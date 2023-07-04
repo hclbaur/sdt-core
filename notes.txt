@@ -1,0 +1,22 @@
+Extend XPATH:
+https://coderanch.com/t/128762/languages/XPath-XML
+
+Jaxen:
+https://javadoc.io/doc/jaxen/jaxen/latest/index.html
+http://www.cafeconleche.org/jaxen/faq.html
+
+Jaxen examples:
+https://www.programcreek.com/java-api-examples/?api=org.jaxen.XPath
+https://www.tabnine.com/code/java/classes/org.jaxen.XPath
+https://www.javatips.net/api/org.jaxen.xpath
+https://www.xml.com/pub/a/ws/2003/09/16/jaxen.html  (with SOAP)
+http://www.javased.com/index.php?api=org.jaxen.XPath
+
+X-Path examples
+https://www.baeldung.com/java-xpath
+
+Processing XML with Java: A Guide to SAX, DOM, JDOM, JAXP, and TrAX
+https://flylib.com/books/en/1.131.1/
+https://flylib.com/books/en/1.131.1.170/1/  (Jaxen)
+
+Better: http://cafeconleche.org/books/xmljava/chapters/ch16s07.html
