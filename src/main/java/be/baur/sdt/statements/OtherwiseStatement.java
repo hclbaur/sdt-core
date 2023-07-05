@@ -31,7 +31,7 @@ public class OtherwiseStatement extends Statement {
 	
 	/**
 	 * @return an SDA node representing<br>
-	 *         <code>when "<i>expression</i>" { <i>statement+</i> }</code>
+	 *         <code>otherwise { <i>statement+</i> }</code>
 	 */
 	public Node toNode() {
 		Node node = new Node(Statements.OTHERWISE.tag); 

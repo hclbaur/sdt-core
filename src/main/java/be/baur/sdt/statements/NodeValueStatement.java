@@ -67,7 +67,7 @@ public class NodeValueStatement extends XPathStatement {
 
 	/**
 	 * @return a node representing<br>
-	 *         <code>node "<i>name</i>" { value "<i>expression</i>" <i>statement?</i> }</code>
+	 *         <code>node "<i>name</i>" { value "<i>expression</i>" <i>statement*</i> }</code>
 	 */
 	public Node toNode() {
 		Node node = new Node(Statements.NODE.tag, getValue());

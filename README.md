@@ -23,7 +23,7 @@ For example:
 				node "person" { 
 					value "firstname"
 					node "phones" {
-						value "fn:string-join(phonenumber)"
+						value "fn:string-join(phonenumber,',')"
 					}
 				}
 			}
