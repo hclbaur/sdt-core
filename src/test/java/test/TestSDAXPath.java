@@ -25,10 +25,10 @@ public class TestSDAXPath {
 		InputStream in = TestSDAXPath.class.getResourceAsStream("/addressbook.sda");
 		Node doc = (Node) DocumentNavigator.getDocument(new InputStreamReader(in, "UTF-8"));
 		
-		Node addressbook = doc.getNodes().get(1);
+		Node addressbook = doc.getNodes().get(0);
 		NodeSet contacts = addressbook.getNodes();
-		Node alice = contacts.get(1); 
-		Node bob = contacts.get(2);
+		Node alice = contacts.get(0); 
+		Node bob = contacts.get(1);
 		
 		System.out.print("general ");
 		

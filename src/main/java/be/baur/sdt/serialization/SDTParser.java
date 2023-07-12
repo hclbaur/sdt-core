@@ -484,7 +484,7 @@ public final class SDTParser implements Parser {
 		if (required == null)
 			throw new ParseException(sdt, String.format(ATTRIBUTE_NOT_ALLOWED, attribute.tag));
 
-		Node node = attributes.get(1);
+		Node node = attributes.get(0);
 		if (node.getValue().isEmpty())
 			throw new ParseException(node, String.format(ATTRIBUTE_REQUIRES_VALUE, attribute.tag));
 		if (size > 1)
