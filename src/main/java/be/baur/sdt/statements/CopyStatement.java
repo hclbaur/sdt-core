@@ -31,7 +31,7 @@ public class CopyStatement extends XPathStatement {
 	 */
 	private static Node copy(Node node) {
 		Node copy = new Node(node.getName(), node.getValue());
-		if (node.isComplex()) {
+		if (! node.isLeaf()) {
 			copy.add(null);
 			for (Node child : node.getNodes()) 
 				copy.add(copy(child));

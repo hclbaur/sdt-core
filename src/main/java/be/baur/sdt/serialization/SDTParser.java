@@ -101,13 +101,13 @@ public final class SDTParser implements Parser {
 		if (!sdt.getValue().isEmpty())
 			throw new ParseException(sdt, String.format(STATEMENT_REQUIRES_NO_VALUE, sdt.getName()));
 
-		if (! sdt.isComplex()) // a transform should have a compound statement, even if empty
+		if (sdt.isLeaf()) // a transform should have a compound statement, even if empty
 			throw new ParseException(sdt, String.format(STATEMENT_INCOMPLETE, Transform.TAG));
 
 		checkAttributes(sdt, null); // no attributes allowed in the transform root
 
 		Transform transform = new Transform();
-		for (Node node : sdt.getNodes().find(n -> n.isComplex()))
+		for (Node node : sdt.getNodes().find(n -> ! n.isLeaf()))
 			transform.add(parseStatement(node)); // parse and add child statements
 
 		return transform;
@@ -364,7 +364,7 @@ public final class SDTParser implements Parser {
 			throw new ParseException(sdt, e);
 		}
 
-		for (Node node : sdt.getNodes().find(n -> n.isComplex()))
+		for (Node node : sdt.getNodes().find(n -> ! n.isLeaf()))
 			stat.add(parseStatement(node)); // parse and add child statements
 
 		return stat;
@@ -423,7 +423,7 @@ public final class SDTParser implements Parser {
 	 */
 	private static void checkStatements(Node sdt, List<Statements> allowed) throws ParseException {
 
-		for (Node node : sdt.getNodes().find(n -> n.isComplex())) {
+		for (Node node : sdt.getNodes().find(n -> ! n.isLeaf())) {
 
 			Statements statement = Statements.get(node.getName());
 			if (statement == null) // all statements must have a known name tag
@@ -444,7 +444,7 @@ public final class SDTParser implements Parser {
 	 */
 	private static void checkAttributes(Node sdt, List<Attribute> allowed) throws ParseException {
 
-		for (Node node : sdt.getNodes().find(n -> !n.isComplex())) {
+		for (Node node : sdt.getNodes().find(n -> n.isLeaf())) {
 
 			Attribute attribute = Attribute.get(node.getName());
 			if (attribute == null) // all attributes must have a known name tag
@@ -474,7 +474,7 @@ public final class SDTParser implements Parser {
 	 */
 	private static Node getAttribute(Node sdt, Attribute attribute, Boolean required) throws ParseException {
 
-		NodeSet attributes = sdt.getNodes().find(n -> !n.isComplex()).find(attribute.tag);
+		NodeSet attributes = sdt.getNodes().find(n -> n.isLeaf()).find(attribute.tag);
 		int size = attributes.size();
 		if (size == 0) {
 			if (required == null || !required)
