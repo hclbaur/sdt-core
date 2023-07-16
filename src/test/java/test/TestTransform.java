@@ -14,18 +14,30 @@ public final class TestTransform {
 	
 	public static void main(String[] args) throws Exception {
 
-		InputStream in = TestSDAXPath.class.getResourceAsStream("/example.sdt");
+		InputStream in = TestSDAXPath.class.getResourceAsStream("/addressbook.sdt");
 		Transform tran = SDT.parser().parse(new InputStreamReader(in, "UTF-8"));
 		
-		TransformContext c = new TransformContext.Builder()
+		TransformContext c = new TransformContext.Builder()//.setWriter(SDT.nullWriter())
 			.setStringParameter("filename", "c:/tmp/addressbook.sda").build();
-		//c = new TransformContext.Builder().setWriter(SDT.nullWriter()).build();
 		Writer w = c.getWriter();
 		
 		w.write("<<\n");
 		Node node = tran.execute(c); 
 		SDA.formatter().format(w, node);
 		w.write(">>\n");
-		w.close();
+		
+		
+		// test performance
+//		TransformContext c2 = new TransformContext.Builder()
+//				.setStringParameter("filename", "c:/tmp/addressbook.sda").build();
+//		PerfTest p = new PerfTest(tranode -> {
+//			try {
+//				((Transform) tranode).execute(c2);
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
+//		});
+//	
+//		p.test("\nPerformance: P01", tran, 2500, 25);
 	}
 }

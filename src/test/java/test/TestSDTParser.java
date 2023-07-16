@@ -1,7 +1,10 @@
 package test;
 
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.StringReader;
 
+import be.baur.sda.Node;
 import be.baur.sda.SDA;
 import be.baur.sdt.Transform;
 import be.baur.sdt.serialization.ParseException;
@@ -144,5 +147,20 @@ public final class TestSDTParser {
 		t.s("F81", "transform { copy \"a\" { value \"''\" } }", "/transform/copy: statement 'copy' requires no value");
 		
 		/* odd */ t.s("F82", "transform { transform { } }", "/transform/transform: statement 'transform' is unknown");
+	
+		
+		// test performance
+		InputStream input = TestSDTParser.class.getResourceAsStream("/addressbook.sdt");
+		Node sdt = sdaparser.parse(new InputStreamReader(input,"UTF-8"));
+		
+		PerfTest p = new PerfTest(sdtnode -> {
+			try {
+				SDTParser.parse(sdtnode);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		});
+	
+		p.test("\nPerformance: P01", sdt, 12500, 30);
 	}
 }
