@@ -6,6 +6,7 @@
 - [If only we could choose](/docs/TUTORIAL.md#if-only-we-could-choose)
 - [On a different node](/docs/TUTORIAL.md#on-a-different-node)
 - [PART TWO](/docs/TUTORIAL.md#part-two)
+- [Vars and Pars](/docs/TUTORIAL.md#vars-and-pars)
 
 
 ## PART ONE
@@ -235,52 +236,28 @@ Which will create the following document:
 The first part of this tutorial introduced the basic features of SDT; variables, iteration, conditional processing and creation of SDA nodes. The second part will elaborate on these concepts and introduce some advanced ones.
 
 
-### More on variables
+### Vars and Pars
 
-Early in part one of this tutorial, the `param` statement was introduced. Parameters are variables that are assigned a default value that can be overwritten by the "outside world", prior to execution of the transform. A parameter can be declared and assigned anywhere, but only *once* within its context or ancestor context. Here are some examples to clarify this.
+Early in part one of this tutorial, the `param` statement was introduced. Parameters are global variables that are assigned a default value that can be overwritten by the "outside world", prior to execution of the transform. A parameter can be declared and assigned only once, and only on the transform level.
 
-This is not allowed:
+In other words, this is *not* allowed, because *P* is declared twice:
 
 	transform {
 		param "P" { select "1" }
 		param "P" { select "2" }
 	}
 
-And neither is this (the second *P* is considered a re-assignment) in the same scope:
-
-<pre>
-transform {
-	param "P" { select "1" }
-	if "<i>some condition</i>" {
-		param "P" { select "2" }
-	}
-}
-</pre>
-
-Perhaps surprisingly, this is illegal too (on the first iteration *P* equals 1, but the second iteration will fail as it tries to re-assign the parameter):
-
-<pre>
-transform {
-	foreach "<i>some node-set</i>" {
-		param "P" { select "$sdt:position" }
-	}
-}
-</pre>
-
-
-This however, is allowed (although hardly useful):
+And neither is this, because *P* has no global scope:
 
 <pre>
 transform {
 	if "<i>some condition</i>" {
 		param "P" { select "1" }
 	}
-	if "<i>some condition</i>" {
-		param "P" { select "2" }
-	}
 }
 </pre>
 
+Other than that, you can hardly go wrong with parameters.
 
 Variables created with the `variable` statement are quite different. For starters, you can (re)declare them as often as you like, and practically anywhere you like:
 
@@ -302,7 +279,9 @@ transform {
 }
 </pre>
 
-Due to the local scope of variables, *V* equals 1 after the last iteration; the inner *V* shadows the outer one (which is not incremented). Also, the same variable can be used in unrelated contexts:
+Due to the local scope of variables, *V* equals 1 after the last iteration; the inner *V* shadows the outer one (which is not incremented). 
+
+Also, a variable with the same name can be declared in unrelated contexts:
 
 <pre>
 transform {
@@ -328,6 +307,6 @@ For *automatic* variables, the same rules apply with regards to scoping, but it 
 		}
 	}
 
-The inner variable *sdt:position* shadows the one in the outer loop, but if we save its current value in our own *position* variable, we can reference that from the inner loop. 
+The inner variable *sdt:position* shadows the one in the outer loop, but we can save the current value in a *position* variable of our own, and reference that from the inner loop.
 
 [ TO BE CONTINUED ]

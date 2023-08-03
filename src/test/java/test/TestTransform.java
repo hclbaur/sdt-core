@@ -25,19 +25,6 @@ public final class TestTransform {
 		Node node = tran.execute(c); 
 		SDA.formatter().format(w, node);
 		w.write(">>\n");
-		
-		
-		// test performance
-//		TransformContext c2 = new TransformContext.Builder()
-//				.setStringParameter("filename", "c:/tmp/addressbook.sda").build();
-//		PerfTest p = new PerfTest(tranode -> {
-//			try {
-//				((Transform) tranode).execute(c2);
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//			}
-//		});
-//	
-//		p.test("\nPerformance: P01", tran, 2500, 25);
+
 	}
 }

@@ -28,7 +28,7 @@ public class NodeValueStatement extends XPathStatement {
 	public NodeValueStatement(String name, SDAXPath xpath) {
 		super(Statements.NODE.tag, xpath);
 		if (! SDA.isName(name)) 
-			throw new IllegalArgumentException("invalid node name '" + name + "'");
+			throw new IllegalArgumentException("name '" + name + "' is invalid");
 		setValue(name); // name is stored in the node value, bit icky
 	}
 

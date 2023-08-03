@@ -1,8 +1,11 @@
 # Release Notes
 
-## [1.0.1] - 2023-??-??
+## [1.1.0] - 2023-??-??
 
 This release is in development.
+
+- `Changed` parameters to be global variables only.
+- Added *VariableStatement.isVarName* method.
 
 ## Compatibility
 

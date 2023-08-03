@@ -85,18 +85,20 @@ public final class TestSDTParser {
 		t.s("F25", "transform { param \"\" { select \"\" } }", "/transform/param: statement 'param' requires a variable name");
 		t.s("F26", "transform { param \"a\" { select \"\" } }", "/transform/param/select: attribute 'select' requires a value");
 		t.s("F27", "transform { param \"a\" { select \"''\" print { } } }", "/transform/param/print: statement 'print' is not allowed here");
-		t.s("F28", "transform { param \":a\" { select \"''\" } }", "/transform/param: name ':a' is invalid, no prefix allowed");
-
+		t.s("F28", "transform { param \":a\" { select \"''\" } }", "/transform/param: variable name ':a' is invalid");
+		t.s("F29", "transform { param \"p\" { select \"''\" } param \"p\" { select \"''\" } }", "/transform/param[1]: parameter 'p' cannot be redeclared");
+		t.s("F30", "transform { if \"1\" { param \"p\" { select \"''\" } } }", "/transform/if/param: statement 'param' is not allowed here");
+		
 		System.out.print("\n            ");
-		t.s("F29", "transform { variable \"\" }", "/transform/variable: attribute 'variable' is unknown");
-		t.s("F30", "transform { variable { } }", "/transform/variable: statement 'variable' is incomplete");
-		t.s("F31", "transform { variable \"\" { } }", "/transform/variable: statement 'variable' is incomplete");
-		t.s("F32", "transform { variable \"\" { value \"\" } }", "/transform/variable: statement 'variable' requires a variable name");
-		t.s("F33", "transform { variable \"a\" { value \"\" } }", "/transform/variable/value: attribute 'value' is not allowed here");
-		t.s("F34", "transform { variable \"\" { select \"\" } }", "/transform/variable: statement 'variable' requires a variable name");
-		t.s("F35", "transform { variable \"a\" { select \"\" } }", "/transform/variable/select: attribute 'select' requires a value");
-		t.s("F36", "transform { variable \"a\" { select \"''\" print { } } }", "/transform/variable/print: statement 'print' is not allowed here");		
-		t.s("F37", "transform { variable \":a\" { select \"''\" } }", "/transform/variable: name ':a' is invalid, no prefix allowed");
+		t.s("F31", "transform { variable \"\" }", "/transform/variable: attribute 'variable' is unknown");
+		t.s("F32", "transform { variable { } }", "/transform/variable: statement 'variable' is incomplete");
+		t.s("F33", "transform { variable \"\" { } }", "/transform/variable: statement 'variable' is incomplete");
+		t.s("F34", "transform { variable \"\" { value \"\" } }", "/transform/variable: statement 'variable' requires a variable name");
+		t.s("F35", "transform { variable \"a\" { value \"\" } }", "/transform/variable/value: attribute 'value' is not allowed here");
+		t.s("F36", "transform { variable \"\" { select \"\" } }", "/transform/variable: statement 'variable' requires a variable name");
+		t.s("F37", "transform { variable \"a\" { select \"\" } }", "/transform/variable/select: attribute 'select' requires a value");
+		t.s("F38", "transform { variable \"a\" { select \"''\" print { } } }", "/transform/variable/print: statement 'print' is not allowed here");		
+		t.s("F39", "transform { variable \":a\" { select \"''\" } }", "/transform/variable: variable name ':a' is invalid");
 
 		t.s("F40", "transform { foreach \"\" }", "/transform/foreach: attribute 'foreach' is unknown");
 		t.s("F41", "transform { foreach { } }", "/transform/foreach: statement 'foreach' is incomplete");
@@ -137,7 +139,7 @@ public final class TestSDTParser {
 		t.s("F72", "transform { node \"\" { select \"\" } }", "/transform/node: statement 'node' requires a node name");
 		t.s("F73", "transform { node \"a\" { select \"\" } }", "/transform/node/select: attribute 'select' is not allowed here");
 		t.s("F74", "transform { node \"a\" { value \"\" } }", "/transform/node/value: attribute 'value' requires a value");
-		t.s("F75", "transform { node \"2\" { value \"''\" } }", "/transform/node: invalid node name '2'");
+		t.s("F75", "transform { node \"2\" { value \"''\" } }", "/transform/node: node name '2' is invalid");
 
 		t.s("F76", "transform { copy \"\" }", "/transform/copy: attribute 'copy' is unknown");
 		t.s("F77", "transform { copy { } }", "/transform/copy: statement 'copy' is incomplete");

@@ -73,7 +73,10 @@ public final class SDTParser implements Parser {
 	private static final String ATTRIBUTE_NOT_SINGULAR = "attribute '%s' can occur only once";
 	private static final String ATTRIBUTE_REQUIRES_VALUE = "attribute '%s' requires a value";
 	private static final String ATTRIBUTE_UNKNOWN = "attribute '%s' is unknown";
-
+	
+	private static final String NODE_NAME_INVALID = "node name '%s' is invalid";
+	private static final String VARIABLE_NAME_INVALID = "variable name '%s' is invalid";
+	private static final String PARAMETER_REDECLARED = "parameter '%s' cannot be redeclared";
 	
 	@Override
 	public Transform parse(Reader input) throws IOException, ParseException, java.text.ParseException {
@@ -187,26 +190,31 @@ public final class SDTParser implements Parser {
 		/*
 		 * A valid variable/param statement has a non-empty value with a variable name,
 		 * a single SELECT attribute containing an XPath expression, and no other
-		 * statements or attributes.
+		 * statements or attributes. Also, parameters must be declared globally (in the
+		 * transform node) and not more than once.
 		 */
-		String value = sdt.getValue();
-		if (value.isEmpty())
+		String varname = sdt.getValue();
+		
+		boolean isParam = sdt.getName().equals(Statements.PARAM.tag);	
+		if ( isParam ) {
+			if (! sdt.getParent().getName().equals(Transform.TAG)) // parent cannot be null
+				throw new ParseException(sdt, String.format(STATEMENT_NOT_ALLOWED, sdt.getName()));	
+			if (sdt.getParent().getNodes().find(n -> n.getName().equals(Statements.PARAM.tag) && n.getValue().equals(varname)).size() > 1)
+				throw new ParseException(sdt, String.format(PARAMETER_REDECLARED, varname));		
+		}
+		
+		if (varname.isEmpty())
 			throw new ParseException(sdt, String.format(STATEMENT_REQUIRES_VARIABLE, sdt.getName()));
-
+		if (! VariableStatement.isVarName(varname))
+			throw new ParseException(sdt, String.format(VARIABLE_NAME_INVALID, varname));
+		
 		checkStatements(sdt, null); // no sub-statements allowed
 		checkAttributes(sdt, Arrays.asList(Attribute.SELECT));
 		Node select = getAttribute(sdt, Attribute.SELECT, true);
 
-		VariableStatement stat;
-		try {
-			stat = sdt.getName().equals(Statements.VARIABLE.tag) 
-				? new VariableStatement(value, xpathFromNode(select))
-				: new ParamStatement(value, xpathFromNode(select));
-		}
-		catch (Exception e) {
-			throw new ParseException(sdt, e);
-		}
-		return stat;
+		return isParam 
+			? new ParamStatement(varname, xpathFromNode(select))
+			: new VariableStatement(varname, xpathFromNode(select));
 	}
 
 
@@ -351,18 +359,15 @@ public final class SDTParser implements Parser {
 
 		if (nodename.isEmpty())
 			throw new ParseException(sdt, String.format(STATEMENT_REQUIRES_NODENAME, sdt.getName()));
+		if (! SDA.isName(nodename))
+			throw new ParseException(sdt, String.format(NODE_NAME_INVALID, nodename));
 		
 		checkAttributes(sdt, Arrays.asList(Attribute.VALUE));
 		final Node value = getAttribute(sdt, Attribute.VALUE, false);
 			
-		Statement stat;
-		try {
-			stat = (value == null) ? new NodeStatement(nodename)
-				: new NodeValueStatement(nodename, xpathFromNode(value));
-		}
-		catch (Exception e) {
-			throw new ParseException(sdt, e);
-		}
+		Statement stat = (value == null) 
+			? new NodeStatement(nodename) 
+			: new NodeValueStatement(nodename, xpathFromNode(value));
 
 		for (Node node : sdt.getNodes().find(n -> ! n.isLeaf()))
 			stat.add(parseStatement(node)); // parse and add child statements

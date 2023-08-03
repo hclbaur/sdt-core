@@ -25,7 +25,7 @@ public class NodeStatement extends Statement {
 	public NodeStatement(String name) {
 		super(Statements.NODE.tag);
 		if (!SDA.isName(name))
-			throw new IllegalArgumentException("invalid node name '" + name + "'");
+			throw new IllegalArgumentException("name '" + name + "' is invalid");
 		setValue(name); // name is stored in the node value, bit icky
 	}
 
