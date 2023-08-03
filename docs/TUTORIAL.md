@@ -279,7 +279,7 @@ transform {
 }
 </pre>
 
-Due to the local scope of variables, *V* equals 1 after the last iteration; the inner *V* shadows the outer one (which is not incremented). 
+Note that due to the local scope of variables, *V* will equal 1 after the last iteration. After all, the inner *V* shadows the outer one (which is not incremented). 
 
 Also, a variable with the same name can be declared in unrelated contexts:
 
@@ -294,9 +294,9 @@ transform {
 }
 </pre>
 
-Obviously, in this case *V* cannot be referenced outside the iterations.
+Obviously, neither *V* can be referenced outside the *if* clauses.
 
-For *automatic* variables, the same rules apply with regards to scoping, but it is not possible to declare or re-assign them. Also, automatic variables "live" within the predefined SDT namespace, which ensures there is no overlap with the ones you declare yourself (in the "unnamed" namespace):
+For *automatic* variables, the same rules apply with regards to scoping, but it is not possible to declare or re-assign them. Automatic variables "live" within the reserved SDT namespace, which ensures there is no overlap with the ones you declare yourself (in the "unnamed" namespace):
 
 	transform {
 		foreach "..." {
