@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import be.baur.sda.Node;
-import be.baur.sda.NodeSet;
 import be.baur.sda.SDA;
 import be.baur.sdt.Transform;
 import be.baur.sdt.statements.ChooseStatement;
@@ -110,7 +109,7 @@ public final class SDTParser implements Parser {
 		checkAttributes(sdt, null); // no attributes allowed in the transform root
 
 		Transform transform = new Transform();
-		for (Node node : sdt.getNodes().find(n -> ! n.isLeaf()))
+		for (Node node : sdt.find(n -> ! n.isLeaf()))
 			transform.add(parseStatement(node)); // parse and add child statements
 
 		return transform;
@@ -199,7 +198,7 @@ public final class SDTParser implements Parser {
 		if ( isParam ) {
 			if (! sdt.getParent().getName().equals(Transform.TAG)) // parent cannot be null
 				throw new ParseException(sdt, String.format(STATEMENT_NOT_ALLOWED, sdt.getName()));	
-			if (sdt.getParent().getNodes().find(n -> n.getName().equals(Statements.PARAM.tag) && n.getValue().equals(varname)).size() > 1)
+			if (sdt.getParent().find(n -> n.getName().equals(Statements.PARAM.tag) && n.getValue().equals(varname)).size() > 1)
 				throw new ParseException(sdt, String.format(PARAMETER_REDECLARED, varname));		
 		}
 		
@@ -233,7 +232,7 @@ public final class SDTParser implements Parser {
 		checkAttributes(sdt, null);
 
 		ForEachStatement statement = new ForEachStatement(xpathFromNode(sdt));
-		for (Node node : sdt.getNodes()) // parse and add child statements
+		for (Node node : sdt.nodes()) // parse and add child statements
 			statement.add(parseStatement(node));
 
 		return statement;
@@ -255,7 +254,7 @@ public final class SDTParser implements Parser {
 		checkAttributes(sdt, null);
 
 		IfStatement statement = new IfStatement(xpathFromNode(sdt));
-		for (Node node : sdt.getNodes()) // parse and add child statements
+		for (Node node : sdt.nodes()) // parse and add child statements
 			statement.add(parseStatement(node));
 
 		return statement;
@@ -278,8 +277,8 @@ public final class SDTParser implements Parser {
 		checkAttributes(sdt, null);
 
 		ChooseStatement statement = null;
-		int i = 0, last = sdt.getNodes().size();
-		for (Node node : sdt.getNodes()) {
+		int i = 0, last = sdt.nodes().size();
+		for (Node node : sdt.nodes()) {
 
 			++i;
 			Statement substat = parseStatement(node);
@@ -316,7 +315,7 @@ public final class SDTParser implements Parser {
 		checkAttributes(sdt, null);
 
 		WhenStatement statement = new WhenStatement(xpathFromNode(sdt));
-		for (Node node : sdt.getNodes()) // parse and add child statements
+		for (Node node : sdt.nodes()) // parse and add child statements
 			statement.add(parseStatement(node));
 
 		return statement;
@@ -338,7 +337,7 @@ public final class SDTParser implements Parser {
 		checkAttributes(sdt, null);
 
 		OtherwiseStatement statement = new OtherwiseStatement();
-		for (Node node : sdt.getNodes()) // parse and add child statements
+		for (Node node : sdt.nodes()) // parse and add child statements
 			statement.add(parseStatement(node));
 
 		return statement;
@@ -369,7 +368,7 @@ public final class SDTParser implements Parser {
 			? new NodeStatement(nodename) 
 			: new NodeValueStatement(nodename, xpathFromNode(value));
 
-		for (Node node : sdt.getNodes().find(n -> ! n.isLeaf()))
+		for (Node node : sdt.find(n -> ! n.isLeaf()))
 			stat.add(parseStatement(node)); // parse and add child statements
 
 		return stat;
@@ -428,7 +427,7 @@ public final class SDTParser implements Parser {
 	 */
 	private static void checkStatements(Node sdt, List<Statements> allowed) throws ParseException {
 
-		for (Node node : sdt.getNodes().find(n -> ! n.isLeaf())) {
+		for (Node node : sdt.find(n -> ! n.isLeaf())) {
 
 			Statements statement = Statements.get(node.getName());
 			if (statement == null) // all statements must have a known name tag
@@ -449,7 +448,7 @@ public final class SDTParser implements Parser {
 	 */
 	private static void checkAttributes(Node sdt, List<Attribute> allowed) throws ParseException {
 
-		for (Node node : sdt.getNodes().find(n -> n.isLeaf())) {
+		for (Node node : sdt.find(n -> n.isLeaf())) {
 
 			Attribute attribute = Attribute.get(node.getName());
 			if (attribute == null) // all attributes must have a known name tag
@@ -479,8 +478,9 @@ public final class SDTParser implements Parser {
 	 */
 	private static Node getAttribute(Node sdt, Attribute attribute, Boolean required) throws ParseException {
 
-		NodeSet attributes = sdt.getNodes().find(n -> n.isLeaf()).find(attribute.tag);
-		int size = attributes.size();
+		List<Node> alist = sdt.find(n -> n.isLeaf() && n.getName().equals(attribute.tag));
+		int size = alist.size();
+		
 		if (size == 0) {
 			if (required == null || !required)
 				return null;
@@ -489,7 +489,7 @@ public final class SDTParser implements Parser {
 		if (required == null)
 			throw new ParseException(sdt, String.format(ATTRIBUTE_NOT_ALLOWED, attribute.tag));
 
-		Node node = attributes.get(0);
+		Node node = alist.get(0);
 		if (node.getValue().isEmpty())
 			throw new ParseException(node, String.format(ATTRIBUTE_REQUIRES_VALUE, attribute.tag));
 		if (size > 1)

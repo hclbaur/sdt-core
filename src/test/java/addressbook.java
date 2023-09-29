@@ -20,7 +20,7 @@ public class addressbook {
 		Node doc = (Node) DocumentNavigator.getDocument(new InputStreamReader(in, "UTF-8"));
 
 		doc.add(new Node("foo"));
-		doc.getNodes().get(1).add(new Node("bar", "test"));
+		doc.nodes().get(1).add(new Node("bar", "test"));
 		XPath y = new SDAXPath("/foo/bar");
 		System.out.println(y.evaluate(doc).toString());
 		
@@ -49,7 +49,7 @@ public class addressbook {
 		System.out.println(x.evaluate(doc).toString());
 
 		x = new SDAXPath("$var/contact[2]/firstname");
-		v.setVariableValue("var", doc.getNodes().get(0)); 
+		v.setVariableValue("var", doc.nodes().get(0)); 
 		x.setVariableContext(v);
 		System.out.println(x.evaluate(doc).toString());
 		

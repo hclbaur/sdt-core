@@ -1,7 +1,8 @@
 package be.baur.sdt.statements;
 
+import java.util.List;
+
 import be.baur.sda.Node;
-import be.baur.sda.NodeSet;
 import be.baur.sda.SDA;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.TransformException;
@@ -41,8 +42,8 @@ public class NodeStatement extends Statement {
 			Node newNode = new Node(getValue()); // icky :(
 			stacon.getOutputNode().add(newNode);
 
-			NodeSet statements = getNodes();
-			if (statements == null) return; // nothing further to do
+			List<Node> statements = nodes();
+			if (statements.isEmpty()) return; // nothing to do
 			
 			StatementContext comcon = stacon.newChild();
 			comcon.setOutputNode(newNode);
@@ -62,10 +63,8 @@ public class NodeStatement extends Statement {
 	 */
 	public Node toNode() {
 		Node node = new Node(Statements.NODE.tag, getValue());
-		final NodeSet nodes = this.getNodes();
-		if (nodes != null)
-			for (Node statement : nodes) // add child statements, if any
-				node.add(((Statement) statement).toNode());
+		for (Node statement : nodes()) // add child statements, if any
+			node.add(((Statement) statement).toNode());
 		return node;
 	}
 

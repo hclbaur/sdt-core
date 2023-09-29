@@ -3,7 +3,6 @@ package be.baur.sdt.statements;
 import java.util.List;
 
 import be.baur.sda.Node;
-import be.baur.sda.NodeSet;
 import be.baur.sdt.SDT;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.TransformException;
@@ -23,7 +22,6 @@ public class ForEachStatement extends XPathStatement {
 	 */
 	public ForEachStatement(SDAXPath xpath) {
 		super(Statements.FOREACH.tag, xpath);
-		add(null); // must have child statements so initialize it with an empty node set
 	}
 
 	
@@ -36,8 +34,8 @@ public class ForEachStatement extends XPathStatement {
 		 * for every node in that set. On every iteration the context node and the
 		 * automatic variables $last, $current and $position are (re)set.
 		 */
-		NodeSet statements = getNodes();
-		if (statements == null) return; // nothing to do
+		List<Node> statements = nodes();
+		if (statements.isEmpty()) return; // nothing to do
 
 		try {
 			SDAXPath xpath = new SDAXPath(getExpression());
@@ -75,7 +73,7 @@ public class ForEachStatement extends XPathStatement {
 	 */
 	public Node toNode() {
 		Node node = new Node(Statements.FOREACH.tag, getExpression());
-		for (Node statement : this.getNodes()) // // add child statements
+		for (Node statement : nodes()) // // add child statements
 			node.add(((Statement) statement).toNode());
 		return node;
 	}

@@ -27,13 +27,13 @@ public class CopyStatement extends XPathStatement {
 
 	/*
 	 * Private helper method to create a deep copy of an SDA node. This functionality should
-	 * be provided by the SDA core library in a future release.
+	 * possibly be provided by the SDA core library in a future release.
 	 */
 	private static Node copy(Node node) {
 		Node copy = new Node(node.getName(), node.getValue());
 		if (! node.isLeaf()) {
 			copy.add(null);
-			for (Node child : node.getNodes()) 
+			for (Node child : node.nodes()) 
 				copy.add(copy(child));
 		}
 		return copy;

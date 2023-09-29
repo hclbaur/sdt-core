@@ -2,11 +2,11 @@ package test;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 import org.jaxen.JaxenException;
 
 import be.baur.sda.Node;
-import be.baur.sda.NodeSet;
 import be.baur.sdt.xpath.DocumentNavigator;
 import be.baur.sdt.xpath.SDAXPath;
 
@@ -25,8 +25,8 @@ public class TestSDAXPath {
 		InputStream in = TestSDAXPath.class.getResourceAsStream("/addressbook.sda");
 		Node doc = (Node) DocumentNavigator.getDocument(new InputStreamReader(in, "UTF-8"));
 		
-		Node addressbook = doc.getNodes().get(0);
-		NodeSet contacts = addressbook.getNodes();
+		Node addressbook = doc.nodes().get(0);
+		List<Node> contacts = addressbook.nodes();
 		Node alice = contacts.get(0); 
 		Node bob = contacts.get(1);
 		

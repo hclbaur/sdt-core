@@ -17,7 +17,6 @@ public class OtherwiseStatement extends Statement {
 	 */
 	public OtherwiseStatement() {
 		super(Statements.OTHERWISE.tag);
-		add(null); // must have child statements so initialize it with an empty node set
 	}
 
 
@@ -35,7 +34,7 @@ public class OtherwiseStatement extends Statement {
 	 */
 	public Node toNode() {
 		Node node = new Node(Statements.OTHERWISE.tag); 
-		for (Node statement : this.getNodes()) // add child statements
+		for (Node statement : nodes()) // add child statements
 			node.add(((Statement) statement).toNode());
 		return node;
 	}

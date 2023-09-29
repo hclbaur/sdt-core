@@ -3,7 +3,6 @@ package be.baur.sdt.statements;
 import java.util.Objects;
 
 import be.baur.sda.Node;
-import be.baur.sda.NodeSet;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.TransformException;
 import be.baur.sdt.serialization.Statements;
@@ -37,10 +36,9 @@ public class ChooseStatement extends Statement {
 		 * If false, evaluate the next "when" statement. If no "when" statements apply
 		 * and there is an "otherwise", execute its compound statement and return.
 		 */
-		NodeSet statements = getNodes(); // will have at least a when statement
 
 		try {
-			for (Node statement : statements) {
+			for (Node statement : nodes()) { // will have at least a when statement
 				
 				Boolean test = false;
 				if (statement instanceof WhenStatement) {
@@ -56,7 +54,7 @@ public class ChooseStatement extends Statement {
 					
 					// execute compound of when or otherwise
 					StatementContext comcon = stacon.newChild();
-					for (Node comstat : statement.getNodes()) {
+					for (Node comstat : statement.nodes()) {
 						((Statement) comstat).execute(tracon, comcon);
 					}
 					return;
@@ -82,7 +80,7 @@ public class ChooseStatement extends Statement {
 	 */
 	public Node toNode() {
 		Node node = new Node(Statements.CHOOSE.tag);
-		for (Node statement : this.getNodes()) // add when/otherwise statements
+		for (Node statement : nodes()) // add when/otherwise statements
 			node.add(((Statement) statement).toNode());
 		return node;
 	}
