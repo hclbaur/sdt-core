@@ -1,8 +1,8 @@
 # Release Notes
 
-## [1.1.0] - 2023-??-??
+## [1.1.0] - 2023-10-04
 
-This release is in development.
+This is a compatibility release for sda-core 2.1.x with minor changes.
 
 - `Changed` parameters to be global variables only.
 - Added *VariableStatement.isVarName* method.
@@ -13,7 +13,8 @@ This release is in development.
 
 ## Previous releases
 
-### [1.0.0] - 2023-07-04
+### [1.0.0] - 2023-07-04 (requires at least SDA v2.0.0)
 
 More than anything else, this release is a proof of concept.
+
 - Supports basic transformation of SDA content using XPath.

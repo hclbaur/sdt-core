@@ -30,16 +30,16 @@ This will produce the following output:
 
 As Roy H. Williams put it: the risk of insult is the price of clarity. In case it was not clear, whatever follows `value` is an XPath expression and whatever is selected is converted to a string - as if by calling the *string()* function. 
 
-In this example, the "expression" is a very basic one, which selects a string literal anyway. But we can change that; let's bring in some input from the outside world, and use the XPath *concat()* function to transform it:
+In this example, the "expression" is a very basic one, which selects a string literal. But we can bring in some data from the outside world, and use the XPath *concat()* function to transform it:
 
 	transform {
 		param "subject" { select "'World'" }
 		println { value "concat('Hello ', $subject, '!')" }
 	}
 
-The `param` statement declares a (global) variable *subject* that can be provisioned by the transformation *context*, overriding the selected default. The default is useful as it allows us to test or debug the recipe in isolation.
+The `param` statement declares a (global) variable *subject* that can be provisioned by the transformation *context*, overriding the selected default ('World'). The required default selection allows us to test or debug the transformation recipe in isolation, e.g. without supplying a context.
 
-Even parameterised versions of Hello World get old rather quickly, so let's transform some actual SDA content, like my (hypothetical) address book: 
+However, even parameterised versions of Hello World get old quickly, so let's transform some actual SDA content, like my (hypothetical) address book: 
 
 	addressbook {
 		contact "1" {
@@ -57,7 +57,7 @@ Even parameterised versions of Hello World get old rather quickly, so let's tran
 		}
 	}
 
-The address book might be in an SDA file called `addressbook.sda`, located in whatever the transformation context perceives as the current working directory (unless this default is overwritten). In any case, this is how we transform it:
+The address book might be in an SDA file called `addressbook.sda`, located in whatever the transformation context perceives as the current working directory (unless this default filename is overwritten). In any case, this is how we transform it:
 
 	transform {
 		param "filename" { select "'addressbook.sda'" }

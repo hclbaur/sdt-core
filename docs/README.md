@@ -5,7 +5,7 @@ idea of supporting XPath to query SDA data lodged in my brain and refused to go
 away. 
 
 This was not the first time I entertained that thought. Back in 2008, I jokingly 
-called  it "S-Path" in the SDA specification, as if I envisioned some simplified 
+called  it "S-Path" in the SDA documentation, as if I envisioned some simplified 
 form of XPath that could be applied to SDA. And maybe I did, at the time.
 
 Now, almost 15 years later, the idea of writing even a simple XPath engine from 
@@ -14,7 +14,7 @@ it would also be like re-inventing a perfectly fine wheel, even more so than wit
 SDA and SDS.
 
 So, the sensible thing to do was to find an *existing* XPath library that was 
-able to adapt to the SDA object model. And it wasn't before long I came across 
+able to adapt to the SDA object model. And it wasn't long before I came across 
 Jaxen, which could do exactly that. Because Jaxen is well-thought-out, and SDA 
 rather simple, I literally had a proof of concept within a few hours.
 
