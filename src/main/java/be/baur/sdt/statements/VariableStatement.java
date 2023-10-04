@@ -29,16 +29,26 @@ public class VariableStatement extends XPathStatement {
 	public VariableStatement(String name, SDAXPath xpath) {
 		super(Statements.VARIABLE.tag, xpath);
 		Objects.requireNonNull(name, "name must not be null");
-		
-		// No attempt is made to check if name is a valid XPath variable name
-		// (see https://www.w3.org/TR/REC-xml/#NT-Name). However, we disallow
-		// the declaration of variables with a namespace prefix (for now).
-		if (name.contains(":"))
-			throw new IllegalArgumentException("name '" + name + "' is invalid, no prefix allowed");
+		if (! isVarName(name))
+			throw new IllegalArgumentException("name '" + name + "' is invalid");
 		setValue(name); // variable is stored in the node value, somewhat icky
 	}
 
-	
+
+	/**
+	 * Returns true if {@code name} is a valid variable name, and false otherwise.
+	 * 
+	 * @param name a variable name
+	 * @return true if name is valid
+	 */
+	public static boolean isVarName(String name) {
+		// No attempt is made to check if name is a valid XPath variable name
+		// (see https://www.w3.org/TR/REC-xml/#NT-Name). At least, we disallow
+		// the declaration of variables with a namespace prefix (for now).
+		return !name.contains(":");
+	}
+
+
 	@SuppressWarnings("rawtypes")
 	@Override
 	public void execute(TransformContext tracon, StatementContext stacon) throws TransformException {

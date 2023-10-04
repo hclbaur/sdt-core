@@ -3,6 +3,7 @@ package be.baur.sdt.xpath;
 import java.io.File;
 import java.io.FileReader;
 import java.io.Reader;
+import java.util.Collections;
 import java.util.Iterator;
 
 import org.jaxen.DefaultNavigator;
@@ -14,7 +15,6 @@ import org.jaxen.UnsupportedAxisException;
 import org.jaxen.XPath;
 
 import be.baur.sda.Node;
-import be.baur.sda.NodeSet;
 import be.baur.sda.SDA;
 
 /**
@@ -54,7 +54,7 @@ public class DocumentNavigator extends DefaultNavigator {
     {
     	Node node = ((Node) contextNode);
     	if (node.isParent()) 
-    		return node.getNodes().iterator();
+    		return node.nodes().iterator();
     	return JaxenConstants.EMPTY_ITERATOR;
     }
     
@@ -62,8 +62,11 @@ public class DocumentNavigator extends DefaultNavigator {
     public Iterator getParentAxisIterator(Object contextNode)
     {
     	Node parent = ((Node) contextNode).getParent();
-        if (parent != null) 
-        	return NodeSet.of(parent).iterator();
+        if (parent != null) {
+        	return Collections.singletonList(parent).iterator();
+        	//ArrayList<Node> l = new ArrayList<Node>();
+        	//l.add(parent); return l.iterator();
+        }
     	return JaxenConstants.EMPTY_ITERATOR;
     }
     

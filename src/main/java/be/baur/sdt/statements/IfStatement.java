@@ -1,7 +1,8 @@
 package be.baur.sdt.statements;
 
+import java.util.List;
+
 import be.baur.sda.Node;
-import be.baur.sda.NodeSet;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.TransformException;
 import be.baur.sdt.serialization.Statements;
@@ -31,8 +32,8 @@ public class IfStatement extends XPathStatement {
 		 * context and perform a Boolean evaluation. If the result is true, execute the
 		 * compound statement, otherwise do nothing.
 		 */
-		NodeSet statements = getNodes();
-		if (statements == null) return; // nothing to do
+		List<Node> statements = nodes();
+		if (statements.isEmpty()) return; // nothing to do
 
 		try {
 			SDAXPath xpath = new SDAXPath(getExpression());
@@ -58,7 +59,7 @@ public class IfStatement extends XPathStatement {
 	 */
 	public Node toNode() {
 		Node node = new Node(Statements.IF.tag, getExpression()); 
-		for (Node statement : this.getNodes()) // // add child statements
+		for (Node statement : nodes()) // // add child statements
 			node.add(((Statement) statement).toNode());
 		return node;
 	}

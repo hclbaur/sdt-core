@@ -1,9 +1,9 @@
 package be.baur.sdt;
 
+import java.util.List;
 import java.util.Objects;
 
 import be.baur.sda.Node;
-import be.baur.sda.NodeSet;
 import be.baur.sda.serialization.SDAFormatter;
 import be.baur.sdt.serialization.SDTParser;
 import be.baur.sdt.statements.Statement;
@@ -27,7 +27,6 @@ public final class Transform extends Node {
 	 */
 	public Transform() {
 		super(TAG); // extends Node, so it must have a tag, even if we do not really use it
-		add(null); // usually has statements so initialize it with an empty node set
 	}
 
 
@@ -37,22 +36,23 @@ public final class Transform extends Node {
 	 * were created during transformation.
 	 * 
 	 * @param context the transformation context, not null
-	 * @return the output Node, may be empty
+	 * @return the output Node, may be null
 	 * @throws TransformException if an exception occurs during execution
 	 * @see TransformContext
 	 */
 	public Node execute(TransformContext context) throws TransformException {
-		
+
 		Objects.requireNonNull(context, "context must not be null");
-		NodeSet statements = getNodes();
-		if (statements == null) return null; // nothing to do
-		
+
+		List<Node> statements = nodes();
+		if (statements.isEmpty()) return null; // nothing to do, should we return null though?
+
 		StatementContext stacon = new StatementContext();
 		for (Node statement : statements) {
 			((Statement) statement).execute(context, stacon);
 		}
-		
-		// at the end of the transform return the output node
+
+		// At the end of the transform return the output node
 		// this is probably not the best design, must improve!
 		return stacon.getOutputNode();
 	}
@@ -68,7 +68,7 @@ public final class Transform extends Node {
 	 */
 	public Node toNode() {
 		Node node = new Node(TAG); node.add(null); // in case there are no statements
-		for (Node statement : this.getNodes()) // add child statements
+		for (Node statement : nodes()) // add child statements
 			node.add(((Statement) statement).toNode());
 		return node;
 	}

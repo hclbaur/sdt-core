@@ -1,7 +1,8 @@
 package be.baur.sdt.statements;
 
+import java.util.List;
+
 import be.baur.sda.Node;
-import be.baur.sda.NodeSet;
 import be.baur.sda.SDA;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.TransformException;
@@ -28,7 +29,7 @@ public class NodeValueStatement extends XPathStatement {
 	public NodeValueStatement(String name, SDAXPath xpath) {
 		super(Statements.NODE.tag, xpath);
 		if (! SDA.isName(name)) 
-			throw new IllegalArgumentException("invalid node name '" + name + "'");
+			throw new IllegalArgumentException("name '" + name + "' is invalid");
 		setValue(name); // name is stored in the node value, bit icky
 	}
 
@@ -50,8 +51,8 @@ public class NodeValueStatement extends XPathStatement {
 			Node newNode = new Node(getValue(), value); // icky :(
 			stacon.getOutputNode().add(newNode);
 
-			NodeSet statements = getNodes();
-			if (statements == null) return; // nothing to do
+			List<Node> statements = nodes();
+			if (statements.isEmpty()) return; // nothing to do
 			
 			StatementContext comcon = stacon.newChild();
 			comcon.setOutputNode(newNode);
@@ -67,15 +68,13 @@ public class NodeValueStatement extends XPathStatement {
 
 	/**
 	 * @return a node representing<br>
-	 *         <code>node "<i>name</i>" { value "<i>expression</i>" <i>statement?</i> }</code>
+	 *         <code>node "<i>name</i>" { value "<i>expression</i>" <i>statement*</i> }</code>
 	 */
 	public Node toNode() {
 		Node node = new Node(Statements.NODE.tag, getValue());
 		node.add(new Node(Attribute.VALUE.tag, getExpression()));
-		final NodeSet nodes = this.getNodes();
-		if (nodes != null)
-			for (Node statement : nodes) // add child statements, if any
-				node.add(((Statement) statement).toNode());
+		for (Node statement : nodes()) // add child statements, if any
+			node.add(((Statement) statement).toNode());
 		return node;
 	}
 
