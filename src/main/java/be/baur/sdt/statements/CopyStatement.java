@@ -3,6 +3,7 @@ package be.baur.sdt.statements;
 import java.util.List;
 
 import be.baur.sda.Node;
+import be.baur.sda.dNode;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.TransformException;
 import be.baur.sdt.serialization.Attribute;
@@ -29,12 +30,12 @@ public class CopyStatement extends XPathStatement {
 	 * Private helper method to create a deep copy of an SDA node. This functionality should
 	 * possibly be provided by the SDA core library in a future release.
 	 */
-	private static Node copy(Node node) {
-		Node copy = new Node(node.getName(), node.getValue());
+	private static dNode copy(dNode node) {
+		dNode copy = new dNode(node.getName(), node.getValue());
 		if (! node.isLeaf()) {
 			copy.add(null);
 			for (Node child : node.nodes()) 
-				copy.add(copy(child));
+				copy.add(copy((dNode) child));
 		}
 		return copy;
 	}
@@ -55,8 +56,8 @@ public class CopyStatement extends XPathStatement {
 			if (!(value instanceof List)) return;
 			
 			for (Object object : (List) value) {
-				if (object instanceof Node)
-					stacon.getOutputNode().add(copy((Node) object));
+				if (object instanceof dNode)
+					stacon.getOutputNode().add(copy((dNode) object));
 			}
 
 		} catch (Exception e) {
@@ -69,9 +70,9 @@ public class CopyStatement extends XPathStatement {
 	 * @return an SDA node representing<br>
 	 *         <code>copy { select "<i>expression</i>" }</code>
 	 */
-	public Node toNode() {
-		Node node = new Node(Statements.COPY.tag, getValue());
-		node.add( new Node(Attribute.SELECT.tag, getExpression()) ); 
+	public dNode toNode() {
+		dNode node = new dNode(Statements.COPY.tag, getValue());
+		node.add( new dNode(Attribute.SELECT.tag, getExpression()) ); 
 		return node;
 	}
 

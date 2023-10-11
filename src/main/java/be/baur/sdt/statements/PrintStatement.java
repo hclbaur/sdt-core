@@ -2,7 +2,7 @@ package be.baur.sdt.statements;
 
 import java.io.Writer;
 
-import be.baur.sda.Node;
+import be.baur.sda.dNode;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.TransformException;
 import be.baur.sdt.serialization.Attribute;
@@ -67,9 +67,9 @@ public class PrintStatement extends XPathStatement {
 	 * @return a node representing<br>
 	 *         <code>print(ln) { value "<i>expression</i>" }</code>
 	 */
-	public Node toNode() {
-		Node node = new Node(terminate ? Statements.PRINTLN.tag : Statements.PRINT.tag);
-		node.add( new Node(Attribute.VALUE.tag, getExpression()) ); 
+	public dNode toNode() {
+		dNode node = new dNode(terminate ? Statements.PRINTLN.tag : Statements.PRINT.tag);
+		node.add( new dNode(Attribute.VALUE.tag, getExpression()) ); 
 		return node;
 	}
 

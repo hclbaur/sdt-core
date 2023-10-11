@@ -1,6 +1,6 @@
 package be.baur.sdt.statements;
 
-import be.baur.sda.Node;
+import be.baur.sda.dNode;
 import be.baur.sda.serialization.SDAFormatter;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.TransformException;
@@ -9,7 +9,7 @@ import be.baur.sdt.serialization.Statements;
 /**
  * The abstract superclass of all transform statements.
  */
-public abstract class Statement extends Node {
+public abstract class Statement extends dNode {
 
 	/**
 	 * Creates a {@code Statement}.
@@ -39,7 +39,7 @@ public abstract class Statement extends Node {
 	 * 
 	 * @return a node representing this statement
 	 */
-	public abstract Node toNode();
+	public abstract dNode toNode();
 
 	
 	/**

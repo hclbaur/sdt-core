@@ -3,6 +3,7 @@ package be.baur.sdt.statements;
 import java.util.List;
 
 import be.baur.sda.Node;
+import be.baur.sda.dNode;
 import be.baur.sdt.SDT;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.TransformException;
@@ -71,8 +72,8 @@ public class ForEachStatement extends XPathStatement {
 	 * @return an SDA node representing<br>
 	 *         <code>foreach "<i>expression</i>" { <i>statement+</i> }</code>
 	 */
-	public Node toNode() {
-		Node node = new Node(Statements.FOREACH.tag, getExpression());
+	public dNode toNode() {
+		dNode node = new dNode(Statements.FOREACH.tag, getExpression());
 		for (Node statement : nodes()) // // add child statements
 			node.add(((Statement) statement).toNode());
 		return node;

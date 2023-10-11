@@ -4,6 +4,7 @@ import java.util.List;
 
 import be.baur.sda.Node;
 import be.baur.sda.SDA;
+import be.baur.sda.dNode;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.TransformException;
 import be.baur.sdt.serialization.Statements;
@@ -39,7 +40,7 @@ public class NodeStatement extends Statement {
 		 * output node to collect any child nodes created "downstream".
 		 */
 		try {
-			Node newNode = new Node(getValue()); // icky :(
+			dNode newNode = new dNode(getValue()); // icky :(
 			stacon.getOutputNode().add(newNode);
 
 			List<Node> statements = nodes();
@@ -61,8 +62,8 @@ public class NodeStatement extends Statement {
 	 * @return a node representing<br>
 	 *         <code>node "<i>name</i>" { <i>statement?</i> }</code>
 	 */
-	public Node toNode() {
-		Node node = new Node(Statements.NODE.tag, getValue());
+	public dNode toNode() {
+		dNode node = new dNode(Statements.NODE.tag, getValue());
 		for (Node statement : nodes()) // add child statements, if any
 			node.add(((Statement) statement).toNode());
 		return node;

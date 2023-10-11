@@ -4,6 +4,7 @@ import java.util.List;
 
 import be.baur.sda.Node;
 import be.baur.sda.SDA;
+import be.baur.sda.dNode;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.TransformException;
 import be.baur.sdt.serialization.Attribute;
@@ -48,7 +49,7 @@ public class NodeValueStatement extends XPathStatement {
 			xpath.setVariableContext(stacon);
 			String value = xpath.stringValueOf(stacon.getContextNode());
 			
-			Node newNode = new Node(getValue(), value); // icky :(
+			dNode newNode = new dNode(getValue(), value); // icky :(
 			stacon.getOutputNode().add(newNode);
 
 			List<Node> statements = nodes();
@@ -70,9 +71,9 @@ public class NodeValueStatement extends XPathStatement {
 	 * @return a node representing<br>
 	 *         <code>node "<i>name</i>" { value "<i>expression</i>" <i>statement*</i> }</code>
 	 */
-	public Node toNode() {
-		Node node = new Node(Statements.NODE.tag, getValue());
-		node.add(new Node(Attribute.VALUE.tag, getExpression()));
+	public dNode toNode() {
+		dNode node = new dNode(Statements.NODE.tag, getValue());
+		node.add(new dNode(Attribute.VALUE.tag, getExpression()));
 		for (Node statement : nodes()) // add child statements, if any
 			node.add(((Statement) statement).toNode());
 		return node;

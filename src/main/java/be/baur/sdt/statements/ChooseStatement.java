@@ -3,6 +3,7 @@ package be.baur.sdt.statements;
 import java.util.Objects;
 
 import be.baur.sda.Node;
+import be.baur.sda.dNode;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.TransformException;
 import be.baur.sdt.serialization.Statements;
@@ -78,8 +79,8 @@ public class ChooseStatement extends Statement {
 	 * @return an SDA node representing<br>
 	 *         <code>choose { <i>when_statement+</i> <i>otherwise_statement?</i> }</code>
 	 */
-	public Node toNode() {
-		Node node = new Node(Statements.CHOOSE.tag);
+	public dNode toNode() {
+		dNode node = new dNode(Statements.CHOOSE.tag);
 		for (Node statement : nodes()) // add when/otherwise statements
 			node.add(((Statement) statement).toNode());
 		return node;

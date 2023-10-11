@@ -1,6 +1,6 @@
 package be.baur.sdt.statements;
 
-import be.baur.sda.Node;
+import be.baur.sda.dNode;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.TransformException;
 import be.baur.sdt.serialization.Statements;
@@ -56,8 +56,8 @@ public class ParamStatement extends VariableStatement {
 	 *         <code>param "<i>name</i>" { select "<i>expression</i>" }</code>
 	 */
 	@Override
-	public Node toNode() {
-		Node node = super.toNode();
+	public dNode toNode() {
+		dNode node = super.toNode();
 		node.setName(Statements.PARAM.tag);
 		return node;
 	}

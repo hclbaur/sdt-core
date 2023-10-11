@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Objects;
 
 import be.baur.sda.Node;
+import be.baur.sda.dNode;
 import be.baur.sda.serialization.SDAFormatter;
 import be.baur.sdt.serialization.SDTParser;
 import be.baur.sdt.statements.Statement;
@@ -17,7 +18,7 @@ import be.baur.sdt.statements.StatementContext;
  * @see Statement
  * @see SDTParser
  */
-public final class Transform extends Node {
+public final class Transform extends dNode {
 
 	public static final String TAG = "transform";	
 	
@@ -40,7 +41,7 @@ public final class Transform extends Node {
 	 * @throws TransformException if an exception occurs during execution
 	 * @see TransformContext
 	 */
-	public Node execute(TransformContext context) throws TransformException {
+	public dNode execute(TransformContext context) throws TransformException {
 
 		Objects.requireNonNull(context, "context must not be null");
 
@@ -66,8 +67,8 @@ public final class Transform extends Node {
 	 * @return a node representing<br>
 	 *         <code>transform { <i>statement?</i> }</code>
 	 */
-	public Node toNode() {
-		Node node = new Node(TAG); node.add(null); // in case there are no statements
+	public dNode toNode() {
+		dNode node = new dNode(TAG); node.add(null); // in case there are no statements
 		for (Node statement : nodes()) // add child statements
 			node.add(((Statement) statement).toNode());
 		return node;

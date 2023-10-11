@@ -3,7 +3,7 @@ package be.baur.sdt.statements;
 import java.util.List;
 import java.util.Objects;
 
-import be.baur.sda.Node;
+import be.baur.sda.dNode;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.TransformException;
 import be.baur.sdt.serialization.Attribute;
@@ -79,9 +79,9 @@ public class VariableStatement extends XPathStatement {
 	 * @return a node representing<br>
 	 *         <code>variable "<i>name</i>" { select "<i>expression</i>" }</code>
 	 */
-	public Node toNode() {
-		Node node = new Node(Statements.VARIABLE.tag, getValue());
-		node.add( new Node(Attribute.SELECT.tag, getExpression()) ); 
+	public dNode toNode() {
+		dNode node = new dNode(Statements.VARIABLE.tag, getValue());
+		node.add( new dNode(Attribute.SELECT.tag, getExpression()) ); 
 		return node;
 	}
 
