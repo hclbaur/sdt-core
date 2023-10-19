@@ -24,7 +24,7 @@ public class PrintStatement extends XPathStatement {
 	 * @param terminate whether to terminate the line
 	 */
 	public PrintStatement(SDAXPath xpath, boolean terminate) {
-		super(terminate ? Statements.PRINTLN.tag : Statements.PRINT.tag, xpath);
+		super(xpath);
 		this.terminate = terminate;
 	}
 
@@ -67,7 +67,7 @@ public class PrintStatement extends XPathStatement {
 	 * @return a node representing<br>
 	 *         <code>print(ln) { value "<i>expression</i>" }</code>
 	 */
-	public dNode toNode() {
+	public dNode toSDA() {
 		dNode node = new dNode(terminate ? Statements.PRINTLN.tag : Statements.PRINT.tag);
 		node.add( new dNode(Attribute.VALUE.tag, getExpression()) ); 
 		return node;

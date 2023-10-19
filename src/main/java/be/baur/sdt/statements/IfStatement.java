@@ -21,7 +21,7 @@ public class IfStatement extends XPathStatement {
 	 * @param xpath the XPath to be evaluated, not null
 	 */
 	public IfStatement(SDAXPath xpath) {
-		super(Statements.IF.tag, xpath);
+		super(xpath);
 		add(null); // must have child statements so initialize it with an empty node set
 	}
 
@@ -58,10 +58,10 @@ public class IfStatement extends XPathStatement {
 	 * @return an SDA node representing<br>
 	 *         <code>if "<i>expression</i>" { <i>statement+</i> }</code>
 	 */
-	public dNode toNode() {
+	public dNode toSDA() {
 		dNode node = new dNode(Statements.IF.tag, getExpression()); 
 		for (Node statement : nodes()) // // add child statements
-			node.add(((Statement) statement).toNode());
+			node.add(((Statement) statement).toSDA());
 		return node;
 	}
 

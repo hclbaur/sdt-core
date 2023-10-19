@@ -30,9 +30,8 @@ public abstract class XPathStatement extends Statement {
 	 * @param name a valid statement name, see {@link Statements}
 	 * @param xpath the XPath object, not null
 	 */
-	public XPathStatement(String name, SDAXPath xpath) {
-		super(name); 
-		this.expression = Objects.requireNonNull(xpath, "xpath must not be null").toString();
+	public XPathStatement(SDAXPath xpath) {
+		expression = Objects.requireNonNull(xpath, "xpath must not be null").toString();
 	}
 
 

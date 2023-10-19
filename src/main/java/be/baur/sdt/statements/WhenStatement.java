@@ -20,7 +20,7 @@ public class WhenStatement extends XPathStatement {
 	 * @param xpath the XPath to be evaluated, not null
 	 */
 	public WhenStatement(SDAXPath xpath) {
-		super(Statements.WHEN.tag, xpath);
+		super(xpath);
 	}
 
 	
@@ -36,10 +36,10 @@ public class WhenStatement extends XPathStatement {
 	 * @return an SDA node representing<br>
 	 *         <code>when "<i>expression</i>" { <i>statement+</i> }</code>
 	 */
-	public dNode toNode() {
+	public dNode toSDA() {
 		dNode node = new dNode(Statements.WHEN.tag, getExpression()); 
 		for (Node statement : nodes()) // add child statements
-			node.add(((Statement) statement).toNode());
+			node.add(((Statement) statement).toSDA());
 		return node;
 	}
 

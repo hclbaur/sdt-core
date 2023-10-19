@@ -22,7 +22,7 @@ public class CopyStatement extends XPathStatement {
 	 * @param xpath the XPath to be evaluated, not null
 	 */
 	public CopyStatement(SDAXPath xpath) {
-		super(Statements.COPY.tag, xpath);
+		super(xpath);
 	}
 
 
@@ -70,8 +70,8 @@ public class CopyStatement extends XPathStatement {
 	 * @return an SDA node representing<br>
 	 *         <code>copy { select "<i>expression</i>" }</code>
 	 */
-	public dNode toNode() {
-		dNode node = new dNode(Statements.COPY.tag, getValue());
+	public dNode toSDA() {
+		dNode node = new dNode(Statements.COPY.tag);
 		node.add( new dNode(Attribute.SELECT.tag, getExpression()) ); 
 		return node;
 	}

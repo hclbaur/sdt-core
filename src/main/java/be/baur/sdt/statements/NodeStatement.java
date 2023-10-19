@@ -1,6 +1,7 @@
 package be.baur.sdt.statements;
 
 import java.util.List;
+import java.util.Objects;
 
 import be.baur.sda.Node;
 import be.baur.sda.SDA;
@@ -12,23 +13,47 @@ import be.baur.sdt.serialization.Statements;
 /**
  * The {@code NodeStatement} creates a new node with the specified name and an
  * empty value (and therefore no XPath expression needs to be evaluated). Any
- * child nodes can be created in the compound statement.
+ * child nodes can be created by the compound statement.
  * 
  * @see NodeValueStatement
  */
 public class NodeStatement extends Statement {
+	
+	private String nodeName; // name of the node created by this statement
+
 
 	/**
 	 * Creates a {@code NodeStatement}.
 	 * 
-	 * @param name the name of the new node, not null
-	 * @throws IllegalArgumentException if the node name is invalid
+	 * @param name a valid node name
+	 * @throws IllegalArgumentException if name is invalid
 	 */
 	public NodeStatement(String name) {
-		super(Statements.NODE.tag);
+		setNodeName(name);
+	}
+
+
+	/**
+	 * Returns the name of the node created by this statement.
+	 * 
+	 * @returns a node name, not null or empty
+	 */
+	public String getNodeName() {
+		return nodeName;
+	}
+
+
+	/**
+	 * Sets the name of the node created by this statement.
+	 * 
+	 * @param name a valid node name, see {@link SDA#isName}
+	 * @throws IllegalArgumentException if name is invalid
+	 */
+	public void setNodeName(String name) {
+		Objects.requireNonNull(name, "name must not be null");
 		if (!SDA.isName(name))
 			throw new IllegalArgumentException("name '" + name + "' is invalid");
-		setValue(name); // name is stored in the node value, bit icky
+		nodeName = name;
 	}
 
 
@@ -40,7 +65,7 @@ public class NodeStatement extends Statement {
 		 * output node to collect any child nodes created "downstream".
 		 */
 		try {
-			dNode newNode = new dNode(getValue()); // icky :(
+			dNode newNode = new dNode(nodeName);
 			stacon.getOutputNode().add(newNode);
 
 			List<Node> statements = nodes();
@@ -62,10 +87,10 @@ public class NodeStatement extends Statement {
 	 * @return a node representing<br>
 	 *         <code>node "<i>name</i>" { <i>statement?</i> }</code>
 	 */
-	public dNode toNode() {
-		dNode node = new dNode(Statements.NODE.tag, getValue());
+	public dNode toSDA() {
+		dNode node = new dNode(Statements.NODE.tag, nodeName);
 		for (Node statement : nodes()) // add child statements, if any
-			node.add(((Statement) statement).toNode());
+			node.add(((Statement) statement).toSDA());
 		return node;
 	}
 

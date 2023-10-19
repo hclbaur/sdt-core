@@ -17,7 +17,7 @@ public class OtherwiseStatement extends Statement {
 	 * Creates an OtherwiseStatement.
 	 */
 	public OtherwiseStatement() {
-		super(Statements.OTHERWISE.tag);
+		//super(Statements.OTHERWISE.tag);
 	}
 
 
@@ -33,10 +33,10 @@ public class OtherwiseStatement extends Statement {
 	 * @return an SDA node representing<br>
 	 *         <code>otherwise { <i>statement+</i> }</code>
 	 */
-	public dNode toNode() {
+	public dNode toSDA() {
 		dNode node = new dNode(Statements.OTHERWISE.tag); 
 		for (Node statement : nodes()) // add child statements
-			node.add(((Statement) statement).toNode());
+			node.add(((Statement) statement).toSDA());
 		return node;
 	}
 
