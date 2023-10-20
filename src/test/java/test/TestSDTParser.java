@@ -4,8 +4,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
 
-import be.baur.sda.Node;
 import be.baur.sda.SDA;
+import be.baur.sda.DataNode;
+import be.baur.sda.serialization.Parser;
 import be.baur.sdt.Transform;
 import be.baur.sdt.serialization.ParseException;
 import be.baur.sdt.serialization.SDTParser;
@@ -14,7 +15,7 @@ import be.baur.sdt.xpath.SDAXPath;
 
 public final class TestSDTParser {
 
-	private static final be.baur.sda.serialization.Parser sdaparser = SDA.parser();
+	private static final Parser<DataNode> sdaparser = SDA.parser();
 	
 	public static void main(String[] args) throws Exception {
 
@@ -30,7 +31,7 @@ public final class TestSDTParser {
 		
 		Transform t1 = new Transform();
 		SDAXPath x = new SDAXPath("'Hello World!'");
-		t1.add(new PrintStatement(x,false));
+		t1.add(new PrintStatement(x, false));
 		System.out.print(t1);
 		
 		// test exception
@@ -153,7 +154,7 @@ public final class TestSDTParser {
 		
 		// test performance
 		InputStream input = TestSDTParser.class.getResourceAsStream("/addressbook.sdt");
-		Node sdt = sdaparser.parse(new InputStreamReader(input,"UTF-8"));
+		DataNode sdt = sdaparser.parse(new InputStreamReader(input,"UTF-8"));
 		
 		PerfTest p = new PerfTest(sdtnode -> {
 			try {

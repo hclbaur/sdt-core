@@ -7,6 +7,7 @@ import java.util.List;
 
 import be.baur.sda.Node;
 import be.baur.sda.SDA;
+import be.baur.sda.DataNode;
 import be.baur.sdt.Transform;
 import be.baur.sdt.statements.ChooseStatement;
 import be.baur.sdt.statements.CopyStatement;
@@ -80,7 +81,7 @@ public final class SDTParser implements Parser {
 	@Override
 	public Transform parse(Reader input) throws IOException, ParseException, java.text.ParseException {
 
-		Node sdt = SDA.parser().parse(input);
+		DataNode sdt = SDA.parser().parse(input);
 		return parse(sdt);
 	}
 
@@ -93,14 +94,14 @@ public final class SDTParser implements Parser {
 	 * @return a Transform
 	 * @throws ParseException if a parse exception occurs
 	 */
-	public static Transform parse(Node sdt) throws ParseException {
+	public static Transform parse(DataNode sdt) throws ParseException {
 		/*
 		 * A valid transform has no value, and no attributes.
 		 */
-		if (!sdt.getName().equals(Transform.TAG))
+		if (! sdt.getName().equals(Transform.TAG))
 			throw new ParseException(sdt, String.format(STATEMENT_EXPECTED, Transform.TAG));
 
-		if (!sdt.getValue().isEmpty())
+		if (! sdt.getValue().isEmpty())
 			throw new ParseException(sdt, String.format(STATEMENT_REQUIRES_NO_VALUE, sdt.getName()));
 
 		if (sdt.isLeaf()) // a transform should have a compound statement, even if empty
@@ -110,7 +111,7 @@ public final class SDTParser implements Parser {
 
 		Transform transform = new Transform();
 		for (Node node : sdt.find(n -> ! n.isLeaf()))
-			transform.add(parseStatement(node)); // parse and add child statements
+			transform.add(parseStatement((DataNode) node)); // parse and add child statements
 
 		return transform;
 	}
@@ -120,7 +121,7 @@ public final class SDTParser implements Parser {
 	 * This method parses an SDA node representing an SDT statement, and returns a
 	 * Statement which itself may contain other Statements.
 	 */
-	private static Statement parseStatement(Node sdt) throws ParseException {
+	private static Statement parseStatement(DataNode sdt) throws ParseException {
 		/*
 		 * Whatever we get must be an existing statement, and contain attributes and/or
 		 * other statements. This method is called recursively and must deal with every
@@ -165,17 +166,17 @@ public final class SDTParser implements Parser {
 	 * This method parses an SDA node representing an SDT print or println
 	 * statement, and returns a PrintStatement.
 	 */
-	private static PrintStatement parsePrintOrPrintLn(Node sdt, boolean addEOL) throws ParseException {
+	private static PrintStatement parsePrintOrPrintLn(DataNode sdt, boolean addEOL) throws ParseException {
 		/*
 		 * A valid print(nl) statement has no value, a single VALUE attribute containing
 		 * an XPath expression, and nothing else.
 		 */
-		if (!sdt.getValue().isEmpty())
+		if (! sdt.getValue().isEmpty())
 			throw new ParseException(sdt, String.format(STATEMENT_REQUIRES_NO_VALUE, sdt.getName()));
 
 		checkStatements(sdt, null); // no sub-statements allowed
 		checkAttributes(sdt, Arrays.asList(Attribute.VALUE));
-		Node value = getAttribute(sdt, Attribute.VALUE, true);
+		DataNode value = getAttribute(sdt, Attribute.VALUE, true);
 
 		return new PrintStatement(xpathFromNode(value), addEOL);
 	}
@@ -185,7 +186,7 @@ public final class SDTParser implements Parser {
 	 * This method parses an SDA node representing an SDT variable or param
 	 * statement, and returns a VariableStatement (or ParamStatement).
 	 */
-	private static VariableStatement parseVariableOrParam(Node sdt) throws ParseException {
+	private static VariableStatement parseVariableOrParam(DataNode sdt) throws ParseException {
 		/*
 		 * A valid variable/param statement has a non-empty value with a variable name,
 		 * a single SELECT attribute containing an XPath expression, and no other
@@ -196,9 +197,13 @@ public final class SDTParser implements Parser {
 		
 		boolean isParam = sdt.getName().equals(Statements.PARAM.tag);	
 		if ( isParam ) {
-			if (! sdt.getParent().getName().equals(Transform.TAG)) // parent cannot be null
-				throw new ParseException(sdt, String.format(STATEMENT_NOT_ALLOWED, sdt.getName()));	
-			if (sdt.getParent().find(n -> n.getName().equals(Statements.PARAM.tag) && n.getValue().equals(varname)).size() > 1)
+			final Node parent = sdt.getParent();
+			if (! parent.getName().equals(Transform.TAG)) // parent cannot be null
+				throw new ParseException(sdt, String.format(STATEMENT_NOT_ALLOWED, sdt.getName()));
+			
+			if (parent.find(n -> 
+				n.getName().equals(Statements.PARAM.tag) 
+					&& ((DataNode) n).getValue().equals(varname)).size() > 1)
 				throw new ParseException(sdt, String.format(PARAMETER_REDECLARED, varname));		
 		}
 		
@@ -209,7 +214,7 @@ public final class SDTParser implements Parser {
 		
 		checkStatements(sdt, null); // no sub-statements allowed
 		checkAttributes(sdt, Arrays.asList(Attribute.SELECT));
-		Node select = getAttribute(sdt, Attribute.SELECT, true);
+		DataNode select = getAttribute(sdt, Attribute.SELECT, true);
 
 		return isParam 
 			? new ParamStatement(varname, xpathFromNode(select))
@@ -221,7 +226,7 @@ public final class SDTParser implements Parser {
 	 * This method parses an SDA node representing an SDT foreach statement, and
 	 * returns a ForEachStatement.
 	 */
-	private static ForEachStatement parseForEach(Node sdt) throws ParseException {
+	private static ForEachStatement parseForEach(DataNode sdt) throws ParseException {
 		/*
 		 * A valid foreach statement has a non-empty value with an XPath expression and
 		 * contains child statements, but no attributes.
@@ -233,7 +238,7 @@ public final class SDTParser implements Parser {
 
 		ForEachStatement statement = new ForEachStatement(xpathFromNode(sdt));
 		for (Node node : sdt.nodes()) // parse and add child statements
-			statement.add(parseStatement(node));
+			statement.add(parseStatement((DataNode) node));
 
 		return statement;
 	}
@@ -243,7 +248,7 @@ public final class SDTParser implements Parser {
 	 * This method parses an SDA node representing an SDT if statement, and returns
 	 * a IfStatement.
 	 */
-	private static IfStatement parseIf(Node sdt) throws ParseException {
+	private static IfStatement parseIf(DataNode sdt) throws ParseException {
 		/*
 		 * A valid if statement has a non-empty value with an XPath expression and
 		 * contains child statements, but no attributes.
@@ -255,7 +260,7 @@ public final class SDTParser implements Parser {
 
 		IfStatement statement = new IfStatement(xpathFromNode(sdt));
 		for (Node node : sdt.nodes()) // parse and add child statements
-			statement.add(parseStatement(node));
+			statement.add(parseStatement((DataNode) node));
 
 		return statement;
 	}
@@ -265,12 +270,12 @@ public final class SDTParser implements Parser {
 	 * This method parses an SDA node representing an SDT choose statement, and
 	 * returns a ChooseStatement.
 	 */
-	private static ChooseStatement parseChoose(Node sdt) throws ParseException {
+	private static ChooseStatement parseChoose(DataNode sdt) throws ParseException {
 		/*
 		 * A valid choose statement has no value, contains at least one when statement,
 		 * an optional otherwise statement, and no attributes or other statements.
 		 */
-		if (!sdt.getValue().isEmpty())
+		if (! sdt.getValue().isEmpty())
 			throw new ParseException(sdt, String.format(STATEMENT_REQUIRES_NO_VALUE, sdt.getName()));
 
 		checkStatements(sdt, Arrays.asList(Statements.WHEN, Statements.OTHERWISE));
@@ -281,7 +286,7 @@ public final class SDTParser implements Parser {
 		for (Node node : sdt.nodes()) {
 
 			++i;
-			Statement substat = parseStatement(node);
+			Statement substat = parseStatement((DataNode) node);
 
 			if (i == 1) {
 				if (!(substat instanceof WhenStatement))
@@ -293,7 +298,7 @@ public final class SDTParser implements Parser {
 			if (substat instanceof OtherwiseStatement && i < last)
 				throw new ParseException(node, String.format(STATEMENT_MISPLACED, Statements.OTHERWISE.tag));
 
-			statement.add(parseStatement(node));
+			statement.add(parseStatement((DataNode) node));
 		}
 
 		return statement;
@@ -304,7 +309,7 @@ public final class SDTParser implements Parser {
 	 * This method parses an SDA node representing an SDT when statement, and
 	 * returns a WhenStatement.
 	 */
-	private static WhenStatement parseWhen(Node sdt) throws ParseException {
+	private static WhenStatement parseWhen(DataNode sdt) throws ParseException {
 		/*
 		 * A valid when statement has a non-empty value with an XPath expression and
 		 * contains child statements, but no attributes.
@@ -316,7 +321,7 @@ public final class SDTParser implements Parser {
 
 		WhenStatement statement = new WhenStatement(xpathFromNode(sdt));
 		for (Node node : sdt.nodes()) // parse and add child statements
-			statement.add(parseStatement(node));
+			statement.add(parseStatement((DataNode) node));
 
 		return statement;
 	}
@@ -326,7 +331,7 @@ public final class SDTParser implements Parser {
 	 * This method parses an SDA node representing an SDT when statement, and
 	 * returns a OtherwiseStatement.
 	 */
-	private static OtherwiseStatement parseOtherwise(Node sdt) throws ParseException {
+	private static OtherwiseStatement parseOtherwise(DataNode sdt) throws ParseException {
 		/*
 		 * A valid otherwise statement has no value and contains child statements, but
 		 * no attributes.
@@ -338,7 +343,7 @@ public final class SDTParser implements Parser {
 
 		OtherwiseStatement statement = new OtherwiseStatement();
 		for (Node node : sdt.nodes()) // parse and add child statements
-			statement.add(parseStatement(node));
+			statement.add(parseStatement((DataNode) node));
 
 		return statement;
 	}
@@ -348,7 +353,7 @@ public final class SDTParser implements Parser {
 	 * This method parses an SDA node representing an SDT node statement, and
 	 * returns a NodeStatement.
 	 */
-	private static Statement parseNode(Node sdt) throws ParseException {
+	private static Statement parseNode(DataNode sdt) throws ParseException {
 		/*
 		 * A valid node statement has a non-empty value with a node name, a single VALUE
 		 * attribute containing an XPath expression, and contains child statements but
@@ -362,14 +367,14 @@ public final class SDTParser implements Parser {
 			throw new ParseException(sdt, String.format(NODE_NAME_INVALID, nodename));
 		
 		checkAttributes(sdt, Arrays.asList(Attribute.VALUE));
-		final Node value = getAttribute(sdt, Attribute.VALUE, false);
+		final DataNode value = getAttribute(sdt, Attribute.VALUE, false);
 			
 		Statement stat = (value == null) 
 			? new NodeStatement(nodename) 
 			: new NodeValueStatement(nodename, xpathFromNode(value));
 
 		for (Node node : sdt.find(n -> ! n.isLeaf()))
-			stat.add(parseStatement(node)); // parse and add child statements
+			stat.add(parseStatement((DataNode) node)); // parse and add child statements
 
 		return stat;
 	}
@@ -379,7 +384,7 @@ public final class SDTParser implements Parser {
 	 * This method parses an SDA node representing an SDT copy statement, and
 	 * returns a CopyStatement.
 	 */
-	private static CopyStatement parseCopy(Node sdt) throws ParseException {
+	private static CopyStatement parseCopy(DataNode sdt) throws ParseException {
 		/*
 		 * A valid copy statement has no value, a single SELECT attribute containing
 		 * an XPath expression, and nothing else.
@@ -389,7 +394,7 @@ public final class SDTParser implements Parser {
 
 		checkStatements(sdt, null); // no sub-statements allowed
 		checkAttributes(sdt, Arrays.asList(Attribute.SELECT));
-		Node select = getAttribute(sdt, Attribute.SELECT, true);
+		DataNode select = getAttribute(sdt, Attribute.SELECT, true);
 
 		return new CopyStatement(xpathFromNode(select));
 	}
@@ -404,7 +409,7 @@ public final class SDTParser implements Parser {
 	 * @param node the Node to create the XPath from
 	 * @throws ParseException if the XPath expression is invalid
 	 */
-	private static SDAXPath xpathFromNode(Node node) throws ParseException {
+	private static SDAXPath xpathFromNode(DataNode node) throws ParseException {
 
 		SDAXPath xpath;
 		try {
@@ -425,7 +430,7 @@ public final class SDTParser implements Parser {
 	 * @param allowed List of Statements, null if none are allowed
 	 * @throws ParseException if unknown or forbidden Statements are found
 	 */
-	private static void checkStatements(Node sdt, List<Statements> allowed) throws ParseException {
+	private static void checkStatements(DataNode sdt, List<Statements> allowed) throws ParseException {
 
 		for (Node node : sdt.find(n -> ! n.isLeaf())) {
 
@@ -446,7 +451,7 @@ public final class SDTParser implements Parser {
 	 * @param allowed List of Attributes, null if none are allowed
 	 * @throws ParseException if unknown or forbidden Attributes are found
 	 */
-	private static void checkAttributes(Node sdt, List<Attribute> allowed) throws ParseException {
+	private static void checkAttributes(DataNode sdt, List<Attribute> allowed) throws ParseException {
 
 		for (Node node : sdt.find(n -> n.isLeaf())) {
 
@@ -476,9 +481,9 @@ public final class SDTParser implements Parser {
 	 * @return a Node, may be null
 	 * @throws ParseException
 	 */
-	private static Node getAttribute(Node sdt, Attribute attribute, Boolean required) throws ParseException {
+	private static DataNode getAttribute(DataNode sdt, Attribute attribute, Boolean required) throws ParseException {
 
-		List<Node> alist = sdt.find(n -> n.isLeaf() && n.getName().equals(attribute.tag));
+		List<DataNode> alist = sdt.find(n -> n.isLeaf() && n.getName().equals(attribute.tag));
 		int size = alist.size();
 		
 		if (size == 0) {
@@ -489,7 +494,7 @@ public final class SDTParser implements Parser {
 		if (required == null)
 			throw new ParseException(sdt, String.format(ATTRIBUTE_NOT_ALLOWED, attribute.tag));
 
-		Node node = alist.get(0);
+		DataNode node = alist.get(0);
 		if (node.getValue().isEmpty())
 			throw new ParseException(node, String.format(ATTRIBUTE_REQUIRES_VALUE, attribute.tag));
 		if (size > 1)

@@ -3,6 +3,7 @@ package be.baur.sdt.statements;
 import java.util.List;
 
 import be.baur.sda.Node;
+import be.baur.sda.DataNode;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.TransformException;
 import be.baur.sdt.serialization.Statements;
@@ -20,7 +21,7 @@ public class IfStatement extends XPathStatement {
 	 * @param xpath the XPath to be evaluated, not null
 	 */
 	public IfStatement(SDAXPath xpath) {
-		super(Statements.IF.tag, xpath);
+		super(xpath);
 		add(null); // must have child statements so initialize it with an empty node set
 	}
 
@@ -57,10 +58,10 @@ public class IfStatement extends XPathStatement {
 	 * @return an SDA node representing<br>
 	 *         <code>if "<i>expression</i>" { <i>statement+</i> }</code>
 	 */
-	public Node toNode() {
-		Node node = new Node(Statements.IF.tag, getExpression()); 
+	public DataNode toSDA() {
+		DataNode node = new DataNode(Statements.IF.tag, getExpression()); 
 		for (Node statement : nodes()) // // add child statements
-			node.add(((Statement) statement).toNode());
+			node.add(((Statement) statement).toSDA());
 		return node;
 	}
 

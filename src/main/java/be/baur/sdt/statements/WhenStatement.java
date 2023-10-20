@@ -1,6 +1,7 @@
 package be.baur.sdt.statements;
 
 import be.baur.sda.Node;
+import be.baur.sda.DataNode;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.TransformException;
 import be.baur.sdt.serialization.Statements;
@@ -19,7 +20,7 @@ public class WhenStatement extends XPathStatement {
 	 * @param xpath the XPath to be evaluated, not null
 	 */
 	public WhenStatement(SDAXPath xpath) {
-		super(Statements.WHEN.tag, xpath);
+		super(xpath);
 	}
 
 	
@@ -35,10 +36,10 @@ public class WhenStatement extends XPathStatement {
 	 * @return an SDA node representing<br>
 	 *         <code>when "<i>expression</i>" { <i>statement+</i> }</code>
 	 */
-	public Node toNode() {
-		Node node = new Node(Statements.WHEN.tag, getExpression()); 
+	public DataNode toSDA() {
+		DataNode node = new DataNode(Statements.WHEN.tag, getExpression()); 
 		for (Node statement : nodes()) // add child statements
-			node.add(((Statement) statement).toNode());
+			node.add(((Statement) statement).toSDA());
 		return node;
 	}
 

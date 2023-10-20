@@ -1,24 +1,23 @@
 package be.baur.sdt.statements;
 
-import be.baur.sda.Node;
+import be.baur.sda.AbstractNode;
+import be.baur.sda.DataNode;
 import be.baur.sda.serialization.SDAFormatter;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.TransformException;
-import be.baur.sdt.serialization.Statements;
 
 /**
  * The abstract superclass of all transform statements.
  */
-public abstract class Statement extends Node {
+public abstract class Statement extends AbstractNode {
 
 	/**
 	 * Creates a {@code Statement}.
 	 * 
 	 * @param name a valid statement name, see {@link Statements}
 	 */
-	public Statement(String name) {
-		super(name);
-	}
+//	public Statement(String name) {
+//	}
 	
 	
 	/**
@@ -39,19 +38,19 @@ public abstract class Statement extends Node {
 	 * 
 	 * @return a node representing this statement
 	 */
-	public abstract Node toNode();
+	public abstract DataNode toSDA();
 
 	
 	/**
 	 * Returns a string representing this statement in SDT notation. The result is
 	 * formatted as a single line of text. For a more readable output, use the
-	 * {@link #toNode} method and render it node using an {@link SDAFormatter}.
+	 * {@link #toSDA} method and render it node using an {@link SDAFormatter}.
 	 * 
 	 * @return a string representation of this statement
 	 */
 	@Override
 	public String toString() {
-		return toNode().toString();
+		return toSDA().toString();
 	}
 
 }

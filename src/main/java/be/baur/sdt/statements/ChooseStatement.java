@@ -3,6 +3,7 @@ package be.baur.sdt.statements;
 import java.util.Objects;
 
 import be.baur.sda.Node;
+import be.baur.sda.DataNode;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.TransformException;
 import be.baur.sdt.serialization.Statements;
@@ -21,7 +22,7 @@ public class ChooseStatement extends Statement {
 	 * @param when a WhenStatement, not null
 	 */
 	public ChooseStatement(WhenStatement when) {
-		super(Statements.CHOOSE.tag);
+		//super(Statements.CHOOSE.tag);
 		Objects.requireNonNull(when, "when statement must not be null");
 		add(when);
 	}
@@ -78,10 +79,10 @@ public class ChooseStatement extends Statement {
 	 * @return an SDA node representing<br>
 	 *         <code>choose { <i>when_statement+</i> <i>otherwise_statement?</i> }</code>
 	 */
-	public Node toNode() {
-		Node node = new Node(Statements.CHOOSE.tag);
+	public DataNode toSDA() {
+		DataNode node = new DataNode(Statements.CHOOSE.tag);
 		for (Node statement : nodes()) // add when/otherwise statements
-			node.add(((Statement) statement).toNode());
+			node.add(((Statement) statement).toSDA());
 		return node;
 	}
 

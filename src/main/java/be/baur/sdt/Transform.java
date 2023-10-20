@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Objects;
 
 import be.baur.sda.Node;
+import be.baur.sda.AbstractNode;
+import be.baur.sda.DataNode;
 import be.baur.sda.serialization.SDAFormatter;
 import be.baur.sdt.serialization.SDTParser;
 import be.baur.sdt.statements.Statement;
@@ -17,7 +19,7 @@ import be.baur.sdt.statements.StatementContext;
  * @see Statement
  * @see SDTParser
  */
-public final class Transform extends Node {
+public final class Transform extends AbstractNode {
 
 	public static final String TAG = "transform";	
 	
@@ -25,22 +27,21 @@ public final class Transform extends Node {
 	/** 
 	 * Creates a {@code Transform}. 
 	 */
-	public Transform() {
-		super(TAG); // extends Node, so it must have a tag, even if we do not really use it
-	}
+//	public Transform() {
+//	}
 
 
 	/**
-	 * Executes this transform suing the supplied {@code TransformContext}. This
-	 * method returns an output document {@code Node} which may be empty if no nodes
-	 * were created during transformation.
+	 * Executes this transform in the supplied {@code TransformContext}. This method
+	 * returns an output document {@code Node} which may be empty if no nodes were
+	 * created during transformation.
 	 * 
 	 * @param context the transformation context, not null
 	 * @return the output Node, may be null
 	 * @throws TransformException if an exception occurs during execution
 	 * @see TransformContext
 	 */
-	public Node execute(TransformContext context) throws TransformException {
+	public DataNode execute(TransformContext context) throws TransformException {
 
 		Objects.requireNonNull(context, "context must not be null");
 
@@ -66,10 +67,10 @@ public final class Transform extends Node {
 	 * @return a node representing<br>
 	 *         <code>transform { <i>statement?</i> }</code>
 	 */
-	public Node toNode() {
-		Node node = new Node(TAG); node.add(null); // in case there are no statements
+	public DataNode toSDA() {
+		DataNode node = new DataNode(TAG); node.add(null); // in case there are no statements
 		for (Node statement : nodes()) // add child statements
-			node.add(((Statement) statement).toNode());
+			node.add(((Statement) statement).toSDA());
 		return node;
 	}
 	
@@ -82,12 +83,12 @@ public final class Transform extends Node {
 	 * </pre>
 	 * 
 	 * The result is formatted as a single line of text. For a more readable output,
-	 * use the {@link #toNode} method and render it using a {@link SDAFormatter}.
+	 * use the {@link #toSDA} method and render it using a {@link SDAFormatter}.
 	 * 
 	 * @return a string in SDT format
 	 */
 	@Override
 	public String toString() {
-		return toNode().toString();
+		return toSDA().toString();
 	}
 }

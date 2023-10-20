@@ -4,8 +4,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Writer;
 
-import be.baur.sda.Node;
 import be.baur.sda.SDA;
+import be.baur.sda.DataNode;
 import be.baur.sdt.SDT;
 import be.baur.sdt.Transform;
 import be.baur.sdt.TransformContext;
@@ -22,7 +22,7 @@ public final class TestTransform {
 		Writer w = c.getWriter();
 		
 		w.write("<<\n");
-		Node node = tran.execute(c); 
+		DataNode node = tran.execute(c); 
 		SDA.formatter().format(w, node);
 		w.write(">>\n");
 

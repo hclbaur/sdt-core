@@ -1,6 +1,6 @@
 package be.baur.sdt.statements;
 
-import be.baur.sda.Node;
+import be.baur.sda.DataNode;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.TransformException;
 import be.baur.sdt.serialization.Statements;
@@ -10,6 +10,7 @@ import be.baur.sdt.xpath.SDAXPath;
  * The {@code ParamStatement} evaluates an XPath expression and assigns the
  * result to a variable. The resulting value is considered a default that can be
  * overwritten by the transformation context - in other words - a parameter.
+ * Unlike regular variables, parameters are not mutable during execution.
  * 
  * @see VariableStatement
  */
@@ -24,7 +25,6 @@ public class ParamStatement extends VariableStatement {
 	 */
 	public ParamStatement(String name, SDAXPath xpath) {
 		super(name, xpath);
-		setName(Statements.PARAM.tag);
 	}
 
 	
@@ -38,14 +38,14 @@ public class ParamStatement extends VariableStatement {
 		 * super method - which will evaluate the XPath value of the parameter and add
 		 * it to the statement context (as if it were a regular variable).
 		 */
-		String name = getValue(); // icky :(
+		final String param = getVarName();
 		
-		if (stacon.hasVariable(null, name))
-			throw new TransformException(this, "parameter '" + name + "' cannot be redeclared.");
+		if (stacon.hasVariable(null, param))
+			throw new TransformException(this, "parameter '" + param + "' cannot be redeclared.");
 			
-		Object value = tracon.getParameters().get(name);
+		Object value = tracon.getParameters().get(param);
 		if (value != null)
-			stacon.setVariableValue(null, name, value);
+			stacon.setVariableValue(null, param, value);
 		else
 			super.execute(tracon, stacon);
 	}
@@ -56,8 +56,8 @@ public class ParamStatement extends VariableStatement {
 	 *         <code>param "<i>name</i>" { select "<i>expression</i>" }</code>
 	 */
 	@Override
-	public Node toNode() {
-		Node node = super.toNode();
+	public DataNode toSDA() {
+		DataNode node = super.toSDA();
 		node.setName(Statements.PARAM.tag);
 		return node;
 	}

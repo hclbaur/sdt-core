@@ -1,17 +1,24 @@
 # Release Notes
 
-## [1.1.0] - 2023-10-04
+## [1.2.0] - in development
 
-This is a compatibility release for sda-core 2.1.x with minor changes.
+This is a compatibility release for sda-core 2.2.x.
 
-- `Changed` parameters to be global variables only.
-- Added *VariableStatement.isVarName* method.
+- `Changed` NodeStatement.getName to NodeStatement.getNodeName.
+- `Changed` NodeValueStatement.getName to NodeValueStatement.getNodeName.
 
 ## Compatibility
 
 - Requires at least Java 8, sda-core 2.1.0 and Jaxen 2.0.0.
 
 ## Previous releases
+
+## [1.1.0] - 2023-10-04
+
+This is a compatibility release for sda-core 2.1.x with minor changes.
+
+- `Changed` parameters to be global variables only.
+- Added *VariableStatement.isVarName* method.
 
 ### [1.0.0] - 2023-07-04 (requires at least SDA v2.0.0)
 

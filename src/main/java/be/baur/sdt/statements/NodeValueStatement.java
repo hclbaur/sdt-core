@@ -1,9 +1,10 @@
 package be.baur.sdt.statements;
 
 import java.util.List;
+import java.util.Objects;
 
 import be.baur.sda.Node;
-import be.baur.sda.SDA;
+import be.baur.sda.DataNode;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.TransformException;
 import be.baur.sdt.serialization.Attribute;
@@ -17,7 +18,10 @@ import be.baur.sdt.xpath.SDAXPath;
  * 
  * @see NodeStatement
  */
-public class NodeValueStatement extends XPathStatement {
+public class NodeValueStatement extends NodeStatement {
+
+	private String expression;
+
 
 	/**
 	 * Creates a {@code NodeValueStatement}.
@@ -27,10 +31,8 @@ public class NodeValueStatement extends XPathStatement {
 	 * @throws IllegalArgumentException if the node name is invalid
 	 */
 	public NodeValueStatement(String name, SDAXPath xpath) {
-		super(Statements.NODE.tag, xpath);
-		if (! SDA.isName(name)) 
-			throw new IllegalArgumentException("name '" + name + "' is invalid");
-		setValue(name); // name is stored in the node value, bit icky
+		super(name);
+		expression = Objects.requireNonNull(xpath, "xpath must not be null").toString();
 	}
 
 
@@ -44,11 +46,11 @@ public class NodeValueStatement extends XPathStatement {
 		 * collect any child nodes created "downstream".
 		 */
 		try {
-			SDAXPath xpath = new SDAXPath(getExpression()); 
+			SDAXPath xpath = new SDAXPath(expression); 
 			xpath.setVariableContext(stacon);
 			String value = xpath.stringValueOf(stacon.getContextNode());
 			
-			Node newNode = new Node(getValue(), value); // icky :(
+			DataNode newNode = new DataNode(getNodeName(), value);
 			stacon.getOutputNode().add(newNode);
 
 			List<Node> statements = nodes();
@@ -70,11 +72,11 @@ public class NodeValueStatement extends XPathStatement {
 	 * @return a node representing<br>
 	 *         <code>node "<i>name</i>" { value "<i>expression</i>" <i>statement*</i> }</code>
 	 */
-	public Node toNode() {
-		Node node = new Node(Statements.NODE.tag, getValue());
-		node.add(new Node(Attribute.VALUE.tag, getExpression()));
+	public DataNode toSDA() {
+		DataNode node = new DataNode(Statements.NODE.tag, getNodeName());
+		node.add(new DataNode(Attribute.VALUE.tag, expression));
 		for (Node statement : nodes()) // add child statements, if any
-			node.add(((Statement) statement).toNode());
+			node.add(((Statement) statement).toSDA());
 		return node;
 	}
 
