@@ -6,6 +6,7 @@ This is a compatibility release for sda-core 2.2.x.
 
 - `Changed` NodeStatement.getName to NodeStatement.getNodeName.
 - `Changed` NodeValueStatement.getName to NodeValueStatement.getNodeName.
+- `Renamed` ParseException to SDTParseException.
 
 ## Compatibility
 

@@ -8,7 +8,7 @@ import be.baur.sda.SDA;
 import be.baur.sda.DataNode;
 import be.baur.sda.serialization.Parser;
 import be.baur.sdt.Transform;
-import be.baur.sdt.serialization.ParseException;
+import be.baur.sdt.serialization.SDTParseException;
 import be.baur.sdt.serialization.SDTParser;
 import be.baur.sdt.statements.PrintStatement;
 import be.baur.sdt.xpath.SDAXPath;
@@ -22,7 +22,7 @@ public final class TestSDTParser {
 		Test t = new Test(s -> {
 			try {
 				return SDTParser.parse( sdaparser.parse(new StringReader(s)) ).toString();
-			} catch (ParseException e) {
+			} catch (SDTParseException e) {
 				return e.getErrorNode().path() + ": " + e.getMessage();
 			} catch (Exception e) {
 				return e.getMessage();

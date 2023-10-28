@@ -3,8 +3,8 @@ package be.baur.sdt.serialization;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
-import java.text.ParseException;
 
+import be.baur.sda.serialization.ParseException;
 import be.baur.sdt.SDT;
 import be.baur.sdt.SDTException;
 import be.baur.sdt.Transform;
@@ -23,10 +23,9 @@ public interface Parser {
 	 * @param input an input stream
 	 * @return a Transform
 	 * @throws IOException if an input exception occurs
-	 * @throws ParseException if a parse exception occurs
-	 * @throws SDTException if another exception occurs
+	 * @throws SDTParseException if a parse exception occurs
 	 */
-	Transform parse(Reader input) throws IOException, ParseException, SDTException;
+	Transform parse(Reader input) throws IOException, ParseException, SDTParseException;
 
 
 	/**
@@ -37,7 +36,7 @@ public interface Parser {
 	 * 
 	 * @param transform the Transform to be verified
 	 * @throws IOException    if an input exception occurs
-	 * @throws ParseException if a parse exception occurs
+	 * @throws SDTParseException if a parse exception occurs
 	 * @throws SDTException if another exception occurs
 	 * 
 	 */
