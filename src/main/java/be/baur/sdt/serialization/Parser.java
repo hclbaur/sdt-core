@@ -6,13 +6,14 @@ import java.io.StringReader;
 
 import be.baur.sda.serialization.ParseException;
 import be.baur.sdt.SDT;
-import be.baur.sdt.SDTException;
 import be.baur.sdt.Transform;
 
 /**
- * A <code>Parser</code> (in SDT context) is a <i>deserializer</i> that reads an
- * input stream (in a format specific to the type of parser) and creates a
- * {@link Transform}. A sample implementation is the default {@link SDTParser}.
+ * A {@code Parser} is a <i>deserializer</i> that reads an input stream in a
+ * format specific to the type of parser, and creates a {@link Transform}. A
+ * sample implementation is the default SDT parser.
+ * 
+ * @see SDTParser
  */
 public interface Parser {
 
@@ -37,10 +38,9 @@ public interface Parser {
 	 * @param transform the Transform to be verified
 	 * @throws IOException    if an input exception occurs
 	 * @throws SDTParseException if a parse exception occurs
-	 * @throws SDTException if another exception occurs
 	 * 
 	 */
-	default void verify(Transform transform) throws IOException, ParseException, SDTException {
+	default void verify(Transform transform) throws IOException, ParseException, SDTParseException {
 		SDT.parser().parse(new StringReader(transform.toString()));
 	}
 }

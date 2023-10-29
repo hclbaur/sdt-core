@@ -4,9 +4,12 @@
 
 This is a compatibility release for sda-core 2.2.x.
 
+- `Removed` SDTException.
+- `Removed` NodeProcessingException (moved to sda-core).
 - `Changed` NodeStatement.getName to NodeStatement.getNodeName.
 - `Changed` NodeValueStatement.getName to NodeValueStatement.getNodeName.
 - `Renamed` ParseException to SDTParseException.
+- Closed issues: #4.
 
 ## Compatibility
 

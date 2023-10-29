@@ -1,6 +1,7 @@
 package be.baur.sdt;
 
 import be.baur.sda.Node;
+import be.baur.sda.serialization.NodeProcessingException;
 
 /**
  * An {@code TransformException} may be thrown during the execution of a

@@ -5,10 +5,11 @@ import java.io.Reader;
 import java.util.Arrays;
 import java.util.List;
 
+import be.baur.sda.DataNode;
 import be.baur.sda.Node;
 import be.baur.sda.SDA;
 import be.baur.sda.serialization.ParseException;
-import be.baur.sda.DataNode;
+import be.baur.sda.serialization.SDAParser;
 import be.baur.sdt.Transform;
 import be.baur.sdt.statements.ChooseStatement;
 import be.baur.sdt.statements.CopyStatement;
@@ -55,7 +56,10 @@ import be.baur.sdt.xpath.SDAXPath;
  * }
  * </pre>
  *
- * See also {@link Transform}.
+ * This parser relies on the default SDA parser.
+ * 
+ * @see Transform
+ * @see SDAParser
  */
 public final class SDTParser implements Parser {
 
