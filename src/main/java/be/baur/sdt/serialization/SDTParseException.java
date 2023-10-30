@@ -1,11 +1,13 @@
 package be.baur.sdt.serialization;
 
 import be.baur.sda.Node;
-import be.baur.sda.serialization.NodeProcessingException;
+import be.baur.sda.NodeProcessingException;
 
 /**
- * An {@code SDTParseException} may be thrown by the {@code SDTParser} when
- * creating a {@code Transform}.
+ * An {@code SDTParseException} is thrown by an {@code SDTParser} if the SDS
+ * syntax or semantics are violated.
+ * 
+ * @see SDTParser
  */
 @SuppressWarnings("serial")
 public class SDTParseException extends NodeProcessingException {

@@ -2,13 +2,14 @@
 
 ## [1.2.0] - in development
 
-This is a compatibility release for sda-core 2.2.x.
+This is a compatibility release for sda-core 2.2.x, with some name changes.
 
 - `Removed` SDTException.
 - `Removed` NodeProcessingException (moved to sda-core).
 - `Changed` NodeStatement.getName to NodeStatement.getNodeName.
 - `Changed` NodeValueStatement.getName to NodeValueStatement.getNodeName.
 - `Renamed` ParseException to SDTParseException.
+- `Renamed` Parser to TransformParser.
 - Closed issues: #4.
 
 ## Compatibility

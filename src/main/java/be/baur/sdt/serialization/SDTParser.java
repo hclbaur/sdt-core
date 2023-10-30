@@ -8,7 +8,7 @@ import java.util.List;
 import be.baur.sda.DataNode;
 import be.baur.sda.Node;
 import be.baur.sda.SDA;
-import be.baur.sda.serialization.ParseException;
+import be.baur.sda.serialization.SDAParseException;
 import be.baur.sda.serialization.SDAParser;
 import be.baur.sdt.Transform;
 import be.baur.sdt.statements.ChooseStatement;
@@ -61,7 +61,7 @@ import be.baur.sdt.xpath.SDAXPath;
  * @see Transform
  * @see SDAParser
  */
-public final class SDTParser implements Parser {
+public final class SDTParser implements TransformParser {
 
 	private static final String STATEMENT_EXPECTED = "'%s' statement expected";
 	private static final String STATEMENT_INCOMPLETE = "statement '%s' is incomplete";
@@ -83,8 +83,11 @@ public final class SDTParser implements Parser {
 	private static final String VARIABLE_NAME_INVALID = "variable name '%s' is invalid";
 	private static final String PARAMETER_REDECLARED = "parameter '%s' cannot be redeclared";
 	
-	@Override
-	public Transform parse(Reader input) throws IOException, SDTParseException, ParseException {
+	/**
+	 * @throws SDAParseException if an SDA parse exception occurs
+	 * @throws SDTParseException if an SDT parse exception occurs
+	 */
+	public Transform parse(Reader input) throws IOException, SDAParseException, SDTParseException {
 
 		DataNode sdt = SDA.parser().parse(input);
 		return parse(sdt);
@@ -97,7 +100,7 @@ public final class SDTParser implements Parser {
 	 *
 	 * @param sdt a Node with a Transform definition
 	 * @return a Transform
-	 * @throws SDTParseException if a parse exception occurs
+	 * @throws SDTParseException if an SDT parse exception occurs
 	 */
 	public static Transform parse(DataNode sdt) throws SDTParseException {
 		/*

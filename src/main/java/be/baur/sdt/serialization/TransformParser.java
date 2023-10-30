@@ -5,17 +5,19 @@ import java.io.Reader;
 import java.io.StringReader;
 
 import be.baur.sda.serialization.ParseException;
+import be.baur.sda.serialization.Parser;
 import be.baur.sdt.SDT;
 import be.baur.sdt.Transform;
 
 /**
  * A {@code Parser} is a <i>deserializer</i> that reads an input stream in a
- * format specific to the type of parser, and creates a {@link Transform}. A
+ * format specific to the type of parser, and creates a {@code Transform}. A
  * sample implementation is the default SDT parser.
  * 
+ * @see Transform
  * @see SDTParser
  */
-public interface Parser {
+public interface TransformParser extends Parser<Transform> {
 
 
 	/**
@@ -23,10 +25,10 @@ public interface Parser {
 	 * 
 	 * @param input an input stream
 	 * @return a Transform
-	 * @throws IOException if an input exception occurs
-	 * @throws SDTParseException if a parse exception occurs
+	 * @throws IOException    if an input exception occurs
+	 * @throws ParseException if a parse exception occurs
 	 */
-	Transform parse(Reader input) throws IOException, ParseException, SDTParseException;
+	Transform parse(Reader input) throws IOException, ParseException;
 
 
 	/**
@@ -37,10 +39,10 @@ public interface Parser {
 	 * 
 	 * @param transform the Transform to be verified
 	 * @throws IOException    if an input exception occurs
-	 * @throws SDTParseException if a parse exception occurs
+	 * @throws ParseException if a parse exception occurs
 	 * 
 	 */
-	default void verify(Transform transform) throws IOException, ParseException, SDTParseException {
+	default void verify(Transform transform) throws IOException, ParseException {
 		SDT.parser().parse(new StringReader(transform.toString()));
 	}
 }
