@@ -33,6 +33,7 @@ public final class TestSDTParser {
 		SDAXPath x = new SDAXPath("'Hello World!'");
 		t1.add(new PrintStatement(x, false));
 		System.out.print(t1);
+		t1.verify();
 		
 		// test exception
 //		SDTParser sdtparser = new SDTParser();

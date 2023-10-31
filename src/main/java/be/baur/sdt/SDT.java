@@ -3,7 +3,6 @@ package be.baur.sdt;
 import java.io.IOException;
 import java.io.Writer;
 
-import be.baur.sdt.serialization.TransformParser;
 import be.baur.sdt.serialization.SDTParser;
 
 /**
@@ -49,7 +48,7 @@ public final class SDT {
 	 * 
 	 * @return an {@link SDTParser}
 	 */
-	public static TransformParser parser() {
+	public static SDTParser parser() {
 		return new SDTParser();
 	}
 

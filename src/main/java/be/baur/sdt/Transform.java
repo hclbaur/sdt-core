@@ -1,11 +1,14 @@
 package be.baur.sdt;
 
+import java.io.IOException;
+import java.io.StringReader;
 import java.util.List;
 import java.util.Objects;
 
 import be.baur.sda.Node;
 import be.baur.sda.AbstractNode;
 import be.baur.sda.DataNode;
+import be.baur.sda.serialization.ParseException;
 import be.baur.sda.serialization.SDAFormatter;
 import be.baur.sdt.serialization.SDTParser;
 import be.baur.sdt.statements.Statement;
@@ -23,14 +26,6 @@ public final class Transform extends AbstractNode {
 
 	public static final String TAG = "transform";	
 	
-
-	/** 
-	 * Creates a {@code Transform}. 
-	 */
-//	public Transform() {
-//	}
-
-
 	/**
 	 * Executes this transform in the supplied {@code TransformContext}. This method
 	 * returns an output document {@code Node} which may be empty if no nodes were
@@ -90,5 +85,18 @@ public final class Transform extends AbstractNode {
 	@Override
 	public String toString() {
 		return toSDA().toString();
+	}
+	
+	
+	/**
+	 * Verifies this transform. This method can be used to to validate a transform that
+	 * was not created by the {@code SDTParser}.
+	 * 
+	 * @throws IOException    if an input exception occurs
+	 * @throws ParseException if a parse exception occurs
+	 */
+	public void verify() throws IOException, ParseException {
+		// Serialize the Transform to SDT, then parsed it back to reveal any issues
+		SDT.parser().parse(new StringReader(this.toString()));
 	}
 }

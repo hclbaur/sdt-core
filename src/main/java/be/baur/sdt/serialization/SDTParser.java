@@ -8,6 +8,7 @@ import java.util.List;
 import be.baur.sda.DataNode;
 import be.baur.sda.Node;
 import be.baur.sda.SDA;
+import be.baur.sda.serialization.Parser;
 import be.baur.sda.serialization.SDAParseException;
 import be.baur.sda.serialization.SDAParser;
 import be.baur.sdt.Transform;
@@ -61,7 +62,7 @@ import be.baur.sdt.xpath.SDAXPath;
  * @see Transform
  * @see SDAParser
  */
-public final class SDTParser implements TransformParser {
+public final class SDTParser implements Parser<Transform> {
 
 	private static final String STATEMENT_EXPECTED = "'%s' statement expected";
 	private static final String STATEMENT_INCOMPLETE = "statement '%s' is incomplete";
@@ -89,7 +90,7 @@ public final class SDTParser implements TransformParser {
 	 */
 	public Transform parse(Reader input) throws IOException, SDAParseException, SDTParseException {
 
-		DataNode sdt = SDA.parser().parse(input);
+		final DataNode sdt = SDA.parser().parse(input);
 		return parse(sdt);
 	}
 
@@ -102,7 +103,7 @@ public final class SDTParser implements TransformParser {
 	 * @return a Transform
 	 * @throws SDTParseException if an SDT parse exception occurs
 	 */
-	public static Transform parse(DataNode sdt) throws SDTParseException {
+	public static Transform parse(final DataNode sdt) throws SDTParseException {
 		/*
 		 * A valid transform has no value, and no attributes.
 		 */
@@ -129,7 +130,7 @@ public final class SDTParser implements TransformParser {
 	 * This method parses an SDA node representing an SDT statement, and returns a
 	 * Statement which itself may contain other Statements.
 	 */
-	private static Statement parseStatement(DataNode sdt) throws SDTParseException {
+	private static Statement parseStatement(final DataNode sdt) throws SDTParseException {
 		/*
 		 * Whatever we get must be an existing statement, and contain attributes and/or
 		 * other statements. This method is called recursively and must deal with every
@@ -174,7 +175,7 @@ public final class SDTParser implements TransformParser {
 	 * This method parses an SDA node representing an SDT print or println
 	 * statement, and returns a PrintStatement.
 	 */
-	private static PrintStatement parsePrintOrPrintLn(DataNode sdt, boolean addEOL) throws SDTParseException {
+	private static PrintStatement parsePrintOrPrintLn(final DataNode sdt, boolean addEOL) throws SDTParseException {
 		/*
 		 * A valid print(nl) statement has no value, a single VALUE attribute containing
 		 * an XPath expression, and nothing else.
@@ -194,7 +195,7 @@ public final class SDTParser implements TransformParser {
 	 * This method parses an SDA node representing an SDT variable or param
 	 * statement, and returns a VariableStatement (or ParamStatement).
 	 */
-	private static VariableStatement parseVariableOrParam(DataNode sdt) throws SDTParseException {
+	private static VariableStatement parseVariableOrParam(final DataNode sdt) throws SDTParseException {
 		/*
 		 * A valid variable/param statement has a non-empty value with a variable name,
 		 * a single SELECT attribute containing an XPath expression, and no other
@@ -234,7 +235,7 @@ public final class SDTParser implements TransformParser {
 	 * This method parses an SDA node representing an SDT foreach statement, and
 	 * returns a ForEachStatement.
 	 */
-	private static ForEachStatement parseForEach(DataNode sdt) throws SDTParseException {
+	private static ForEachStatement parseForEach(final DataNode sdt) throws SDTParseException {
 		/*
 		 * A valid foreach statement has a non-empty value with an XPath expression and
 		 * contains child statements, but no attributes.
@@ -256,7 +257,7 @@ public final class SDTParser implements TransformParser {
 	 * This method parses an SDA node representing an SDT if statement, and returns
 	 * a IfStatement.
 	 */
-	private static IfStatement parseIf(DataNode sdt) throws SDTParseException {
+	private static IfStatement parseIf(final DataNode sdt) throws SDTParseException {
 		/*
 		 * A valid if statement has a non-empty value with an XPath expression and
 		 * contains child statements, but no attributes.
@@ -278,7 +279,7 @@ public final class SDTParser implements TransformParser {
 	 * This method parses an SDA node representing an SDT choose statement, and
 	 * returns a ChooseStatement.
 	 */
-	private static ChooseStatement parseChoose(DataNode sdt) throws SDTParseException {
+	private static ChooseStatement parseChoose(final DataNode sdt) throws SDTParseException {
 		/*
 		 * A valid choose statement has no value, contains at least one when statement,
 		 * an optional otherwise statement, and no attributes or other statements.
@@ -317,7 +318,7 @@ public final class SDTParser implements TransformParser {
 	 * This method parses an SDA node representing an SDT when statement, and
 	 * returns a WhenStatement.
 	 */
-	private static WhenStatement parseWhen(DataNode sdt) throws SDTParseException {
+	private static WhenStatement parseWhen(final DataNode sdt) throws SDTParseException {
 		/*
 		 * A valid when statement has a non-empty value with an XPath expression and
 		 * contains child statements, but no attributes.
@@ -339,7 +340,7 @@ public final class SDTParser implements TransformParser {
 	 * This method parses an SDA node representing an SDT when statement, and
 	 * returns a OtherwiseStatement.
 	 */
-	private static OtherwiseStatement parseOtherwise(DataNode sdt) throws SDTParseException {
+	private static OtherwiseStatement parseOtherwise(final DataNode sdt) throws SDTParseException {
 		/*
 		 * A valid otherwise statement has no value and contains child statements, but
 		 * no attributes.
@@ -361,7 +362,7 @@ public final class SDTParser implements TransformParser {
 	 * This method parses an SDA node representing an SDT node statement, and
 	 * returns a NodeStatement.
 	 */
-	private static Statement parseNode(DataNode sdt) throws SDTParseException {
+	private static Statement parseNode(final DataNode sdt) throws SDTParseException {
 		/*
 		 * A valid node statement has a non-empty value with a node name, a single VALUE
 		 * attribute containing an XPath expression, and contains child statements but
@@ -392,7 +393,7 @@ public final class SDTParser implements TransformParser {
 	 * This method parses an SDA node representing an SDT copy statement, and
 	 * returns a CopyStatement.
 	 */
-	private static CopyStatement parseCopy(DataNode sdt) throws SDTParseException {
+	private static CopyStatement parseCopy(final DataNode sdt) throws SDTParseException {
 		/*
 		 * A valid copy statement has no value, a single SELECT attribute containing
 		 * an XPath expression, and nothing else.
@@ -417,7 +418,7 @@ public final class SDTParser implements TransformParser {
 	 * @param node the Node to create the XPath from
 	 * @throws SDTParseException if the XPath expression is invalid
 	 */
-	private static SDAXPath xpathFromNode(DataNode node) throws SDTParseException {
+	private static SDAXPath xpathFromNode(final DataNode node) throws SDTParseException {
 
 		SDAXPath xpath;
 		try {
@@ -438,7 +439,7 @@ public final class SDTParser implements TransformParser {
 	 * @param allowed List of Statements, null if none are allowed
 	 * @throws SDTParseException if unknown or forbidden Statements are found
 	 */
-	private static void checkStatements(DataNode sdt, List<Statements> allowed) throws SDTParseException {
+	private static void checkStatements(final DataNode sdt, List<Statements> allowed) throws SDTParseException {
 
 		for (Node node : sdt.find(n -> ! n.isLeaf())) {
 
@@ -459,7 +460,7 @@ public final class SDTParser implements TransformParser {
 	 * @param allowed List of Attributes, null if none are allowed
 	 * @throws SDTParseException if unknown or forbidden Attributes are found
 	 */
-	private static void checkAttributes(DataNode sdt, List<Attribute> allowed) throws SDTParseException {
+	private static void checkAttributes(final DataNode sdt, List<Attribute> allowed) throws SDTParseException {
 
 		for (Node node : sdt.find(n -> n.isLeaf())) {
 
@@ -489,7 +490,7 @@ public final class SDTParser implements TransformParser {
 	 * @return a Node, may be null
 	 * @throws SDTParseException
 	 */
-	private static DataNode getAttribute(DataNode sdt, Attribute attribute, Boolean required) throws SDTParseException {
+	private static DataNode getAttribute(final DataNode sdt, Attribute attribute, Boolean required) throws SDTParseException {
 
 		List<DataNode> alist = sdt.find(n -> n.isLeaf() && n.getName().equals(attribute.tag));
 		int size = alist.size();
