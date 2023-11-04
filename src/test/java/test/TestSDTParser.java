@@ -4,9 +4,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
 
-import be.baur.sda.SDA;
 import be.baur.sda.DataNode;
-import be.baur.sda.serialization.Parser;
+import be.baur.sda.SDA;
 import be.baur.sdt.Transform;
 import be.baur.sdt.serialization.SDTParseException;
 import be.baur.sdt.serialization.SDTParser;
@@ -14,14 +13,12 @@ import be.baur.sdt.statements.PrintStatement;
 import be.baur.sdt.xpath.SDAXPath;
 
 public final class TestSDTParser {
-
-	private static final Parser<DataNode> sdaparser = SDA.parser();
 	
 	public static void main(String[] args) throws Exception {
 
 		Test t = new Test(s -> {
 			try {
-				return SDTParser.parse( sdaparser.parse(new StringReader(s)) ).toString();
+				return SDTParser.parse( SDA.parse(new StringReader(s)) ).toString();
 			} catch (SDTParseException e) {
 				return e.getErrorNode().path() + ": " + e.getMessage();
 			} catch (Exception e) {
@@ -155,7 +152,7 @@ public final class TestSDTParser {
 		
 		// test performance
 		InputStream input = TestSDTParser.class.getResourceAsStream("/addressbook.sdt");
-		DataNode sdt = sdaparser.parse(new InputStreamReader(input,"UTF-8"));
+		DataNode sdt = SDA.parse(new InputStreamReader(input,"UTF-8"));
 		
 		PerfTest p = new PerfTest(sdtnode -> {
 			try {

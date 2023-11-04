@@ -20,6 +20,6 @@ public class demo {
 			.build();
 		
 		DataNode output = transform.execute(c); 
-		SDA.formatter().format(new PrintWriter(System.out), output);
+		SDA.format(new PrintWriter(System.out), output);
 	}
 }

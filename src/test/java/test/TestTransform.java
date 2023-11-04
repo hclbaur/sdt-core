@@ -23,7 +23,7 @@ public final class TestTransform {
 		
 		w.write("<<\n");
 		DataNode node = tran.execute(c); 
-		SDA.formatter().format(w, node);
+		SDA.format(w, node);
 		w.write(">>\n");
 
 	}

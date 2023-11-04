@@ -90,7 +90,7 @@ public final class SDTParser implements Parser<Transform> {
 	 */
 	public Transform parse(Reader input) throws IOException, SDAParseException, SDTParseException {
 
-		final DataNode sdt = SDA.parser().parse(input);
+		final DataNode sdt = SDA.parse(input);
 		return parse(sdt);
 	}
 

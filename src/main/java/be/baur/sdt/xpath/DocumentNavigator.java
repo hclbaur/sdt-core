@@ -128,7 +128,7 @@ public class DocumentNavigator extends DefaultNavigator {
     {
     	DataNode root, document;
     	try {
-			root = SDA.parser().parse(input);
+			root = SDA.parse(input);
 		} catch (Exception e) {
 			throw new FunctionCallException(e.getMessage(), e);
 		}
