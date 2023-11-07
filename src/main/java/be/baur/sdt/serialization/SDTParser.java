@@ -47,16 +47,6 @@ import be.baur.sdt.xpath.SDAXPath;
  * }
  * </pre>
  *
- * The internal representation of the Transform would be:
- *
- * <pre>
- * Transform {
- *    NodeStatement("greeting") {
- *       NodeStatement("message","'hello world'")
- *   }
- * }
- * </pre>
- *
  * This parser relies on the default SDA parser.
  * 
  * @see Transform
@@ -83,8 +73,14 @@ public final class SDTParser implements Parser<Transform> {
 	private static final String NODE_NAME_INVALID = "node name '%s' is invalid";
 	private static final String VARIABLE_NAME_INVALID = "variable name '%s' is invalid";
 	private static final String PARAMETER_REDECLARED = "parameter '%s' cannot be redeclared";
-	
+
+
 	/**
+	 * Creates a transform from a character input stream in SDT format, using the
+	 * default SDT parser.
+	 * 
+	 * @return a transform
+	 * @throws IOException       if an I/O operation failed
 	 * @throws SDAParseException if an SDA parse exception occurs
 	 * @throws SDTParseException if an SDT parse exception occurs
 	 */
@@ -96,11 +92,11 @@ public final class SDTParser implements Parser<Transform> {
 
 
 	/**
-	 * Creates a Transform from an SDA node representing a transformation recipe in
+	 * Creates a transform from an SDA node representing a transformation recipe in
 	 * SDT notation.
 	 *
-	 * @param sdt a Node with a Transform definition
-	 * @return a Transform
+	 * @param sdt a data node
+	 * @return a transform
 	 * @throws SDTParseException if an SDT parse exception occurs
 	 */
 	public static Transform parse(final DataNode sdt) throws SDTParseException {

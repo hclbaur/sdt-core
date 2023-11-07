@@ -12,7 +12,7 @@ public class demo {
 	public static void main(String[] args) throws Exception {
 		
 		FileReader sdt = new FileReader(args[0]);
-		Transform transform = SDT.parser().parse(sdt);
+		Transform transform = SDT.parse(sdt);
 
 		TransformContext c = new TransformContext.Builder()
 			.setStringParameter("filename", args[1])

@@ -13,9 +13,9 @@ import be.baur.sda.NodeProcessingException;
 public class SDTParseException extends NodeProcessingException {
 
 	/**
-	 * Creates a SDTParseException with a detail message.
+	 * Creates an SDTParseException with a detail message.
 	 * 
-	 * @param node    the node where the error was found
+	 * @param node    the node where an error was found
 	 * @param message an error message
 	 */
 	public SDTParseException(Node node, String message) {
@@ -24,9 +24,9 @@ public class SDTParseException extends NodeProcessingException {
 
 	
 	/**
-	 * Creates SDTParseException caused by another exception.
+	 * Creates an SDTParseException caused by another exception.
 	 * 
-	 * @param node  the node where the error was found
+	 * @param node  the node where an exception occurred
 	 * @param cause the exception causing this exception to be thrown
 	 */
 	public SDTParseException(Node node, Throwable cause) {

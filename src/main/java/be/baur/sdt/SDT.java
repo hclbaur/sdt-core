@@ -1,8 +1,11 @@
 package be.baur.sdt;
 
 import java.io.IOException;
+import java.io.Reader;
 import java.io.Writer;
 
+import be.baur.sda.serialization.SDAParseException;
+import be.baur.sdt.serialization.SDTParseException;
 import be.baur.sdt.serialization.SDTParser;
 
 /**
@@ -43,13 +46,20 @@ public final class SDT {
 	}
 
 	
+	private static SDTParser PARSER = new SDTParser(); // singleton parser
+
 	/**
-	 * Returns a new instance of the default SDT parser.
+	 * Creates a transform from a character input stream in SDT format, using the
+	 * default SDT parser.
 	 * 
-	 * @return an {@link SDTParser}
+	 * @return a transform
+	 * @throws IOException       if an I/O operation failed
+	 * @throws SDAParseException if an SDA parse exception occurs
+	 * @throws SDTParseException if an SDT parse exception occurs
+	 * @see SDTParser
 	 */
-	public static SDTParser parser() {
-		return new SDTParser();
+	public static Transform parse(Reader input) throws IOException, SDAParseException, SDTParseException {
+		return PARSER.parse(input);
 	}
 
 }

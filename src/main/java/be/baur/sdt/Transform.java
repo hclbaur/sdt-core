@@ -5,11 +5,12 @@ import java.io.StringReader;
 import java.util.List;
 import java.util.Objects;
 
-import be.baur.sda.Node;
 import be.baur.sda.AbstractNode;
 import be.baur.sda.DataNode;
-import be.baur.sda.serialization.ParseException;
+import be.baur.sda.Node;
 import be.baur.sda.serialization.SDAFormatter;
+import be.baur.sda.serialization.SDAParseException;
+import be.baur.sdt.serialization.SDTParseException;
 import be.baur.sdt.serialization.SDTParser;
 import be.baur.sdt.statements.Statement;
 import be.baur.sdt.statements.StatementContext;
@@ -89,14 +90,15 @@ public final class Transform extends AbstractNode {
 	
 	
 	/**
-	 * Verifies this transform. This method can be used to to validate a transform that
+	 * Verifies this transform. This method can be used to validate a transform that
 	 * was not created by the {@code SDTParser}.
 	 * 
-	 * @throws IOException    if an input exception occurs
-	 * @throws ParseException if a parse exception occurs
+	 * @throws IOException       if an I/O operation failed
+	 * @throws SDAParseException if an SDA parse exception occurs
+	 * @throws SDTParseException if an SDT parse exception occurs
 	 */
-	public void verify() throws IOException, ParseException {
+	public void verify() throws IOException, SDAParseException, SDTParseException {
 		// Serialize the Transform to SDT, then parsed it back to reveal any issues
-		SDT.parser().parse(new StringReader(this.toString()));
+		SDT.parse(new StringReader(this.toString()));
 	}
 }
