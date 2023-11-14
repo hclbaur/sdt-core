@@ -1,7 +1,7 @@
 package be.baur.sdt.serialization;
 
 import be.baur.sda.Node;
-import be.baur.sda.NodeProcessingException;
+import be.baur.sda.ProcessingException;
 
 /**
  * An {@code SDTParseException} is thrown by an {@code SDTParser} if the SDS
@@ -10,7 +10,7 @@ import be.baur.sda.NodeProcessingException;
  * @see SDTParser
  */
 @SuppressWarnings("serial")
-public class SDTParseException extends NodeProcessingException {
+public class SDTParseException extends ProcessingException {
 
 	/**
 	 * Creates an SDTParseException with a detail message.
@@ -30,7 +30,7 @@ public class SDTParseException extends NodeProcessingException {
 	 * @param cause the exception causing this exception to be thrown
 	 */
 	public SDTParseException(Node node, Throwable cause) {
-		super(node, cause.getMessage(), cause);
+		super(node, cause.getMessage()); initCause(cause);
 	}
 
 }
