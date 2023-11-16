@@ -104,13 +104,13 @@ public final class SDTParser implements Parser<Transform> {
 		 * A valid transform has no value, and no attributes.
 		 */
 		if (! sdt.getName().equals(Transform.TAG))
-			throw new SDTParseException(sdt, String.format(STATEMENT_EXPECTED, Transform.TAG));
+			throw exception(sdt, STATEMENT_EXPECTED, Transform.TAG);
 
 		if (! sdt.getValue().isEmpty())
-			throw new SDTParseException(sdt, String.format(STATEMENT_REQUIRES_NO_VALUE, sdt.getName()));
+			throw exception(sdt, STATEMENT_REQUIRES_NO_VALUE, sdt.getName());
 
 		if (sdt.isLeaf()) // a transform should have a compound statement, even if empty
-			throw new SDTParseException(sdt, String.format(STATEMENT_INCOMPLETE, Transform.TAG));
+			throw exception(sdt, STATEMENT_INCOMPLETE, Transform.TAG);
 
 		checkAttributes(sdt, null); // no attributes allowed in the transform root
 
@@ -136,14 +136,14 @@ public final class SDTParser implements Parser<Transform> {
 		Statements statement = Statements.get(name);
 
 		if (statement == null) // this statement is unknown
-			throw new SDTParseException(sdt, String.format(STATEMENT_UNKNOWN, name));
+			throw exception(sdt, STATEMENT_UNKNOWN, name);
 
 		Statements parent = Statements.get(sdt.getParent().getName()); // returns null if parent is transform
 		if (!statement.isAllowedIn(parent)) // check sub-ordinate statements
-			throw new SDTParseException(sdt, String.format(STATEMENT_NOT_ALLOWED, name));
+			throw exception(sdt, STATEMENT_NOT_ALLOWED, name);
 
 		if (!sdt.isParent()) // statements must have attributes and/or other statements
-			throw new SDTParseException(sdt, String.format(STATEMENT_INCOMPLETE, name));
+			throw exception(sdt, STATEMENT_INCOMPLETE, name);
 
 		Statement stat;
 
@@ -177,7 +177,7 @@ public final class SDTParser implements Parser<Transform> {
 		 * an XPath expression, and nothing else.
 		 */
 		if (! sdt.getValue().isEmpty())
-			throw new SDTParseException(sdt, String.format(STATEMENT_REQUIRES_NO_VALUE, sdt.getName()));
+			throw exception(sdt, STATEMENT_REQUIRES_NO_VALUE, sdt.getName());
 
 		checkStatements(sdt, null); // no sub-statements allowed
 		checkAttributes(sdt, Arrays.asList(Attribute.VALUE));
@@ -204,18 +204,18 @@ public final class SDTParser implements Parser<Transform> {
 		if ( isParam ) {
 			final Node parent = sdt.getParent();
 			if (! parent.getName().equals(Transform.TAG)) // parent cannot be null
-				throw new SDTParseException(sdt, String.format(STATEMENT_NOT_ALLOWED, sdt.getName()));
+				throw exception(sdt, STATEMENT_NOT_ALLOWED, sdt.getName());
 			
 			if (parent.find(n -> 
 				n.getName().equals(Statements.PARAM.tag) 
 					&& ((DataNode) n).getValue().equals(varname)).size() > 1)
-				throw new SDTParseException(sdt, String.format(PARAMETER_REDECLARED, varname));		
+				throw exception(sdt, PARAMETER_REDECLARED, varname);		
 		}
 		
 		if (varname.isEmpty())
-			throw new SDTParseException(sdt, String.format(STATEMENT_REQUIRES_VARIABLE, sdt.getName()));
+			throw exception(sdt, STATEMENT_REQUIRES_VARIABLE, sdt.getName());
 		if (! VariableStatement.isVarName(varname))
-			throw new SDTParseException(sdt, String.format(VARIABLE_NAME_INVALID, varname));
+			throw exception(sdt, VARIABLE_NAME_INVALID, varname);
 		
 		checkStatements(sdt, null); // no sub-statements allowed
 		checkAttributes(sdt, Arrays.asList(Attribute.SELECT));
@@ -237,7 +237,7 @@ public final class SDTParser implements Parser<Transform> {
 		 * contains child statements, but no attributes.
 		 */
 		if (sdt.getValue().isEmpty())
-			throw new SDTParseException(sdt, String.format(STATEMENT_REQUIRES_XPATH, sdt.getName()));
+			throw exception(sdt, STATEMENT_REQUIRES_XPATH, sdt.getName());
 
 		checkAttributes(sdt, null);
 
@@ -259,7 +259,7 @@ public final class SDTParser implements Parser<Transform> {
 		 * contains child statements, but no attributes.
 		 */
 		if (sdt.getValue().isEmpty())
-			throw new SDTParseException(sdt, String.format(STATEMENT_REQUIRES_XPATH, sdt.getName()));
+			throw exception(sdt, STATEMENT_REQUIRES_XPATH, sdt.getName());
 
 		checkAttributes(sdt, null);
 
@@ -281,7 +281,7 @@ public final class SDTParser implements Parser<Transform> {
 		 * an optional otherwise statement, and no attributes or other statements.
 		 */
 		if (! sdt.getValue().isEmpty())
-			throw new SDTParseException(sdt, String.format(STATEMENT_REQUIRES_NO_VALUE, sdt.getName()));
+			throw exception(sdt, STATEMENT_REQUIRES_NO_VALUE, sdt.getName());
 
 		checkStatements(sdt, Arrays.asList(Statements.WHEN, Statements.OTHERWISE));
 		checkAttributes(sdt, null);
@@ -295,13 +295,13 @@ public final class SDTParser implements Parser<Transform> {
 
 			if (i == 1) {
 				if (!(substat instanceof WhenStatement))
-					throw new SDTParseException(node, String.format(STATEMENT_EXPECTED, Statements.WHEN.tag));
+					throw exception(node, STATEMENT_EXPECTED, Statements.WHEN.tag);
 				statement = new ChooseStatement((WhenStatement) substat);
 				continue;
 			}
 
 			if (substat instanceof OtherwiseStatement && i < last)
-				throw new SDTParseException(node, String.format(STATEMENT_MISPLACED, Statements.OTHERWISE.tag));
+				throw exception(node, STATEMENT_MISPLACED, Statements.OTHERWISE.tag);
 
 			statement.add(parseStatement((DataNode) node));
 		}
@@ -320,7 +320,7 @@ public final class SDTParser implements Parser<Transform> {
 		 * contains child statements, but no attributes.
 		 */
 		if (sdt.getValue().isEmpty())
-			throw new SDTParseException(sdt, String.format(STATEMENT_REQUIRES_XPATH, sdt.getName()));
+			throw exception(sdt, STATEMENT_REQUIRES_XPATH, sdt.getName());
 
 		checkAttributes(sdt, null);
 
@@ -342,7 +342,7 @@ public final class SDTParser implements Parser<Transform> {
 		 * no attributes.
 		 */
 		if (!sdt.getValue().isEmpty())
-			throw new SDTParseException(sdt, String.format(STATEMENT_REQUIRES_NO_VALUE, sdt.getName()));
+			throw exception(sdt, STATEMENT_REQUIRES_NO_VALUE, sdt.getName());
 
 		checkAttributes(sdt, null);
 
@@ -367,9 +367,9 @@ public final class SDTParser implements Parser<Transform> {
 		final String nodename = sdt.getValue();
 
 		if (nodename.isEmpty())
-			throw new SDTParseException(sdt, String.format(STATEMENT_REQUIRES_NODENAME, sdt.getName()));
+			throw exception(sdt, STATEMENT_REQUIRES_NODENAME, sdt.getName());
 		if (! SDA.isName(nodename))
-			throw new SDTParseException(sdt, String.format(NODE_NAME_INVALID, nodename));
+			throw exception(sdt, NODE_NAME_INVALID, nodename);
 		
 		checkAttributes(sdt, Arrays.asList(Attribute.VALUE));
 		final DataNode value = getAttribute(sdt, Attribute.VALUE, false);
@@ -395,7 +395,7 @@ public final class SDTParser implements Parser<Transform> {
 		 * an XPath expression, and nothing else.
 		 */
 		if (!sdt.getValue().isEmpty())
-			throw new SDTParseException(sdt, String.format(STATEMENT_REQUIRES_NO_VALUE, sdt.getName()));
+			throw exception(sdt, STATEMENT_REQUIRES_NO_VALUE, sdt.getName());
 
 		checkStatements(sdt, null); // no sub-statements allowed
 		checkAttributes(sdt, Arrays.asList(Attribute.SELECT));
@@ -441,9 +441,9 @@ public final class SDTParser implements Parser<Transform> {
 
 			Statements statement = Statements.get(node.getName());
 			if (statement == null) // all statements must have a known name tag
-				throw new SDTParseException(node, String.format(STATEMENT_UNKNOWN, node.getName()));
+				throw exception(node, STATEMENT_UNKNOWN, node.getName());
 			if (allowed == null || !allowed.contains(statement))
-				throw new SDTParseException(node, String.format(STATEMENT_NOT_ALLOWED, node.getName()));
+				throw exception(node, STATEMENT_NOT_ALLOWED, node.getName());
 		}
 	}
 
@@ -462,9 +462,9 @@ public final class SDTParser implements Parser<Transform> {
 
 			Attribute attribute = Attribute.get(node.getName());
 			if (attribute == null) // all attributes must have a known name tag
-				throw new SDTParseException(node, String.format(ATTRIBUTE_UNKNOWN, node.getName()));
+				throw exception(node, ATTRIBUTE_UNKNOWN, node.getName());
 			if (allowed == null || !allowed.contains(attribute))
-				throw new SDTParseException(node, String.format(ATTRIBUTE_NOT_ALLOWED, node.getName()));
+				throw exception(node, ATTRIBUTE_NOT_ALLOWED, node.getName());
 		}
 	}
 
@@ -494,18 +494,30 @@ public final class SDTParser implements Parser<Transform> {
 		if (size == 0) {
 			if (required == null || !required)
 				return null;
-			throw new SDTParseException(sdt, String.format(ATTRIBUTE_EXPECTED, attribute.tag));
+			throw exception(sdt, ATTRIBUTE_EXPECTED, attribute.tag);
 		}
 		if (required == null)
-			throw new SDTParseException(sdt, String.format(ATTRIBUTE_NOT_ALLOWED, attribute.tag));
+			throw exception(sdt, ATTRIBUTE_NOT_ALLOWED, attribute.tag);
 
 		DataNode node = alist.get(0);
 		if (node.getValue().isEmpty())
-			throw new SDTParseException(node, String.format(ATTRIBUTE_REQUIRES_VALUE, attribute.tag));
+			throw exception(node, ATTRIBUTE_REQUIRES_VALUE, attribute.tag);
 		if (size > 1)
-			throw new SDTParseException(node, String.format(ATTRIBUTE_NOT_SINGULAR, attribute.tag));
+			throw exception(node, ATTRIBUTE_NOT_SINGULAR, attribute.tag);
 
 		return node;
 	}
 
+	
+	/**
+	 * Returns an SDT parse exception with an error node and formatted message.
+	 * 
+	 * @param node   the node where the error was found
+	 * @param format a format message, and
+	 * @param args arguments, as in {@link String#format}
+	 * @return 
+	 */
+	private static SDTParseException exception(Node node, String format, Object... args) {
+		return new SDTParseException(node, String.format(format, args));
+	}
 }
