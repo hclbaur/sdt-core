@@ -13,16 +13,8 @@ import be.baur.sdt.serialization.Statements;
  */
 public class OtherwiseStatement extends Statement {
 
-	/**
-	 * Creates an OtherwiseStatement.
-	 */
-	public OtherwiseStatement() {
-		//super(Statements.OTHERWISE.tag);
-	}
-
-
 	@Override
-	public void execute(TransformContext tracon, StatementContext stacon) throws TransformException {
+	public void execute(TransformContext traco, StatementContext staco) throws TransformException {
 		/*
 		 * This method does nothing. Execution takes place in the context of the ChooseStatement.
 		 */

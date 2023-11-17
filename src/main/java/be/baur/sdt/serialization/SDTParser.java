@@ -16,7 +16,6 @@ import be.baur.sdt.statements.CopyStatement;
 import be.baur.sdt.statements.ForEachStatement;
 import be.baur.sdt.statements.IfStatement;
 import be.baur.sdt.statements.NodeStatement;
-import be.baur.sdt.statements.NodeValueStatement;
 import be.baur.sdt.statements.OtherwiseStatement;
 import be.baur.sdt.statements.ParamStatement;
 import be.baur.sdt.statements.PrintStatement;
@@ -375,11 +374,10 @@ public final class SDTParser implements Parser<Transform> {
 			throw exception(sdt, NODE_NAME_INVALID, nodename);
 		
 		checkAttributes(sdt, Arrays.asList(Attribute.VALUE));
-		final DataNode value = getAttribute(sdt, Attribute.VALUE, false);
+		final DataNode nodevalue = getAttribute(sdt, Attribute.VALUE, false);
 			
-		Statement stat = (value == null) 
-			? new NodeStatement(nodename) 
-			: new NodeValueStatement(nodename, xpathFromNode(value));
+		Statement stat = (nodevalue == null) ? new NodeStatement(nodename)
+			: new NodeStatement(nodename, xpathFromNode(nodevalue));
 
 		for (Node node : sdt.find(n -> ! n.isLeaf()))
 			stat.add(parseStatement((DataNode) node)); // parse and add child statements

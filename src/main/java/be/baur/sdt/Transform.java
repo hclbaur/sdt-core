@@ -29,11 +29,11 @@ public final class Transform extends AbstractNode {
 	
 	/**
 	 * Executes this transform in the supplied {@code TransformContext}. This method
-	 * returns an output document {@code Node} which may be empty if no nodes were
+	 * returns an output document {@code DataNode} which will empty if no nodes were
 	 * created during transformation.
 	 * 
 	 * @param context the transformation context, not null
-	 * @return the output Node, may be null
+	 * @return an output node, may be null
 	 * @throws TransformException if an exception occurs during execution
 	 * @see TransformContext
 	 */
@@ -41,17 +41,16 @@ public final class Transform extends AbstractNode {
 
 		Objects.requireNonNull(context, "context must not be null");
 
-		List<Node> statements = nodes();
-		if (statements.isEmpty()) return null; // nothing to do, should we return null though?
+		List<Statement> statements = nodes();
+		StatementContext staco = new StatementContext();
 
-		StatementContext stacon = new StatementContext();
-		for (Node statement : statements) {
-			((Statement) statement).execute(context, stacon);
+		for (Statement statement : statements) {
+			statement.execute(context, staco);
 		}
 
 		// At the end of the transform return the output node
 		// this is probably not the best design, must improve!
-		return stacon.getOutputNode();
+		return staco.getOutputNode();
 	}
 	
 	
@@ -61,7 +60,7 @@ public final class Transform extends AbstractNode {
 	 * in SDT notation.
 	 * 
 	 * @return a node representing<br>
-	 *         <code>transform { <i>statement?</i> }</code>
+	 *         <code>transform { <i>statement*</i> }</code>
 	 */
 	public DataNode toSDA() {
 		DataNode node = new DataNode(TAG); node.add(null); // in case there are no statements

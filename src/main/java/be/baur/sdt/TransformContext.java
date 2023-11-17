@@ -33,7 +33,7 @@ public class TransformContext {
 	 * A builder class to build a {@code TransformContext}. The builder has methods
 	 * to set a writer for textual output and/or add parameters to the context.
 	 */
-	public static class Builder {
+	 public static class Builder {
 		
 		private Writer writer = new PrintWriter(System.out);
 		private final Map<String, Object> parameters = new HashMap<String, Object>();
@@ -41,7 +41,7 @@ public class TransformContext {
 		/**
 		 * Creates an {@code Builder} that builds a {@code TransformContext} with a
 		 * standard output writer and no parameters. To set a different writer and/or
-		 * add parameters, use the {@link #setWriter} and {@link #setParameter} methods.
+		 * add parameters, use the provided setter methods.
 		 */
 		public Builder() {
 		}

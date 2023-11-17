@@ -3,35 +3,55 @@ package be.baur.sdt.statements;
 import java.util.List;
 import java.util.Objects;
 
+import org.jaxen.JaxenException;
+
+import be.baur.sda.DataNode;
 import be.baur.sda.Node;
 import be.baur.sda.SDA;
-import be.baur.sda.DataNode;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.TransformException;
+import be.baur.sdt.serialization.Attribute;
 import be.baur.sdt.serialization.Statements;
+import be.baur.sdt.xpath.SDAXPath;
 
 /**
  * The {@code NodeStatement} creates a new node with the specified name and an
- * empty value (and therefore no XPath expression needs to be evaluated). Any
- * child nodes can be created by the compound statement.
- * 
- * @see NodeValueStatement
+ * optional value from an evaluated XPath expression. Any child nodes can be
+ * created by the compound statement.
  */
-public class NodeStatement extends Statement {
+public class NodeStatement extends XPathStatement {
+	
+	/** The expression that evaluates to an empty string. */
+	private static SDAXPath EMPTY = null;
+	static {
+		try { EMPTY = new SDAXPath("''");
+		} catch (JaxenException e) { /* never happens */ }
+	}
 	
 	private String nodeName; // name of the node created by this statement
-
+	private final boolean withValue; // whether this node gets a value upon creation
 
 	/**
-	 * Creates a {@code NodeStatement}.
+	 * Creates a node statement without a value.
 	 * 
 	 * @param name a valid node name
 	 * @throws IllegalArgumentException if name is invalid
 	 */
 	public NodeStatement(String name) {
-		setNodeName(name);
+		super(EMPTY); setNodeName(name); withValue = false;
 	}
 
+	
+	/**
+	 * Creates a node statement with a value from an XPath expression.
+	 * 
+	 * @param name  the name of the new node, not null
+	 * @param xpath the XPath to be evaluated, not null
+	 * @throws IllegalArgumentException if the node name is invalid
+	 */
+	public NodeStatement(String name, SDAXPath xpath) {
+		super(xpath); setNodeName(name); withValue = true;
+	}
 
 	/**
 	 * Returns the name of the node created by this statement.
@@ -49,7 +69,7 @@ public class NodeStatement extends Statement {
 	 * @param name a valid node name, see {@link SDA#isName}
 	 * @throws IllegalArgumentException if name is invalid
 	 */
-	public void setNodeName(String name) {
+	void setNodeName(String name) {
 		Objects.requireNonNull(name, "name must not be null");
 		if (!SDA.isName(name))
 			throw new IllegalArgumentException("name '" + name + "' is invalid");
@@ -58,23 +78,32 @@ public class NodeStatement extends Statement {
 
 
 	@Override
-	public void execute(TransformContext tracon, StatementContext stacon) throws TransformException {
+	public void execute(TransformContext traco, StatementContext staco) throws TransformException {
 		/*
 		 * Execution: create a new SDA node, and add it to the current output node.
 		 * Then, execute the compound statement with the new node set as the current
 		 * output node to collect any child nodes created "downstream".
 		 */
 		try {
-			DataNode newNode = new DataNode(nodeName);
-			stacon.getOutputNode().add(newNode);
+			
+			String value = null;
+			
+			if (withValue) {
+				SDAXPath xpath = new SDAXPath(getExpression());
+				xpath.setVariableContext(staco);
+				value = xpath.stringValueOf(staco.getContextNode());
+			}
+			
+			DataNode newNode = new DataNode(nodeName, value);
+			staco.getOutputNode().add(newNode);
 
-			List<Node> statements = nodes();
+			List<Statement> statements = nodes();
 			if (statements.isEmpty()) return; // nothing to do
 			
-			StatementContext comcon = stacon.newChild();
-			comcon.setOutputNode(newNode);
-			for (Node statement : statements) {
-				((Statement) statement).execute(tracon, comcon);
+			StatementContext coco = staco.newChild();
+			coco.setOutputNode(newNode);
+			for (Statement statement : statements) {
+				statement.execute(traco, coco);
 			}
 
 		} catch (Exception e) {
@@ -84,11 +113,14 @@ public class NodeStatement extends Statement {
 
 
 	/**
-	 * @return a node representing<br>
-	 *         <code>node "<i>name</i>" { <i>statement?</i> }</code>
+	 * @return a data node representing<br>
+	 *         <code>node "<i>name</i>" { <i>statement*</i> }</code> or<br>
+	 *         <code>node "<i>name</i>" { value "<i>expression</i>" <i>statement*</i> }</code>
 	 */
 	public DataNode toSDA() {
 		DataNode node = new DataNode(Statements.NODE.tag, nodeName);
+		if (withValue)
+			node.add(new DataNode(Attribute.VALUE.tag, getExpression()));
 		for (Node statement : nodes()) // add child statements, if any
 			node.add(((Statement) statement).toSDA());
 		return node;

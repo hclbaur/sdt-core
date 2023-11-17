@@ -27,7 +27,7 @@ public class IfStatement extends XPathStatement {
 
 
 	@Override
-	public void execute(TransformContext tracon, StatementContext stacon) throws TransformException {
+	public void execute(TransformContext traco, StatementContext staco) throws TransformException {
 		/*
 		 * Execution: create an XPath from the statement expression, set the variable
 		 * context and perform a Boolean evaluation. If the result is true, execute the
@@ -38,14 +38,14 @@ public class IfStatement extends XPathStatement {
 
 		try {
 			SDAXPath xpath = new SDAXPath(getExpression());
-			xpath.setVariableContext(stacon);
-			Boolean test = xpath.booleanValueOf(stacon.getContextNode());
+			xpath.setVariableContext(staco);
+			Boolean test = xpath.booleanValueOf(staco.getContextNode());
 
 			if (! test) return; // do nothing
 			
-			StatementContext comcon = stacon.newChild();
+			StatementContext coco = staco.newChild();
 			for (Node statement : statements) {
-				((Statement) statement).execute(tracon, comcon);
+				((Statement) statement).execute(traco, coco);
 			}
 		
 		} catch (Exception e) {
@@ -60,7 +60,7 @@ public class IfStatement extends XPathStatement {
 	 */
 	public DataNode toSDA() {
 		DataNode node = new DataNode(Statements.IF.tag, getExpression()); 
-		for (Node statement : nodes()) // // add child statements
+		for (Node statement : nodes()) // add child statements
 			node.add(((Statement) statement).toSDA());
 		return node;
 	}

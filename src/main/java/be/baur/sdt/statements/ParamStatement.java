@@ -29,7 +29,7 @@ public class ParamStatement extends VariableStatement {
 
 	
 	@Override
-	public void execute(TransformContext tracon, StatementContext stacon) throws TransformException {
+	public void execute(TransformContext traco, StatementContext staco) throws TransformException {
 		/*
 		 * Execution: if the statement context already contains a parameter this name,
 		 * an exception is thrown, because parameters can be declared only once.
@@ -40,14 +40,14 @@ public class ParamStatement extends VariableStatement {
 		 */
 		final String param = getVarName();
 		
-		if (stacon.hasVariable(null, param))
+		if (staco.hasVariable(null, param))
 			throw new TransformException(this, "parameter '" + param + "' cannot be redeclared.");
 			
-		Object value = tracon.getParameters().get(param);
+		Object value = traco.getParameters().get(param);
 		if (value != null)
-			stacon.setVariableValue(null, param, value);
+			staco.setVariableValue(null, param, value);
 		else
-			super.execute(tracon, stacon);
+			super.execute(traco, staco);
 	}
 	
 	

@@ -9,7 +9,7 @@ import be.baur.sdt.xpath.SDAXPath;
 
 /**
  * The <code>WhenStatement</code> is a subordinate statement of the
- * {@link ChooseStatement} that evaluates an XPath expression and executes a
+ * {@code ChooseStatement} that evaluates an XPath expression and executes a
  * compound statement if the boolean result is true.
  */
 public class WhenStatement extends XPathStatement {
@@ -25,7 +25,7 @@ public class WhenStatement extends XPathStatement {
 
 	
 	@Override
-	public void execute(TransformContext tracon, StatementContext stacon) throws TransformException {
+	public void execute(TransformContext traco, StatementContext staco) throws TransformException {
 		/*
 		 * This method does nothing. Execution takes place in the context of the ChooseStatement.
 		 */

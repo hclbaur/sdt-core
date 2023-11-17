@@ -40,7 +40,7 @@ public class PrintStatement extends XPathStatement {
 
 
 	@Override
-	public void execute(TransformContext tracon, StatementContext stacon) throws TransformException {
+	public void execute(TransformContext traco, StatementContext staco) throws TransformException {
 		/*
 		 * Execution: create an XPath from the statement expression, set the variable
 		 * context and perform a String evaluation. The result (and an optional EOL
@@ -48,10 +48,10 @@ public class PrintStatement extends XPathStatement {
 		 */
 		try {
 			SDAXPath xpath = new SDAXPath(getExpression()); 
-			xpath.setVariableContext(stacon);
-			String value = xpath.stringValueOf(stacon.getContextNode());
+			xpath.setVariableContext(staco);
+			String value = xpath.stringValueOf(staco.getContextNode());
 			
-			Writer writer = tracon.getWriter();
+			Writer writer = traco.getWriter();
 			writer.write(value); 
 			if (terminate) 
 				writer.write(System.lineSeparator());

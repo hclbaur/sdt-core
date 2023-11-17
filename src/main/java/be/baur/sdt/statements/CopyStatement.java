@@ -42,7 +42,7 @@ public class CopyStatement extends XPathStatement {
 	
 	@SuppressWarnings("rawtypes")
 	@Override
-	public void execute(TransformContext tracon, StatementContext stacon) throws TransformException {
+	public void execute(TransformContext traco, StatementContext staco) throws TransformException {
 		/*
 		 * Execution: create an XPath from the statement expression, set the variable
 		 * context and evaluate. If the result is a node(set), copy and add the node(s)
@@ -50,14 +50,14 @@ public class CopyStatement extends XPathStatement {
 		 */
 		try {
 			SDAXPath xpath = new SDAXPath(getExpression());
-			xpath.setVariableContext(stacon);
-			Object value = xpath.evaluate(stacon.getContextNode());
+			xpath.setVariableContext(staco);
+			Object value = xpath.evaluate(staco.getContextNode());
 
 			if (!(value instanceof List)) return;
 			
 			for (Object object : (List) value) {
 				if (object instanceof DataNode)
-					stacon.getOutputNode().add(copy((DataNode) object));
+					staco.getOutputNode().add(copy((DataNode) object));
 			}
 
 		} catch (Exception e) {

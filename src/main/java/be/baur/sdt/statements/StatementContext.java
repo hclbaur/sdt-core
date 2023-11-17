@@ -83,9 +83,9 @@ public class StatementContext implements VariableContext {
 
 	
 	/**
-	 * Returns the current output node.
+	 * Returns the output document node.
 	 * 
-	 * @return a Node, never null
+	 * @return a data node, never null
 	 */
 	public DataNode getOutputNode() {
 		return outputNode;

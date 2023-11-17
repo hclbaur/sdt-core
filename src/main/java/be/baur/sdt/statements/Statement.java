@@ -11,24 +11,16 @@ import be.baur.sdt.TransformException;
  */
 public abstract class Statement extends AbstractNode {
 
-	/**
-	 * Creates a {@code Statement}.
-	 * 
-	 * @param name a valid statement name, see {@link Statements}
-	 */
-//	public Statement(String name) {
-//	}
-	
-	
+
 	/**
 	 * Executes this statement. The caller of this method must supply a
 	 * {@code TransformContext} and a {@code StatementContext}.
 	 * 
-	 * @param tracon the transformation context
-	 * @param stacon the statement context
+	 * @param traco the transformation context
+	 * @param staco the statement context
 	 * @throws TransformException if an exception occurs during execution
 	 */
-	public abstract void execute(TransformContext tracon, StatementContext stacon) throws TransformException;
+	public abstract void execute(TransformContext traco, StatementContext staco) throws TransformException;
 
 	
 	/**

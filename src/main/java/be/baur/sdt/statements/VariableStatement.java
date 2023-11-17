@@ -30,8 +30,7 @@ public class VariableStatement extends XPathStatement {
 	 * @throws IllegalArgumentException if name is invalid
 	 */
 	public VariableStatement(String name, SDAXPath xpath) {
-		super(xpath);
-		setVarName(name);
+		super(xpath); setVarName(name);
 	}
 
 
@@ -75,7 +74,7 @@ public class VariableStatement extends XPathStatement {
 
 	@SuppressWarnings("rawtypes")
 	@Override
-	public void execute(TransformContext tracon, StatementContext stacon) throws TransformException {
+	public void execute(TransformContext traco, StatementContext staco) throws TransformException {
 		/*
 		 * Execution: Execution: create an XPath from the statement expression, set the
 		 * variable context, and evaluate. The resulting value is used to add a new
@@ -84,14 +83,14 @@ public class VariableStatement extends XPathStatement {
 		 */
 		try {
 			SDAXPath xpath = new SDAXPath(getExpression());
-			xpath.setVariableContext(stacon);
-			Object value = xpath.evaluate(stacon.getContextNode());
+			xpath.setVariableContext(staco);
+			Object value = xpath.evaluate(staco.getContextNode());
 			
 			if (value instanceof List && ((List) value).size() == 1) {
 				value = ((List) value).get(0); // replace a list of one node with that node
 			}
 			
-			stacon.setVariableValue(null, varName, value);
+			staco.setVariableValue(null, varName, value);
 		
 		} catch (Exception e) {
 			throw new TransformException(this, e);

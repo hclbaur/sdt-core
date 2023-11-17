@@ -22,14 +22,13 @@ public class ChooseStatement extends Statement {
 	 * @param when a WhenStatement, not null
 	 */
 	public ChooseStatement(WhenStatement when) {
-		//super(Statements.CHOOSE.tag);
 		Objects.requireNonNull(when, "when statement must not be null");
 		add(when);
 	}
 
 
 	@Override
-	public void execute(TransformContext tracon, StatementContext stacon) throws TransformException {
+	public void execute(TransformContext traco, StatementContext staco) throws TransformException {
 		/*
 		 * Execution: for each sub-ordinate "when" statement, create an XPath from the
 		 * statement expression, set the variable context and perform a Boolean
@@ -45,18 +44,18 @@ public class ChooseStatement extends Statement {
 				if (statement instanceof WhenStatement) {
 					
 					SDAXPath xpath = new SDAXPath( ((WhenStatement) statement).getExpression() );
-					xpath.setVariableContext(stacon);
-					test = xpath.booleanValueOf(stacon.getContextNode());
+					xpath.setVariableContext(staco);
+					test = xpath.booleanValueOf(staco.getContextNode());
 					if (! test) continue; // test next when clause
 				}
 				
 				// we have a when that applies, or an otherwise, or neither.
 				if (test || statement instanceof OtherwiseStatement) {
 					
-					// execute compound of when or otherwise
-					StatementContext comcon = stacon.newChild();
-					for (Node comstat : statement.nodes()) {
-						((Statement) comstat).execute(tracon, comcon);
+					// execute compound of when or otherwise in new context
+					StatementContext coco = staco.newChild();
+					for (Node compound : statement.nodes()) {
+						((Statement) compound).execute(traco, coco);
 					}
 					return;
 				}
