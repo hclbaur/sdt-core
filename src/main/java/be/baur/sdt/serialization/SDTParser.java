@@ -9,7 +9,6 @@ import be.baur.sda.DataNode;
 import be.baur.sda.Node;
 import be.baur.sda.SDA;
 import be.baur.sda.serialization.Parser;
-import be.baur.sda.serialization.SDAParseException;
 import be.baur.sda.serialization.SDAParser;
 import be.baur.sdt.Transform;
 import be.baur.sdt.statements.ChooseStatement;
@@ -81,12 +80,16 @@ public final class SDTParser implements Parser<Transform> {
 	 * 
 	 * @return a transform
 	 * @throws IOException       if an I/O operation failed
-	 * @throws SDAParseException if an SDA parse exception occurs
 	 * @throws SDTParseException if an SDT parse exception occurs
 	 */
-	public Transform parse(Reader input) throws IOException, SDAParseException, SDTParseException {
+	public Transform parse(Reader input) throws IOException, SDTParseException {
 
-		final DataNode sdt = SDA.parse(input);
+		final DataNode sdt;
+		try {
+			sdt = SDA.parse(input);
+		} catch (Exception e) {
+			throw new SDTParseException(null, e.getMessage(), e);
+		}
 		return parse(sdt);
 	}
 
@@ -420,7 +423,7 @@ public final class SDTParser implements Parser<Transform> {
 		try {
 			xpath = new SDAXPath(node.getValue());
 		} catch (Exception e) {
-			throw new SDTParseException(node, e);
+			throw new SDTParseException(node, e.getMessage(), e);
 		}
 		return xpath;
 	}

@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
 
-import be.baur.sda.serialization.SDAParseException;
 import be.baur.sdt.serialization.SDTParseException;
 import be.baur.sdt.serialization.SDTParser;
 
@@ -54,11 +53,10 @@ public final class SDT {
 	 * 
 	 * @return a transform
 	 * @throws IOException       if an I/O operation failed
-	 * @throws SDAParseException if an SDA parse exception occurs
 	 * @throws SDTParseException if an SDT parse exception occurs
 	 * @see SDTParser
 	 */
-	public static Transform parse(Reader input) throws IOException, SDAParseException, SDTParseException {
+	public static Transform parse(Reader input) throws IOException, SDTParseException {
 		return PARSER.parse(input);
 	}
 
