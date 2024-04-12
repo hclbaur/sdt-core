@@ -102,6 +102,7 @@ public class VariableStatement extends XPathStatement {
 	 * @return a node representing<br>
 	 *         <code>variable "<i>name</i>" { select "<i>expression</i>" }</code>
 	 */
+	@Override
 	public DataNode toSDA() {
 		DataNode node = new DataNode(Statements.VARIABLE.tag, varName);
 		node.add( new DataNode(Attribute.SELECT.tag, getExpression()) ); 

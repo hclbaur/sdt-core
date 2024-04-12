@@ -78,6 +78,7 @@ public class ChooseStatement extends Statement {
 	 * @return an SDA node representing<br>
 	 *         <code>choose { <i>when_statement+</i> <i>otherwise_statement?</i> }</code>
 	 */
+	@Override
 	public DataNode toSDA() {
 		DataNode node = new DataNode(Statements.CHOOSE.tag);
 		for (Node statement : nodes()) // add when/otherwise statements

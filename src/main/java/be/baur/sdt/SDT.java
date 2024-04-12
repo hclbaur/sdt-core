@@ -16,8 +16,11 @@ public final class SDT {
 
 	private static final Writer NULL_WRITER = new NullWriter();
 	private static class NullWriter extends Writer {
+		@Override
 		public void write(char[] cbuf, int off, int len) throws IOException {}
+		@Override
 		public void flush() throws IOException {}
+		@Override
 		public void close() throws IOException {}
 	}
 

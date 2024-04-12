@@ -72,6 +72,7 @@ public class ForEachStatement extends XPathStatement {
 	 * @return an SDA node representing<br>
 	 *         <code>foreach "<i>expression</i>" { <i>statement+</i> }</code>
 	 */
+	@Override
 	public DataNode toSDA() {
 		DataNode node = new DataNode(Statements.FOREACH.tag, getExpression());
 		for (Node statement : nodes()) // add child statements

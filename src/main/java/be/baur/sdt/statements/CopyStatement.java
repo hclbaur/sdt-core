@@ -70,6 +70,7 @@ public class CopyStatement extends XPathStatement {
 	 * @return an SDA node representing<br>
 	 *         <code>copy { select "<i>expression</i>" }</code>
 	 */
+	@Override
 	public DataNode toSDA() {
 		DataNode node = new DataNode(Statements.COPY.tag);
 		node.add( new DataNode(Attribute.SELECT.tag, getExpression()) ); 

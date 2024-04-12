@@ -42,6 +42,7 @@ public class LeftFunction implements Function
 	 * @throws FunctionCallException if <code>args</code> has more or less than two
 	 *                               items.
 	 */
+	@Override
 	@SuppressWarnings("rawtypes")
 	public Object call(Context context, List args) throws FunctionCallException
     {
