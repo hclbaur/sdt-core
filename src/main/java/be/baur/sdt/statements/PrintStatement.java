@@ -2,7 +2,8 @@ package be.baur.sdt.statements;
 
 import java.io.Writer;
 
-import be.baur.sda.Node;
+import be.baur.sda.DataNode;
+import be.baur.sdt.StatementContext;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.TransformException;
 import be.baur.sdt.serialization.Attribute;
@@ -24,7 +25,7 @@ public class PrintStatement extends XPathStatement {
 	 * @param terminate whether to terminate the line
 	 */
 	public PrintStatement(SDAXPath xpath, boolean terminate) {
-		super(terminate ? Statements.PRINTLN.tag : Statements.PRINT.tag, xpath);
+		super(xpath);
 		this.terminate = terminate;
 	}
 
@@ -39,8 +40,7 @@ public class PrintStatement extends XPathStatement {
 	}
 
 
-	@Override
-	public void execute(TransformContext tracon, StatementContext stacon) throws TransformException {
+	@Override void execute(TransformContext traco, StatementContext staco) throws TransformException {
 		/*
 		 * Execution: create an XPath from the statement expression, set the variable
 		 * context and perform a String evaluation. The result (and an optional EOL
@@ -48,10 +48,10 @@ public class PrintStatement extends XPathStatement {
 		 */
 		try {
 			SDAXPath xpath = new SDAXPath(getExpression()); 
-			xpath.setVariableContext(stacon);
-			String value = xpath.stringValueOf(stacon.getContextNode());
+			xpath.setVariableContext(staco);
+			String value = xpath.stringValueOf(staco.getContextNode());
 			
-			Writer writer = tracon.getWriter();
+			Writer writer = traco.getWriter();
 			writer.write(value); 
 			if (terminate) 
 				writer.write(System.lineSeparator());
@@ -67,9 +67,10 @@ public class PrintStatement extends XPathStatement {
 	 * @return a node representing<br>
 	 *         <code>print(ln) { value "<i>expression</i>" }</code>
 	 */
-	public Node toNode() {
-		Node node = new Node(terminate ? Statements.PRINTLN.tag : Statements.PRINT.tag);
-		node.add( new Node(Attribute.VALUE.tag, getExpression()) ); 
+	@Override
+	public DataNode toSDA() {
+		DataNode node = new DataNode(terminate ? Statements.PRINTLN.tag : Statements.PRINT.tag);
+		node.add( new DataNode(Attribute.VALUE.tag, getExpression()) ); 
 		return node;
 	}
 

@@ -1,4 +1,4 @@
-package be.baur.sdt.statements;
+package be.baur.sdt;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -7,7 +7,7 @@ import java.util.Objects;
 import org.jaxen.UnresolvableException;
 import org.jaxen.VariableContext;
 
-import be.baur.sda.Node;
+import be.baur.sda.DataNode;
 
 /**
  * A {@code StatementContext} resolves variable bindings in XPath expressions
@@ -30,7 +30,7 @@ public class StatementContext implements VariableContext {
     private final Map<String, Object> variables = new HashMap<String, Object>();	
 
     private Object contextNode = null; // the current context node, initially null!
-    private Node outputNode = new Node("document"); // the output document node
+    private DataNode outputNode = new DataNode("document"); // the output document node
     
 	/**
 	 * Creates a {@code StatementContext}.
@@ -83,11 +83,11 @@ public class StatementContext implements VariableContext {
 
 	
 	/**
-	 * Returns the current output node.
+	 * Returns the output document node.
 	 * 
-	 * @return a Node, never null
+	 * @return a data node, never null
 	 */
-	public Node getOutputNode() {
+	public DataNode getOutputNode() {
 		return outputNode;
 	}
 
@@ -97,7 +97,7 @@ public class StatementContext implements VariableContext {
 	 * 
 	 * @param outputNode a Node, not null
 	 */
-	public void setOutputNode(Node outputNode) {
+	public void setOutputNode(DataNode outputNode) {
 		Objects.requireNonNull(outputNode, "outputNode must not be null");
 		this.outputNode = outputNode;
 	}

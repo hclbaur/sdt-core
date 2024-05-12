@@ -9,9 +9,11 @@ public class Test {
 
 	Function<String, String> function;
 	BiFunction<String, Object, String> bifunc;
+	String prefix;
 	
-	public Test(Function<String, String> function) {
+	public Test(Function<String, String> function, String prefix) {
 		this.function = function;
+		this.prefix = prefix;
 	}
 	
 	public Test(BiFunction<String, Object, String> bifunction) {
@@ -24,6 +26,8 @@ public class Test {
 		String result = function.apply(str);
 
 		if (expected == null) expected = str;
+		expected = prefix + expected;
+		
 		if (result.equals(expected)) 
 			System.out.print(scenario + " ");
 		else {

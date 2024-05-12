@@ -1,18 +1,19 @@
 package be.baur.sdt;
 
 import be.baur.sda.Node;
+import be.baur.sda.ProcessingException;
 
 /**
  * An {@code TransformException} may be thrown during the execution of a
- * transformation recipe. See also {@link NodeProcessingException}.
+ * transformation recipe. See also {@link ProcessingException}.
  */
 @SuppressWarnings("serial")
-public final class TransformException extends NodeProcessingException {
+public final class TransformException extends ProcessingException {
 
 	/**
-	 * Creates a TransformException with a detail message.
+	 * Creates a transform exception with an error node and message.
 	 * 
-	 * @param node    the node where the exception was thrown
+	 * @param node    the node where an error occurred
 	 * @param message an error message
 	 */
 	public TransformException(Node node, String message) {
@@ -21,13 +22,13 @@ public final class TransformException extends NodeProcessingException {
 
 	
 	/**
-	 * Creates a TransformException caused by another exception.
+	 * Creates a transform exception caused by another exception.
 	 * 
-	 * @param node  the node where the exception was thrown
-	 * @param cause the exception causing this exception to be thrown
+	 * @param node    the node where an exception occurred
+	 * @param cause   the exception causing this exception to be thrown
 	 */
 	public TransformException(Node node, Throwable cause) {
-		super(node, cause.getMessage(), cause);
+		super(node, cause.getMessage()); initCause(cause);
 	}
 
 }

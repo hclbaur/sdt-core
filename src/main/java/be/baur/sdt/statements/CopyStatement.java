@@ -3,6 +3,8 @@ package be.baur.sdt.statements;
 import java.util.List;
 
 import be.baur.sda.Node;
+import be.baur.sda.DataNode;
+import be.baur.sdt.StatementContext;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.TransformException;
 import be.baur.sdt.serialization.Attribute;
@@ -21,7 +23,7 @@ public class CopyStatement extends XPathStatement {
 	 * @param xpath the XPath to be evaluated, not null
 	 */
 	public CopyStatement(SDAXPath xpath) {
-		super(Statements.COPY.tag, xpath);
+		super(xpath);
 	}
 
 
@@ -29,19 +31,18 @@ public class CopyStatement extends XPathStatement {
 	 * Private helper method to create a deep copy of an SDA node. This functionality should
 	 * possibly be provided by the SDA core library in a future release.
 	 */
-	private static Node copy(Node node) {
-		Node copy = new Node(node.getName(), node.getValue());
+	private static DataNode copy(DataNode node) {
+		DataNode copy = new DataNode(node.getName(), node.getValue());
 		if (! node.isLeaf()) {
 			copy.add(null);
 			for (Node child : node.nodes()) 
-				copy.add(copy(child));
+				copy.add(copy((DataNode) child));
 		}
 		return copy;
 	}
 	
 	@SuppressWarnings("rawtypes")
-	@Override
-	public void execute(TransformContext tracon, StatementContext stacon) throws TransformException {
+	@Override void execute(TransformContext traco, StatementContext staco) throws TransformException {
 		/*
 		 * Execution: create an XPath from the statement expression, set the variable
 		 * context and evaluate. If the result is a node(set), copy and add the node(s)
@@ -49,14 +50,14 @@ public class CopyStatement extends XPathStatement {
 		 */
 		try {
 			SDAXPath xpath = new SDAXPath(getExpression());
-			xpath.setVariableContext(stacon);
-			Object value = xpath.evaluate(stacon.getContextNode());
+			xpath.setVariableContext(staco);
+			Object value = xpath.evaluate(staco.getContextNode());
 
 			if (!(value instanceof List)) return;
 			
 			for (Object object : (List) value) {
-				if (object instanceof Node)
-					stacon.getOutputNode().add(copy((Node) object));
+				if (object instanceof DataNode)
+					staco.getOutputNode().add(copy((DataNode) object));
 			}
 
 		} catch (Exception e) {
@@ -69,9 +70,10 @@ public class CopyStatement extends XPathStatement {
 	 * @return an SDA node representing<br>
 	 *         <code>copy { select "<i>expression</i>" }</code>
 	 */
-	public Node toNode() {
-		Node node = new Node(Statements.COPY.tag, getValue());
-		node.add( new Node(Attribute.SELECT.tag, getExpression()) ); 
+	@Override
+	public DataNode toSDA() {
+		DataNode node = new DataNode(Statements.COPY.tag);
+		node.add( new DataNode(Attribute.SELECT.tag, getExpression()) ); 
 		return node;
 	}
 

@@ -3,19 +3,19 @@ package test;
 import java.util.Date;
 import java.util.function.Consumer;
 
-import be.baur.sda.Node;
+import be.baur.sda.DataNode;
 
 /** A convenience class with testing methods that accept Lamba expressions */
 public final class PerfTest {
 
-	private Consumer<Node> nodeconsumer;
+	private Consumer<DataNode> nodeconsumer;
 	
-	public PerfTest(Consumer<Node> nodeconsumer) {
+	public PerfTest(Consumer<DataNode> nodeconsumer) {
 		this.nodeconsumer = nodeconsumer;
 	}
 
 	
-	public void test(String scenario, Node input, long iterations, long runs) {
+	public void test(String scenario, DataNode input, long iterations, long runs) {
 
 		System.out.print(scenario);
 		long total = 0, r = 0;

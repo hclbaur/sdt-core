@@ -3,7 +3,8 @@ package be.baur.sdt.statements;
 import java.util.List;
 import java.util.Objects;
 
-import be.baur.sda.Node;
+import be.baur.sda.DataNode;
+import be.baur.sdt.StatementContext;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.TransformException;
 import be.baur.sdt.serialization.Attribute;
@@ -11,13 +12,16 @@ import be.baur.sdt.serialization.Statements;
 import be.baur.sdt.xpath.SDAXPath;
 
 /**
- * The {@code VariableStatement} evaluates an XPath expression and assigns
- * the result to a variable. Unlike parameters, variables cannot be overwritten
- * by the transformation context.
+ * The {@code VariableStatement} evaluates an XPath expression and assigns the
+ * result to a named variable. Unlike parameters, variables cannot be supplied
+ * by the transformation context, and are mutable during transform execution.
  * 
  * @see ParamStatement
  */
 public class VariableStatement extends XPathStatement {
+
+	private String varName; // name of the variable assigned by this statement
+
 
 	/**
 	 * Creates a {@code VariableStatement}.
@@ -27,31 +31,50 @@ public class VariableStatement extends XPathStatement {
 	 * @throws IllegalArgumentException if name is invalid
 	 */
 	public VariableStatement(String name, SDAXPath xpath) {
-		super(Statements.VARIABLE.tag, xpath);
-		Objects.requireNonNull(name, "name must not be null");
-		if (! isVarName(name))
-			throw new IllegalArgumentException("name '" + name + "' is invalid");
-		setValue(name); // variable is stored in the node value, somewhat icky
+		super(xpath); setVarName(name);
 	}
 
 
 	/**
-	 * Returns true if {@code name} is a valid variable name, and false otherwise.
+	 * Returns the name of the variable assigned by this statement.
+	 * 
+	 * @return a variable name, not null or empty
+	 */
+	public String getVarName() {
+		return varName;
+	}
+
+
+	/**
+	 * Sets the name of the variable assigned by this statement.
+	 * 
+	 * @param name the name of the variable, not null or empty
+	 * @throws IllegalArgumentException if name is invalid
+	 */
+	public void setVarName(String name) {
+		Objects.requireNonNull(name, "name must not be null");
+		if (! isVarName(name))
+			throw new IllegalArgumentException("name '" + name + "' is invalid");
+		varName = name;
+	}
+
+
+	/**
+	 * Determines if {@code name} is a valid variable name.
 	 * 
 	 * @param name a variable name
-	 * @return true if name is valid
+	 * @return true or false
 	 */
 	public static boolean isVarName(String name) {
 		// No attempt is made to check if name is a valid XPath variable name
 		// (see https://www.w3.org/TR/REC-xml/#NT-Name). At least, we disallow
 		// the declaration of variables with a namespace prefix (for now).
-		return !name.contains(":");
+		return !(name.isEmpty() || name.contains(":"));
 	}
 
 
 	@SuppressWarnings("rawtypes")
-	@Override
-	public void execute(TransformContext tracon, StatementContext stacon) throws TransformException {
+	@Override void execute(TransformContext traco, StatementContext staco) throws TransformException {
 		/*
 		 * Execution: Execution: create an XPath from the statement expression, set the
 		 * variable context, and evaluate. The resulting value is used to add a new
@@ -60,14 +83,14 @@ public class VariableStatement extends XPathStatement {
 		 */
 		try {
 			SDAXPath xpath = new SDAXPath(getExpression());
-			xpath.setVariableContext(stacon);
-			Object value = xpath.evaluate(stacon.getContextNode());
+			xpath.setVariableContext(staco);
+			Object value = xpath.evaluate(staco.getContextNode());
 			
 			if (value instanceof List && ((List) value).size() == 1) {
 				value = ((List) value).get(0); // replace a list of one node with that node
 			}
 			
-			stacon.setVariableValue(null, getValue(), value);
+			staco.setVariableValue(null, varName, value);
 		
 		} catch (Exception e) {
 			throw new TransformException(this, e);
@@ -79,9 +102,10 @@ public class VariableStatement extends XPathStatement {
 	 * @return a node representing<br>
 	 *         <code>variable "<i>name</i>" { select "<i>expression</i>" }</code>
 	 */
-	public Node toNode() {
-		Node node = new Node(Statements.VARIABLE.tag, getValue());
-		node.add( new Node(Attribute.SELECT.tag, getExpression()) ); 
+	@Override
+	public DataNode toSDA() {
+		DataNode node = new DataNode(Statements.VARIABLE.tag, varName);
+		node.add( new DataNode(Attribute.SELECT.tag, getExpression()) ); 
 		return node;
 	}
 

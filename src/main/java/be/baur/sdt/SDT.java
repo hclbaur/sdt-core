@@ -1,10 +1,12 @@
 package be.baur.sdt;
 
 import java.io.IOException;
+import java.io.Reader;
 import java.io.Writer;
 
-import be.baur.sdt.serialization.Parser;
+import be.baur.sdt.serialization.SDTParseException;
 import be.baur.sdt.serialization.SDTParser;
+import be.baur.sdt.statements.Transform;
 
 /**
  * This class defines static constants and utility methods.
@@ -15,8 +17,11 @@ public final class SDT {
 
 	private static final Writer NULL_WRITER = new NullWriter();
 	private static class NullWriter extends Writer {
+		@Override
 		public void write(char[] cbuf, int off, int len) throws IOException {}
+		@Override
 		public void flush() throws IOException {}
+		@Override
 		public void close() throws IOException {}
 	}
 
@@ -44,13 +49,20 @@ public final class SDT {
 	}
 
 	
+	private static SDTParser PARSER = new SDTParser(); // singleton parser
+
 	/**
-	 * Returns a new instance of the default SDT parser.
+	 * Creates a transform from a character input stream in SDT format, using the
+	 * default SDT parser.
 	 * 
-	 * @return an {@link SDTParser}
+	 * @param input an input stream
+	 * @return a transform
+	 * @throws IOException       if an I/O operation failed
+	 * @throws SDTParseException if an SDT parse exception occurs
+	 * @see SDTParser
 	 */
-	public static Parser parser() {
-		return new SDTParser();
+	public static Transform parse(Reader input) throws IOException, SDTParseException {
+		return PARSER.parse(input);
 	}
 
 }

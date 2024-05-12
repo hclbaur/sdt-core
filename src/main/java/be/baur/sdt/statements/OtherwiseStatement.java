@@ -1,6 +1,8 @@
 package be.baur.sdt.statements;
 
 import be.baur.sda.Node;
+import be.baur.sda.DataNode;
+import be.baur.sdt.StatementContext;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.TransformException;
 import be.baur.sdt.serialization.Statements;
@@ -12,16 +14,7 @@ import be.baur.sdt.serialization.Statements;
  */
 public class OtherwiseStatement extends Statement {
 
-	/**
-	 * Creates an OtherwiseStatement.
-	 */
-	public OtherwiseStatement() {
-		super(Statements.OTHERWISE.tag);
-	}
-
-
-	@Override
-	public void execute(TransformContext tracon, StatementContext stacon) throws TransformException {
+	@Override void execute(TransformContext traco, StatementContext staco) throws TransformException {
 		/*
 		 * This method does nothing. Execution takes place in the context of the ChooseStatement.
 		 */
@@ -32,10 +25,11 @@ public class OtherwiseStatement extends Statement {
 	 * @return an SDA node representing<br>
 	 *         <code>otherwise { <i>statement+</i> }</code>
 	 */
-	public Node toNode() {
-		Node node = new Node(Statements.OTHERWISE.tag); 
+	@Override
+	public DataNode toSDA() {
+		DataNode node = new DataNode(Statements.OTHERWISE.tag); 
 		for (Node statement : nodes()) // add child statements
-			node.add(((Statement) statement).toNode());
+			node.add(((Statement) statement).toSDA());
 		return node;
 	}
 

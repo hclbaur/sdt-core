@@ -45,7 +45,8 @@ public class RightFunction implements Function
 	 * @throws FunctionCallException if <code>args</code> has more or less than two
 	 *                               items.
 	 */
-    @SuppressWarnings("rawtypes")
+    @Override
+	@SuppressWarnings("rawtypes")
 	public Object call(Context context, List args) throws FunctionCallException
     {
         if (args.size() != 2)

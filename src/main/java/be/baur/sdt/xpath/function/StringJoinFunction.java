@@ -42,7 +42,8 @@ public class StringJoinFunction implements Function
 	 *                               than one item, or if the first argument is not
 	 *                               a <code>List</code>
 	 */
-    @SuppressWarnings("rawtypes")
+    @Override
+	@SuppressWarnings("rawtypes")
 	public Object call(Context context, List args) throws FunctionCallException
     {
     	final int argc = args.size();

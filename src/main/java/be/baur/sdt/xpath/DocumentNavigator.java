@@ -16,6 +16,7 @@ import org.jaxen.XPath;
 
 import be.baur.sda.Node;
 import be.baur.sda.SDA;
+import be.baur.sda.DataNode;
 
 /**
  * Interface for navigating around the SDA object model.
@@ -123,16 +124,16 @@ public class DocumentNavigator extends DefaultNavigator {
 		}
     }
 	
-    public static Object getDocument(Reader input) throws FunctionCallException
+    public static DataNode getDocument(Reader input) throws FunctionCallException
     {
-    	Node root, document;
+    	DataNode root, document;
     	try {
-			root = SDA.parser().parse(input);
+			root = SDA.parse(input);
 		} catch (Exception e) {
 			throw new FunctionCallException(e.getMessage(), e);
 		}
     	// add the root to a "document node" for XPath to work as expected
-    	document = new Node("document"); document.add(root); 
+    	document = new DataNode("document"); document.add(root); 
     	return document;
     }
     
@@ -223,7 +224,7 @@ public class DocumentNavigator extends DefaultNavigator {
 
 	@Override
 	public String getElementStringValue(Object element) {
-		return ((Node) element).getValue();
+		return ((DataNode) element).getValue();
 	}
 
 	@Override

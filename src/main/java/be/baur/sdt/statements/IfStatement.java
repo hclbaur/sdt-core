@@ -3,6 +3,8 @@ package be.baur.sdt.statements;
 import java.util.List;
 
 import be.baur.sda.Node;
+import be.baur.sda.DataNode;
+import be.baur.sdt.StatementContext;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.TransformException;
 import be.baur.sdt.serialization.Statements;
@@ -20,13 +22,12 @@ public class IfStatement extends XPathStatement {
 	 * @param xpath the XPath to be evaluated, not null
 	 */
 	public IfStatement(SDAXPath xpath) {
-		super(Statements.IF.tag, xpath);
+		super(xpath);
 		add(null); // must have child statements so initialize it with an empty node set
 	}
 
 
-	@Override
-	public void execute(TransformContext tracon, StatementContext stacon) throws TransformException {
+	@Override void execute(TransformContext traco, StatementContext staco) throws TransformException {
 		/*
 		 * Execution: create an XPath from the statement expression, set the variable
 		 * context and perform a Boolean evaluation. If the result is true, execute the
@@ -37,14 +38,14 @@ public class IfStatement extends XPathStatement {
 
 		try {
 			SDAXPath xpath = new SDAXPath(getExpression());
-			xpath.setVariableContext(stacon);
-			Boolean test = xpath.booleanValueOf(stacon.getContextNode());
+			xpath.setVariableContext(staco);
+			Boolean test = xpath.booleanValueOf(staco.getContextNode());
 
 			if (! test) return; // do nothing
 			
-			StatementContext comcon = stacon.newChild();
+			StatementContext coco = staco.newChild();
 			for (Node statement : statements) {
-				((Statement) statement).execute(tracon, comcon);
+				((Statement) statement).execute(traco, coco);
 			}
 		
 		} catch (Exception e) {
@@ -57,10 +58,11 @@ public class IfStatement extends XPathStatement {
 	 * @return an SDA node representing<br>
 	 *         <code>if "<i>expression</i>" { <i>statement+</i> }</code>
 	 */
-	public Node toNode() {
-		Node node = new Node(Statements.IF.tag, getExpression()); 
-		for (Node statement : nodes()) // // add child statements
-			node.add(((Statement) statement).toNode());
+	@Override
+	public DataNode toSDA() {
+		DataNode node = new DataNode(Statements.IF.tag, getExpression()); 
+		for (Node statement : nodes()) // add child statements
+			node.add(((Statement) statement).toSDA());
 		return node;
 	}
 
