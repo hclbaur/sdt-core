@@ -1,6 +1,6 @@
 # Release Notes
 
-## [1.2.0] - 2024-??-??
+## [1.2.0] - 2024-05-12
 
 This is a compatibility release for sda-core 2.2.x but has quite a few 
 changes with regards to naming and packaging.
