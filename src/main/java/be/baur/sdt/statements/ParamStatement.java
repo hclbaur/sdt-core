@@ -1,6 +1,7 @@
 package be.baur.sdt.statements;
 
 import be.baur.sda.DataNode;
+import be.baur.sdt.StatementContext;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.TransformException;
 import be.baur.sdt.serialization.Statements;
@@ -28,8 +29,7 @@ public class ParamStatement extends VariableStatement {
 	}
 
 	
-	@Override
-	public void execute(TransformContext traco, StatementContext staco) throws TransformException {
+	@Override void execute(TransformContext traco, StatementContext staco) throws TransformException {
 		/*
 		 * Execution: if the statement context already contains a parameter this name,
 		 * an exception is thrown, because parameters can be declared only once.

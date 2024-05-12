@@ -4,6 +4,7 @@ import java.util.Objects;
 
 import be.baur.sda.Node;
 import be.baur.sda.DataNode;
+import be.baur.sdt.StatementContext;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.TransformException;
 import be.baur.sdt.serialization.Statements;
@@ -27,8 +28,7 @@ public class ChooseStatement extends Statement {
 	}
 
 
-	@Override
-	public void execute(TransformContext traco, StatementContext staco) throws TransformException {
+	@Override void execute(TransformContext traco, StatementContext staco) throws TransformException {
 		/*
 		 * Execution: for each sub-ordinate "when" statement, create an XPath from the
 		 * statement expression, set the variable context and perform a Boolean

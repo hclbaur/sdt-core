@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Objects;
 
 import be.baur.sda.DataNode;
+import be.baur.sdt.StatementContext;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.TransformException;
 import be.baur.sdt.serialization.Attribute;
@@ -73,8 +74,7 @@ public class VariableStatement extends XPathStatement {
 
 
 	@SuppressWarnings("rawtypes")
-	@Override
-	public void execute(TransformContext traco, StatementContext staco) throws TransformException {
+	@Override void execute(TransformContext traco, StatementContext staco) throws TransformException {
 		/*
 		 * Execution: Execution: create an XPath from the statement expression, set the
 		 * variable context, and evaluate. The resulting value is used to add a new

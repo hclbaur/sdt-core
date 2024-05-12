@@ -1,4 +1,4 @@
-package be.baur.sdt;
+package be.baur.sdt.statements;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -10,10 +10,12 @@ import be.baur.sda.DataNode;
 import be.baur.sda.Node;
 import be.baur.sda.serialization.SDAFormatter;
 import be.baur.sda.serialization.SDAParseException;
+import be.baur.sdt.SDT;
+import be.baur.sdt.StatementContext;
+import be.baur.sdt.TransformContext;
+import be.baur.sdt.TransformException;
 import be.baur.sdt.serialization.SDTParseException;
 import be.baur.sdt.serialization.SDTParser;
-import be.baur.sdt.statements.Statement;
-import be.baur.sdt.statements.StatementContext;
 
 /**
  * A {@code Transform} represents a recipe with statements for mapping and

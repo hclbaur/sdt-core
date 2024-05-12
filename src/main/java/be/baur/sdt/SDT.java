@@ -6,6 +6,7 @@ import java.io.Writer;
 
 import be.baur.sdt.serialization.SDTParseException;
 import be.baur.sdt.serialization.SDTParser;
+import be.baur.sdt.statements.Transform;
 
 /**
  * This class defines static constants and utility methods.

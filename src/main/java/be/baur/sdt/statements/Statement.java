@@ -3,6 +3,7 @@ package be.baur.sdt.statements;
 import be.baur.sda.AbstractNode;
 import be.baur.sda.DataNode;
 import be.baur.sda.serialization.SDAFormatter;
+import be.baur.sdt.StatementContext;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.TransformException;
 
@@ -20,7 +21,7 @@ public abstract class Statement extends AbstractNode {
 	 * @param staco the statement context
 	 * @throws TransformException if an exception occurs during execution
 	 */
-	public abstract void execute(TransformContext traco, StatementContext staco) throws TransformException;
+	abstract void execute(TransformContext traco, StatementContext staco) throws TransformException;
 
 	
 	/**

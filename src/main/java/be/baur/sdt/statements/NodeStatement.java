@@ -8,6 +8,7 @@ import org.jaxen.JaxenException;
 import be.baur.sda.DataNode;
 import be.baur.sda.Node;
 import be.baur.sda.SDA;
+import be.baur.sdt.StatementContext;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.TransformException;
 import be.baur.sdt.serialization.Attribute;
@@ -77,8 +78,7 @@ public class NodeStatement extends XPathStatement {
 	}
 
 
-	@Override
-	public void execute(TransformContext traco, StatementContext staco) throws TransformException {
+	@Override void execute(TransformContext traco, StatementContext staco) throws TransformException {
 		/*
 		 * Execution: create a new SDA node, and add it to the current output node.
 		 * Then, execute the compound statement with the new node set as the current

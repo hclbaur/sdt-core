@@ -5,6 +5,7 @@ import java.util.List;
 import be.baur.sda.Node;
 import be.baur.sda.DataNode;
 import be.baur.sdt.SDT;
+import be.baur.sdt.StatementContext;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.TransformException;
 import be.baur.sdt.serialization.Statements;
@@ -27,8 +28,7 @@ public class ForEachStatement extends XPathStatement {
 
 	
 	@SuppressWarnings("rawtypes")
-	@Override
-	public void execute(TransformContext traco, StatementContext staco) throws TransformException {
+	@Override void execute(TransformContext traco, StatementContext staco) throws TransformException {
 		/*
 		 * Execution: create an XPath from the statement expression, set the variable
 		 * context and evaluate it to obtain a node-set. Execute the compound statement

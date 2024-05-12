@@ -4,6 +4,7 @@ import java.util.List;
 
 import be.baur.sda.Node;
 import be.baur.sda.DataNode;
+import be.baur.sdt.StatementContext;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.TransformException;
 import be.baur.sdt.serialization.Attribute;
@@ -41,8 +42,7 @@ public class CopyStatement extends XPathStatement {
 	}
 	
 	@SuppressWarnings("rawtypes")
-	@Override
-	public void execute(TransformContext traco, StatementContext staco) throws TransformException {
+	@Override void execute(TransformContext traco, StatementContext staco) throws TransformException {
 		/*
 		 * Execution: create an XPath from the statement expression, set the variable
 		 * context and evaluate. If the result is a node(set), copy and add the node(s)

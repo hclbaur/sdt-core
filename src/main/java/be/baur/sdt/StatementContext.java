@@ -1,4 +1,4 @@
-package be.baur.sdt.statements;
+package be.baur.sdt;
 
 import java.util.HashMap;
 import java.util.Map;

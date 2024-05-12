@@ -7,6 +7,7 @@ This is (mostly) a compatibility release for sda-core 2.2.x.
 - `Removed` NodeValueStatement class.
 - `Removed` SDTException and Parser interface.
 - `Removed` NodeProcessingException (moved to sda-core).
+- `Changed` Statement.execute() is no longer public.
 - `Changed` Convenience method SDT.parser() to SDT.parse().
 - `Changed` NodeStatement.getName to NodeStatement.getNodeName.
 - `Changed` NodeValueStatement.getName to NodeValueStatement.getNodeName.

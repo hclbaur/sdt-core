@@ -3,6 +3,7 @@ package be.baur.sdt.statements;
 import java.io.Writer;
 
 import be.baur.sda.DataNode;
+import be.baur.sdt.StatementContext;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.TransformException;
 import be.baur.sdt.serialization.Attribute;
@@ -39,8 +40,7 @@ public class PrintStatement extends XPathStatement {
 	}
 
 
-	@Override
-	public void execute(TransformContext traco, StatementContext staco) throws TransformException {
+	@Override void execute(TransformContext traco, StatementContext staco) throws TransformException {
 		/*
 		 * Execution: create an XPath from the statement expression, set the variable
 		 * context and perform a String evaluation. The result (and an optional EOL
