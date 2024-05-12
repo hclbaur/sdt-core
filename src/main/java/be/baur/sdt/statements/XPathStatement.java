@@ -17,8 +17,7 @@ public abstract class XPathStatement extends Statement {
 	 * re-usable nor thread-safe, and its evaluation depends on a context, there is
 	 * no point to keep it as a class field. So instead, we just save the expression
 	 * text of the object that is passed in the constructor. This places the burden
-	 * of creating a valid XPath object on the caller and we still know that the
-	 * expression is actually valid.
+	 * of creating a valid XPath on the caller.
 	 */
 	private final String expression;
 

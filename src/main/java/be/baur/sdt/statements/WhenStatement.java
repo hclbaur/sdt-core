@@ -9,7 +9,7 @@ import be.baur.sdt.serialization.Statements;
 import be.baur.sdt.xpath.SDAXPath;
 
 /**
- * The <code>WhenStatement</code> is a subordinate statement of the
+ * The <code>WhenStatement</code> is a mandatory subordinate statement of the
  * {@code ChooseStatement} that evaluates an XPath expression and executes a
  * compound statement if the boolean result is true.
  */

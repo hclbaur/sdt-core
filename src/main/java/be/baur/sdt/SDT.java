@@ -55,6 +55,7 @@ public final class SDT {
 	 * Creates a transform from a character input stream in SDT format, using the
 	 * default SDT parser.
 	 * 
+	 * @param input an input stream
 	 * @return a transform
 	 * @throws IOException       if an I/O operation failed
 	 * @throws SDTParseException if an SDT parse exception occurs

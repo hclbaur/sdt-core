@@ -57,7 +57,7 @@ public class NodeStatement extends XPathStatement {
 	/**
 	 * Returns the name of the node created by this statement.
 	 * 
-	 * @returns a node name, not null or empty
+	 * @return a node name, not null or empty
 	 */
 	public String getNodeName() {
 		return nodeName;

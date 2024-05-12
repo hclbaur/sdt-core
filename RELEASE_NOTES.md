@@ -1,8 +1,9 @@
 # Release Notes
 
-## [1.2.0] - in development
+## [1.2.0] - 2024-??-??
 
-This is (mostly) a compatibility release for sda-core 2.2.x.
+This is a compatibility release for sda-core 2.2.x but has quite a few 
+changes with regards to naming and packaging.
 
 - `Removed` NodeValueStatement class.
 - `Removed` SDTException and Parser interface.
@@ -16,7 +17,7 @@ This is (mostly) a compatibility release for sda-core 2.2.x.
 
 ## Compatibility
 
-- Requires at least Java 8, sda-core 2.1.0 and Jaxen 2.0.0.
+- Requires at least Java 8, sda-core 2.2.0 and Jaxen 2.0.0.
 
 ## Previous releases
 
@@ -25,7 +26,7 @@ This is (mostly) a compatibility release for sda-core 2.2.x.
 This is a compatibility release for sda-core 2.1.x with minor changes.
 
 - `Changed` parameters to be global variables only.
-- Added *VariableStatement.isVarName* method.
+- Added VariableStatement.isVarName().
 
 ### [1.0.0] - 2023-07-04 (requires at least SDA v2.0.0)
 

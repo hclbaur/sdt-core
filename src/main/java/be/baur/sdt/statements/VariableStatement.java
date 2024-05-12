@@ -38,7 +38,7 @@ public class VariableStatement extends XPathStatement {
 	/**
 	 * Returns the name of the variable assigned by this statement.
 	 * 
-	 * @returns a variable name, not null or empty
+	 * @return a variable name, not null or empty
 	 */
 	public String getVarName() {
 		return varName;
