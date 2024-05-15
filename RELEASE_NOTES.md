@@ -1,6 +1,20 @@
 # Release Notes
 
-## [1.2.0] - 2024-05-12
+## [1.3.0] - In development
+
+This release has a few changes with respect to the syntax of some SDT statements,
+and the parser internals and validation error messages have been improved.
+
+- `Changed` the print(ln) statement into a "leaf" statement.
+
+
+## Compatibility
+
+- Requires at least Java 8, sda-core 2.2.0 and Jaxen 2.0.0.
+
+## Previous releases
+
+### [1.2.0] - 2024-05-12
 
 This is a compatibility release for sda-core 2.2.x but has quite a few 
 changes with regards to naming and packaging.
@@ -15,13 +29,7 @@ changes with regards to naming and packaging.
 - `Renamed` ParseException to SDTParseException.
 - Closed issues: #4.
 
-## Compatibility
-
-- Requires at least Java 8, sda-core 2.2.0 and Jaxen 2.0.0.
-
-## Previous releases
-
-## [1.1.0] - 2023-10-04
+### [1.1.0] - 2023-10-04
 
 This is a compatibility release for sda-core 2.1.x with minor changes.
 

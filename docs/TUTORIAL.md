@@ -21,25 +21,36 @@ Nevertheless, if you already know XSLT, all concepts introduced by SDT will be f
 When you say transformation, you say input and output. So, without further ado, here is the obligatory Hello World example:
 
 	transform {
-		println { value "'Hello World!'" }
+		println "'Hello World!'"
 	}
 
 This will produce the following output:
 
 	Hello World!
 
-As Roy H. Williams put it: the risk of insult is the price of clarity. In case it was not clear, whatever follows `value` is an XPath expression and whatever is selected is converted to a string - as if by calling the *string()* function. 
+As Roy H. Williams put it: the risk of insult is the price of clarity. In case it was not clear, what follows `println` is an XPath expression and whatever is selected is converted to a string - as if by calling the *string()* function. 
 
-In this example, the "expression" is a very basic one, which selects a string literal. But we can bring in some data from the outside world, and use the XPath *concat()* function to transform it:
+In this example, the "expression" is a very basic one, which selects a string literal. But we can bring in some data from the outside world, using a parameter holding whatever subject we want to greet:
+
+	transform {
+		param "subject" { 
+			select "'World'" 
+		}
+		print "'Hello '" 
+		print "$subject" 
+		println "'!'"
+	}
+
+First, note that `print` will omit the line separator, and second that this can be written way more concise if we use the XPath *concat()* function to construct our greeting:
 
 	transform {
 		param "subject" { select "'World'" }
-		println { value "concat('Hello ', $subject, '!')" }
+		println "concat('Hello ', $subject, '!')"
 	}
 
-The `param` statement declares a (global) variable *subject* that can be provisioned by the transformation *context*, overriding the selected default ('World'). The required default selection allows us to test or debug the transformation recipe in isolation, e.g. without supplying a context.
+The `param` statement declares a (global) variable *subject* that can be provisioned by the transformation *context*, overriding the selected default ('World'), so we can greet whomever we like. The required default selection allows us to test or debug the transformation recipe in isolation, e.g. without supplying a context.
 
-However, even parameterised versions of Hello World get old quickly, so let's transform some actual SDA content, like my (hypothetical) address book: 
+However, even parameterized versions of "Hello World" get old rather quickly, so let's transform some actual SDA content, like my (hypothetical) address book: 
 
 	addressbook {
 		contact "1" {
@@ -62,9 +73,7 @@ The address book might be in an SDA file called `addressbook.sda`, located in wh
 	transform {
 		param "filename" { select "'addressbook.sda'" }
 		variable "doc" { select "document($filename)" }
-		println { 
-			value "concat('Hello ', $doc/addressbook/contact[1]/firstname, '!')"
-		}
+		println "concat('Hello ', $doc/addressbook/contact[1]/firstname, '!')"
 	}
 
 We use the *document()* function to read and parse the file into an SDA node tree, which is bound to a variable *doc* for reference in subsequent expressions. Note that unlike `param`, the `variable` statement declares a variable that can *not* be overriden by the transformation context. Executing this recipe would produce:
@@ -82,9 +91,7 @@ Suppose we want to iterate over all phone numbers in the address book and transf
 transform {
 	<i>...(read address book)...</i>
 	foreach "$doc/addressbook/contact/phonenumber" {
-		println { 
-			value "concat('Number ', $sdt:position, ' of ', $sdt:last, ': ', ., ' (', ../firstname, ')')"
-		}
+		println "concat('Number ', $sdt:position, ' of ', $sdt:last, ': ', ., ' (', ../firstname, ')')"
 	}
 }
 </pre>
@@ -102,9 +109,7 @@ Now, we will add a predicate that selects only the "odd" phone numbers (1 and 3)
 
 	...
 	foreach "($doc//phonenumber)[(position() mod 2) = 1]" {
-		println { 
-			value "concat('Number ', $sdt:position, ' of ', $sdt:last, ': ', ., ' (', ../firstname, ')')"
-		}
+		println "concat('Number ', $sdt:position, ' of ', $sdt:last, ': ', ., ' (', ../firstname, ')')"
 	}
 
 The result would be:
@@ -126,9 +131,7 @@ Whether you are iterating a set or not, processing may be *conditional*; you may
 	...
 	foreach "$doc//phonenumber" {
 		if "($sdt:position mod 2) = 1" {
-			println {
-				value "concat('Number ', $sdt:position, ' of ', $sdt:last, ': ', ., ' (', ../firstname, ')')"
-			}
+			println "concat('Number ', $sdt:position, ' of ', $sdt:last, ': ', ., ' (', ../firstname, ')')"
 		}
 	}
 
@@ -149,16 +152,16 @@ Just like in XSLT, there is no `else(if)` clause, but we do have a way to test a
 
 	...
 	foreach "$doc//phonenumber" {
-		print { value "concat('Number ', $sdt:position, ' of ', $sdt:last, ': ', .)" }
+		print "concat('Number ', $sdt:position, ' of ', $sdt:last, ': ', .)"
 		choose {
 			when "$sdt:position mod 2" {
-				println { value "' (odd)'" }
+				println "' (odd)'"
 			}
 			when "not($sdt:position mod 2)" {
-				println { value "' (even)'" }
+				println "' (even)'"
 			}
 			otherwise {
-				println { value "' (???)'" }
+				println "' (???)'"
 			}
 		}
 	}
@@ -182,8 +185,8 @@ transform {
 	<i>...(read address book)...</i>
 		node "contacts" {
 			foreach "$doc/addressbook/contact" {
-				node "person" { value "firstname" }
-				node "phonenumbers" { value "fn:string-join(phonenumber,',')" }
+				node "person" "firstname" }
+				node "phonenumbers" "fn:string-join(phonenumber,',')" }
 			}
 		}
 	}
@@ -302,7 +305,7 @@ For *automatic* variables, the same rules apply with regards to scoping, but it 
 		foreach "..." {
 			variable "position" { select "$sdt:position" }
 			foreach "..." {
-				println { value "concat('outer ', $position, ' inner ', $sdt:position)" }
+				println "concat('outer ', $position, ' inner ', $sdt:position)" }
 			}
 		}
 	}

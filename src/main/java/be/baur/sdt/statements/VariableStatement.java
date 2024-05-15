@@ -99,7 +99,7 @@ public class VariableStatement extends XPathStatement {
 	
 	
 	/**
-	 * @return a node representing<br>
+	 * @return a data node representing:<br><br>
 	 *         <code>variable "<i>name</i>" { select "<i>expression</i>" }</code>
 	 */
 	@Override

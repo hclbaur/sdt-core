@@ -3,12 +3,12 @@ transform {
 	variable "doc" { select "document($filename)" }
 
 	variable "total" { select "1" }
-	println { value "concat('total: ', $total)" }
+	println "concat('total: ', $total)"
 	
 	foreach "$doc//contact" {
 		variable "total" { select "$total + 1" }
-		println { value "concat('total: ', $total)" }
+		println "concat('total: ', $total)"
 	}
 	
-	println { value "concat('total: ', $total)" }
+	println "concat('total: ', $total)"
 }

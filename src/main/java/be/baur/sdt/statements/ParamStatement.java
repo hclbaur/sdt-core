@@ -52,7 +52,7 @@ public class ParamStatement extends VariableStatement {
 	
 	
 	/**
-	 * @return a node representing<br>
+	 * @return a data node representing:<br><br>
 	 *         <code>param "<i>name</i>" { select "<i>expression</i>" }</code>
 	 */
 	@Override

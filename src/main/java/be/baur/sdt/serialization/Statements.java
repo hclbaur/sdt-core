@@ -1,29 +1,40 @@
 package be.baur.sdt.serialization;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Statements allowed by the SDT syntax. The lower-case name of a statement can
  * be accessed using the {@code toString()} method or the {@code tag} field.
  */
 public enum Statements {
 
-	NODE("node"), COPY("copy"),
-	PRINT("print"), PRINTLN("println"), 
-	VARIABLE("variable"), PARAM("param"),
-	FOREACH("foreach"), IF("if"), CHOOSE("choose"), 
-	WHEN("when", CHOOSE), OTHERWISE("otherwise", CHOOSE);
+	CHOOSE("choose", false), 
+	COPY("copy", false),
+	FOREACH("foreach", false), 
+	IF("if", false), 
+	NODE("node", false), 
+	OTHERWISE("otherwise", false, Arrays.asList(CHOOSE)),
+	PARAM("param", false), VARIABLE("variable", false), 
+	PRINT("print", true), PRINTLN("println", true),
+	SELECT("select", true, Arrays.asList(COPY,PARAM,VARIABLE)),
+	VALUE("value", true, Arrays.asList(NODE)),
+	WHEN("when", false, Arrays.asList(CHOOSE));
 
 	/** The (lower-case) name tag. */
 	public final String tag;
-	private final Statements context; // the context that this may appear in, null means any context
+	/** Whether this is a leaf statement (no sub-statements allowed). */
+	public final boolean isLeaf;
+	/* The context nodes this may appear in, null means any context. */
+	private final List<Statements> context;
 	
 	
-	Statements(String tag) {
-		this.tag = tag; this.context = null;
+	private Statements(String tag, boolean isLeaf) {
+		this.tag = tag; this.isLeaf = isLeaf; this.context = null;
 	}
 	
-	
-	Statements(String tag, Statements context) {
-		this.tag = tag; this.context = context;
+	private Statements(String tag, boolean isLeaf, List<Statements> context) {
+		this.tag = tag; this.isLeaf = isLeaf; this.context = context;
 	}
 	
 	
@@ -60,7 +71,6 @@ public enum Statements {
 	 * @return true or false
 	 */
 	public boolean isAllowedIn(Statements context) {
-		
-		return (this.context == null || context == this.context);
+		return (this.context == null || this.context.contains(context));
 	}
 }

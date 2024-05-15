@@ -67,7 +67,7 @@ public class CopyStatement extends XPathStatement {
 
 
 	/**
-	 * @return an SDA node representing<br>
+	 * @return a data node representing:<br><br>
 	 *         <code>copy { select "<i>expression</i>" }</code>
 	 */
 	@Override

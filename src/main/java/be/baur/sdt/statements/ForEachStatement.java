@@ -69,7 +69,7 @@ public class ForEachStatement extends XPathStatement {
 	
 	
 	/**
-	 * @return an SDA node representing<br>
+	 * @return a data node representing:<br><br>
 	 *         <code>foreach "<i>expression</i>" { <i>statement+</i> }</code>
 	 */
 	@Override

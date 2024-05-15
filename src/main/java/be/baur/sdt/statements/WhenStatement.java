@@ -33,7 +33,7 @@ public class WhenStatement extends XPathStatement {
 
 	
 	/**
-	 * @return an SDA node representing<br>
+	 * @return a data node representing:<br><br>
 	 *         <code>when "<i>expression</i>" { <i>statement+</i> }</code>
 	 */
 	@Override

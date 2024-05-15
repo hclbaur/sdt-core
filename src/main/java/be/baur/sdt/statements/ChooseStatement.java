@@ -75,7 +75,7 @@ public class ChooseStatement extends Statement {
 
 	
 	/**
-	 * @return an SDA node representing<br>
+	 * @return a data node representing:<br><br>
 	 *         <code>choose { <i>when_statement+</i> <i>otherwise_statement?</i> }</code>
 	 */
 	@Override

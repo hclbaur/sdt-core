@@ -76,7 +76,7 @@ public final class Transform extends AbstractNode {
 	 * Returns the string representing this transform in SDT notation. For example:
 	 * 
 	 * <pre>
-	 * transform { println { value "'hello world!'" } }
+	 * transform { println "'hello world!'" }
 	 * </pre>
 	 * 
 	 * The result is formatted as a single line of text. For a more readable output,

@@ -113,7 +113,7 @@ public class NodeStatement extends XPathStatement {
 
 
 	/**
-	 * @return a data node representing<br>
+	 * @return a data node representing:<br><br>
 	 *         <code>node "<i>name</i>" { <i>statement*</i> }</code> or<br>
 	 *         <code>node "<i>name</i>" { value "<i>expression</i>" <i>statement*</i> }</code>
 	 */

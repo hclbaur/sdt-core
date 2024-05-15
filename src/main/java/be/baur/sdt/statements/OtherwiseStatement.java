@@ -22,7 +22,7 @@ public class OtherwiseStatement extends Statement {
 
 	
 	/**
-	 * @return an SDA node representing<br>
+	 * @return a data node representing:<br><br>
 	 *         <code>otherwise { <i>statement+</i> }</code>
 	 */
 	@Override

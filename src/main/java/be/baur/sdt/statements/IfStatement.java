@@ -55,7 +55,7 @@ public class IfStatement extends XPathStatement {
 
 	
 	/**
-	 * @return an SDA node representing<br>
+	 * @return a data node representing:<br><br>
 	 *         <code>if "<i>expression</i>" { <i>statement+</i> }</code>
 	 */
 	@Override
