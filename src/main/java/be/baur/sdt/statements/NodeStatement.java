@@ -11,7 +11,6 @@ import be.baur.sda.SDA;
 import be.baur.sdt.StatementContext;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.TransformException;
-import be.baur.sdt.serialization.Attribute;
 import be.baur.sdt.serialization.Statements;
 import be.baur.sdt.xpath.SDAXPath;
 
@@ -121,7 +120,7 @@ public class NodeStatement extends XPathStatement {
 	public DataNode toSDA() {
 		DataNode node = new DataNode(Statements.NODE.tag, nodeName);
 		if (withValue)
-			node.add(new DataNode(Attribute.VALUE.tag, getExpression()));
+			node.add(new DataNode(Statements.VALUE.tag, getExpression()));
 		for (Node statement : nodes()) // add child statements, if any
 			node.add(((Statement) statement).toSDA());
 		return node;

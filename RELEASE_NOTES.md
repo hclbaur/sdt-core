@@ -5,6 +5,7 @@
 This release has a few changes with respect to the syntax of some SDT statements,
 and the parser internals and validation error messages have been improved.
 
+- `Removed` the sdt.serialization.Attribute class.
 - `Changed` the print(ln) statement into a "leaf" statement.
 
 

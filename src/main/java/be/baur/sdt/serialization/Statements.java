@@ -9,21 +9,19 @@ import java.util.List;
  */
 public enum Statements {
 
-	CHOOSE("choose", false), 
-	COPY("copy", false),
-	FOREACH("foreach", false), 
-	IF("if", false), 
-	NODE("node", false), 
+	CHOOSE("choose", false),
+	WHEN("when", false, Arrays.asList(CHOOSE)),
 	OTHERWISE("otherwise", false, Arrays.asList(CHOOSE)),
+	FOREACH("foreach", false), IF("if", false), 
+	COPY("copy", false), NODE("node", false), 
 	PARAM("param", false), VARIABLE("variable", false), 
 	PRINT("print", true), PRINTLN("println", true),
 	SELECT("select", true, Arrays.asList(COPY,PARAM,VARIABLE)),
-	VALUE("value", true, Arrays.asList(NODE)),
-	WHEN("when", false, Arrays.asList(CHOOSE));
+	VALUE("value", true, Arrays.asList(NODE));
 
 	/** The (lower-case) name tag. */
 	public final String tag;
-	/** Whether this is a leaf statement (no sub-statements allowed). */
+	/** Whether this is a leaf statement (no compound statement allowed). */
 	public final boolean isLeaf;
 	/* The context nodes this may appear in, null means any context. */
 	private final List<Statements> context;
