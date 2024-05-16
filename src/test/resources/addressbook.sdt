@@ -6,7 +6,7 @@ transform {
 	node "contacts" {
 		foreach "$doc/addressbook/contact" {
 			node "person" { 
-				value "firstname"
+				value "upper-case(firstname)"
 				node "phones" {
 					value "fn:string-join(phonenumber,',')"
 				}

@@ -7,7 +7,7 @@ and the parser internals and validation error messages have been improved.
 
 - `Removed` the sdt.serialization.Attribute class.
 - `Changed` the print(ln) statement into a "leaf" statement.
-
+- Closed issue #3 (move copy() to SDA core).
 
 ## Compatibility
 
@@ -28,7 +28,7 @@ changes with regards to naming and packaging.
 - `Changed` NodeStatement.getName to NodeStatement.getNodeName.
 - `Changed` NodeValueStatement.getName to NodeValueStatement.getNodeName.
 - `Renamed` ParseException to SDTParseException.
-- Closed issues: #4.
+- Closed issue #4.
 
 ### [1.1.0] - 2023-10-04
 

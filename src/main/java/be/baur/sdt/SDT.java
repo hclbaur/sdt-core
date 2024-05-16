@@ -26,9 +26,9 @@ public final class SDT {
 	}
 
 
-	/** Namespace prefix of SDT specific XPath functions */
+	/** Namespace prefix of SDT specific XPath functions. */
 	public static final String FUNCTIONS_NS_PFX = "sdt";
-	/** Namespace URI for SDT specific XPath functions */
+	/** Namespace URI for SDT specific XPath functions. */
 	public static final String FUNCTIONS_NS_URI = "be.baur.sdt.xpath.function";
 
 	/** Namespace prefix of W3C XPath 2 functions. */

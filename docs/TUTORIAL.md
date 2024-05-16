@@ -85,7 +85,7 @@ And with that, we shall move on to much more interesting stuff.
 
 ### For each their own
 
-Suppose we want to iterate over all phone numbers in the address book and transform them in one way or another. The following recipe could be used to do that:
+Suppose we want to iterate over all phone numbers in the address book and list them. The following recipe could be used to do that:
 
 <pre>
 transform {
@@ -126,7 +126,7 @@ There's more to say about iterations; we will come back to this subject later.
 
 ### If only we could choose
 
-Whether you are iterating a set or not, processing may be *conditional*; you may want to process something in a different way - or not at all - depending on the outcome of some pre-defined test. For example, to print the odd numbers in a different way:
+Whether you are iterating a set or not, processing may be *conditional*; you may want to process something in a different way - or not at all - depending on the outcome of some pre-defined test. For example, here is how to print the odd numbers in a different way:
 
 	...
 	foreach "$doc//phonenumber" {
@@ -173,19 +173,19 @@ And this would be the result:
 	Number 3 of 4: 06-33333333 (odd)
 	Number 4 of 4: 06-44444444 (even)
 
-Obviously, the `otherwise` statement block will never be executed; I included it merely to show the full syntax of the `choose` statement - which requires one or more `when` clauses, followed by an optional `otherwise` clause.  
+Obviously, the `otherwise` statement block is never executed; I merely included it to show you the full syntax of the `choose` statement - which requires one or more `when` clauses, followed by an optional `otherwise` clause.  
 
 
 ### On a different node
 
-So far we have been using `print(ln)` to generate output, which is fine for simple things or for debugging purposes. But when generating complex data structures, it is cumbersome. More often than not, you will want to "map" input nodes to output nodes, creating a new SDA node tree from existing ones. Luckily, creating nodes is rather straight-forward:
+So far we have been using a `print(ln)` statement to generate output, which is fine for simple things or for debugging purposes. But when generating complex data structures, it is cumbersome. More often than not, you will want to "map" input nodes to output nodes, creating a new SDA node tree from existing ones. Luckily, creating nodes is rather straight-forward (I am omitting the code that reads the address book):
 
 <pre>
 transform {
 	<i>...(read address book)...</i>
 		node "contacts" {
 			foreach "$doc/addressbook/contact" {
-				node "person" "firstname" }
+				node "person" "upper-case(firstname)" }
 				node "phonenumbers" "fn:string-join(phonenumber,',')" }
 			}
 		}
@@ -195,23 +195,23 @@ transform {
 This will produce the following SDA document:
 
 	contacts {
-		person "Alice" 
+		person "ALICE" 
 		phonenumbers "06-11111111"
-		person "Bob" 
+		person "BOB" 
 		phonenumbers "06-22222222,06-33333333"
-		person "Chris" 
+		person "CHRIS" 
 		phonenumbers "06-44444444"
 	}
 
 The `node` statement will instantiate a new node with the specified name and (an optional) `value` equal to the string evaluation of the given expression. Any child nodes can be created within the statement block.
 
-Note that if an output node should be *identical* to an input node, you can use the `copy` statement to create a (deep) clone of the selected node(s):
+Note that if an output node should be *identical* to an input node, you can use the (deep) `copy` statement to clone the selected node(s):
 
 	...
 	node "contacts" {
 		foreach "$doc/addressbook/contact" {
 			node "person" { 
-				value "firstname" 
+				value "upper-case(firstname)" 
 				copy { select "phonenumber" }
 			}
 		}
@@ -220,14 +220,14 @@ Note that if an output node should be *identical* to an input node, you can use 
 Which will create the following document:
 
 	contacts {
-		person "Alice" {
+		person "ALICE" {
 			phonenumber "06-11111111"
 		}
-		person "Bob" {
+		person "BOB" {
 			phonenumber "06-22222222"
 			phonenumber "06-33333333"
 		}
-		person "Chris" {
+		person "CHRIS" {
 			phonenumber "06-44444444"
 		}
 	}
@@ -299,7 +299,7 @@ transform {
 
 Obviously, neither *V* can be referenced outside the *if* clauses.
 
-For *automatic* variables, the same rules apply with regards to scoping, but it is not possible to declare or re-assign them. Automatic variables "live" within the reserved SDT namespace, which ensures there is no overlap with the ones you declare yourself (in the "unnamed" namespace):
+For *automatic* variables, the same rules apply with regards to scoping, but it is not possible to declare or re-assign them. Automatic variables "live" within the reserved SDT namespace, which ensures there is no overlap with the ones you declare yourself (in the "unnamed" namespace). The following example illustrates this:
 
 	transform {
 		foreach "..." {
@@ -310,6 +310,6 @@ For *automatic* variables, the same rules apply with regards to scoping, but it 
 		}
 	}
 
-The inner variable *sdt:position* shadows the one in the outer loop, but we can save the current value in a *position* variable of our own, and reference that from the inner loop.
+There is no way to reference the outer *sdt:position* variable as it is shadowed by the one in the inner loop. But we can save its value in a *position* variable of our own, and reference that from the inner loop, as it doesn't clash with the one in the SDT namespace.
 
 [ TO BE CONTINUED ]

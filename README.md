@@ -16,7 +16,7 @@ For example:
 		node "contacts" {
 			foreach "$doc/addressbook/contact" {
 				node "person" { 
-					value "firstname"
+					value "upper-case(firstname)"
 					node "phones" {
 						value "fn:string-join(phonenumber,',')"
 					}
@@ -56,10 +56,10 @@ to
 
 	document {
 		contacts {
-			person "Alice" {
+			person "ALICE" {
 				phones "06-11111111,06-22222222"
 			}
-			person "Bob" {
+			person "BOB" {
 				phones "06-33333333,06-44444444"
 			}
 		}

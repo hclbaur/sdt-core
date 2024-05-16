@@ -6,8 +6,6 @@ import be.baur.sda.ProcessingException;
 /**
  * An {@code SDTParseException} is thrown by an {@code SDTParser} if the SDS
  * syntax or semantics are violated.
- * 
- * @see SDTParser
  */
 @SuppressWarnings("serial")
 public class SDTParseException extends ProcessingException {

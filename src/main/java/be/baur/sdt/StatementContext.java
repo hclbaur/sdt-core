@@ -11,7 +11,7 @@ import be.baur.sda.DataNode;
 
 /**
  * A {@code StatementContext} resolves variable bindings in XPath expressions
- * during the execution of statements in a transform.
+ * during the execution of statements in a {@code Transform}.
  * <p>
  * Since statements can be nested and each statement can have its own context,
  * variables may exist in several nodes of the "context tree", even with the
@@ -30,7 +30,7 @@ public class StatementContext implements VariableContext {
     private final Map<String, Object> variables = new HashMap<String, Object>();	
 
     private Object contextNode = null; // the current context node, initially null!
-    private DataNode outputNode = new DataNode("document"); // the output document node
+    private DataNode outputNode = new DataNode("output"); // the output document node
     
 	/**
 	 * Creates a {@code StatementContext}.
@@ -52,7 +52,7 @@ public class StatementContext implements VariableContext {
 
 	
 	/**
-	 * Returns a new {@code StatementContext} with this context as the parent.
+	 * Returns a new {@code StatementContext} with this context as its parent.
 	 * 
 	 * @return a new child context
 	 */
@@ -106,13 +106,14 @@ public class StatementContext implements VariableContext {
 	/*
 	 * Private helper method to return a lookup key in Clark notation
 	 */
-	private String key(String namespaceURI, String localName) {
+	private static final String key(String namespaceURI, String localName) {
 		return (namespaceURI == null) ? localName : "{" + namespaceURI + "}" + localName;
 	}
-	
+
+
 	/**
 	 * Sets the value of a variable in this context. The variable will be
-	 * created if it does not exist, and overwritten it it does.
+	 * created if it does not exist, and overwritten if it does.
 	 * <p>
 	 * The variable is optionally associated with a namespace URI.
 	 * 
@@ -125,7 +126,6 @@ public class StatementContext implements VariableContext {
 		Objects.requireNonNull(localName, "localName must not be null");
 		this.variables.put(key(namespaceURI, localName), value);
 	}
-
 
 
 	/*
@@ -144,6 +144,7 @@ public class StatementContext implements VariableContext {
 
 		return parent.getVariableValueByKey(key, pfxname);
 	}
+
 
 	/**
 	 * Returns the value of an XPath variable based on the namespace URI and local
@@ -170,7 +171,8 @@ public class StatementContext implements VariableContext {
 		
 		return (parent == null) ? false : parent.containsVariableKey(key);
 	}
-	
+
+
 	/**
 	 * Returns whether this context can resolve the specified XPath variable.
 	 * 

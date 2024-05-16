@@ -31,8 +31,8 @@ public final class Transform extends AbstractNode {
 	
 	/**
 	 * Executes this transform in the supplied {@code TransformContext}. This method
-	 * returns an output document {@code DataNode} which will empty if no nodes were
-	 * created during transformation.
+	 * returns an output {@code DataNode} which will empty if no nodes were created
+	 * during transformation.
 	 * 
 	 * @param context the transformation context, not null
 	 * @return an output node, may be null

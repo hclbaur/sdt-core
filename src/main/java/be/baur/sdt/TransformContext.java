@@ -10,10 +10,12 @@ import java.util.Objects;
 import be.baur.sdt.statements.Transform;
 
 /**
- * The {@code TransformContext} is used during execution of a {@code Transform}.
+ * A {@code TransformContext} is created prior to, and used during execution of
+ * a {@code Transform}.
  * <p>
  * This context provides a writer for the {@code PrintStatement} to write output
- * to, and (optional) parameters to overwrite a {@code ParamStatement} value.
+ * to, and (optionally prepared) parameters to overwrite the default value of a
+ * {@code ParamStatement}.
  * <p>
  * A context cannot be instantiated, but must be built using a {@link Builder}.
  * 
@@ -42,8 +44,8 @@ public class TransformContext {
 		
 		/**
 		 * Creates an {@code Builder} that builds a {@code TransformContext} with a
-		 * standard output writer and no parameters. To set a different writer and/or
-		 * add parameters, use the provided setter methods.
+		 * <i>standard output writer</i> and no parameters. To set a different writer
+		 * and/or add parameters, use the provided setter methods.
 		 */
 		public Builder() {
 		}

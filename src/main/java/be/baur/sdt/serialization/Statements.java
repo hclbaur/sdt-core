@@ -22,7 +22,7 @@ public enum Statements {
 	/** The (lower-case) name tag. */
 	public final String tag;
 	/** Whether this is a leaf statement (no compound statement allowed). */
-	public final boolean isLeaf;
+	final boolean isLeaf;
 	/* The context nodes this may appear in, null means any context. */
 	private final List<Statements> context;
 	

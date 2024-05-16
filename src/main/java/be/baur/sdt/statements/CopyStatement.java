@@ -3,7 +3,6 @@ package be.baur.sdt.statements;
 import java.util.List;
 
 import be.baur.sda.DataNode;
-import be.baur.sda.Node;
 import be.baur.sdt.StatementContext;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.TransformException;
@@ -25,20 +24,6 @@ public class CopyStatement extends XPathStatement {
 		super(xpath);
 	}
 
-
-	/*
-	 * Private helper method to create a deep copy of an SDA node. This functionality should
-	 * possibly be provided by the SDA core library in a future release.
-	 */
-	private static DataNode copy(DataNode node) {
-		DataNode copy = new DataNode(node.getName(), node.getValue());
-		if (! node.isLeaf()) {
-			copy.add(null);
-			for (Node child : node.nodes()) 
-				copy.add(copy((DataNode) child));
-		}
-		return copy;
-	}
 	
 	@SuppressWarnings("rawtypes")
 	@Override void execute(TransformContext traco, StatementContext staco) throws TransformException {
@@ -56,7 +41,7 @@ public class CopyStatement extends XPathStatement {
 			
 			for (Object object : (List) value) {
 				if (object instanceof DataNode)
-					staco.getOutputNode().add(copy((DataNode) object));
+					staco.getOutputNode().add(((DataNode) object).copy());
 			}
 
 		} catch (Exception e) {

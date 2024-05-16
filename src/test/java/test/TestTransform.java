@@ -17,7 +17,7 @@ public final class TestTransform {
 		InputStream in = TestSDAXPath.class.getResourceAsStream("/addressbook.sdt");
 		Transform tran = SDT.parse(new InputStreamReader(in, "UTF-8"));
 		
-		TransformContext c = new TransformContext.Builder()//.setWriter(SDT.nullWriter())
+		TransformContext c = new TransformContext.Builder() //.setWriter(SDT.nullWriter())
 			.setStringParameter("filename", "c:/tmp/addressbook.sda").build();
 		Writer w = c.getWriter();
 		
