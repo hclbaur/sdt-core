@@ -51,7 +51,7 @@ public class StringJoinFunction implements Function
         	throw new FunctionCallException( "string-join() requires one or two arguments." );
 
         if (! (args.get(0) instanceof List) )
-        	throw new FunctionCallException("The first argument to the string-join function must be a node-set");
+        	throw new FunctionCallException("string-join() expects a node-set.");
         
         List list = (List) args.get(0);
         if (list.isEmpty()) return "";

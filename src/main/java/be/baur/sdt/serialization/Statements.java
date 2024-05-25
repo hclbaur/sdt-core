@@ -9,29 +9,37 @@ import java.util.List;
  */
 public enum Statements {
 
-	CHOOSE("choose", false),
+	IF("if", false), CHOOSE("choose", false),
 	WHEN("when", false, Arrays.asList(CHOOSE)),
 	OTHERWISE("otherwise", false, Arrays.asList(CHOOSE)),
-	FOREACH("foreach", false), IF("if", false), 
-	COPY("copy", false), NODE("node", false), 
-	PARAM("param", false), VARIABLE("variable", false), 
+	
+	FOREACH("foreach", false), 
+	SORT("sort", null, Arrays.asList(FOREACH)),
+	REVERSE("reverse", true, Arrays.asList(SORT)),
+	COMPARABLE("comparable", true, Arrays.asList(SORT)),
+	
 	PRINT("print", true), PRINTLN("println", true),
-	SELECT("select", true, Arrays.asList(COPY,PARAM,VARIABLE)),
-	VALUE("value", true, Arrays.asList(NODE));
+	
+	NODE("node", false), COPY("copy", false), 
+	VALUE("value", true, Arrays.asList(NODE)),
+	
+	PARAM("param", false), VARIABLE("variable", false), 
+	SELECT("select", true, Arrays.asList(COPY, PARAM, VARIABLE))
+	;
 
 	/** The (lower-case) name tag. */
 	public final String tag;
-	/** Whether this is a leaf statement (no compound statement allowed). */
-	final boolean isLeaf;
-	/* The context nodes this may appear in, null means any context. */
+	/** Whether this is a leaf statement or not (null means either is allowed). */
+	final Boolean isLeaf;
+	/* The context nodes this may appear in, null means any. */
 	private final List<Statements> context;
 	
 	
-	private Statements(String tag, boolean isLeaf) {
+	private Statements(String tag, Boolean isLeaf) {
 		this.tag = tag; this.isLeaf = isLeaf; this.context = null;
 	}
 	
-	private Statements(String tag, boolean isLeaf, List<Statements> context) {
+	private Statements(String tag, Boolean isLeaf, List<Statements> context) {
 		this.tag = tag; this.isLeaf = isLeaf; this.context = context;
 	}
 	
@@ -62,13 +70,13 @@ public enum Statements {
 	
 	
 	/**
-	 * Returns whether this statement is allowed in the supplied context.<br>
+	 * Returns whether this statement is allowed in the supplied parent.<br>
 	 * Example: <code> WHEN.isAllowed(CHOOSE)</code> returns true.
 	 * 
-	 * @param context the context statement, null means any
+	 * @param parent the parent statement, null means any
 	 * @return true or false
 	 */
-	public boolean isAllowedIn(Statements context) {
-		return (this.context == null || this.context.contains(context));
+	public boolean isAllowedIn(Statements parent) {
+		return (this.context == null || this.context.contains(parent));
 	}
 }

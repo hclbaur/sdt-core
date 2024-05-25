@@ -1,14 +1,17 @@
 transform {
+
 	param "filename" { select "'addressbook.sda'" }
 	variable "doc" { select "document($filename)" }
 
-	variable "total" { select "1" }
-	println "concat('total: ', $total)"
-	
-	foreach "$doc//contact" {
-		variable "total" { select "$total + 1" }
-		println "concat('total: ', $total)"
+	node "contacts" {
+		foreach "$doc/addressbook/contact" {
+			sort "firstname" { reverse "true()" }
+			node "person" { 
+				value "upper-case(firstname)"
+				node "phones" {
+					value "fn:string-join(phonenumber,',')"
+				}
+			}
+		}
 	}
-	
-	println "concat('total: ', $total)"
 }

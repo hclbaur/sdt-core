@@ -47,6 +47,7 @@ public final class TestSDTParser {
 		s.s("S04", "transform { param \"par\" { select \"'a'\" } }", null);
 		s.s("S05", "transform { variable \"var\" { select \"'a'\" } }", null);
 		s.s("S06", "transform { param \"par\" { select \"'a'\" } print \"$par\" }", null);
+		//s.s("S07", "transform { foreach \"/item\" { } }", null);
 		s.s("S07", "transform { foreach \"/item\" { println \".\" } }", null);
 		s.s("S08", "transform { if \"true()\" { print \"'1'\" } }", null);
 		s.s("S09", "transform { choose { when \"1\" { print \"1\" } } }", null);
@@ -56,6 +57,9 @@ public final class TestSDTParser {
 		s.s("S13", "transform { node \"a\" { node \"b\" { value \"'c'\" } } }", null);
 		s.s("S14", "transform { node \"a\" { value \"'b'\" } node \"c\" { value \"'d'\" } }", null);
 		s.s("S15", "transform { copy { select \"/item\" } }", null);
+		s.s("S16", "transform { foreach \"/i\" { sort \".\" print \".\" } }", null);
+		s.s("S17", "transform { foreach \"/i\" { sort \".\" { } print \".\" } }", "transform { foreach \"/i\" { sort \".\" print \".\" } }");
+		s.s("S18", "transform { foreach \"/i\" { sort \".\" { reverse \"1\" } print \".\" } }", null);
 		
 		System.out.print("\n            "); /* test invalid SDT */
 		f.s("F01", "transfrom \"\"", "/transfrom: 'transform' statement expected");
@@ -69,12 +73,12 @@ public final class TestSDTParser {
 		f.s("F08", "transform { print \"\" }", "/transform/print: statement 'print' requires an XPath expression");
 		f.s("F09", "transform { print { } }", "/transform/print: statement 'print' expects no compound statement");
 		f.s("F10", "transform { print \"\" { } }", "/transform/print: statement 'print' expects no compound statement");
-		f.s("F11", "transform { print \"a\" { select \"\" } }", "/transform/print: statement 'print' expects no compound statement");
+		f.s("F11", "transform { print \"\" { select \"\" } }", "/transform/print: statement 'print' expects no compound statement");
 
 		f.s("F12", "transform { println \"\" }", "/transform/println: statement 'println' requires an XPath expression");
 		f.s("F13", "transform { println { } }", "/transform/println: statement 'println' expects no compound statement");
 		f.s("F14", "transform { println \"\" { } }", "/transform/println: statement 'println' expects no compound statement");
-		f.s("F15", "transform { println \"a\" { select \"\" } }", "/transform/println: statement 'println' expects no compound statement");
+		f.s("F15", "transform { println \"\" { select \"\" } }", "/transform/println: statement 'println' expects no compound statement");
 
 		f.s("F20", "transform { param \"\" }", "/transform/param: statement 'param' requires a compound statement");
 		f.s("F21", "transform { param { } }", "/transform/param: statement 'param' requires a variable name");

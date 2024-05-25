@@ -1,14 +1,16 @@
 package be.baur.sdt.statements;
 
+import java.util.Comparator;
 import java.util.List;
 
-import be.baur.sda.Node;
 import be.baur.sda.DataNode;
+import be.baur.sda.Node;
 import be.baur.sdt.SDT;
 import be.baur.sdt.StatementContext;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.TransformException;
 import be.baur.sdt.serialization.Statements;
+import be.baur.sdt.statements.SortStatement.NodeComparator;
 import be.baur.sdt.xpath.SDAXPath;
 
 /**
@@ -27,7 +29,7 @@ public class ForEachStatement extends XPathStatement {
 	}
 
 	
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override void execute(TransformContext traco, StatementContext staco) throws TransformException {
 		/*
 		 * Execution: create an XPath from the statement expression, set the variable
@@ -39,16 +41,38 @@ public class ForEachStatement extends XPathStatement {
 		if (statements.isEmpty()) return; // nothing to do
 
 		try {
+			
 			SDAXPath xpath = new SDAXPath(getExpression());
 			xpath.setVariableContext(staco);
+			
 			List nodeset = xpath.selectNodes(staco.getContextNode());
-			/* 
-			 * Breaks if this expression does not return a List of nodes, must fix this later! 
-			 */
-			if (nodeset.isEmpty()) return; // nothing to do
+			int setsize = nodeset.size();
+			if (setsize == 0) return; // do nothing
+			
+			// Breaks if expression does not return a List of nodes, must fix this later!
+			
+			// Optionally sort the node set prior to iteration
+			if (setsize > 1 && statements.get(0) instanceof SortStatement) {
+
+				SortStatement sortstat = (SortStatement) statements.get(0);
+				SDAXPath sortxpath = new SDAXPath(sortstat.getExpression());
+				sortxpath.setVariableContext(staco);
+				
+				boolean reverse = false;
+				String revexp = sortstat.getReverseExpression();
+				if (revexp != null) {
+					SDAXPath revxpath = new SDAXPath(revexp);
+					revxpath.setVariableContext(staco);
+					reverse = revxpath.booleanValueOf(staco.getContextNode());
+				}
+
+				Comparator comp = new NodeComparator(sortxpath);
+				nodeset.sort(reverse ? comp.reversed() : comp);
+				
+			}
 			
 			StatementContext coco = staco.newChild(); // compound statement context
-			coco.setVariableValue(SDT.FUNCTIONS_NS_URI, "last", new Double(nodeset.size()));
+			coco.setVariableValue(SDT.FUNCTIONS_NS_URI, "last", new Double(setsize));
 			
 			int position = 0;
 			for (Object current : nodeset) {

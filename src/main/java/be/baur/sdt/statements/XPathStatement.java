@@ -5,8 +5,8 @@ import java.util.Objects;
 import be.baur.sdt.xpath.SDAXPath;
 
 /**
- * The abstract superclass of all transform statements that evaluate an XPath
- * expression.
+ * The abstract superclass of all transform statements that evaluate at least
+ * one XPath expression.
  * 
  * @see Statement
  */

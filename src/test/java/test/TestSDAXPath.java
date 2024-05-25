@@ -1,10 +1,8 @@
 package test;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
+import java.net.URL;
 import java.util.List;
-
-import org.jaxen.JaxenException;
 
 import be.baur.sda.Node;
 import be.baur.sdt.xpath.DocumentNavigator;
@@ -12,7 +10,7 @@ import be.baur.sdt.xpath.SDAXPath;
 
 public class TestSDAXPath {
 
-	public static void main(String[] args) throws UnsupportedEncodingException, JaxenException {
+	public static void main(String[] args) throws Exception {
 
 		Test t = new Test( (str,obj) -> {
 			try {
@@ -22,7 +20,9 @@ public class TestSDAXPath {
 			}
 		});
 		
-		InputStream in = TestSDAXPath.class.getResourceAsStream("/addressbook.sda");
+		URL url = TestSDAXPath.class.getResource("/addressbook.sda");
+		String file = url.getFile(); InputStream in = url.openStream();
+		
 		Node doc = (Node) DocumentNavigator.getDocument(new InputStreamReader(in, "UTF-8"));
 		
 		Node addressbook = doc.nodes().get(0);
@@ -145,7 +145,7 @@ public class TestSDAXPath {
 		t.so("S77", "lower-case(/addressbook/contact/firstname)", doc, "alice");
 		t.so("S78", "upper-case(firstname)", bob, "BOB");
 		
-		t.so("S79", "document('/temp/addressbook.sda')", addressbook, "["+doc.toString()+"]");
+		t.so("S79", "document('"+ file + "')", addressbook, "["+doc.toString()+"]");
 		
 		System.out.print(" sdt ");
 		
