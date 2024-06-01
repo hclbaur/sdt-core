@@ -150,15 +150,25 @@ public class TestSDAXPath {
 		System.out.print(" sdt ");
 		
 		t.so("S80", "fn:string-join(/addressbook/contact/phonenumber)", doc, "06-1111111106-2222222206-3333333306-44444444");
-		t.so("S80", "fn:string-join(contact|contact/firstname,':')", addressbook, "1:Alice:2:Bob");
+		t.so("S81", "fn:string-join(contact|contact/firstname,':')", addressbook, "1:Alice:2:Bob");
 		
-		t.so("S90", "sdt:left(/addressbook/contact[1]/firstname,0)", doc, "");
-		t.so("S91", "sdt:left(/addressbook/contact[1]/firstname,2)", doc, "Al");
-		t.so("S92", "sdt:left(/addressbook/contact[1]/firstname,4)", doc, "Alic");
+		t.so("S82", "sdt:left(/addressbook/contact[1]/firstname,0)", doc, "");
+		t.so("S83", "sdt:left(/addressbook/contact[1]/firstname,2)", doc, "Al");
+		t.so("S84", "sdt:left(/addressbook/contact[1]/firstname,6)", doc, "Alice");
 		
-		t.so("S93", "sdt:right(/addressbook/contact[2]/firstname,0)", doc, "");
-		t.so("S94", "sdt:right(/addressbook/contact[2]/firstname,2)", doc, "ob");
-		t.so("S95", "sdt:right(/addressbook/contact[2]/firstname,4)", doc, "Bob");
+		t.so("S85", "sdt:right(/addressbook/contact[2]/firstname,0)", doc, "");
+		t.so("S86", "sdt:right(/addressbook/contact[2]/firstname,2)", doc, "ob");
+		t.so("S87", "sdt:right(/addressbook/contact[2]/firstname,4)", doc, "Bob");
+		
+		t.so("S88", "sdt:compare-number(1,2)", doc, "-1");
+		t.so("S89", "sdt:compare-number(3,'3')", doc, "0");
+		t.so("S90", "sdt:compare-number('5','4')", doc, "1");
+		t.so("S91", "sdt:compare-number('a',1)", doc, "1");
+		t.so("S92", "sdt:compare-number('a','b')", doc, "0");
+		t.so("S91", "sdt:compare-number('a',1,true())", doc, "-1");
+		t.so("S91", "sdt:compare-number('a',1,false())", doc, "1");
+		t.so("S92", "sdt:compare-number('a','b',true())", doc, "0");
+		t.so("S92", "sdt:compare-number('a','b',false())", doc, "0");
 	}
 
 }

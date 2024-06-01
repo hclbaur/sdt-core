@@ -1,6 +1,5 @@
 package be.baur.sdt.statements;
 
-import java.util.Comparator;
 import java.util.List;
 
 import be.baur.sda.DataNode;
@@ -10,12 +9,12 @@ import be.baur.sdt.StatementContext;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.TransformException;
 import be.baur.sdt.serialization.Statements;
-import be.baur.sdt.statements.SortStatement.NodeComparator;
 import be.baur.sdt.xpath.SDAXPath;
 
 /**
  * The <code>ForEachStatement</code> evaluates an XPath expression, iterates the
- * resulting node set and executes a compound statement on each iteration.
+ * resulting node set and executes a compound statement on each iteration. Prior 
+ * to the iteration a {@code SortStatement} is applied (if present).
  */
 public class ForEachStatement extends XPathStatement {
 
@@ -55,20 +54,7 @@ public class ForEachStatement extends XPathStatement {
 			if (setsize > 1 && statements.get(0) instanceof SortStatement) {
 
 				SortStatement sortstat = (SortStatement) statements.get(0);
-				SDAXPath sortxpath = new SDAXPath(sortstat.getExpression());
-				sortxpath.setVariableContext(staco);
-				
-				boolean reverse = false;
-				String revexp = sortstat.getReverseExpression();
-				if (revexp != null) {
-					SDAXPath revxpath = new SDAXPath(revexp);
-					revxpath.setVariableContext(staco);
-					reverse = revxpath.booleanValueOf(staco.getContextNode());
-				}
-
-				Comparator comp = new NodeComparator(sortxpath);
-				nodeset.sort(reverse ? comp.reversed() : comp);
-				
+				nodeset.sort(sortstat.getComparator(staco));	
 			}
 			
 			StatementContext coco = staco.newChild(); // compound statement context

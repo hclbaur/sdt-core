@@ -57,14 +57,14 @@ public class RightFunction implements Function
         final int len = (StringLengthFunction.evaluate(args.get(0), nav )).intValue();
         if (len == 0) return "";
         
-        Double arg1 = NumberFunction.evaluate(args.get(1), nav);
-        if (arg1.isNaN()) return "";
+        Double arg2 = NumberFunction.evaluate(args.get(1), nav);
+        if (arg2.isNaN()) return "";
 
         // number of characters to return
-        int num = (int) Math.round(arg1); 
+        int num = (int) Math.round(arg2); 
         if (num <= 0) return "";
 
-        final Object[] subargs = { args.get(0), new Double(len - num + 1),  arg1 };
+        final Object[] subargs = { args.get(0), new Double(len - num + 1),  arg2 };
         return (new SubstringFunction()).call(context, Arrays.asList( subargs ));    
     }
 

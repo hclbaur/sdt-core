@@ -3,7 +3,6 @@ package be.baur.sdt.statements;
 import java.util.Comparator;
 import java.util.Objects;
 
-import org.jaxen.BaseXPath;
 import org.jaxen.JaxenException;
 import org.jaxen.JaxenRuntimeException;
 
@@ -16,16 +15,16 @@ import be.baur.sdt.xpath.SDAXPath;
 
 /**
  * The <code>SortStatement</code> occurs only in the context of a for-each loop.
- * It evaluates an XPath expression and sorts the iterated set on the value of
- * the selected node. The default sort order is ascending, but can be reversed
- * using the REVERSE keyword with an expression that is evaluated to a boolean.
+ * It evaluates an XPath expression and sorts the iterated set using the value
+ * of the selected node as a sorting key. Methods are supplied to control the
+ * sorting order and type.
  * 
  * @see ForEachStatement
  */
 public class SortStatement extends XPathStatement {
 
-	/* Expression that determines if sort order is reversed (descending). */
-	private String reverseExpression;
+	private String reverseExpression; // Expression that determines if order is reversed (descending)
+	private String comparatorExpression; // Expression that determines how keys are compared
 	
 
 	/**
@@ -58,6 +57,82 @@ public class SortStatement extends XPathStatement {
 	public String getReverseExpression() {
 		return reverseExpression;
 	}
+	
+	
+	/**
+	 * Sets the XPath comparator expression to be evaluated during sorting. The
+	 * comparator should accept two objects and return -1, 0, or 1 depending on
+	 * whether the first object is smaller than, equal to, or greater than the
+	 * second object.
+	 * <p>
+	 * No attempt is made to assert validity of the given expression, other than the
+	 * requirement that it must contain exactly two question marks, which act as a
+	 * placeholder for the objects to be compared.
+	 * <p>
+	 * Example: {@code setComparatorExpression("sdt:compare-number(?,?)"); }
+	 * 
+	 * @param compexpr an expression string, not null
+	 * @throws IllegalArgumentException if the expression is invalid
+	 */
+	public void setComparatorExpression(String expression) {
+		comparatorExpression = Objects.requireNonNull(expression, "expression must not be null");
+		if (comparatorExpression.chars().filter(c -> c =='?').count() != 2)
+			throw new IllegalArgumentException("expression must contain exactly two placeholders");
+	}
+
+
+	/**
+	 * Returns the XPath comparator expression text that is evaluated during
+	 * sorting, if a specific comparator expression has been set.
+	 * 
+	 * @return an expression string, may be null
+	 */
+	public String getComparatorExpression() {
+		return comparatorExpression;
+	}
+
+
+	/**
+	 * Returns a comparator appropriate for this sort statement. If no specific
+	 * comparator expression has been set, a lexicographical compare is implied.
+	 * 
+	 * @param context the current statement context
+	 * @return a Comparator, not null
+	 */
+	public Comparator<DataNode> getComparator(StatementContext context) throws JaxenException {
+
+		SDAXPath xpath = new SDAXPath(getExpression());
+		xpath.setVariableContext(context);
+
+		Comparator<DataNode> comparator = new Comparator<DataNode>() {
+			@Override
+			public int compare(DataNode node1, DataNode node2) {
+				String s1, s2;
+				try {
+					s1 = xpath.stringValueOf(node1);
+					s2 = xpath.stringValueOf(node2);
+					if (comparatorExpression != null) {
+						String xs = comparatorExpression.replaceFirst("\\?", s1);
+						SDAXPath compxp = new SDAXPath(xs.replaceFirst("\\?", s2));
+						compxp.setVariableContext(context);
+						return compxp.numberValueOf(context.getContextNode()).intValue();
+					}
+				} catch (JaxenException e) {
+					throw new JaxenRuntimeException(e);
+				}
+				return s1.compareTo(s2);
+			}
+		};
+
+		if (reverseExpression != null) {
+			SDAXPath revxp = new SDAXPath(reverseExpression);
+			revxp.setVariableContext(context);
+			if (revxp.booleanValueOf(context.getContextNode()))
+				return comparator.reversed();
+		}
+
+		return comparator;
+	}
 
 
 	@Override 
@@ -77,40 +152,8 @@ public class SortStatement extends XPathStatement {
 		DataNode node = new DataNode(Statements.SORT.tag, getExpression());
 		if (getReverseExpression() != null) 
 			node.add( new DataNode(Statements.REVERSE.tag, getReverseExpression()) );
+		if (getComparatorExpression() != null) 
+			node.add( new DataNode(Statements.COMPARATOR.tag, getComparatorExpression()) );
 		return node;
 	}
-
-
-	
-	/**
-	 * A {@code NodeComparator} can be used to sort nodes in lexicographical order
-	 * on the outcome of an XPath expression evaluated to a string value. For
-	 * example, if<br>
-	 * <br>
-	 * 
-	 * <code>node1 = item { name "foo" }</code> and
-	 * <code>node2 = item { name "bar" }</code> then<br>
-	 * <code>new NodeComparator(new BaseXPath("name")).compare(node1, node2)</code>
-	 * returns 1
-	 */
-	public static class NodeComparator implements Comparator<DataNode> {
-		
-		final BaseXPath xpath;
-		
-		NodeComparator(BaseXPath xpath) {
-			this.xpath = xpath;
-		}
-		
-		@Override
-		public int compare(DataNode n1, DataNode n2) {
-		  	String s1, s2;
-			try {
-				s1 = xpath.stringValueOf(n1);
-				s2 = xpath.stringValueOf(n2);
-			} catch (JaxenException e) {
-				throw new JaxenRuntimeException(e);
-			}
-			return s1.compareTo(s2);
-		}
-	  }
 }

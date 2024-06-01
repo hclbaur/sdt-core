@@ -16,7 +16,7 @@ public enum Statements {
 	FOREACH("foreach", false), 
 	SORT("sort", null, Arrays.asList(FOREACH)),
 	REVERSE("reverse", true, Arrays.asList(SORT)),
-	COMPARABLE("comparable", true, Arrays.asList(SORT)),
+	COMPARATOR("comparator", true, Arrays.asList(SORT)),
 	
 	PRINT("print", true), PRINTLN("println", true),
 	

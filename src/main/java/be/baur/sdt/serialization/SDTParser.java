@@ -378,22 +378,20 @@ public final class SDTParser implements Parser<Transform> {
 	 */
 	private static SortStatement parseSort(final DataNode sdt) throws SDTParseException {
 
-//		if (sdt.getValue().isEmpty())
-//			throw exception(sdt, STATEMENT_REQUIRES_XPATH, sdt.getName());
-		
 		SortStatement sort = new SortStatement(xpathFromNode(sdt));
 
 		if (sdt.isLeaf()) return sort;
 
 		checkParentStatements(sdt, Arrays.asList()); // no parent statements allowed
-		checkLeafStatements(sdt, Arrays.asList(Statements.REVERSE, Statements.COMPARABLE));
+		checkLeafStatements(sdt, Arrays.asList(Statements.REVERSE, Statements.COMPARATOR));
 
 		DataNode reverse = getStatement(sdt, Statements.REVERSE, false);
 		if (reverse != null)
 			sort.setReverseExpression(xpathFromNode(reverse));
 
-		// DataNode comparable = getStatement(sdt, Statements.COMPARABLE, false);
-		// sort.setComparable(comparable.getValue());
+		DataNode comparator = getStatement(sdt, Statements.COMPARATOR, false);
+		if (comparator != null)
+			sort.setComparatorExpression(comparator.getValue());
 
 		return sort;
 	}
