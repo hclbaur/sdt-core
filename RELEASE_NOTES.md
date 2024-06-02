@@ -8,6 +8,7 @@ and the parser internals and validation error messages have been improved.
 - `Removed` the sdt.serialization.Attribute class.
 - `Changed` the print(ln) statement into a "leaf" statement.
 - Closed issue #3 (move copy() to SDA core).
+- Closed issue #7 (rendering issue compound statement).
 
 ## Compatibility
 

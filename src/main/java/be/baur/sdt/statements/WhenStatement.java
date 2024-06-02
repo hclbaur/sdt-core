@@ -39,7 +39,8 @@ public class WhenStatement extends XPathStatement {
 	@Override
 	public DataNode toSDA() {
 		DataNode node = new DataNode(Statements.WHEN.tag, getExpression()); 
-		for (Node statement : nodes()) // add child statements
+		node.add(null); // render compound statement, even if empty
+		for (Node statement : nodes()) // add any child statements
 			node.add(((Statement) statement).toSDA());
 		return node;
 	}

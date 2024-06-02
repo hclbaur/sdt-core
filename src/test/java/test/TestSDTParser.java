@@ -46,20 +46,23 @@ public final class TestSDTParser {
 		s.s("S03", "transform { println \"'a'\" }", null);
 		s.s("S04", "transform { param \"par\" { select \"'a'\" } }", null);
 		s.s("S05", "transform { variable \"var\" { select \"'a'\" } }", null);
-		s.s("S06", "transform { param \"par\" { select \"'a'\" } print \"$par\" }", null);
-		//s.s("S07", "transform { foreach \"/item\" { } }", null);
+		s.s("S06", "transform { foreach \"/item\" { } }", null);
 		s.s("S07", "transform { foreach \"/item\" { println \".\" } }", null);
-		s.s("S08", "transform { if \"true()\" { print \"'1'\" } }", null);
-		s.s("S09", "transform { choose { when \"1\" { print \"1\" } } }", null);
-		s.s("S10", "transform { choose { when \"1\" { print \"1\" } when \"0\" { print \"0\" } } }", null);
-		s.s("S11", "transform { choose { when \"1\" { print \"1\" } otherwise { print \"0\" } } }", null);
-		s.s("S12", "transform { node \"a\" { value \"'b'\" } }", null);
-		s.s("S13", "transform { node \"a\" { node \"b\" { value \"'c'\" } } }", null);
-		s.s("S14", "transform { node \"a\" { value \"'b'\" } node \"c\" { value \"'d'\" } }", null);
-		s.s("S15", "transform { copy { select \"/item\" } }", null);
-		s.s("S16", "transform { foreach \"/i\" { sort \".\" print \".\" } }", null);
-		s.s("S17", "transform { foreach \"/i\" { sort \".\" { } print \".\" } }", "transform { foreach \"/i\" { sort \".\" print \".\" } }");
-		s.s("S18", "transform { foreach \"/i\" { sort \".\" { reverse \"1\" } print \".\" } }", null);
+		s.s("S08", "transform { if \"true()\" { } }", null);
+		s.s("S09", "transform { if \"true()\" { print \"'1'\" } }", null);
+		s.s("S10", "transform { choose { when \"1\" { print \"1\" } } }", null);
+		s.s("S11", "transform { choose { when \"1\" { } when \"0\" { print \"0\" } } }", null);
+		s.s("S12", "transform { choose { when \"1\" { print \"1\" } otherwise { } } }", null);
+		s.s("S13", "transform { choose { when \"1\" { print \"1\" } otherwise { print \"0\" } } }", null);
+		s.s("S14", "transform { node \"a\" { value \"'b'\" } }", null);
+		s.s("S15", "transform { node \"a\" { node \"b\" { value \"'c'\" } } }", null);
+		s.s("S16", "transform { node \"a\" { value \"'b'\" } node \"c\" { value \"'d'\" } }", null);
+		s.s("S17", "transform { copy { select \"/item\" } }", null);
+		s.s("S18", "transform { foreach \"/i\" { sort \".\" print \".\" } }", null);
+		s.s("S19", "transform { foreach \"/i\" { sort \".\" { } print \".\" } }", "transform { foreach \"/i\" { sort \".\" print \".\" } }");
+		s.s("S20", "transform { foreach \"/i\" { sort \".\" { reverse \"1\" } } }", null);
+		s.s("S21", "transform { foreach \"/i\" { sort \".\" { comparator \"f(?,?)\" } } }", null);
+		s.s("S22", "transform { foreach \"/i\" { sort \".\" { comparator \"f(?,?)\" reverse \"0\" } } }", "transform { foreach \"/i\" { sort \".\" { reverse \"0\" comparator \"f(?,?)\" } } }");
 		
 		System.out.print("\n            "); /* test invalid SDT */
 		f.s("F01", "transfrom \"\"", "/transfrom: 'transform' statement expected");

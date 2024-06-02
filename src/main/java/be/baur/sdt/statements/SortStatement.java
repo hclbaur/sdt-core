@@ -112,10 +112,10 @@ public class SortStatement extends XPathStatement {
 					s1 = xpath.stringValueOf(node1);
 					s2 = xpath.stringValueOf(node2);
 					if (comparatorExpression != null) {
-						String xs = comparatorExpression.replaceFirst("\\?", s1);
-						SDAXPath compxp = new SDAXPath(xs.replaceFirst("\\?", s2));
-						compxp.setVariableContext(context);
-						return compxp.numberValueOf(context.getContextNode()).intValue();
+						String comexpr = comparatorExpression.replaceFirst("\\?", "'"+s1+"'");
+						SDAXPath comxp = new SDAXPath(comexpr.replaceFirst("\\?", "'"+s2+"'"));
+						comxp.setVariableContext(context);
+						return (int) Math.signum((double) comxp.numberValueOf(context.getContextNode()));
 					}
 				} catch (JaxenException e) {
 					throw new JaxenRuntimeException(e);
