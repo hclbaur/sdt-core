@@ -217,19 +217,20 @@ public final class SDTParser implements Parser<Transform> {
 	/**
 	 * This method parses an SDA node representing an FOREACH statement. Expected is
 	 * a parent node with a compound statement and an XPath expression as the value.
+	 * The compound may start with one or several consecutive SORT statements.
 	 */
 	private static ForEachStatement parseForEach(final DataNode sdt) throws SDTParseException {
 		
 		ForEachStatement foreach = new ForEachStatement(xpathFromNode(sdt));
-		int i = 0;
+		int iterations = 0, sortstatements = 0;
 		for (Node node : sdt.nodes()) {
 
-			++i; Statement substat = parseStatement((DataNode) node);
+			++iterations; Statement stat = parseStatement((DataNode) node);
 
-			if (substat instanceof SortStatement && i != 1)
+			if (stat instanceof SortStatement && ++sortstatements != iterations)
 				throw exception(node, STATEMENT_MISPLACED, Statements.SORT.tag);
 
-			foreach.add(parseStatement((DataNode) node));
+			foreach.add(stat);
 		}
 		return foreach;
 	}
@@ -240,9 +241,6 @@ public final class SDTParser implements Parser<Transform> {
 	 * parent node with a compound statement and an XPath expression as the value.
 	 */
 	private static IfStatement parseIf(final DataNode sdt) throws SDTParseException {
-
-//		if (sdt.getValue().isEmpty())
-//			throw exception(sdt, STATEMENT_REQUIRES_XPATH, sdt.getName());
 
 		IfStatement statement = new IfStatement(xpathFromNode(sdt));
 		for (Node node : sdt.nodes()) // parse and add child statements
@@ -411,8 +409,7 @@ public final class SDTParser implements Parser<Transform> {
 
 		if (node.getValue().isEmpty())
 			throw exception(node, STATEMENT_REQUIRES_XPATH, node.getName());
-		
-		
+
 		SDAXPath xpath;
 		try {
 			xpath = new SDAXPath(node.getValue());

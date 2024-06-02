@@ -1,5 +1,6 @@
 package be.baur.sdt.statements;
 
+import java.util.Comparator;
 import java.util.List;
 
 import be.baur.sda.DataNode;
@@ -32,9 +33,10 @@ public class ForEachStatement extends XPathStatement {
 	@Override void execute(TransformContext traco, StatementContext staco) throws TransformException {
 		/*
 		 * Execution: create an XPath from the statement expression, set the variable
-		 * context and evaluate it to obtain a node-set. Execute the compound statement
-		 * for every node in that set. On every iteration the context node and the
-		 * automatic variables $last, $current and $position are (re)set.
+		 * context and evaluate it to obtain a node-set. Optionally sort the set, then
+		 * execute the compound statement for every node in that set. On every iteration
+		 * the context node and the automatic variables $last, $current and $position
+		 * are (re)set.
 		 */
 		List<Node> statements = nodes();
 		if (statements.isEmpty()) return; // nothing to do
@@ -49,14 +51,30 @@ public class ForEachStatement extends XPathStatement {
 			if (setsize == 0) return; // do nothing
 			
 			// Breaks if expression does not return a List of nodes, must fix this later!
+			// For example test this with the results of a tokenize (if we have one)
 			
-			// Optionally sort the node set prior to iteration
-			if (setsize > 1 && statements.get(0) instanceof SortStatement) {
+			/*
+			 * Optionally sort the node-set prior to iteration. If we have at least 2 nodes
+			 * we create a comparator from all sort statements (if any) and sort if needed.
+			 */
+			if (setsize > 1) {
 
-				SortStatement sortstat = (SortStatement) statements.get(0);
-				nodeset.sort(sortstat.getComparator(staco));	
+				Comparator<DataNode> comparator = null;
+				for (Node statement : statements) {
+					if (statement instanceof SortStatement) {
+						SortStatement sortstat = (SortStatement) statement;
+						if (comparator == null) // new comparator
+							comparator = sortstat.getComparator(staco);
+						else // add "if-equals" comparator for subsequent sort statement(s)
+							comparator = comparator.thenComparing(sortstat.getComparator(staco));
+					}
+				}
+
+				if (comparator != null)
+					nodeset.sort(comparator);
 			}
-			
+
+
 			StatementContext coco = staco.newChild(); // compound statement context
 			coco.setVariableValue(SDT.FUNCTIONS_NS_URI, "last", new Double(setsize));
 			

@@ -5,7 +5,8 @@ transform {
 
 	node "contacts" {
 		foreach "$doc/addressbook/contact" {
-			sort "string-length(firstname)" { reverse "true()" comparator "sdt:compare-number(?,?)" }
+			sort "count(phonenumber)" { comparator "sdt:compare-number(?,?)" }
+			sort "firstname" { reverse "true()" }
 			node "person" { 
 				value "upper-case(firstname)"
 				node "phones" {
