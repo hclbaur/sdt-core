@@ -10,7 +10,8 @@ import org.jaxen.Navigator;
 import org.jaxen.function.StringFunction;
 
 /**
- * <code><i>string</i> fn:string-join( <i>node-set</i>, <i>string?</i> )</code>
+ * <code><i>string</i> fn:string-join( <i>node-set</i> )</code><br>
+ * <code><i>string</i> fn:string-join( <i>node-set</i>, <i>string separator</i> )</code>
  * <p>
  * Returns a string created by concatenating the items in a sequence, with an
  * optional separator between adjacent items. If the sequence is empty, the

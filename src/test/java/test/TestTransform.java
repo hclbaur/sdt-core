@@ -26,6 +26,6 @@ public final class TestTransform {
 		DataNode node = tran.execute(c); 
 		SDA.format(w, node);
 		w.write(">>\n");
-		w.close();
+		w.flush();
 	}
 }

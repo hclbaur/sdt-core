@@ -52,7 +52,7 @@ public class TransformContext {
 		
 		/**
 		 * Sets the {@code Writer} for the context to be built. The writer cannot be
-		 * null, but a {@link SDT#nullWriter} can be used to suppress textual output.
+		 * null, but a {@link SDT#nullWriter} can be used to suppress output.
 		 * 
 		 * @param writer a writer, not null
 		 * @return the builder
@@ -119,7 +119,8 @@ public class TransformContext {
 
 
 	/**
-	 * Returns the {@code Writer} defined in this context.
+	 * Returns the {@code Writer} defined in this context. If no writer was set
+	 * explicitly, this will be a writer to standard output.
 	 * 
 	 * @return a writer, never null
 	 */

@@ -160,15 +160,21 @@ public class TestSDAXPath {
 		t.so("S86", "sdt:right(/addressbook/contact[2]/firstname,2)", doc, "ob");
 		t.so("S87", "sdt:right(/addressbook/contact[2]/firstname,4)", doc, "Bob");
 		
-		t.so("S88", "sdt:compare-number(1,2)", doc, "-1.0");
+		t.so("S88", "sdt:compare-number(1,3)", doc, "-1.0");
 		t.so("S89", "sdt:compare-number(3,'3')", doc, "0.0");
-		t.so("S90", "sdt:compare-number('5','4')", doc, "1.0");
+		t.so("S90", "sdt:compare-number('6','4')", doc, "1.0");
 		t.so("S91", "sdt:compare-number('a',1)", doc, "1.0");
 		t.so("S92", "sdt:compare-number('a','b')", doc, "0.0");
 		t.so("S91", "sdt:compare-number('a',1,true())", doc, "-1.0");
 		t.so("S91", "sdt:compare-number('a',1,false())", doc, "1.0");
 		t.so("S92", "sdt:compare-number('a','b',true())", doc, "0.0");
-		t.so("S92", "sdt:compare-number('a','b',false())", doc, "0.0");
+		t.so("S93", "sdt:compare-number('a','b',false())", doc, "0.0");
+		
+		t.so("S94", "sdt:compare-string('a','A')", doc, "-1.0");
+		t.so("S95", "sdt:compare-string(3,'3')", doc, "0.0");
+		t.so("S96", "sdt:compare-string('b','A')", doc, "1.0");
+		t.so("S97", "sdt:compare-string('Ångström','Zulu','en')", doc, "-1.0");
+		t.so("S98", "sdt:compare-string('Ångström','Zulu','sv')", doc, "1.0");
 	}
 
 }

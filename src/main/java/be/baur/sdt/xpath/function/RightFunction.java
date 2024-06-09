@@ -9,7 +9,8 @@ import org.jaxen.FunctionCallException;
 import org.jaxen.Navigator;
 import org.jaxen.function.NumberFunction;
 import org.jaxen.function.StringLengthFunction;
-import org.jaxen.function.SubstringFunction;
+
+import be.baur.sdt.SDT;
 
 /**
  * <code><i>string</i> sdt:right( <i>string</i>, <i>number</i> )</code>
@@ -65,7 +66,7 @@ public class RightFunction implements Function
         if (num <= 0) return "";
 
         final Object[] subargs = { args.get(0), new Double(len - num + 1),  arg2 };
-        return (new SubstringFunction()).call(context, Arrays.asList( subargs ));    
+        return SDT.SUBSTRING.call(context, Arrays.asList( subargs ));    
     }
 
 }

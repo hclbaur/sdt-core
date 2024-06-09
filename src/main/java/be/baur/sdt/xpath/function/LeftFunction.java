@@ -6,7 +6,8 @@ import java.util.List;
 import org.jaxen.Context;
 import org.jaxen.Function;
 import org.jaxen.FunctionCallException;
-import org.jaxen.function.SubstringFunction;
+
+import be.baur.sdt.SDT;
 
 /**
  * <code><i>string</i> sdt:left( <i>string</i>, <i>number</i> )</code>
@@ -50,7 +51,7 @@ public class LeftFunction implements Function
             throw new FunctionCallException( "left() requires two arguments." );
 
         final Object[] subargs = { args.get(0), 1.0, args.get(1) };
-        return (new SubstringFunction()).call(context, Arrays.asList( subargs ));       
+        return SDT.SUBSTRING.call(context, Arrays.asList( subargs ));       
     }
 
 }

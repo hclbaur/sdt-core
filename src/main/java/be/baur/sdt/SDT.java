@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
 
+import org.jaxen.Function;
+import org.jaxen.function.SubstringFunction;
+
 import be.baur.sdt.serialization.SDTParseException;
 import be.baur.sdt.serialization.SDTParser;
 import be.baur.sdt.statements.Transform;
@@ -25,18 +28,6 @@ public final class SDT {
 		public void close() throws IOException {}
 	}
 
-
-	/** Namespace prefix of SDT specific XPath functions. */
-	public static final String FUNCTIONS_NS_PFX = "sdt";
-	/** Namespace URI for SDT specific XPath functions. */
-	public static final String FUNCTIONS_NS_URI = "be.baur.sdt.xpath.function";
-
-	/** Namespace prefix of W3C XPath 2 functions. */
-	public static final String W3CFUNCTIONS_NS_PFX = "fn";
-	/** Namespace URI for W3C XPath 2 functions. */
-	public static final String W3CFUNCTIONS_NS_URI = "http://www.w3.org/2005/xpath-functions";
-
-
 	/**
 	 * Returns a {@code Writer} that discards everything. The methods {@code write},
 	 * {@code flush} and {@code close} do nothing at all. Note that as of Java 11 a
@@ -48,6 +39,21 @@ public final class SDT {
 		return NULL_WRITER;
 	}
 
+	
+	/** Namespace prefix of SDT specific XPath functions. */
+	public static final String FUNCTIONS_NS_PFX = "sdt";
+	/** Namespace URI for SDT specific XPath functions. */
+	public static final String FUNCTIONS_NS_URI = "be.baur.sdt.xpath.function";
+
+	/** Namespace prefix of W3C XPath 2 functions. */
+	public static final String W3CFUNCTIONS_NS_PFX = "fn";
+	/** Namespace URI for W3C XPath 2 functions. */
+	public static final String W3CFUNCTIONS_NS_URI = "http://www.w3.org/2005/xpath-functions";
+
+
+	/** Singleton instance of SubstringFunction for use in other functions. */
+	public static final Function SUBSTRING = new SubstringFunction();
+	
 	
 	private static SDTParser PARSER = new SDTParser(); // singleton parser
 

@@ -10,15 +10,16 @@ import org.jaxen.function.BooleanFunction;
 import org.jaxen.function.NumberFunction;
 
 /**
- * <code><i>double</i> sdt:compare-number( <i>object</i>, <i>object</i>, <i>boolean nanFirst?</i> )</code>
+ * <code><i>double</i> sdt:compare-number( <i>object</i>, <i>object</i> )</code><br>
+ * <code><i>double</i> sdt:compare-number( <i>object</i>, <i>object</i>, <i>boolean nanFirst</i> )</code>
  * <p>
  * Compares two objects numerically. This function converts its arguments to
  * numbers and returns -1 if the second argument precedes the first, 1 if it
  * exceeds it, and 0 if the arguments are numerically equal:
  * <p>
- * <code>sdt:compare-number(1,2)</code> returns <code>-1.0</code>.<br>
+ * <code>sdt:compare-number(1,3)</code> returns <code>-1.0</code>.<br>
  * <code>sdt:compare-number(3,'3')</code> returns <code>0.0</code>.<br>
- * <code>sdt:compare-number('5','4')</code> returns <code>1.0</code>.
+ * <code>sdt:compare-number('6','4')</code> returns <code>1.0</code>.
  * <p>
  * Objects that are not numbers are considered equal, and greater than all other
  * numbers:
@@ -28,6 +29,8 @@ import org.jaxen.function.NumberFunction;
  * <p>
  * If the optional third argument evaluates to true, objects that are not
  * numbers are considered smaller than all numbers.
+ * <p>
+ * This function can be used as a comparator in a sort statement.
  */
 public class CompareNumberFunction implements Function
 {
@@ -62,7 +65,8 @@ public class CompareNumberFunction implements Function
 
 		final Navigator nav = context.getNavigator();
 
-		return evaluate(args.get(0), args.get(1), argc == 3 && BooleanFunction.evaluate(args.get(2), nav), nav);
+		return evaluate(args.get(0), args.get(1), 
+			argc == 3 && BooleanFunction.evaluate(args.get(2), nav), nav);
 	}
     
 
@@ -72,6 +76,7 @@ public class CompareNumberFunction implements Function
 	 * @param obj1     the first object to be compared
 	 * @param obj2     the second object to be compared
 	 * @param nanFirst whether NaN is considered smaller than all other numbers.
+	 * @param nav      the navigator used
 	 * 
 	 * @return a <code>Double</code>
 	 */
@@ -94,7 +99,7 @@ public class CompareNumberFunction implements Function
 				return nan1 ? -1.0 : 1.0; // if first is NaN it's smaller, else greater
 		}
 
-		// If we get here a regular compareTo applies. Must return a double!
+		// if we get here a regular compareTo applies
 		return Math.signum((double) d1.compareTo(d2));
 	}
 

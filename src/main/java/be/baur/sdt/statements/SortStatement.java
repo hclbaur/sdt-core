@@ -15,9 +15,9 @@ import be.baur.sdt.xpath.SDAXPath;
 
 /**
  * The <code>SortStatement</code> occurs only in the context of a for-each loop.
- * It evaluates an XPath expression and sorts the iterated set using the value
- * of the selected node as a sorting key. Methods are supplied to control the
- * sorting order and type.
+ * It evaluates an XPath expression and sorts the iterated set using the string
+ * value of the selected node as a sorting key. Methods are supplied to control
+ * the sorting order and type.
  * 
  * @see ForEachStatement
  */
@@ -82,8 +82,8 @@ public class SortStatement extends XPathStatement {
 
 
 	/**
-	 * Returns the XPath comparator expression text that is evaluated during
-	 * sorting, if a specific comparator expression has been set.
+	 * Returns the comparator expression text that is evaluated during sorting, if a
+	 * specific comparator expression has been set.
 	 * 
 	 * @return an expression string, may be null
 	 */
