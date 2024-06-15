@@ -79,7 +79,8 @@ An `if` statement evaluates an expression and executes a compound statement if t
 
 <pre>
 	node "<i>name</i>" { 
-		value "<i>expression</i>" 
+		[ value "<i>expression</i>" ]
+		[ <i>statement(s)</i> ]
 	}
 </pre>
 
@@ -110,7 +111,8 @@ A `print` or `println` statement evaluates an expression and writes the result t
 
 <pre>
 	sort "<i>expression</i>" { 
-		[ reverse "<i>expression</i>" comparator "<i>expression</i>" ]
+		[ reverse "<i>expression</i>" ]
+		[ comparator "<i>expression</i>" ]
 	}
 </pre>
 
