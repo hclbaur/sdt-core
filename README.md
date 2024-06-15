@@ -25,7 +25,7 @@ For example, this recipe parses an 'addressbook' in SDA format and produces a ne
 		}
 	}
 
-As you can see the transform reads like a scripting language if you are already familiar with SDA and XPath. I do not expect you to grasp the SDT syntax at a glance, so please refer to the [tutorial](docs/TUTORIAL.md) for a detailed explanation.
+As you can see the transform reads like a scripting language if you are already familiar with SDA and XPath. I do not expect you to grasp the SDT syntax at a glance, so please refer to the [tutorial](docs/TUTORIAL.md) and [specification](docs/SPECIFICATION.md) for details.
 
 ## Running the demo
 

@@ -8,11 +8,12 @@ transform {
 			sort "count(phonenumber)" { comparator "sdt:compare-number(?,?)" }
 			sort "firstname" { reverse "true()" }
 			node "person" { 
-				value "upper-case(firstname)"
+				value "firstname"
 				node "phones" {
 					value "fn:string-join(phonenumber,',')"
 				}
 			}
 		}
 	}
+
 }

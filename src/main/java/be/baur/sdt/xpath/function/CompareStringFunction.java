@@ -11,8 +11,8 @@ import org.jaxen.Navigator;
 import org.jaxen.function.StringFunction;
 
 /**
- * <code><i>double</i> sdt:compare-string( <i>object</i>, <i>object</i> )</code><br>
- * <code><i>double</i> sdt:compare-string( <i>object</i>, <i>object</i>, <i>string language</i> )</code>
+ * <code><i>double</i> sdt:compare-string( <i>string</i>, <i>string</i> )</code><br>
+ * <code><i>double</i> sdt:compare-string( <i>string</i>, <i>string</i>, <i>string language</i> )</code>
  * <p>
  * Compares two objects locale-sensitive. This function converts its arguments
  * to strings and returns -1 if the second argument precedes the first, 1 if it

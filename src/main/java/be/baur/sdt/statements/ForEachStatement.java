@@ -14,8 +14,11 @@ import be.baur.sdt.xpath.SDAXPath;
 
 /**
  * The <code>ForEachStatement</code> evaluates an XPath expression, iterates the
- * resulting node set and executes a compound statement on each iteration. Prior 
- * to the iteration a {@code SortStatement} is applied (if present).
+ * resulting node set and executes a compound statement on each iteration. If
+ * present, one or more {@code SortStatement}s are applied to order the selected
+ * node-set prior to iteration.
+ * 
+ * @see SortStatement
  */
 public class ForEachStatement extends XPathStatement {
 

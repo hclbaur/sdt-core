@@ -10,8 +10,8 @@ import org.jaxen.function.BooleanFunction;
 import org.jaxen.function.NumberFunction;
 
 /**
- * <code><i>double</i> sdt:compare-number( <i>object</i>, <i>object</i> )</code><br>
- * <code><i>double</i> sdt:compare-number( <i>object</i>, <i>object</i>, <i>boolean nanFirst</i> )</code>
+ * <code><i>double</i> sdt:compare-number( <i>number</i>, <i>number</i> )</code><br>
+ * <code><i>double</i> sdt:compare-number( <i>number</i>, <i>number</i>, <i>boolean nanFirst</i> )</code>
  * <p>
  * Compares two objects numerically. This function converts its arguments to
  * numbers and returns -1 if the second argument precedes the first, 1 if it

@@ -16,8 +16,8 @@ import be.baur.sdt.xpath.SDAXPath;
 
 /**
  * The {@code NodeStatement} creates a new node with the specified name and an
- * optional value from an evaluated XPath expression. Any child nodes can be
- * created by the compound statement.
+ * optional value from an evaluated XPath expression. Any number of child nodes
+ * can be created by the compound statement.
  */
 public class NodeStatement extends XPathStatement {
 	

@@ -11,7 +11,8 @@ import be.baur.sdt.xpath.SDAXPath;
  * The {@code ParamStatement} evaluates an XPath expression and assigns the
  * result to a variable. The resulting value is considered a default that can be
  * overwritten by the transformation context - in other words - a parameter.
- * Unlike regular variables, parameters are not mutable during execution.
+ * Unlike regular variables, parameters can be declared in the context of a
+ * transform only, and are not mutable during execution.
  * 
  * @see VariableStatement
  */

@@ -12,8 +12,13 @@ import be.baur.sdt.xpath.SDAXPath;
 
 /**
  * The <code>ChooseStatement</code> conditionally executes a compound statement,
- * supporting multiple conditions. It contains at least one {@link WhenStatement}
- * and an optional {@link OtherwiseStatement}.
+ * supporting multiple conditions. It has at least one {code WhenStatement} and
+ * an optional {@code OtherwiseStatement}. The first when-statement with an
+ * expression that evaluates to true is executed, or if none does, the
+ * otherwise-statement is executed - if one is present.
+ * 
+ * @see WhenStatement
+ * @see OtherwiseStatement
  */
 public class ChooseStatement extends Statement {
 

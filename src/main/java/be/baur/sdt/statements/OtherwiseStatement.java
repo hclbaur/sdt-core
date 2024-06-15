@@ -9,8 +9,10 @@ import be.baur.sdt.serialization.Statements;
 
 /**
  * The <code>OtherwiseStatement</code> is an optional subordinate statement of
- * the {@link ChooseStatement} that executes a compound statement if no other
+ * the {@code ChooseStatement} that executes a compound statement if no other
  * conditions apply.
+ * 
+ * @see ChooseStatement
  */
 public class OtherwiseStatement extends Statement {
 

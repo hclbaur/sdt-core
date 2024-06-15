@@ -14,10 +14,10 @@ import be.baur.sdt.serialization.Statements;
 import be.baur.sdt.xpath.SDAXPath;
 
 /**
- * The <code>SortStatement</code> occurs only in the context of a for-each loop.
- * It evaluates an XPath expression and sorts the iterated set using the string
- * value of the selected node as a sorting key. Methods are supplied to control
- * the sorting order and type.
+ * The <code>SortStatement</code> can only occur in the context of a for-each
+ * loop. It evaluates an XPath expression and sorts the iterated set using the
+ * string value of the selected node as a sorting key. Methods are supplied to
+ * control the sorting order and type.
  * 
  * @see ForEachStatement
  */

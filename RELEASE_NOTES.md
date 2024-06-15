@@ -7,8 +7,8 @@ and the parser internals and validation error messages have been improved.
 
 - `Removed` the sdt.serialization.Attribute class.
 - `Changed` the print(ln) statement into a "leaf" statement.
-- Added compare-number() function. 
-- Added (multi-level) sort statement.
+- Added compare-number()/compare-string() functions. 
+- Added sort statement (closes issue #8).
 - Closed issue #3 (move copy() to SDA core).
 - Closed issue #7 (rendering issue compound statement).
 

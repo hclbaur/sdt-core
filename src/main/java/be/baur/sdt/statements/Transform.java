@@ -19,7 +19,7 @@ import be.baur.sdt.serialization.SDTParser;
 
 /**
  * A {@code Transform} represents a recipe with statements for mapping and
- * transformation of SDA content. It is usually not created "manually" but
+ * transformation of node content. It is usually not created "manually" but
  * parsed from input in SDT notation.
  * 
  * @see Statement

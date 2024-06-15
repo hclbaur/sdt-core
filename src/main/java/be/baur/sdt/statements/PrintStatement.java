@@ -11,7 +11,7 @@ import be.baur.sdt.xpath.SDAXPath;
 
 /**
  * The {@code PrintStatement} evaluates an XPath expression and writes the
- * result to the output stream with an optional line termination separator.
+ * result to the output stream with or without a line separator.
  */
 public class PrintStatement extends XPathStatement {
 
