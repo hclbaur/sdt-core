@@ -213,7 +213,7 @@ Note that if an output node should be *identical* to an input node, you can use 
 		foreach "$doc/addressbook/contact" {
 			node "person" { 
 				value "upper-case(firstname)" 
-				copy { select "phonenumber" }
+				copy "phonenumber"
 			}
 		}
 	}

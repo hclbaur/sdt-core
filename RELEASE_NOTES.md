@@ -6,11 +6,12 @@ This release has a few changes with respect to the syntax of some SDT statements
 and the parser internals and validation error messages have been improved.
 
 - `Removed` the sdt.serialization.Attribute class.
-- `Changed` the print(ln) statement into a "leaf" statement.
+- `Changed` print(ln) and copy into "leaf" statements.
 - Added compare-number()/compare-string() functions. 
 - Added sort statement (closes issue #8).
 - Closed issue #3 (move copy() to SDA core).
 - Closed issue #7 (rendering issue compound statement).
+- Closed issue #10 (copy should be a leaf statement).
 
 ## Compatibility
 

@@ -20,7 +20,7 @@ public enum Statements {
 	
 	PRINT("print", true), PRINTLN("println", true),
 	
-	NODE("node", false), COPY("copy", false), 
+	NODE("node", false), COPY("copy", true), 
 	VALUE("value", true, Arrays.asList(NODE)),
 	
 	PARAM("param", false), VARIABLE("variable", false), 

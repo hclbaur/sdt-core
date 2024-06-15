@@ -46,7 +46,7 @@ A `choose` conditionally executes a compound statement, supporting multiple cond
 ### copy
 
 <pre>
-	copy { select "<i>expression</i>" }
+	copy "<i>expression</i>"
 </pre>
 
 The `copy` statement evaluates an expression and creates a deep copy of the selected node(s).
@@ -94,7 +94,7 @@ A `node` statement creates a new node with the specified name and an optional `v
 	}
 </pre>
 
-The `param` statement evaluates an expression and assigns the result to a variable. The resulting value is considered a default that can be overwritten by the transformation context - in other words - a parameter. Unlike regular variables, parameters can be declared in the context of a `transform` only, and are not mutable during execution.
+The `param` statement evaluates an expression and assigns the result to a variable. The resulting value is considered a default that can be overwritten by the transformation context - in other words - a parameter. Unlike regular variables, parameters can be declared in the context of a `transform` only, and are immutable during execution.
 
 
 ### print(ln)

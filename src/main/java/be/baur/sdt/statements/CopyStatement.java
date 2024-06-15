@@ -56,8 +56,8 @@ public class CopyStatement extends XPathStatement {
 	 */
 	@Override
 	public DataNode toSDA() {
-		DataNode node = new DataNode(Statements.COPY.tag);
-		node.add( new DataNode(Statements.SELECT.tag, getExpression()) ); 
+		DataNode node = new DataNode(Statements.COPY.tag, getExpression());
+		//node.add( new DataNode(Statements.SELECT.tag, getExpression()) ); 
 		return node;
 	}
 

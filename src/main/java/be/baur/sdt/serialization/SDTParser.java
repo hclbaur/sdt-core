@@ -336,13 +336,14 @@ public final class SDTParser implements Parser<Transform> {
 		if (! SDA.isName(nodename))
 			throw exception(sdt, NODE_NAME_INVALID, nodename);
 		
-		checkLeafStatements(sdt, Arrays.asList(Statements.VALUE)); // only value is allowed
+		// allow value and copy, must add print later.... need something better actually
+		checkLeafStatements(sdt, Arrays.asList(Statements.VALUE,Statements.COPY));
 		final DataNode nodevalue = getStatement(sdt, Statements.VALUE, false);
 			
 		Statement stat = (nodevalue == null) ? new NodeStatement(nodename)
 			: new NodeStatement(nodename, xpathFromNode(nodevalue));
 
-		for (Node node : sdt.find(n -> ! n.isLeaf()))
+		for (Node node : sdt.find(n -> ! n.getName().equals(Statements.VALUE.tag))) // skip value keyword
 			stat.add(parseStatement((DataNode) node)); // parse and add child statements
 
 		return stat;
@@ -350,20 +351,19 @@ public final class SDTParser implements Parser<Transform> {
 
 	
 	/**
-	 * This method parses an SDA node representing a COPY statement. Expected is a
-	 * parent node with no value, and a single mandatory SELECT statement with an
-	 * XPath expression.
+	 * This method parses an SDA node representing a COPY statement. Expected
+	 * is a leaf node with an XPath expression as the value.
 	 */
 	private static CopyStatement parseCopy(final DataNode sdt) throws SDTParseException {
 
-		if (! sdt.getValue().isEmpty())
-			throw exception(sdt, STATEMENT_REQUIRES_NO_VALUE, sdt.getName());
+//		if (! sdt.getValue().isEmpty())
+//			throw exception(sdt, STATEMENT_REQUIRES_NO_VALUE, sdt.getName());
 
-		checkParentStatements(sdt, Arrays.asList()); // no parent statements allowed
-		checkLeafStatements(sdt, Arrays.asList(Statements.SELECT));
-		DataNode select = getStatement(sdt, Statements.SELECT, true);
+//		checkParentStatements(sdt, Arrays.asList()); // no parent statements allowed
+//		checkLeafStatements(sdt, Arrays.asList(Statements.SELECT));
+//		DataNode select = getStatement(sdt, Statements.SELECT, true);
 
-		return new CopyStatement(xpathFromNode(select));
+		return new CopyStatement(xpathFromNode(sdt));
 	}
 	
 	
