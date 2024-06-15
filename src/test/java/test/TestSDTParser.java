@@ -55,8 +55,9 @@ public final class TestSDTParser {
 		s.s("S12", "transform { choose { when \"1\" { print \"1\" } otherwise { } } }", null);
 		s.s("S13", "transform { choose { when \"1\" { print \"1\" } otherwise { print \"0\" } } }", null);
 		s.s("S14", "transform { node \"a\" { value \"'b'\" } }", null);
+		s.s("S14", "transform { node \"a\" { println \"'b'\" } }", null);
 		s.s("S15", "transform { node \"a\" { node \"b\" { value \"'c'\" } } }", null);
-		s.s("S16", "transform { node \"a\" { value \"'b'\" } node \"c\" { value \"'d'\" } }", null);
+		s.s("S16", "transform { node \"a\" { value \"'b'\" } node \"c\" { print \"'d'\" } }", null);
 		s.s("S17", "transform { copy \"/item\" }", null);
 		s.s("S18", "transform { foreach \"/i\" { sort \".\" } }", null);
 		s.s("S19", "transform { foreach \"/i\" { sort \".\" sort \".\" } }", null);
