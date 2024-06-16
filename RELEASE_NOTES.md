@@ -11,6 +11,7 @@ and the parser internals and validation error messages have been improved.
 - Added sort statement (closes issue #8).
 - Closed issue #3 (move copy() to SDA core).
 - Closed issue #7 (rendering issue compound statement).
+- Closed issue #9 (issue with node statement).
 - Closed issue #10 (copy should be a leaf statement).
 
 ## Compatibility

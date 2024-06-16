@@ -3,8 +3,6 @@ package be.baur.sdt.statements;
 import java.util.List;
 import java.util.Objects;
 
-import org.jaxen.JaxenException;
-
 import be.baur.sda.DataNode;
 import be.baur.sda.Node;
 import be.baur.sda.SDA;
@@ -19,17 +17,10 @@ import be.baur.sdt.xpath.SDAXPath;
  * optional value from an evaluated XPath expression. Any number of child nodes
  * can be created by the compound statement.
  */
-public class NodeStatement extends XPathStatement {
-	
-	/** The expression that evaluates to an empty string. */
-	private static SDAXPath EMPTY = null;
-	static {
-		try { EMPTY = new SDAXPath("''");
-		} catch (JaxenException e) { /* never happens */ }
-	}
+public class NodeStatement extends Statement {
 	
 	private String nodeName; // name of the node created by this statement
-	private final boolean withValue; // whether this node gets a value upon creation
+	private String valueExpression; // Expression that determines if order is reversed (descending)
 
 	/**
 	 * Creates a node statement without a value.
@@ -38,20 +29,9 @@ public class NodeStatement extends XPathStatement {
 	 * @throws IllegalArgumentException if name is invalid
 	 */
 	public NodeStatement(String name) {
-		super(EMPTY); setNodeName(name); withValue = false;
+		setNodeName(name);
 	}
 
-	
-	/**
-	 * Creates a node statement with a value from an XPath expression.
-	 * 
-	 * @param name  the name of the new node, not null
-	 * @param xpath the XPath to be evaluated, not null
-	 * @throws IllegalArgumentException if the node name is invalid
-	 */
-	public NodeStatement(String name, SDAXPath xpath) {
-		super(xpath); setNodeName(name); withValue = true;
-	}
 
 	/**
 	 * Returns the name of the node created by this statement.
@@ -77,7 +57,31 @@ public class NodeStatement extends XPathStatement {
 	}
 
 
-	@Override void execute(TransformContext traco, StatementContext staco) throws TransformException {
+	/**
+	 * Sets the XPath expression used for the value of the node created by this
+	 * statement. If no expression is set, the node will have an empty value.
+	 * 
+	 * @param xpath an XPath object, not null
+	 */
+	public void setValueExpression(SDAXPath xpath) {
+		valueExpression = Objects.requireNonNull(xpath, "xpath must not be null").toString();
+	}
+
+
+	/**
+	 * Returns the XPath expression text used for the value of the node created by
+	 * this statement. If no expression is set (is null), the node will have an
+	 * empty value.
+	 * 
+	 * @return an expression string, may be null
+	 */
+	public String getValueExpression() {
+		return valueExpression;
+	}
+	
+	
+	@Override 
+	void execute(TransformContext traco, StatementContext staco) throws TransformException {
 		/*
 		 * Execution: create a new SDA node, and add it to the current output node.
 		 * Then, execute the compound statement with the new node set as the current
@@ -87,8 +91,8 @@ public class NodeStatement extends XPathStatement {
 			
 			String value = null;
 			
-			if (withValue) {
-				SDAXPath xpath = new SDAXPath(getExpression());
+			if (valueExpression != null) {
+				SDAXPath xpath = new SDAXPath(valueExpression);
 				xpath.setVariableContext(staco);
 				value = xpath.stringValueOf(staco.getContextNode());
 			}
@@ -119,8 +123,10 @@ public class NodeStatement extends XPathStatement {
 	@Override
 	public DataNode toSDA() {
 		DataNode node = new DataNode(Statements.NODE.tag, nodeName);
-		if (withValue)
-			node.add(new DataNode(Statements.VALUE.tag, getExpression()));
+		if (valueExpression != null)
+			node.add(new DataNode(Statements.VALUE.tag, valueExpression));
+		else
+			node.add(null);
 		for (Node statement : nodes()) // add child statements, if any
 			node.add(((Statement) statement).toSDA());
 		return node;

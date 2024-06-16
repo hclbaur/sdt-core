@@ -54,18 +54,19 @@ public final class TestSDTParser {
 		s.s("S11", "transform { choose { when \"1\" { } when \"0\" { print \"0\" } } }", null);
 		s.s("S12", "transform { choose { when \"1\" { print \"1\" } otherwise { } } }", null);
 		s.s("S13", "transform { choose { when \"1\" { print \"1\" } otherwise { print \"0\" } } }", null);
-		s.s("S14", "transform { node \"a\" { value \"'b'\" } }", null);
-		s.s("S15", "transform { node \"a\" { node \"b\" { value \"'c'\" } } }", null);
-		s.s("S16", "transform { node \"a\" { value \"'b'\" } node \"c\" { value \"'d'\" } }", null);
-		s.s("S17", "transform { copy \"/item\" }", null);
-		s.s("S18", "transform { foreach \"/i\" { sort \".\" } }", null);
-		s.s("S19", "transform { foreach \"/i\" { sort \".\" sort \".\" } }", null);
-		s.s("S20", "transform { foreach \"/i\" { sort \".\" print \".\" } }", null);
-		s.s("S21", "transform { foreach \"/i\" { sort \".\" sort \".\" print \".\" } }", null);
-		s.s("S22", "transform { foreach \"/i\" { sort \".\" { } print \".\" } }", "transform { foreach \"/i\" { sort \".\" print \".\" } }");
-		s.s("S23", "transform { foreach \"/i\" { sort \".\" { reverse \"1\" } } }", null);
-		s.s("S24", "transform { foreach \"/i\" { sort \".\" { comparator \"f(?,?)\" } } }", null);
-		s.s("S25", "transform { foreach \"/i\" { sort \".\" { comparator \"f(?,?)\" reverse \"0\" } } }", "transform { foreach \"/i\" { sort \".\" { reverse \"0\" comparator \"f(?,?)\" } } }");
+		s.s("S14", "transform { node \"a\" { } }", null);
+		s.s("S15", "transform { node \"a\" { value \"'b'\" } }", null);
+		s.s("S16", "transform { node \"a\" { println \"'b'\" } }", null);
+		s.s("S17", "transform { node \"a\" { value \"'b'\" node \"c\" { } copy \"'d'\" } }", null);
+		s.s("S18", "transform { copy \"/item\" }", null);
+		s.s("S19", "transform { foreach \"/i\" { sort \".\" } }", null);
+		s.s("S20", "transform { foreach \"/i\" { sort \".\" sort \".\" } }", null);
+		s.s("S21", "transform { foreach \"/i\" { sort \".\" print \".\" } }", null);
+		s.s("S22", "transform { foreach \"/i\" { sort \".\" sort \".\" print \".\" } }", null);
+		s.s("S23", "transform { foreach \"/i\" { sort \".\" { } print \".\" } }", "transform { foreach \"/i\" { sort \".\" print \".\" } }");
+		s.s("S24", "transform { foreach \"/i\" { sort \".\" { reverse \"1\" } } }", null);
+		s.s("S25", "transform { foreach \"/i\" { sort \".\" { comparator \"f(?,?)\" } } }", null);
+		s.s("S26", "transform { foreach \"/i\" { sort \".\" { comparator \"f(?,?)\" reverse \"0\" } } }", "transform { foreach \"/i\" { sort \".\" { reverse \"0\" comparator \"f(?,?)\" } } }");
 		
 		System.out.print("\n            "); /* test invalid SDT */
 		f.s("F01", "transfrom \"\"", "/transfrom: 'transform' statement expected");
@@ -132,18 +133,16 @@ public final class TestSDTParser {
 		
 		f.s("F70", "transform { node \"\" }", "/transform/node: statement 'node' requires a compound statement");
 		f.s("F71", "transform { node { } }", "/transform/node: statement 'node' requires a node name");
-		f.s("F72", "transform { node \"\" { } }", "/transform/node: statement 'node' requires a node name");
-		f.s("F73", "transform { node \"\" { select \"\" } }", "/transform/node: statement 'node' requires a node name");
-		f.s("F74", "transform { node \"a\" { select \"\" } }", "/transform/node/select: statement 'select' is not allowed here");
-		f.s("F75", "transform { node \"a\" { value \"\" } }", "/transform/node/value: statement 'value' requires an XPath expression");
-		f.s("F76", "transform { node \"2\" { value \"''\" } }", "/transform/node: node name '2' is invalid");
-
-		f.s("F77", "transform { copy \"\" }", "/transform/copy: statement 'copy' requires an XPath expression");
-		f.s("F78", "transform { copy { } }", "/transform/copy: statement 'copy' expects no compound statement");
-		f.s("F79", "transform { copy \"/item\" { } }", "/transform/copy: statement 'copy' expects no compound statement");
-		f.s("F80", "transform { copy \"/item\" { value \"\" } }", "/transform/copy: statement 'copy' expects no compound statement");
+		f.s("F72", "transform { node \"a\" { select \"\" } }", "/transform/node/select: statement 'select' is not allowed here");
+		f.s("F73", "transform { node \"a\" { value \"\" } }", "/transform/node/value: statement 'value' requires an XPath expression");
+		f.s("F74", "transform { node \"2\" { value \"''\" } }", "/transform/node: node name '2' is invalid");
 		
-		/* odd */ f.s("F82", "transform { transform { } }", "/transform/transform: statement 'transform' is unknown");
+		f.s("F80", "transform { copy \"\" }", "/transform/copy: statement 'copy' requires an XPath expression");
+		f.s("F81", "transform { copy { } }", "/transform/copy: statement 'copy' expects no compound statement");
+		f.s("F82", "transform { copy \"/item\" { } }", "/transform/copy: statement 'copy' expects no compound statement");
+		f.s("F83", "transform { copy \"/item\" { value \"\" } }", "/transform/copy: statement 'copy' expects no compound statement");
+		
+		/* odd */ f.s("F84", "transform { transform { } }", "/transform/transform: statement 'transform' is unknown");
 	
 		
 		// test performance

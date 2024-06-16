@@ -8,7 +8,7 @@ import java.util.List;
  * be accessed using the {@code toString()} method or the {@code tag} field.
  */
 public enum Statements {
-
+	
 	IF("if", false), CHOOSE("choose", false),
 	WHEN("when", false, Arrays.asList(CHOOSE)),
 	OTHERWISE("otherwise", false, Arrays.asList(CHOOSE)),
@@ -24,7 +24,7 @@ public enum Statements {
 	VALUE("value", true, Arrays.asList(NODE)),
 	
 	PARAM("param", false), VARIABLE("variable", false), 
-	SELECT("select", true, Arrays.asList(COPY, PARAM, VARIABLE))
+	SELECT("select", true, Arrays.asList(PARAM, VARIABLE))
 	;
 
 	/** The (lower-case) name tag. */
@@ -33,7 +33,6 @@ public enum Statements {
 	final Boolean isLeaf;
 	/* The context nodes this may appear in, null means any. */
 	private final List<Statements> context;
-	
 	
 	private Statements(String tag, Boolean isLeaf) {
 		this.tag = tag; this.isLeaf = isLeaf; this.context = null;
@@ -70,8 +69,10 @@ public enum Statements {
 	
 	
 	/**
-	 * Returns whether this statement is allowed in the supplied parent.<br>
-	 * Example: <code> WHEN.isAllowed(CHOOSE)</code> returns true.
+	 * Returns whether this statement is allowed in the context of the specified
+	 * parent.
+	 * <p>
+	 * For example: <code> WHEN.isAllowedIn(CHOOSE)</code> returns true.
 	 * 
 	 * @param parent the parent statement, null means any
 	 * @return true or false

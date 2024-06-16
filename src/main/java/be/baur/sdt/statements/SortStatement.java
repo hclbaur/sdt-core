@@ -23,8 +23,8 @@ import be.baur.sdt.xpath.SDAXPath;
  */
 public class SortStatement extends XPathStatement {
 
-	private String reverseExpression; // Expression that determines if order is reversed (descending)
-	private String comparatorExpression; // Expression that determines how keys are compared
+	private String reverseExpression; // expression that determines if order is reversed (descending)
+	private String comparatorExpression; // expression that determines how keys are compared
 	
 
 	/**
@@ -39,7 +39,8 @@ public class SortStatement extends XPathStatement {
 	
 	/**
 	 * Sets the XPath expression to determine whether sort order is reversed. If the
-	 * expression evaluates to true, sort order is descending instead of ascending.
+	 * expression evaluates to true, sort order is descending. If no expression is
+	 * set, sort order should be ascending by default.
 	 * 
 	 * @param xpath an XPath object, not null
 	 */
@@ -49,8 +50,9 @@ public class SortStatement extends XPathStatement {
 
 
 	/**
-	 * Returns the XPath expression text that determine if sort order is reversed. If the
-	 * expression is non-null and evaluates to true, sort order is descending.
+	 * Returns the XPath expression text that determines whether sort order is
+	 * reversed. If no expression is set (is null), sort order should be ascending
+	 * by default.
 	 * 
 	 * @return an expression string, may be null
 	 */

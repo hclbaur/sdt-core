@@ -32,10 +32,10 @@ Following is an overview of all SDT statements and their syntax, as well as a su
 <pre>
 	choose {
 	  when "<i>expression</i>" {
-		<i>compound statement</i>
+		<i>[ statement(s) ]</i>
 	  }
 	  otherwise {
-		<i>compound statement</i>
+		<i>[ statement(s) ]</i>
 	  }
 	}
 </pre>
@@ -56,8 +56,8 @@ The `copy` statement evaluates an expression and creates a deep copy of the sele
 
 <pre>
 	foreach "<i>expression</i>" {
-		<i>optional sort statement(s)</i>
-		<i>other statements</i>
+		<i>[ sort statement(s) ]</i>
+		<i>[ other statement(s) ]</i>
 	}
 </pre>
 
@@ -68,7 +68,7 @@ The `foreach` statement evaluates an expression, iterates the resulting node set
 
 <pre>
 	if "<i>expression</i>" {
-		<i>compound statement</i>
+		<i>[ statement(s) ]</i>
 	}
 </pre>
 
@@ -79,11 +79,12 @@ An `if` statement evaluates an expression and executes a compound statement if t
 
 <pre>
 	node "<i>name</i>" { 
-		value "<i>expression</i>" 
+		<i>[</i> value "<i>expression</i>" <i>]</i>
+		<i>[ statement(s) ]</i>
 	}
 </pre>
 
-A `node` statement creates a new node with the specified name and an optional `value` from the string evaluation of an expression. Any number of child nodes can be created by the compound statement.
+A `node` statement creates a new node with the specified name and an optional `value` from the string evaluation of an expression. Any number of child nodes can be created by the compound statement, which may contain iteration and conditional statements to create repeating or optional nodes.
 
 
 ### param
@@ -100,7 +101,7 @@ The `param` statement evaluates an expression and assigns the result to a variab
 ### print(ln)
 
 <pre>
-	print "<i>expression</i>" | println "<i>expression</i>"
+	print "<i>expression</i>" <i>|</i> println "<i>expression</i>"
 </pre>
 
 A `print` or `println` statement evaluates an expression and writes the result to the output stream with or without a line separator.
@@ -109,8 +110,10 @@ A `print` or `println` statement evaluates an expression and writes the result t
 ### sort
 
 <pre>
+	sort "<i>expression</i>" <i>|</i> 
 	sort "<i>expression</i>" { 
-		[ reverse "<i>expression</i>" comparator "<i>expression</i>" ]
+		<i>[</i> reverse "<i>expression</i>" <i>]</i>
+		<i>[</i> comparator "<i>expression</i>" <i>]</i>
 	}
 </pre>
 
@@ -121,7 +124,7 @@ The `sort` statement can only occur in the context of a `foreach` loop. It evalu
 
 <pre>
 	transform {
-		<i>compound statement</i>
+		<i>[ statement(s) ]</i>
 	}
 </pre>
 

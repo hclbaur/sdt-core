@@ -183,11 +183,11 @@ So far we have been using a `print(ln)` statement to generate output, which is f
 
 <pre>
 transform {
-	<i>...(read address book)...</i>
+	<i>... read address book ...</i>
 		node "contacts" {
 			foreach "$doc/addressbook/contact" {
-				node "person" "upper-case(firstname)" }
-				node "phonenumbers" "fn:string-join(phonenumber,',')" }
+				node "person" { value "upper-case(firstname)" }
+				node "phonenumbers" { value "fn:string-join(phonenumber,',')" }
 			}
 		}
 	}
@@ -206,7 +206,7 @@ This will produce the following SDA document:
 
 The `node` statement will instantiate a new node with the specified name and (an optional) `value` equal to the string evaluation of the given expression. Any child nodes can be created within the statement block.
 
-Note that if an output node should be *identical* to an input node, you can use the (deep) `copy` statement to clone the selected node(s):
+Note that if an output node should be *identical* to an input node, you can use the `copy` statement to clone the selected node(s):
 
 	...
 	node "contacts" {

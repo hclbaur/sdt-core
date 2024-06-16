@@ -294,9 +294,6 @@ public final class SDTParser implements Parser<Transform> {
 	 */
 	private static WhenStatement parseWhen(final DataNode sdt) throws SDTParseException {
 
-//		if (sdt.getValue().isEmpty())
-//			throw exception(sdt, STATEMENT_REQUIRES_XPATH, sdt.getName());
-
 		WhenStatement statement = new WhenStatement(xpathFromNode(sdt));
 		for (Node node : sdt.nodes()) // parse and add child statements
 			statement.add(parseStatement((DataNode) node));
@@ -336,17 +333,19 @@ public final class SDTParser implements Parser<Transform> {
 		if (! SDA.isName(nodename))
 			throw exception(sdt, NODE_NAME_INVALID, nodename);
 		
-		// allow value and copy, must add print later.... need something better actually
-		checkLeafStatements(sdt, Arrays.asList(Statements.VALUE,Statements.COPY));
+		checkLeafStatements(sdt, // allow value, copy, print(ln) .... need something better than this?
+			Arrays.asList(Statements.VALUE,Statements.COPY,Statements.PRINT,Statements.PRINTLN));
+		//validateKeywordsInNode(sdt);
 		final DataNode nodevalue = getStatement(sdt, Statements.VALUE, false);
-			
-		Statement stat = (nodevalue == null) ? new NodeStatement(nodename)
-			: new NodeStatement(nodename, xpathFromNode(nodevalue));
+		
+		NodeStatement nodestat = new NodeStatement(nodename);
+		if (nodevalue != null) // set the optional value expression
+			nodestat.setValueExpression(xpathFromNode(nodevalue));
 
-		for (Node node : sdt.find(n -> ! n.getName().equals(Statements.VALUE.tag))) // skip value keyword
-			stat.add(parseStatement((DataNode) node)); // parse and add child statements
+		for (Node node : sdt.find(n -> !n.getName().equals(Statements.VALUE.tag))) // skip value keyword
+			nodestat.add(parseStatement((DataNode) node)); // parse and add child statements
 
-		return stat;
+		return nodestat;
 	}
 
 	
@@ -355,13 +354,6 @@ public final class SDTParser implements Parser<Transform> {
 	 * is a leaf node with an XPath expression as the value.
 	 */
 	private static CopyStatement parseCopy(final DataNode sdt) throws SDTParseException {
-
-//		if (! sdt.getValue().isEmpty())
-//			throw exception(sdt, STATEMENT_REQUIRES_NO_VALUE, sdt.getName());
-
-//		checkParentStatements(sdt, Arrays.asList()); // no parent statements allowed
-//		checkLeafStatements(sdt, Arrays.asList(Statements.SELECT));
-//		DataNode select = getStatement(sdt, Statements.SELECT, true);
 
 		return new CopyStatement(xpathFromNode(sdt));
 	}
@@ -462,6 +454,29 @@ public final class SDTParser implements Parser<Transform> {
 				throw exception(node, STATEMENT_NOT_ALLOWED, node.getName());
 		}
 	}
+	
+	
+//	/**
+//	 * This helper method iterates all nodes in a statement node, and checks for
+//	 * nodes that do not represent an existing keyword, or are not allowed in the
+//	 * context of this statement node. In either case an exception will be thrown.
+//	 *
+//	 * @param sdt a node representing an SDT statement, not null
+//	 * @throws SDTParseException if unknown or forbidden statements are found
+//	 */
+//	private static void validateKeywordsInNode(final DataNode sdt) throws SDTParseException {
+//
+//		Statements context = Statements.get(sdt.getName()); // must always exist
+//		
+//		for (Node node : sdt.nodes()) {
+//
+//			Statements stat = Statements.get(node.getName());
+//			if (stat == null) // no statement with that name
+//				throw exception(node, STATEMENT_UNKNOWN, node.getName());
+//			if (! stat.isAllowedIn(context))
+//				throw exception(node, STATEMENT_NOT_ALLOWED, node.getName());
+//		}
+//	}
 
 
 	/**
