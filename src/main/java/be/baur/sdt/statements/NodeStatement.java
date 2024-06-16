@@ -125,6 +125,8 @@ public class NodeStatement extends Statement {
 		DataNode node = new DataNode(Statements.NODE.tag, nodeName);
 		if (valueExpression != null)
 			node.add(new DataNode(Statements.VALUE.tag, valueExpression));
+		else
+			node.add(null);
 		for (Node statement : nodes()) // add child statements, if any
 			node.add(((Statement) statement).toSDA());
 		return node;

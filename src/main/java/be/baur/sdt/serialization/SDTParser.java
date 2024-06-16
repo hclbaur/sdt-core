@@ -333,9 +333,9 @@ public final class SDTParser implements Parser<Transform> {
 		if (! SDA.isName(nodename))
 			throw exception(sdt, NODE_NAME_INVALID, nodename);
 		
-//		checkLeafStatements(sdt, // allow value, copy, print(ln) .... need something better than this?
-//			Arrays.asList(Statements.VALUE,Statements.COPY,Statements.PRINT,Statements.PRINTLN));
-		validateKeywordsInNode(sdt);
+		checkLeafStatements(sdt, // allow value, copy, npde, print(ln) .... need something better than this?
+			Arrays.asList(Statements.VALUE,Statements.COPY,Statements.NODE,Statements.PRINT,Statements.PRINTLN));
+		//validateKeywordsInNode(sdt);
 		final DataNode nodevalue = getStatement(sdt, Statements.VALUE, false);
 		
 		NodeStatement nodestat = new NodeStatement(nodename);
@@ -456,27 +456,27 @@ public final class SDTParser implements Parser<Transform> {
 	}
 	
 	
-	/**
-	 * This helper method iterates all nodes in a statement node, and checks for
-	 * nodes that do not represent an existing keyword, or are not allowed in the
-	 * context of this statement node. In either case an exception will be thrown.
-	 *
-	 * @param sdt a node representing an SDT statement, not null
-	 * @throws SDTParseException if unknown or forbidden statements are found
-	 */
-	private static void validateKeywordsInNode(final DataNode sdt) throws SDTParseException {
-
-		Statements context = Statements.get(sdt.getName()); // must always exist
-		
-		for (Node node : sdt.nodes()) {
-
-			Statements stat = Statements.get(node.getName());
-			if (stat == null) // no statement with that name
-				throw exception(node, STATEMENT_UNKNOWN, node.getName());
-			if (! stat.isAllowedIn(context))
-				throw exception(node, STATEMENT_NOT_ALLOWED, node.getName());
-		}
-	}
+//	/**
+//	 * This helper method iterates all nodes in a statement node, and checks for
+//	 * nodes that do not represent an existing keyword, or are not allowed in the
+//	 * context of this statement node. In either case an exception will be thrown.
+//	 *
+//	 * @param sdt a node representing an SDT statement, not null
+//	 * @throws SDTParseException if unknown or forbidden statements are found
+//	 */
+//	private static void validateKeywordsInNode(final DataNode sdt) throws SDTParseException {
+//
+//		Statements context = Statements.get(sdt.getName()); // must always exist
+//		
+//		for (Node node : sdt.nodes()) {
+//
+//			Statements stat = Statements.get(node.getName());
+//			if (stat == null) // no statement with that name
+//				throw exception(node, STATEMENT_UNKNOWN, node.getName());
+//			if (! stat.isAllowedIn(context))
+//				throw exception(node, STATEMENT_NOT_ALLOWED, node.getName());
+//		}
+//	}
 
 
 	/**

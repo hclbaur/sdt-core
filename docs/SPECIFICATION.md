@@ -78,14 +78,13 @@ An `if` statement evaluates an expression and executes a compound statement if t
 ### node
 
 <pre>
-	node "<i>name</i>" <i>|</i>
 	node "<i>name</i>" { 
 		<i>[</i> value "<i>expression</i>" <i>]</i>
 		<i>[ statement(s) ]</i>
 	}
 </pre>
 
-A `node` statement creates a new node with the specified name and an optional `value` from the string evaluation of an expression. Any number of child nodes can be created by the compound statement.
+A `node` statement creates a new node with the specified name and an optional `value` from the string evaluation of an expression. Any number of child nodes can be created by the compound statement, which may contain iteration and conditional statements to create repeating or optional nodes.
 
 
 ### param
@@ -102,8 +101,7 @@ The `param` statement evaluates an expression and assigns the result to a variab
 ### print(ln)
 
 <pre>
-	print "<i>expression</i>" <i>|</i> 
-	println "<i>expression</i>"
+	print "<i>expression</i>" <i>|</i> println "<i>expression</i>"
 </pre>
 
 A `print` or `println` statement evaluates an expression and writes the result to the output stream with or without a line separator.
