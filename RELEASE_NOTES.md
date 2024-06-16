@@ -3,9 +3,11 @@
 ## [1.3.0] - In development
 
 This release has a few changes with respect to the syntax of some SDT statements,
-and the parser internals and validation error messages have been improved.
+and the parser internals and validation error messages have been improved. This 
+release also introduces the sort statement.
 
 - `Removed` the sdt.serialization.Attribute class.
+- `Renamed` sdt.statements package to sdt.transform.
 - `Changed` print(ln) and copy into "leaf" statements.
 - Added compare-number()/compare-string() functions. 
 - Added sort statement (closes issue #8).
@@ -13,6 +15,7 @@ and the parser internals and validation error messages have been improved.
 - Closed issue #7 (rendering issue compound statement).
 - Closed issue #9 (issue with node statement).
 - Closed issue #10 (copy should be a leaf statement).
+- Closed issue #13 (rename sdt.statements package).
 
 ## Compatibility
 

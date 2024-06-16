@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import be.baur.sdt.statements.Transform;
+import be.baur.sdt.transform.Transform;
 
 /**
  * A {@code TransformContext} is created prior to, and used during execution of

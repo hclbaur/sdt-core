@@ -9,7 +9,7 @@ import org.jaxen.function.SubstringFunction;
 
 import be.baur.sdt.serialization.SDTParseException;
 import be.baur.sdt.serialization.SDTParser;
-import be.baur.sdt.statements.Transform;
+import be.baur.sdt.transform.Transform;
 
 /**
  * This class defines static constants and utility methods.

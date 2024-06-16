@@ -8,7 +8,7 @@ import be.baur.sda.DataNode;
 import be.baur.sda.SDA;
 import be.baur.sdt.SDT;
 import be.baur.sdt.TransformContext;
-import be.baur.sdt.statements.Transform;
+import be.baur.sdt.transform.Transform;
 
 public final class TestTransform {
 	

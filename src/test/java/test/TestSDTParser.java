@@ -9,8 +9,8 @@ import be.baur.sda.DataNode;
 import be.baur.sda.SDA;
 import be.baur.sdt.serialization.SDTParseException;
 import be.baur.sdt.serialization.SDTParser;
-import be.baur.sdt.statements.PrintStatement;
-import be.baur.sdt.statements.Transform;
+import be.baur.sdt.transform.PrintStatement;
+import be.baur.sdt.transform.Transform;
 import be.baur.sdt.xpath.SDAXPath;
 
 public final class TestSDTParser {

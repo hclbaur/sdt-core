@@ -1,4 +1,4 @@
-package be.baur.sdt.statements;
+package be.baur.sdt.transform;
 
 import java.util.List;
 import java.util.Objects;

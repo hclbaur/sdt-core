@@ -4,47 +4,57 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Statements allowed by the SDT syntax. The lower-case name of a statement can
- * be accessed using the {@code toString()} method or the {@code tag} field.
+ * Statements and keywords allowed by the SDT syntax.
  */
 public enum Statements {
 	
-	IF("if", false), CHOOSE("choose", false),
-	WHEN("when", false, Arrays.asList(CHOOSE)),
-	OTHERWISE("otherwise", false, Arrays.asList(CHOOSE)),
-	
+	CHOOSE("choose", false),
+	COMPARATOR("comparator", true),
+	COPY("copy", true), 
 	FOREACH("foreach", false), 
-	SORT("sort", null, Arrays.asList(FOREACH)),
-	REVERSE("reverse", true, Arrays.asList(SORT)),
-	COMPARATOR("comparator", true, Arrays.asList(SORT)),
-	
-	PRINT("print", true), PRINTLN("println", true),
-	
-	NODE("node", false), COPY("copy", true), 
-	VALUE("value", true, Arrays.asList(NODE)),
-	
-	PARAM("param", false), VARIABLE("variable", false), 
-	SELECT("select", true, Arrays.asList(PARAM, VARIABLE))
+	IF("if", false), 
+	NODE("node", false), 
+	OTHERWISE("otherwise", false),
+	PARAM("param", false), 
+	PRINT("print", true), 
+	PRINTLN("println", true),
+	REVERSE("reverse", true),
+	SELECT("select", true),
+	SORT("sort", null),
+	VALUE("value", true),
+	VARIABLE("variable", false), 
+	WHEN("when", false)
 	;
-
-	/** The (lower-case) name tag. */
-	public final String tag;
-	/** Whether this is a leaf statement or not (null means either is allowed). */
-	final Boolean isLeaf;
-	/* The context nodes this may appear in, null means any. */
-	private final List<Statements> context;
 	
-	private Statements(String tag, Boolean isLeaf) {
-		this.tag = tag; this.isLeaf = isLeaf; this.context = null;
+	static {
+		WHEN.setAllowedIn(Arrays.asList(CHOOSE));
+		OTHERWISE.setAllowedIn(Arrays.asList(CHOOSE));
+		
+		SORT.setAllowedIn(Arrays.asList(FOREACH));
+		REVERSE.setAllowedIn(Arrays.asList(SORT));
+		COMPARATOR.setAllowedIn(Arrays.asList(SORT));
+		
+		VALUE.setAllowedIn(Arrays.asList(NODE));
+		SELECT.setAllowedIn(Arrays.asList(PARAM, VARIABLE));
 	}
 	
-	private Statements(String tag, Boolean isLeaf, List<Statements> context) {
-		this.tag = tag; this.isLeaf = isLeaf; this.context = context;
+
+	/** The statement tag. */
+	public final String tag;
+
+	/** Whether this is a leaf statement or not (null means either is allowed). */
+	public final Boolean isLeaf;
+	
+	/* The context nodes this may appear in, null means any (default). */
+	private List<Statements> allowedIn = null;
+	
+	private Statements(String tag, Boolean isLeaf) {
+		this.tag = tag; this.isLeaf = isLeaf;
 	}
 	
 	
 	/**
-	 * Returns the (lower-case) tag of this component.
+	 * Returns the tag of this statement.
 	 * 
 	 * @return the name tag
 	 */
@@ -69,15 +79,22 @@ public enum Statements {
 	
 	
 	/**
-	 * Returns whether this statement is allowed in the context of the specified
-	 * parent.
-	 * <p>
-	 * For example: <code> WHEN.isAllowedIn(CHOOSE)</code> returns true.
+	 * Sets the context statements in which this statement is allowed to occur.
 	 * 
-	 * @param parent the parent statement, null means any
+	 * @param allowedIn a list of statements
+	 */
+	public void setAllowedIn(List<Statements> allowedIn) {
+		this.allowedIn = allowedIn;
+	}
+	
+	
+	/**
+	 * Returns whether this statement is allowed in the specified context statement.
+	 * 
+	 * @param context the context statement
 	 * @return true or false
 	 */
-	public boolean isAllowedIn(Statements parent) {
-		return (this.context == null || this.context.contains(parent));
+	public boolean isAllowedIn(Statements context) {
+		return (this.allowedIn == null || this.allowedIn.contains(context));
 	}
 }

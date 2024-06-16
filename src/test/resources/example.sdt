@@ -14,11 +14,11 @@ transform {
 					value "fn:string-join(phonenumber,',')"
 				}
 			}
-			node "empty2" {}
-			node "empty3" { value "''" }
-			node "leaf" { value "'abc'" }
-			node "parent" { node "empty" {} }
-			node "parent2" { value "'abc'" node "empty" {} }
 		}	
+		node "empty2" {}
+		node "empty3" { value "''" }
+		node "leaf" { value "'abc'" }
+		node "parent" { node "empty" {} }
+		node "parent2" { value "'abc'" node "empty" {} }
 	}
 }
