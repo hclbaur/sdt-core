@@ -131,20 +131,18 @@ public final class TestSDTParser {
 		f.s("F63", "transform { choose { when { print \"''\" } } }", "/transform/choose/when: statement 'when' requires an XPath expression");
 		f.s("F64", "transform { choose { when \"true()\" { print \"''\" } otherwise { print \"''\" }  when { } } }", "/transform/choose/otherwise: statement 'otherwise' is misplaced");
 		
-		f.s("F70", "transform { node \"\" }", "/transform/node: statement 'node' requires a compound statement");
+		f.s("F70", "transform { node \"\" }", "/transform/node: statement 'node' requires a node name");
 		f.s("F71", "transform { node { } }", "/transform/node: statement 'node' requires a node name");
-		f.s("F72", "transform { node \"\" { } }", "/transform/node: statement 'node' requires a node name");
-		f.s("F73", "transform { node \"\" { select \"\" } }", "/transform/node: statement 'node' requires a node name");
-		f.s("F74", "transform { node \"a\" { select \"\" } }", "/transform/node/select: statement 'select' is not allowed here");
-		f.s("F75", "transform { node \"a\" { value \"\" } }", "/transform/node/value: statement 'value' requires an XPath expression");
-		f.s("F76", "transform { node \"2\" { value \"''\" } }", "/transform/node: node name '2' is invalid");
+		f.s("F72", "transform { node \"a\" { select \"\" } }", "/transform/node/select: statement 'select' is not allowed here");
+		f.s("F73", "transform { node \"a\" { value \"\" } }", "/transform/node/value: statement 'value' requires an XPath expression");
+		f.s("F74", "transform { node \"2\" { value \"''\" } }", "/transform/node: node name '2' is invalid");
 
-		f.s("F77", "transform { copy \"\" }", "/transform/copy: statement 'copy' requires an XPath expression");
-		f.s("F78", "transform { copy { } }", "/transform/copy: statement 'copy' expects no compound statement");
-		f.s("F79", "transform { copy \"/item\" { } }", "/transform/copy: statement 'copy' expects no compound statement");
-		f.s("F80", "transform { copy \"/item\" { value \"\" } }", "/transform/copy: statement 'copy' expects no compound statement");
+		f.s("F80", "transform { copy \"\" }", "/transform/copy: statement 'copy' requires an XPath expression");
+		f.s("F81", "transform { copy { } }", "/transform/copy: statement 'copy' expects no compound statement");
+		f.s("F82", "transform { copy \"/item\" { } }", "/transform/copy: statement 'copy' expects no compound statement");
+		f.s("F83", "transform { copy \"/item\" { value \"\" } }", "/transform/copy: statement 'copy' expects no compound statement");
 		
-		/* odd */ f.s("F82", "transform { transform { } }", "/transform/transform: statement 'transform' is unknown");
+		/* odd */ f.s("F84", "transform { transform { } }", "/transform/transform: statement 'transform' is unknown");
 	
 		
 		// test performance

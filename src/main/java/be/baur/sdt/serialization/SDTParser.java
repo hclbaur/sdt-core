@@ -336,8 +336,8 @@ public final class SDTParser implements Parser<Transform> {
 		if (! SDA.isName(nodename))
 			throw exception(sdt, NODE_NAME_INVALID, nodename);
 		
-		// allow value and copy, must add print later.... need something better actually
-		checkLeafStatements(sdt, Arrays.asList(Statements.VALUE,Statements.COPY));
+		checkLeafStatements(sdt, // allow value, copy, print(ln) .... need something better than this?
+			Arrays.asList(Statements.VALUE,Statements.COPY,Statements.PRINT,Statements.PRINTLN));
 		final DataNode nodevalue = getStatement(sdt, Statements.VALUE, false);
 		
 		NodeStatement nodestat = new NodeStatement(nodename);
