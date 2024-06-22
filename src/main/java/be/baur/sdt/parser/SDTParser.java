@@ -1,4 +1,4 @@
-package be.baur.sdt.serialization;
+package be.baur.sdt.parser;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -167,12 +167,169 @@ public final class SDTParser implements Parser<Transform> {
 
 
 	/**
+	 * This method parses an SDA node representing a CHOOSE statement. Expected is a
+	 * parent node with at least one WHEN statement and an optional OTHERWISE
+	 * statement.
+	 */
+	private static ChooseStatement parseChoose(final DataNode sdt) throws SDTParseException {
+
+		if (! sdt.getValue().isEmpty())
+			throw exception(sdt, STATEMENT_REQUIRES_NO_VALUE, sdt.getName());
+		
+		if (! sdt.isParent()) // at least one "when" statement is expected
+			throw exception(sdt, STATEMENT_EXPECTED_IN, "when", sdt.getName());
+
+		checkKeywords(sdt, false, Arrays.asList(Keyword.WHEN, Keyword.OTHERWISE));
+
+		ChooseStatement choose = null;
+		int i = 0, last = sdt.nodes().size();
+		for (Node node : sdt.nodes()) {
+
+			++i; Statement substat = parseStatement((DataNode) node);
+
+			if (i == 1) {
+				if (! (substat instanceof WhenStatement))
+					throw exception(node, STATEMENT_EXPECTED, Keyword.WHEN.tag);
+				choose = new ChooseStatement((WhenStatement) substat);
+				continue;
+			}
+
+			if (substat instanceof OtherwiseStatement && i < last)
+				throw exception(node, STATEMENT_MISPLACED, Keyword.OTHERWISE.tag);
+
+			choose.add(parseStatement((DataNode) node));
+		}
+
+		return choose;
+	}
+
+
+	/**
+	 * This method parses an SDA node representing a COPY statement. Expected
+	 * is a leaf node with an XPath expression as the value.
+	 */
+	private static CopyStatement parseCopy(final DataNode sdt) throws SDTParseException {
+
+		return new CopyStatement(xpathFromNode(sdt));
+	}
+
+
+	/**
+	 * This method parses an SDA node representing an FOREACH statement. Expected is
+	 * a parent node with a compound statement and an XPath expression as the value.
+	 * The compound may start with one or several consecutive SORT statements.
+	 */
+	private static ForEachStatement parseForEach(final DataNode sdt) throws SDTParseException {
+		
+		ForEachStatement foreach = new ForEachStatement(xpathFromNode(sdt));
+		int iterations = 0, sortstatements = 0;
+		for (Node node : sdt.nodes()) {
+
+			++iterations; Statement stat = parseStatement((DataNode) node);
+
+			if (stat instanceof SortStatement && ++sortstatements != iterations)
+				throw exception(node, STATEMENT_MISPLACED, Keyword.SORT.tag);
+
+			foreach.add(stat);
+		}
+		return foreach;
+	}
+
+
+	/**
+	 * This method parses an SDA node representing an IF statement. Expected is a
+	 * parent node with a compound statement and an XPath expression as the value.
+	 */
+	private static IfStatement parseIf(final DataNode sdt) throws SDTParseException {
+
+		IfStatement statement = new IfStatement(xpathFromNode(sdt));
+		for (Node node : sdt.nodes()) // parse and add child statements
+			statement.add(parseStatement((DataNode) node));
+
+		return statement;
+	}
+
+
+	/**
+	 * This method parses an SDA node representing a NODE statement. Expected is a
+	 * parent node with a compound statement and a non-empty node name as the value.
+	 * The compound statement may have a VALUE keyword with an XPath expression.
+	 */
+	private static Statement parseNode(final DataNode sdt) throws SDTParseException {
+
+		final String nodename = sdt.getValue();
+
+		if (nodename.isEmpty())
+			throw exception(sdt, STATEMENT_REQUIRES_NODENAME, sdt.getName());
+		if (! SDA.isName(nodename))
+			throw exception(sdt, NODE_NAME_INVALID, nodename);
+		
+		checkKeywords(sdt, true, Arrays.asList(Keyword.VALUE)); // only value is allowed
+		final DataNode nodevalue = getStatement(sdt, Keyword.VALUE, false);
+		
+		NodeStatement nodestat = new NodeStatement(nodename);
+		if (nodevalue != null) // set the optional value expression
+			nodestat.setValueExpression(xpathFromNode(nodevalue));
+
+		for (Node node : sdt.find(n -> !n.getName().equals(Keyword.VALUE.tag))) // skip value keyword
+			nodestat.add(parseStatement((DataNode) node)); // parse and add child statements
+
+		return nodestat;
+	}
+
+
+	/**
+	 * This method parses an SDA node representing an OTHERWISE statement. Expected
+	 * is a parent node with a compound statement and no value.
+	 */
+	private static OtherwiseStatement parseOtherwise(final DataNode sdt) throws SDTParseException {
+
+		if (! sdt.getValue().isEmpty())
+			throw exception(sdt, STATEMENT_REQUIRES_NO_VALUE, sdt.getName());
+
+		OtherwiseStatement statement = new OtherwiseStatement();
+		for (Node node : sdt.nodes()) // parse and add child statements
+			statement.add(parseStatement((DataNode) node));
+
+		return statement;
+	}
+
+
+	/**
 	 * This method parses an SDA node representing a PRINT(LN) statement. Expected
 	 * is a leaf node with an XPath expression as the value.
 	 */
 	private static PrintStatement parsePrintOrPrintLn(final DataNode sdt) throws SDTParseException {
 
 		return new PrintStatement(xpathFromNode(sdt), sdt.getName().equals(Keyword.PRINTLN.tag));
+	}
+
+
+	/**
+	 * This method parses an SDA node representing a SORT statement. Expected is
+	 * either a leaf node or a parent node with an XPath expression as the value,
+	 * and - in case of a parent node - an optional REVERSE keyword with an XPath
+	 * expression and/or a COMPARATOR keyword with the name of an XPath comparator
+	 * function.
+	 */
+	private static SortStatement parseSort(final DataNode sdt) throws SDTParseException {
+
+		SortStatement sort = new SortStatement(xpathFromNode(sdt));
+
+		if (sdt.isLeaf()) return sort;
+
+		checkKeywords(sdt, false, Arrays.asList()); // no other statements allowed
+		checkKeywords(sdt, true, Arrays.asList(Keyword.REVERSE, Keyword.COMPARATOR));
+
+		DataNode reverse = getStatement(sdt, Keyword.REVERSE, false);
+		if (reverse != null)
+			sort.setReverseExpression(xpathFromNode(reverse));
+
+		DataNode comparator = getStatement(sdt, Keyword.COMPARATOR, false);
+		if (comparator != null)
+			sort.setComparatorExpression(comparator.getValue());
+
+		return sort;
 	}
 
 
@@ -214,80 +371,6 @@ public final class SDTParser implements Parser<Transform> {
 
 
 	/**
-	 * This method parses an SDA node representing an FOREACH statement. Expected is
-	 * a parent node with a compound statement and an XPath expression as the value.
-	 * The compound may start with one or several consecutive SORT statements.
-	 */
-	private static ForEachStatement parseForEach(final DataNode sdt) throws SDTParseException {
-		
-		ForEachStatement foreach = new ForEachStatement(xpathFromNode(sdt));
-		int iterations = 0, sortstatements = 0;
-		for (Node node : sdt.nodes()) {
-
-			++iterations; Statement stat = parseStatement((DataNode) node);
-
-			if (stat instanceof SortStatement && ++sortstatements != iterations)
-				throw exception(node, STATEMENT_MISPLACED, Keyword.SORT.tag);
-
-			foreach.add(stat);
-		}
-		return foreach;
-	}
-
-
-	/**
-	 * This method parses an SDA node representing an IF statement. Expected is a
-	 * parent node with a compound statement and an XPath expression as the value.
-	 */
-	private static IfStatement parseIf(final DataNode sdt) throws SDTParseException {
-
-		IfStatement statement = new IfStatement(xpathFromNode(sdt));
-		for (Node node : sdt.nodes()) // parse and add child statements
-			statement.add(parseStatement((DataNode) node));
-
-		return statement;
-	}
-
-
-	/**
-	 * This method parses an SDA node representing a CHOOSE statement. Expected is a
-	 * parent node with at least one WHEN statement and an optional OTHERWISE
-	 * statement.
-	 */
-	private static ChooseStatement parseChoose(final DataNode sdt) throws SDTParseException {
-
-		if (! sdt.getValue().isEmpty())
-			throw exception(sdt, STATEMENT_REQUIRES_NO_VALUE, sdt.getName());
-		
-		if (! sdt.isParent()) // at least one "when" statement is expected
-			throw exception(sdt, STATEMENT_EXPECTED_IN, "when", sdt.getName());
-
-		checkKeywords(sdt, false, Arrays.asList(Keyword.WHEN, Keyword.OTHERWISE));
-
-		ChooseStatement choose = null;
-		int i = 0, last = sdt.nodes().size();
-		for (Node node : sdt.nodes()) {
-
-			++i; Statement substat = parseStatement((DataNode) node);
-
-			if (i == 1) {
-				if (! (substat instanceof WhenStatement))
-					throw exception(node, STATEMENT_EXPECTED, Keyword.WHEN.tag);
-				choose = new ChooseStatement((WhenStatement) substat);
-				continue;
-			}
-
-			if (substat instanceof OtherwiseStatement && i < last)
-				throw exception(node, STATEMENT_MISPLACED, Keyword.OTHERWISE.tag);
-
-			choose.add(parseStatement((DataNode) node));
-		}
-
-		return choose;
-	}
-
-
-	/**
 	 * This method parses an SDA node representing a WHEN statement. Expected is a
 	 * parent node with a compound statement and an XPath expression as the value.
 	 */
@@ -298,89 +381,6 @@ public final class SDTParser implements Parser<Transform> {
 			statement.add(parseStatement((DataNode) node));
 
 		return statement;
-	}
-
-
-	/**
-	 * This method parses an SDA node representing an OTHERWISE statement. Expected
-	 * is a parent node with a compound statement and no value.
-	 */
-	private static OtherwiseStatement parseOtherwise(final DataNode sdt) throws SDTParseException {
-
-		if (! sdt.getValue().isEmpty())
-			throw exception(sdt, STATEMENT_REQUIRES_NO_VALUE, sdt.getName());
-
-		OtherwiseStatement statement = new OtherwiseStatement();
-		for (Node node : sdt.nodes()) // parse and add child statements
-			statement.add(parseStatement((DataNode) node));
-
-		return statement;
-	}
-
-
-	/**
-	 * This method parses an SDA node representing a NODE statement. Expected is a
-	 * parent node with a compound statement and a non-empty node name as the value.
-	 * The compound statement may have a VALUE keyword with an XPath expression.
-	 */
-	private static Statement parseNode(final DataNode sdt) throws SDTParseException {
-
-		final String nodename = sdt.getValue();
-
-		if (nodename.isEmpty())
-			throw exception(sdt, STATEMENT_REQUIRES_NODENAME, sdt.getName());
-		if (! SDA.isName(nodename))
-			throw exception(sdt, NODE_NAME_INVALID, nodename);
-		
-		checkKeywords(sdt, true, Arrays.asList(Keyword.VALUE)); // only value is allowed
-		final DataNode nodevalue = getStatement(sdt, Keyword.VALUE, false);
-		
-		NodeStatement nodestat = new NodeStatement(nodename);
-		if (nodevalue != null) // set the optional value expression
-			nodestat.setValueExpression(xpathFromNode(nodevalue));
-
-		for (Node node : sdt.find(n -> !n.getName().equals(Keyword.VALUE.tag))) // skip value keyword
-			nodestat.add(parseStatement((DataNode) node)); // parse and add child statements
-
-		return nodestat;
-	}
-
-	
-	/**
-	 * This method parses an SDA node representing a COPY statement. Expected
-	 * is a leaf node with an XPath expression as the value.
-	 */
-	private static CopyStatement parseCopy(final DataNode sdt) throws SDTParseException {
-
-		return new CopyStatement(xpathFromNode(sdt));
-	}
-	
-	
-	/**
-	 * This method parses an SDA node representing a SORT statement. Expected is
-	 * either a leaf node or a parent node with an XPath expression as the value,
-	 * and - in case of a parent node - an optional REVERSE keyword with an XPath
-	 * expression and/or a COMPARATOR keyword with the name of an XPath comparator
-	 * function.
-	 */
-	private static SortStatement parseSort(final DataNode sdt) throws SDTParseException {
-
-		SortStatement sort = new SortStatement(xpathFromNode(sdt));
-
-		if (sdt.isLeaf()) return sort;
-
-		checkKeywords(sdt, false,Arrays.asList()); // no other statements allowed
-		checkKeywords(sdt, true, Arrays.asList(Keyword.REVERSE, Keyword.COMPARATOR));
-
-		DataNode reverse = getStatement(sdt, Keyword.REVERSE, false);
-		if (reverse != null)
-			sort.setReverseExpression(xpathFromNode(reverse));
-
-		DataNode comparator = getStatement(sdt, Keyword.COMPARATOR, false);
-		if (comparator != null)
-			sort.setComparatorExpression(comparator.getValue());
-
-		return sort;
 	}
 
 

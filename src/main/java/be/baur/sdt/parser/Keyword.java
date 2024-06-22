@@ -1,15 +1,15 @@
-package be.baur.sdt.serialization;
+package be.baur.sdt.parser;
 
 import java.util.Arrays;
 import java.util.List;
 
 /**
- * Statements and attributes allowed by the SDT syntax, identified by keywords.
+ * Statement and attribute keywords allowed by the SDT syntax.
  */
 public enum Keyword {
 	
 	CHOOSE("choose", false, false),
-	COMPARATOR("comparator", true, true),
+	COMPARATOR("comparator", true, true),	// attribute
 	COPY("copy", true, false), 
 	FOREACH("foreach", false, false), 
 	IF("if", false, false), 
@@ -18,10 +18,10 @@ public enum Keyword {
 	PARAM("param", false, false), 
 	PRINT("print", true, false), 
 	PRINTLN("println", true, false),
-	REVERSE("reverse", true, true),
-	SELECT("select", true, true),
+	REVERSE("reverse", true, true),			// attribute
+	SELECT("select", true, true),			// attribute
 	SORT("sort", null, false),
-	VALUE("value", true, true),
+	VALUE("value", true, true),				// attribute
 	VARIABLE("variable", false, false), 
 	WHEN("when", false, false),
 	;
@@ -91,7 +91,7 @@ public enum Keyword {
 	
 	
 	/**
-	 * Returns whether this keyword is allowed in the specified context keyword.
+	 * Returns whether this keyword is allowed in the specified context.
 	 * 
 	 * @param context the context keyword
 	 * @return true or false
