@@ -7,8 +7,8 @@ import java.io.Writer;
 import org.jaxen.Function;
 import org.jaxen.function.SubstringFunction;
 
-import be.baur.sdt.serialization.SDTParseException;
-import be.baur.sdt.serialization.SDTParser;
+import be.baur.sdt.parser.SDTParseException;
+import be.baur.sdt.parser.SDTParser;
 import be.baur.sdt.transform.Transform;
 
 /**

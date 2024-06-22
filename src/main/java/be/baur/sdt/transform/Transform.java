@@ -14,8 +14,8 @@ import be.baur.sdt.SDT;
 import be.baur.sdt.StatementContext;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.TransformException;
-import be.baur.sdt.serialization.SDTParseException;
-import be.baur.sdt.serialization.SDTParser;
+import be.baur.sdt.parser.SDTParseException;
+import be.baur.sdt.parser.SDTParser;
 
 /**
  * A {@code Transform} represents a recipe with statements for mapping and

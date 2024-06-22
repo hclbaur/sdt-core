@@ -7,7 +7,7 @@ import be.baur.sda.DataNode;
 import be.baur.sdt.StatementContext;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.TransformException;
-import be.baur.sdt.serialization.Statements;
+import be.baur.sdt.parser.Keyword;
 import be.baur.sdt.xpath.SDAXPath;
 
 /**
@@ -85,7 +85,7 @@ public class ChooseStatement extends Statement {
 	 */
 	@Override
 	public DataNode toSDA() {
-		DataNode node = new DataNode(Statements.CHOOSE.tag);
+		DataNode node = new DataNode(Keyword.CHOOSE.tag);
 		for (Node statement : nodes()) // add when/otherwise statements
 			node.add(((Statement) statement).toSDA());
 		return node;

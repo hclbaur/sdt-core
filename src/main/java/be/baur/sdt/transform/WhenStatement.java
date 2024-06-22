@@ -5,7 +5,7 @@ import be.baur.sda.DataNode;
 import be.baur.sdt.StatementContext;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.TransformException;
-import be.baur.sdt.serialization.Statements;
+import be.baur.sdt.parser.Keyword;
 import be.baur.sdt.xpath.SDAXPath;
 
 /**
@@ -38,7 +38,7 @@ public class WhenStatement extends XPathStatement {
 	 */
 	@Override
 	public DataNode toSDA() {
-		DataNode node = new DataNode(Statements.WHEN.tag, getExpression()); 
+		DataNode node = new DataNode(Keyword.WHEN.tag, getExpression()); 
 		node.add(null); // render compound statement, even if empty
 		for (Node statement : nodes()) // add any child statements
 			node.add(((Statement) statement).toSDA());

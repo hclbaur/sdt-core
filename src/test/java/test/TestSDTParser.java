@@ -7,8 +7,8 @@ import java.util.function.Function;
 
 import be.baur.sda.DataNode;
 import be.baur.sda.SDA;
-import be.baur.sdt.serialization.SDTParseException;
-import be.baur.sdt.serialization.SDTParser;
+import be.baur.sdt.parser.SDTParseException;
+import be.baur.sdt.parser.SDTParser;
 import be.baur.sdt.transform.PrintStatement;
 import be.baur.sdt.transform.Transform;
 import be.baur.sdt.xpath.SDAXPath;
@@ -103,8 +103,9 @@ public final class TestSDTParser {
 		f.s("F34", "transform { foreach \"a\" { value \"\" } }", "/transform/foreach/value: statement 'value' is not allowed here");
 		f.s("F35", "transform { foreach \"a\" { choose { } } }", "/transform/foreach/choose: 'when' statement expected in 'choose'");
 		f.s("F36", "transform { foreach \"a\" { when { } } }", "/transform/foreach/when: statement 'when' is not allowed here");
-		s.s("F37", "transform { foreach \"/i\" { print \".\" sort \".\" } }", "error at /transform/foreach/sort: statement 'sort' is misplaced");
-		s.s("F38", "transform { foreach \"/i\" { sort \".\" print \".\" sort \".\" } }", "error at /transform/foreach/sort[2]: statement 'sort' is misplaced");
+		s.s("F37", "transform { foreach \"/i\" { sort \".\" { value \"\" } } }", "error at /transform/foreach/sort/value: statement 'value' is not allowed here");
+		s.s("F38", "transform { foreach \"/i\" { print \".\" sort \".\" } }", "error at /transform/foreach/sort: statement 'sort' is misplaced");
+		s.s("F39", "transform { foreach \"/i\" { sort \".\" print \".\" sort \".\" } }", "error at /transform/foreach/sort[2]: statement 'sort' is misplaced");
 		
 		f.s("F40", "transform { if \"\" }", "/transform/if: statement 'if' requires a compound statement");
 		f.s("F41", "transform { if { } }", "/transform/if: statement 'if' requires an XPath expression");
@@ -125,11 +126,12 @@ public final class TestSDTParser {
 		f.s("F57", "transform { choose { otherwise \"\" { } } }", "/transform/choose/otherwise: 'when' statement expected");
 		f.s("F58", "transform { choose { otherwise { print \"''\" } } }", "/transform/choose/otherwise: 'when' statement expected");
 		f.s("F59", "transform { choose { otherwise \"a\" { print \"''\" } } }", "/transform/choose/otherwise: statement 'otherwise' requires no value");
-		f.s("F60", "transform { choose { when \"''\" } }", "/transform/choose/when: statement 'when' requires a compound statement");
+		f.s("F60", "transform { choose { when \"1\" } }", "/transform/choose/when: statement 'when' requires a compound statement");
 		f.s("F61", "transform { choose { when { } } }", "/transform/choose/when: statement 'when' requires an XPath expression");
 		f.s("F62", "transform { choose { when \"\" { } } }", "/transform/choose/when: statement 'when' requires an XPath expression");
 		f.s("F63", "transform { choose { when { print \"''\" } } }", "/transform/choose/when: statement 'when' requires an XPath expression");
-		f.s("F64", "transform { choose { when \"true()\" { print \"''\" } otherwise { print \"''\" }  when { } } }", "/transform/choose/otherwise: statement 'otherwise' is misplaced");
+		f.s("F64", "transform { choose { when \"1\" { select \"\" } } }", "/transform/choose/when/select: statement 'select' is not allowed here");
+		f.s("F65", "transform { choose { when \"1\" { print \"''\" } otherwise { print \"''\" }  when { } } }", "/transform/choose/otherwise: statement 'otherwise' is misplaced");
 		
 		f.s("F70", "transform { node \"\" }", "/transform/node: statement 'node' requires a compound statement");
 		f.s("F71", "transform { node { } }", "/transform/node: statement 'node' requires a node name");

@@ -9,7 +9,7 @@ import be.baur.sda.SDA;
 import be.baur.sdt.StatementContext;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.TransformException;
-import be.baur.sdt.serialization.Statements;
+import be.baur.sdt.parser.Keyword;
 import be.baur.sdt.xpath.SDAXPath;
 
 /**
@@ -122,9 +122,9 @@ public class NodeStatement extends Statement {
 	 */
 	@Override
 	public DataNode toSDA() {
-		DataNode node = new DataNode(Statements.NODE.tag, nodeName);
+		DataNode node = new DataNode(Keyword.NODE.tag, nodeName);
 		if (valueExpression != null)
-			node.add(new DataNode(Statements.VALUE.tag, valueExpression));
+			node.add(new DataNode(Keyword.VALUE.tag, valueExpression));
 		else
 			node.add(null);
 		for (Node statement : nodes()) // add child statements, if any

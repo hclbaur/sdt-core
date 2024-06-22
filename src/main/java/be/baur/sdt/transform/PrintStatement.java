@@ -6,7 +6,7 @@ import be.baur.sda.DataNode;
 import be.baur.sdt.StatementContext;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.TransformException;
-import be.baur.sdt.serialization.Statements;
+import be.baur.sdt.parser.Keyword;
 import be.baur.sdt.xpath.SDAXPath;
 
 /**
@@ -67,7 +67,7 @@ public class PrintStatement extends XPathStatement {
 	 */
 	@Override
 	public DataNode toSDA() {
-		return new DataNode(terminate ? Statements.PRINTLN.tag : Statements.PRINT.tag, getExpression());
+		return new DataNode(terminate ? Keyword.PRINTLN.tag : Keyword.PRINT.tag, getExpression());
 	}
 
 }

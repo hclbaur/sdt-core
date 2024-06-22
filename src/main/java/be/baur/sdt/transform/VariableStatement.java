@@ -7,7 +7,7 @@ import be.baur.sda.DataNode;
 import be.baur.sdt.StatementContext;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.TransformException;
-import be.baur.sdt.serialization.Statements;
+import be.baur.sdt.parser.Keyword;
 import be.baur.sdt.xpath.SDAXPath;
 
 /**
@@ -103,8 +103,8 @@ public class VariableStatement extends XPathStatement {
 	 */
 	@Override
 	public DataNode toSDA() {
-		DataNode node = new DataNode(Statements.VARIABLE.tag, varName);
-		node.add( new DataNode(Statements.SELECT.tag, getExpression()) ); 
+		DataNode node = new DataNode(Keyword.VARIABLE.tag, varName);
+		node.add( new DataNode(Keyword.SELECT.tag, getExpression()) ); 
 		return node;
 	}
 

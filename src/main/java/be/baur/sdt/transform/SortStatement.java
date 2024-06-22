@@ -10,7 +10,7 @@ import be.baur.sda.DataNode;
 import be.baur.sdt.StatementContext;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.TransformException;
-import be.baur.sdt.serialization.Statements;
+import be.baur.sdt.parser.Keyword;
 import be.baur.sdt.xpath.SDAXPath;
 
 /**
@@ -151,11 +151,11 @@ public class SortStatement extends XPathStatement {
 	 */
 	@Override
 	public DataNode toSDA() {
-		DataNode node = new DataNode(Statements.SORT.tag, getExpression());
+		DataNode node = new DataNode(Keyword.SORT.tag, getExpression());
 		if (getReverseExpression() != null) 
-			node.add( new DataNode(Statements.REVERSE.tag, getReverseExpression()) );
+			node.add( new DataNode(Keyword.REVERSE.tag, getReverseExpression()) );
 		if (getComparatorExpression() != null) 
-			node.add( new DataNode(Statements.COMPARATOR.tag, getComparatorExpression()) );
+			node.add( new DataNode(Keyword.COMPARATOR.tag, getComparatorExpression()) );
 		return node;
 	}
 }

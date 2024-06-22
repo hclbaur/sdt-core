@@ -1,4 +1,4 @@
-package be.baur.sdt.serialization;
+package be.baur.sdt.parser;
 
 import be.baur.sda.Node;
 import be.baur.sda.ProcessingException;
