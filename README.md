@@ -63,6 +63,6 @@ to
 		}
 	}
 
-Have a look at the [code](src/main/java/demo.java) to see how it was done. I hope this demonstrates the use of SDT for transformation of SDA content. This concludes my SDA trilogy, but who knows - there may be more to come. 
+Have a look at the [code](src/main/java/demo.java) to see how it was done. I hope this demonstrates the use of SDT for transformation of SDA content. This also concludes my SDA trilogy, but who knows - there may be more to come. 
 
 ----

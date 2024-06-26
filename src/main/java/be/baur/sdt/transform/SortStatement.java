@@ -62,7 +62,7 @@ public class SortStatement extends XPathStatement {
 	
 	
 	/**
-	 * Sets the XPath comparator expression to be evaluated during sorting. The
+	 * Sets the comparator XPath expression text to be evaluated during sorting. The
 	 * comparator should accept two objects and return -1, 0, or 1 depending on
 	 * whether the first object is smaller than, equal to, or greater than the
 	 * second object.
@@ -73,7 +73,7 @@ public class SortStatement extends XPathStatement {
 	 * <p>
 	 * Example: {@code setComparatorExpression("sdt:compare-number(?,?)"); }
 	 * 
-	 * @param compexpr an expression string, not null
+	 * @param expression an expression, not null
 	 * @throws IllegalArgumentException if the expression is invalid
 	 */
 	public void setComparatorExpression(String expression) {
@@ -84,10 +84,10 @@ public class SortStatement extends XPathStatement {
 
 
 	/**
-	 * Returns the comparator expression text that is evaluated during sorting, if a
-	 * specific comparator expression has been set.
+	 * Returns the comparator XPath expression text that is evaluated during
+	 * sorting, if a specific comparator expression has been set.
 	 * 
-	 * @return an expression string, may be null
+	 * @return an expression, may be null
 	 */
 	public String getComparatorExpression() {
 		return comparatorExpression;
@@ -100,6 +100,7 @@ public class SortStatement extends XPathStatement {
 	 * 
 	 * @param context the current statement context
 	 * @return a Comparator, not null
+	 * @throws JaxenException if an XPath evaluation error occurs
 	 */
 	public Comparator<DataNode> getComparator(StatementContext context) throws JaxenException {
 
