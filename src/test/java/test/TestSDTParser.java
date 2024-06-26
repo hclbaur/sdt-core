@@ -91,7 +91,7 @@ public final class TestSDTParser {
 		f.s("F25", "transform { variable \"a\" { select \"\" } }", "/transform/variable/select: statement 'select' requires an XPath expression");
 		f.s("F26", "transform { param \"a\" { select \"''\" print { } } }", "/transform/param/print: statement 'print' is not allowed here");
 		f.s("F27", "transform { variable \":a\" { select \"''\" } }", "/transform/variable: variable name ':a' is invalid");
-		f.s("F28", "transform { param \"p\" { select \"''\" } param \"p\" { select \"''\" } }", "/transform/param[1]: parameter 'p' cannot be redeclared");
+		f.s("F28", "transform { param \"p\" { select \"''\" } param \"p\" { select \"''\" } }", "/transform/param[2]: parameter 'p' cannot be redeclared");
 		f.s("F29", "transform { if \"1\" { param \"p\" { select \"''\" } } }", "/transform/if/param: statement 'param' is not allowed here");
 		
 		System.out.print("\n            ");

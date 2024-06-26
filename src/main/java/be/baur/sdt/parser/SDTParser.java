@@ -349,10 +349,11 @@ public final class SDTParser implements Parser<Transform> {
 			if (! parent.getName().equals(Transform.TAG)) // parent cannot be null
 				throw exception(sdt, STATEMENT_NOT_ALLOWED, sdt.getName());
 			
-			if (parent.find(n -> 
-				n.getName().equals(Keyword.PARAM.tag) 
-					&& ((DataNode) n).getValue().equals(varname)).size() > 1)
-				throw exception(sdt, PARAMETER_REDECLARED, varname);		
+			List<Node> params = parent.find(n -> n.getName().equals(Keyword.PARAM.tag) 
+				&& ((DataNode) n).getValue().equals(varname)); // find re-declarations
+			
+			if (params.size() > 1)
+				throw exception(params.get(1), PARAMETER_REDECLARED, varname);		
 		}
 		
 		if (varname.isEmpty())
