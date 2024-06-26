@@ -2,6 +2,7 @@ transform {
 
 	param "filename" { select "'addressbook.sda'" }
 	variable "doc" { select "document($filename)" }
+	variable "filename" { select "'addressbook2.sda'" }
 
 	node "contacts" {
 		foreach "$doc/addressbook/contact" {

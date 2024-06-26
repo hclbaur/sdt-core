@@ -64,9 +64,9 @@ public final class SDTParser implements Parser<Transform> {
 	private static final String STATEMENT_UNKNOWN = "statement '%s' is unknown";
 	
 	private static final String NODE_NAME_INVALID = "node name '%s' is invalid";
-	private static final String VARIABLE_NAME_INVALID = "variable name '%s' is invalid";
 	private static final String PARAMETER_REDECLARED = "parameter '%s' cannot be redeclared";
-
+	private static final String VARIABLE_NAME_INVALID = "variable name '%s' is invalid";
+	private static final String VARIABLE_OVERWRITES_PARAM = "variable '%s' cannot overwrite param";
 
 	/**
 	 * Creates a transform from a character input stream in SDT format.
@@ -353,7 +353,13 @@ public final class SDTParser implements Parser<Transform> {
 				&& ((DataNode) n).getValue().equals(varname)); // find re-declarations
 			
 			if (params.size() > 1)
-				throw exception(params.get(1), PARAMETER_REDECLARED, varname);		
+				throw exception(params.get(1), PARAMETER_REDECLARED, varname);
+			
+			List<Node> vars = parent.findDescendant(n -> n.getName().equals(Keyword.VARIABLE.tag) 
+					&& ((DataNode) n).getValue().equals(varname)); // find overwriting variables
+			
+			if (vars.size() > 0)
+				throw exception(params.get(0), VARIABLE_OVERWRITES_PARAM, varname);
 		}
 		
 		if (varname.isEmpty())
