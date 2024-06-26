@@ -1,4 +1,4 @@
-package be.baur.sdt.statements;
+package be.baur.sdt.transform;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -14,12 +14,12 @@ import be.baur.sdt.SDT;
 import be.baur.sdt.StatementContext;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.TransformException;
-import be.baur.sdt.serialization.SDTParseException;
-import be.baur.sdt.serialization.SDTParser;
+import be.baur.sdt.parser.SDTParseException;
+import be.baur.sdt.parser.SDTParser;
 
 /**
  * A {@code Transform} represents a recipe with statements for mapping and
- * transformation of SDA content. It is usually not created "manually" but
+ * transformation of node content. It is usually not created "manually" but
  * parsed from input in SDT notation.
  * 
  * @see Statement
@@ -31,8 +31,8 @@ public final class Transform extends AbstractNode {
 	
 	/**
 	 * Executes this transform in the supplied {@code TransformContext}. This method
-	 * returns an output document {@code DataNode} which will empty if no nodes were
-	 * created during transformation.
+	 * returns an output {@code DataNode} which will empty if no nodes were created
+	 * during transformation.
 	 * 
 	 * @param context the transformation context, not null
 	 * @return an output node, may be null
@@ -76,7 +76,7 @@ public final class Transform extends AbstractNode {
 	 * Returns the string representing this transform in SDT notation. For example:
 	 * 
 	 * <pre>
-	 * transform { println { value "'hello world!'" } }
+	 * transform { println "'hello world!'" }
 	 * </pre>
 	 * 
 	 * The result is formatted as a single line of text. For a more readable output,

@@ -1,4 +1,4 @@
-package be.baur.sdt.statements;
+package be.baur.sdt.transform;
 
 import java.io.Writer;
 
@@ -6,13 +6,12 @@ import be.baur.sda.DataNode;
 import be.baur.sdt.StatementContext;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.TransformException;
-import be.baur.sdt.serialization.Attribute;
-import be.baur.sdt.serialization.Statements;
+import be.baur.sdt.parser.Keyword;
 import be.baur.sdt.xpath.SDAXPath;
 
 /**
  * The {@code PrintStatement} evaluates an XPath expression and writes the
- * result to the output stream with an optional line termination separator.
+ * result to the output stream with or without a line separator.
  */
 public class PrintStatement extends XPathStatement {
 
@@ -25,8 +24,7 @@ public class PrintStatement extends XPathStatement {
 	 * @param terminate whether to terminate the line
 	 */
 	public PrintStatement(SDAXPath xpath, boolean terminate) {
-		super(xpath);
-		this.terminate = terminate;
+		super(xpath); this.terminate = terminate;
 	}
 
 	
@@ -64,14 +62,12 @@ public class PrintStatement extends XPathStatement {
 	
 
 	/**
-	 * @return a node representing<br>
-	 *         <code>print(ln) { value "<i>expression</i>" }</code>
+	 * @return a data node representing
+	 *         <code>print(ln) "<i>expression</i>"</code>
 	 */
 	@Override
 	public DataNode toSDA() {
-		DataNode node = new DataNode(terminate ? Statements.PRINTLN.tag : Statements.PRINT.tag);
-		node.add( new DataNode(Attribute.VALUE.tag, getExpression()) ); 
-		return node;
+		return new DataNode(terminate ? Keyword.PRINTLN.tag : Keyword.PRINT.tag, getExpression());
 	}
 
 }

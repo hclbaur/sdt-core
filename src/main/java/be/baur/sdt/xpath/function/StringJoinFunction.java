@@ -10,7 +10,8 @@ import org.jaxen.Navigator;
 import org.jaxen.function.StringFunction;
 
 /**
- * <code><i>string</i> fn:string-join( <i>node-set</i>, <i>string?</i> )</code>
+ * <code><i>string</i> fn:string-join( <i>node-set</i> )</code><br>
+ * <code><i>string</i> fn:string-join( <i>node-set</i>, <i>string separator</i> )</code>
  * <p>
  * Returns a string created by concatenating the items in a sequence, with an
  * optional separator between adjacent items. If the sequence is empty, the
@@ -51,7 +52,7 @@ public class StringJoinFunction implements Function
         	throw new FunctionCallException( "string-join() requires one or two arguments." );
 
         if (! (args.get(0) instanceof List) )
-        	throw new FunctionCallException("The first argument to the string-join function must be a node-set");
+        	throw new FunctionCallException("string-join() expects a node-set.");
         
         List list = (List) args.get(0);
         if (list.isEmpty()) return "";

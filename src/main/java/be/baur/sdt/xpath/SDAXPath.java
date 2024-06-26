@@ -5,6 +5,8 @@ import org.jaxen.JaxenException;
 import org.jaxen.XPathFunctionContext;
 
 import be.baur.sdt.SDT;
+import be.baur.sdt.xpath.function.CompareNumberFunction;
+import be.baur.sdt.xpath.function.CompareStringFunction;
 import be.baur.sdt.xpath.function.LeftFunction;
 import be.baur.sdt.xpath.function.RightFunction;
 import be.baur.sdt.xpath.function.StringJoinFunction;
@@ -31,9 +33,11 @@ public class SDAXPath extends BaseXPath {
 	static {	
 		// add all SDT specific functions to the default context
 		XPathFunctionContext ctx = (XPathFunctionContext) XPathFunctionContext.getInstance();
-		ctx.registerFunction(SDT.W3CFUNCTIONS_NS_URI, "string-join", new StringJoinFunction());
+		ctx.registerFunction(SDT.FUNCTIONS_NS_URI, "compare-number", new CompareNumberFunction());
+		ctx.registerFunction(SDT.FUNCTIONS_NS_URI, "compare-string", new CompareStringFunction());
 		ctx.registerFunction(SDT.FUNCTIONS_NS_URI, "left", new LeftFunction());
 		ctx.registerFunction(SDT.FUNCTIONS_NS_URI, "right", new RightFunction());
+		ctx.registerFunction(SDT.W3CFUNCTIONS_NS_URI, "string-join", new StringJoinFunction());
 	}
 	
 	/**

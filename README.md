@@ -4,9 +4,9 @@ The SDA project was conceived in 2008 and aims to produce Java libraries that (u
 
 ## What is SDT
 
-SDT is to SDA what XSLT is to XML. In other words, it is a language that allows you to create mapping and transformation recipies to read and write SDA content.
+SDT is to SDA what XSLT is to XML. In other words, it is a language that allows you to create mapping and transformation recipes to read and write SDA content.
 
-For example:
+For example, this recipe parses an 'addressbook' in SDA format and produces a new SDA document with the same data in a different format, while using functions to transform the node values:
 
 	transform {
 
@@ -16,7 +16,7 @@ For example:
 		node "contacts" {
 			foreach "$doc/addressbook/contact" {
 				node "person" { 
-					value "firstname"
+					value "upper-case(firstname)"
 					node "phones" {
 						value "fn:string-join(phonenumber,',')"
 					}
@@ -25,9 +25,7 @@ For example:
 		}
 	}
 
-As you can see the transform reads like a scripting language if you are already familiar with SDA and XPath. The example reads an 'addressbook' in SDA format and produces a new SDA document with the same data in a different format. 
-
-I do not expect you to grasp the SDT syntax at a glance, so please refer to the [tutorial](docs/TUTORIAL.md) for a detailed explanation.
+As you can see the transform reads like a scripting language if you are already familiar with SDA and XPath. I do not expect you to grasp the SDT syntax at a glance, so please refer to the [tutorial](docs/TUTORIAL.md) and [specification](docs/SPECIFICATION.md) for details.
 
 ## Running the demo
 
@@ -37,7 +35,7 @@ In order to run the demo, get `demo.jar`, `addressbook.sda` and `addressbook.sdt
 
 	java -jar demo.jar addressbook.sdt addressbook.sda
 	
-This will parse the `addressbook.sdt` script and transform the data in the file `addressbook.sda` from
+This will transform the data in the file `addressbook.sda` according to the recipe shown earlier.
 
 	addressbook {
 		contact "1" {
@@ -54,17 +52,17 @@ This will parse the `addressbook.sdt` script and transform the data in the file 
 
 to
 
-	document {
+	output {
 		contacts {
-			person "Alice" {
+			person "ALICE" {
 				phones "06-11111111,06-22222222"
 			}
-			person "Bob" {
+			person "BOB" {
 				phones "06-33333333,06-44444444"
 			}
 		}
 	}
 
-Have a look at the [code](src/main/java/demo.java) to see how it's done. I hope this demonstrates the use of SDT for transformation of SDA content. This concludes the SDA trilogy, but who knows - there may be more to come. 
+Have a look at the [code](src/main/java/demo.java) to see how it was done. I hope this demonstrates the use of SDT for transformation of SDA content. This also concludes my SDA trilogy, but who knows - there may be more to come. 
 
 ----

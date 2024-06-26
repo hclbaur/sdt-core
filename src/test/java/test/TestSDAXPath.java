@@ -1,10 +1,8 @@
 package test;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
+import java.net.URL;
 import java.util.List;
-
-import org.jaxen.JaxenException;
 
 import be.baur.sda.Node;
 import be.baur.sdt.xpath.DocumentNavigator;
@@ -12,7 +10,7 @@ import be.baur.sdt.xpath.SDAXPath;
 
 public class TestSDAXPath {
 
-	public static void main(String[] args) throws UnsupportedEncodingException, JaxenException {
+	public static void main(String[] args) throws Exception {
 
 		Test t = new Test( (str,obj) -> {
 			try {
@@ -22,7 +20,9 @@ public class TestSDAXPath {
 			}
 		});
 		
-		InputStream in = TestSDAXPath.class.getResourceAsStream("/addressbook.sda");
+		URL url = TestSDAXPath.class.getResource("/addressbook.sda");
+		String file = url.getFile(); InputStream in = url.openStream();
+		
 		Node doc = (Node) DocumentNavigator.getDocument(new InputStreamReader(in, "UTF-8"));
 		
 		Node addressbook = doc.nodes().get(0);
@@ -145,20 +145,36 @@ public class TestSDAXPath {
 		t.so("S77", "lower-case(/addressbook/contact/firstname)", doc, "alice");
 		t.so("S78", "upper-case(firstname)", bob, "BOB");
 		
-		t.so("S79", "document('/temp/addressbook.sda')", addressbook, "["+doc.toString()+"]");
+		t.so("S79", "document('"+ file + "')", addressbook, "["+doc.toString()+"]");
 		
 		System.out.print(" sdt ");
 		
 		t.so("S80", "fn:string-join(/addressbook/contact/phonenumber)", doc, "06-1111111106-2222222206-3333333306-44444444");
-		t.so("S80", "fn:string-join(contact|contact/firstname,':')", addressbook, "1:Alice:2:Bob");
+		t.so("S81", "fn:string-join(contact|contact/firstname,':')", addressbook, "1:Alice:2:Bob");
 		
-		t.so("S90", "sdt:left(/addressbook/contact[1]/firstname,0)", doc, "");
-		t.so("S91", "sdt:left(/addressbook/contact[1]/firstname,2)", doc, "Al");
-		t.so("S92", "sdt:left(/addressbook/contact[1]/firstname,4)", doc, "Alic");
+		t.so("S82", "sdt:left(/addressbook/contact[1]/firstname,0)", doc, "");
+		t.so("S83", "sdt:left(/addressbook/contact[1]/firstname,2)", doc, "Al");
+		t.so("S84", "sdt:left(/addressbook/contact[1]/firstname,6)", doc, "Alice");
 		
-		t.so("S93", "sdt:right(/addressbook/contact[2]/firstname,0)", doc, "");
-		t.so("S94", "sdt:right(/addressbook/contact[2]/firstname,2)", doc, "ob");
-		t.so("S95", "sdt:right(/addressbook/contact[2]/firstname,4)", doc, "Bob");
+		t.so("S85", "sdt:right(/addressbook/contact[2]/firstname,0)", doc, "");
+		t.so("S86", "sdt:right(/addressbook/contact[2]/firstname,2)", doc, "ob");
+		t.so("S87", "sdt:right(/addressbook/contact[2]/firstname,4)", doc, "Bob");
+		
+		t.so("S88", "sdt:compare-number(1,3)", doc, "-1.0");
+		t.so("S89", "sdt:compare-number(3,'3')", doc, "0.0");
+		t.so("S90", "sdt:compare-number('6','4')", doc, "1.0");
+		t.so("S91", "sdt:compare-number('a',1)", doc, "1.0");
+		t.so("S92", "sdt:compare-number('a','b')", doc, "0.0");
+		t.so("S91", "sdt:compare-number('a',1,true())", doc, "-1.0");
+		t.so("S91", "sdt:compare-number('a',1,false())", doc, "1.0");
+		t.so("S92", "sdt:compare-number('a','b',true())", doc, "0.0");
+		t.so("S93", "sdt:compare-number('a','b',false())", doc, "0.0");
+		
+		t.so("S94", "sdt:compare-string('a','A')", doc, "-1.0");
+		t.so("S95", "sdt:compare-string(3,'3')", doc, "0.0");
+		t.so("S96", "sdt:compare-string('b','A')", doc, "1.0");
+		t.so("S97", "sdt:compare-string('Ångström','Zulu','en')", doc, "-1.0");
+		t.so("S98", "sdt:compare-string('Ångström','Zulu','sv')", doc, "1.0");
 	}
 
 }

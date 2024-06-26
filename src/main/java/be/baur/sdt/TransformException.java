@@ -5,7 +5,7 @@ import be.baur.sda.ProcessingException;
 
 /**
  * An {@code TransformException} may be thrown during the execution of a
- * transformation recipe. See also {@link ProcessingException}.
+ * transformation recipe.
  */
 @SuppressWarnings("serial")
 public final class TransformException extends ProcessingException {

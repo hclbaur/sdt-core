@@ -7,6 +7,7 @@
 - [On a different node](/docs/TUTORIAL.md#on-a-different-node)
 - [PART TWO](/docs/TUTORIAL.md#part-two)
 - [Vars and Pars](/docs/TUTORIAL.md#vars-and-pars)
+- [Sorting it out](/docs/TUTORIAL.md#sorting-it-out)
 
 
 ## PART ONE
@@ -21,25 +22,36 @@ Nevertheless, if you already know XSLT, all concepts introduced by SDT will be f
 When you say transformation, you say input and output. So, without further ado, here is the obligatory Hello World example:
 
 	transform {
-		println { value "'Hello World!'" }
+		println "'Hello World!'"
 	}
 
 This will produce the following output:
 
 	Hello World!
 
-As Roy H. Williams put it: the risk of insult is the price of clarity. In case it was not clear, whatever follows `value` is an XPath expression and whatever is selected is converted to a string - as if by calling the *string()* function. 
+As Roy H. Williams put it: the risk of insult is the price of clarity. In case it was not clear, what follows `println` is an XPath expression and whatever is selected is converted to a string - as if by calling the *string()* function. 
 
-In this example, the "expression" is a very basic one, which selects a string literal. But we can bring in some data from the outside world, and use the XPath *concat()* function to transform it:
+In this example, the "expression" is a very basic one, which selects a string literal. But we can bring in some data from the outside world, using a parameter holding whatever subject we want to greet:
+
+	transform {
+		param "subject" { 
+			select "'World'" 
+		}
+		print "'Hello '" 
+		print "$subject" 
+		println "'!'"
+	}
+
+First, note that `print` will omit the line separator, and second that this can be written way more concise if we use the XPath *concat()* function to construct our greeting:
 
 	transform {
 		param "subject" { select "'World'" }
-		println { value "concat('Hello ', $subject, '!')" }
+		println "concat('Hello ', $subject, '!')"
 	}
 
-The `param` statement declares a (global) variable *subject* that can be provisioned by the transformation *context*, overriding the selected default ('World'). The required default selection allows us to test or debug the transformation recipe in isolation, e.g. without supplying a context.
+The `param` statement declares a (global) variable *subject* that can be provisioned by the transformation *context*, overriding the selected default ('World'), so we can greet whomever we like. The required default selection allows us to test or debug the transformation recipe in isolation, e.g. without supplying a context.
 
-However, even parameterised versions of Hello World get old quickly, so let's transform some actual SDA content, like my (hypothetical) address book: 
+However, even parameterized versions of "Hello World" get old rather quickly, so let's transform some actual SDA content, like my (hypothetical) address book: 
 
 	addressbook {
 		contact "1" {
@@ -62,9 +74,7 @@ The address book might be in an SDA file called `addressbook.sda`, located in wh
 	transform {
 		param "filename" { select "'addressbook.sda'" }
 		variable "doc" { select "document($filename)" }
-		println { 
-			value "concat('Hello ', $doc/addressbook/contact[1]/firstname, '!')"
-		}
+		println "concat('Hello ', $doc/addressbook/contact[1]/firstname, '!')"
 	}
 
 We use the *document()* function to read and parse the file into an SDA node tree, which is bound to a variable *doc* for reference in subsequent expressions. Note that unlike `param`, the `variable` statement declares a variable that can *not* be overriden by the transformation context. Executing this recipe would produce:
@@ -76,15 +86,13 @@ And with that, we shall move on to much more interesting stuff.
 
 ### For each their own
 
-Suppose we want to iterate over all phone numbers in the address book and transform them in one way or another. The following recipe could be used to do that:
+Suppose we want to iterate over all phone numbers in the address book and list them. The following recipe could be used to do that:
 
 <pre>
 transform {
 	<i>...(read address book)...</i>
 	foreach "$doc/addressbook/contact/phonenumber" {
-		println { 
-			value "concat('Number ', $sdt:position, ' of ', $sdt:last, ': ', ., ' (', ../firstname, ')')"
-		}
+		println "concat('Number ', $sdt:position, ' of ', $sdt:last, ': ', ., ' (', ../firstname, ')')"
 	}
 }
 </pre>
@@ -102,9 +110,7 @@ Now, we will add a predicate that selects only the "odd" phone numbers (1 and 3)
 
 	...
 	foreach "($doc//phonenumber)[(position() mod 2) = 1]" {
-		println { 
-			value "concat('Number ', $sdt:position, ' of ', $sdt:last, ': ', ., ' (', ../firstname, ')')"
-		}
+		println "concat('Number ', $sdt:position, ' of ', $sdt:last, ': ', ., ' (', ../firstname, ')')"
 	}
 
 The result would be:
@@ -121,14 +127,12 @@ There's more to say about iterations; we will come back to this subject later.
 
 ### If only we could choose
 
-Whether you are iterating a set or not, processing may be *conditional*; you may want to process something in a different way - or not at all - depending on the outcome of some pre-defined test. For example, to print the odd numbers in a different way:
+Whether you are iterating a set or not, processing may be *conditional*; you may want to process something in a different way - or not at all - depending on the outcome of some pre-defined test. For example, here is how to print the odd numbers in a different way:
 
 	...
 	foreach "$doc//phonenumber" {
 		if "($sdt:position mod 2) = 1" {
-			println {
-				value "concat('Number ', $sdt:position, ' of ', $sdt:last, ': ', ., ' (', ../firstname, ')')"
-			}
+			println "concat('Number ', $sdt:position, ' of ', $sdt:last, ': ', ., ' (', ../firstname, ')')"
 		}
 	}
 
@@ -149,16 +153,16 @@ Just like in XSLT, there is no `else(if)` clause, but we do have a way to test a
 
 	...
 	foreach "$doc//phonenumber" {
-		print { value "concat('Number ', $sdt:position, ' of ', $sdt:last, ': ', .)" }
+		print "concat('Number ', $sdt:position, ' of ', $sdt:last, ': ', .)"
 		choose {
 			when "$sdt:position mod 2" {
-				println { value "' (odd)'" }
+				println "' (odd)'"
 			}
 			when "not($sdt:position mod 2)" {
-				println { value "' (even)'" }
+				println "' (even)'"
 			}
 			otherwise {
-				println { value "' (???)'" }
+				println "' (???)'"
 			}
 		}
 	}
@@ -170,19 +174,19 @@ And this would be the result:
 	Number 3 of 4: 06-33333333 (odd)
 	Number 4 of 4: 06-44444444 (even)
 
-Obviously, the `otherwise` statement block will never be executed; I included it merely to show the full syntax of the `choose` statement - which requires one or more `when` clauses, followed by an optional `otherwise` clause.  
+Obviously, the `otherwise` statement block is never executed; I merely included it to show you the full syntax of the `choose` statement - which requires one or more `when` clauses, followed by an optional `otherwise` clause.  
 
 
 ### On a different node
 
-So far we have been using `print(ln)` to generate output, which is fine for simple things or for debugging purposes. But when generating complex data structures, it is cumbersome. More often than not, you will want to "map" input nodes to output nodes, creating a new SDA node tree from existing ones. Luckily, creating nodes is rather straight-forward:
+So far we have been using a `print(ln)` statement to generate output, which is fine for simple things or for debugging purposes. But when generating complex data structures, it is cumbersome. More often than not, you will want to "map" input nodes to output nodes, creating a new SDA node tree from existing ones. Luckily, creating nodes is rather straight-forward (I am omitting the code that reads the address book):
 
 <pre>
 transform {
-	<i>...(read address book)...</i>
+	<i>... read address book ...</i>
 		node "contacts" {
 			foreach "$doc/addressbook/contact" {
-				node "person" { value "firstname" }
+				node "person" { value "upper-case(firstname)" }
 				node "phonenumbers" { value "fn:string-join(phonenumber,',')" }
 			}
 		}
@@ -192,24 +196,24 @@ transform {
 This will produce the following SDA document:
 
 	contacts {
-		person "Alice" 
+		person "ALICE" 
 		phonenumbers "06-11111111"
-		person "Bob" 
+		person "BOB" 
 		phonenumbers "06-22222222,06-33333333"
-		person "Chris" 
+		person "CHRIS" 
 		phonenumbers "06-44444444"
 	}
 
 The `node` statement will instantiate a new node with the specified name and (an optional) `value` equal to the string evaluation of the given expression. Any child nodes can be created within the statement block.
 
-Note that if an output node should be *identical* to an input node, you can use the `copy` statement to create a (deep) clone of the selected node(s):
+Note that if an output node should be *identical* to an input node, you can use the `copy` statement to clone the selected node(s):
 
 	...
 	node "contacts" {
 		foreach "$doc/addressbook/contact" {
 			node "person" { 
-				value "firstname" 
-				copy { select "phonenumber" }
+				value "upper-case(firstname)" 
+				copy "phonenumber"
 			}
 		}
 	}
@@ -217,14 +221,14 @@ Note that if an output node should be *identical* to an input node, you can use 
 Which will create the following document:
 
 	contacts {
-		person "Alice" {
+		person "ALICE" {
 			phonenumber "06-11111111"
 		}
-		person "Bob" {
+		person "BOB" {
 			phonenumber "06-22222222"
 			phonenumber "06-33333333"
 		}
-		person "Chris" {
+		person "CHRIS" {
 			phonenumber "06-44444444"
 		}
 	}
@@ -296,17 +300,78 @@ transform {
 
 Obviously, neither *V* can be referenced outside the *if* clauses.
 
-For *automatic* variables, the same rules apply with regards to scoping, but it is not possible to declare or re-assign them. Automatic variables "live" within the reserved SDT namespace, which ensures there is no overlap with the ones you declare yourself (in the "unnamed" namespace):
+For *automatic* variables, the same rules apply with regards to scoping, but it is not possible to declare or re-assign them. Automatic variables "live" within the reserved SDT namespace, which ensures there is no overlap with the ones you declare yourself (in the "unnamed" namespace). The following example illustrates this:
 
 	transform {
 		foreach "..." {
 			variable "position" { select "$sdt:position" }
 			foreach "..." {
-				println { value "concat('outer ', $position, ' inner ', $sdt:position)" }
+				println "concat('outer ', $position, ' inner ', $sdt:position)" }
 			}
 		}
 	}
 
-The inner variable *sdt:position* shadows the one in the outer loop, but we can save the current value in a *position* variable of our own, and reference that from the inner loop.
+There is no way to reference the outer *sdt:position* variable as it is shadowed by the one in the inner loop. But we can save its value in a *position* variable of our own, and reference that from the inner loop, as it doesn't clash with the one in the SDT namespace.
+
+
+### Sorting it out
+
+In this section, we will revisit the subject of iteration, and address a common requirement: sorting. In its basic form, sorting a node-set is just a matter of specifying the sorting key, like this:
+
+	foreach "$doc/addressbook/contact" {
+		sort "firstname"
+		println "firstname"
+	}
+
+This will print "Alice", "Bob" and "Christopher" - regardless of how the contacts 
+are ordered in the addressbook node. Reversing sort order - so the output will be "Christopher", "Bob" and "Alice" - is just a matter of using the `reverse` keyword.
+ 
+ 	foreach "$doc/addressbook/contact" {
+		sort "firstname" { reverse "true()" }
+		println "firstname"
+	}
+
+Sorting keys are not limited to node values, but can be any effective value "extracted" by the sort expression. For instance, to sort contacts in order of increasing length of their firstname:
+
+ 	foreach ... {
+		sort "string-length(firstname)"
+	... }
+
+Oops. This will print "Christopher", "Bob" and "Alice" again, when obviously "Christopher" - with length 11 - should come last. What went wrong? 
+
+By default, values are compared lexicographically, which means that "11" comes before "3" and "5", rather than after it. When sorting numeric values, we must use an appropriate `comparator``, as in
+
+ 	foreach ... {
+		sort "string-length(firstname)" { comparator "sdt:compare-number(?,?)" }
+	... }
+
+A comparator is a function with at least two arguments, and returns a negative number, zero, or a positive number, depending on whether the effective value of the first argument collates before, equal to, or after the second one. The question marks - in what is effectively a Lambda expression - act as a placeholder for the objects to be compared.
+
+Let's go back to sorting names. If your addressbook neatly capitalizes all names, you may get away with a lexicographical sort. Otherwise, you are in trouble, because lowercase letters collate after *all* uppercase ones, so for example "alice" would come after "Zoey".
+
+To address this we could sort in a case-insensitive manner, like so:
+
+	sort "lower-case(firstname)"
+
+However, this will ignore case rather than handle it. A better solution is to use a locale-sensitive comparator that takes case differences as well as accented characters into account:
+
+	sort "firstname" { comparator "sdt:compare-string(?,?)" }
+
+This comparator even accepts language tags, so to please our Swedish audience we can ensure that "Ådel" is sorted properly *after* "Zoey", using
+
+ 	comparator "sdt:compare-string(?,?,'sv')" }
+
+because to them, Å is a letter that comes after Z - rather than the funny looking A it is to us.
+
+To wrap things up, here is an example that uses multiple sort statements to order contacts first by the number of phones they own, and then by their first name: 
+
+	foreach "$doc/addressbook/contact" {
+		sort "count(phonenumber)" sort "firstname" 
+		println "concat(firstname, ' has ', count(phonenumber), '.')"
+	}
+
+	Christopher has 1.
+	Alice has 2.
+	Bob has 2.
 
 [ TO BE CONTINUED ]

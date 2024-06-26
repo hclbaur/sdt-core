@@ -1,4 +1,4 @@
-package be.baur.sdt.statements;
+package be.baur.sdt.transform;
 
 import be.baur.sda.AbstractNode;
 import be.baur.sda.DataNode;

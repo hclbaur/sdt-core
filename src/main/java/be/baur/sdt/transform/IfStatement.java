@@ -1,4 +1,4 @@
-package be.baur.sdt.statements;
+package be.baur.sdt.transform;
 
 import java.util.List;
 
@@ -7,7 +7,7 @@ import be.baur.sda.DataNode;
 import be.baur.sdt.StatementContext;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.TransformException;
-import be.baur.sdt.serialization.Statements;
+import be.baur.sdt.parser.Keyword;
 import be.baur.sdt.xpath.SDAXPath;
 
 /**
@@ -55,13 +55,14 @@ public class IfStatement extends XPathStatement {
 
 	
 	/**
-	 * @return an SDA node representing<br>
+	 * @return a data node representing:<br><br>
 	 *         <code>if "<i>expression</i>" { <i>statement+</i> }</code>
 	 */
 	@Override
 	public DataNode toSDA() {
-		DataNode node = new DataNode(Statements.IF.tag, getExpression()); 
-		for (Node statement : nodes()) // add child statements
+		DataNode node = new DataNode(Keyword.IF.tag, getExpression()); 
+		node.add(null); // render compound statement, even if empty
+		for (Node statement : nodes()) // add any child statements
 			node.add(((Statement) statement).toSDA());
 		return node;
 	}
