@@ -21,7 +21,7 @@ public final class TestSDTParser {
 			try {
 				return SDTParser.parse( SDA.parse(new StringReader(str)) ).toString();
 			} catch (SDTParseException e) {
-				return e.getMessage();
+				return e.getLocalizedMessage();
 			} catch (Exception e) {
 				return e.getMessage();
 			}
