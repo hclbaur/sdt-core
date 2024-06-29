@@ -21,7 +21,7 @@ public final class TestSDTParser {
 			try {
 				return SDTParser.parse( SDA.parse(new StringReader(str)) ).toString();
 			} catch (SDTParseException e) {
-				return e.getMessage();
+				return e.getLocalizedMessage();
 			} catch (Exception e) {
 				return e.getMessage();
 			}
@@ -83,16 +83,18 @@ public final class TestSDTParser {
 		f.s("F11", "transform { print \"\" { } }", "/transform/print: statement 'print' expects no compound statement");
 		f.s("F12", "transform { println \"\" { select \"\" } }", "/transform/println: statement 'println' expects no compound statement");
 
-		f.s("F20", "transform { param \"\" }", "/transform/param: statement 'param' requires a compound statement");
-		f.s("F21", "transform { variable { } }", "/transform/variable: statement 'variable' requires a variable name");
-		f.s("F22", "transform { param \"\" { } }", "/transform/param: statement 'param' requires a variable name");
-		f.s("F23", "transform { variable \"a\" { value \"\" } }", "/transform/variable/value: statement 'value' is not allowed here");
-		f.s("F24", "transform { param \"\" { select \"\" } }", "/transform/param: statement 'param' requires a variable name");
-		f.s("F25", "transform { variable \"a\" { select \"\" } }", "/transform/variable/select: statement 'select' requires an XPath expression");
-		f.s("F26", "transform { param \"a\" { select \"''\" print { } } }", "/transform/param/print: statement 'print' is not allowed here");
-		f.s("F27", "transform { variable \":a\" { select \"''\" } }", "/transform/variable: variable name ':a' is invalid");
-		f.s("F28", "transform { param \"p\" { select \"''\" } param \"p\" { select \"''\" } }", "/transform/param[1]: parameter 'p' cannot be redeclared");
-		f.s("F29", "transform { if \"1\" { param \"p\" { select \"''\" } } }", "/transform/if/param: statement 'param' is not allowed here");
+		f.s("F15", "transform { param \"\" }", "/transform/param: statement 'param' requires a compound statement");
+		f.s("F16", "transform { variable { } }", "/transform/variable: statement 'variable' requires a variable name");
+		f.s("F17", "transform { param \"\" { } }", "/transform/param: statement 'param' requires a variable name");
+		f.s("F18", "transform { variable \"v\" { value \"\" } }", "/transform/variable/value: statement 'value' is not allowed here");
+		f.s("F19", "transform { param \"\" { select \"\" } }", "/transform/param: statement 'param' requires a variable name");
+		f.s("F20", "transform { variable \"v\" { select \"\" } }", "/transform/variable/select: statement 'select' requires an XPath expression");
+		f.s("F21", "transform { param \"p\" { select \"''\" print \"0\" } }", "/transform/param/print: statement 'print' is not allowed here");
+		f.s("F22", "transform { variable \":v\" { select \"''\" } }", "/transform/variable: variable name ':v' is invalid");
+		f.s("F23", "transform { param \"p\" { select \"0\" } param \"p\" { select \"1\" } }", "/transform/param[2]: parameter 'p' cannot be redeclared");
+		f.s("F24", "transform { if \"1\" { param \"p\" { select \"1\" } } }", "/transform/if/param: statement 'param' is not allowed here");
+		f.s("F25", "transform { param \"p\" { select \"0\" } variable \"p\" { select \"1\" } }", "/transform/variable: variable 'p' cannot overwrite parameter");
+		f.s("F26", "transform { variable \"v\" { select \"0\" } param \"v\" { select \"1\" } }", "/transform/param: parameter 'v' cannot overwrite variable");
 		
 		System.out.print("\n            ");
 

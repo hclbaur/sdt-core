@@ -112,19 +112,19 @@ public class StatementContext implements VariableContext {
 
 
 	/**
-	 * Sets the value of a variable in this context. The variable will be
-	 * created if it does not exist, and overwritten if it does.
+	 * Sets the value of a variable in this context. The variable will be created if
+	 * it does not exist, and overwritten if it does.
 	 * <p>
 	 * The variable is optionally associated with a namespace URI.
 	 * 
-	 * @param namespaceURI namespace URI of the variable, may be null
-	 * @param localName    local name of the variable, not null
-	 * @param value        value to be set, may be null
+	 * @param nsURI     namespace URI of the variable, may be null
+	 * @param localName local name of the variable, not null
+	 * @param value     value to be set, may be null
 	 */
-	public void setVariableValue(String namespaceURI, String localName, Object value) {
+	public void setVariableValue(String nsURI, String localName, Object value) {
 		
 		Objects.requireNonNull(localName, "localName must not be null");
-		this.variables.put(key(namespaceURI, localName), value);
+		this.variables.put(key(nsURI, localName), value);
 	}
 
 

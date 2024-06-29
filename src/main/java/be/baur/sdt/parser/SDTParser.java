@@ -64,9 +64,10 @@ public final class SDTParser implements Parser<Transform> {
 	private static final String STATEMENT_UNKNOWN = "statement '%s' is unknown";
 	
 	private static final String NODE_NAME_INVALID = "node name '%s' is invalid";
-	private static final String VARIABLE_NAME_INVALID = "variable name '%s' is invalid";
 	private static final String PARAMETER_REDECLARED = "parameter '%s' cannot be redeclared";
-
+	private static final String PARAM_OVERWRITES_VARIABLE = "parameter '%s' cannot overwrite variable";
+	private static final String VARIABLE_NAME_INVALID = "variable name '%s' is invalid";
+	private static final String VARIABLE_OVERWRITES_PARAM = "variable '%s' cannot overwrite parameter";
 
 	/**
 	 * Creates a transform from a character input stream in SDT format.
@@ -336,24 +337,14 @@ public final class SDTParser implements Parser<Transform> {
 	/**
 	 * This method parses an SDA node representing a VARIABLE or PARAM statement.
 	 * Expected is a parent node with a non-empty variable name as the value, and a
-	 * single, mandatory SELECT keyword with an XPath expression. Also, parameters
-	 * must be declared globally (in the transform node) and not more than once.
+	 * single, mandatory SELECT keyword with an XPath expression. Parameters must be
+	 * declared globally (in the transform node) and not more than once. Variables
+	 * can be declared anywhere any number of times. It is not possible to have both
+	 * a parameter and a variable with the same name.
 	 */
 	private static VariableStatement parseVariableOrParam(final DataNode sdt) throws SDTParseException {
 
-		String varname = sdt.getValue();
-		
-		boolean isParam = sdt.getName().equals(Keyword.PARAM.tag);	
-		if ( isParam ) {
-			final Node parent = sdt.getParent();
-			if (! parent.getName().equals(Transform.TAG)) // parent cannot be null
-				throw exception(sdt, STATEMENT_NOT_ALLOWED, sdt.getName());
-			
-			if (parent.find(n -> 
-				n.getName().equals(Keyword.PARAM.tag) 
-					&& ((DataNode) n).getValue().equals(varname)).size() > 1)
-				throw exception(sdt, PARAMETER_REDECLARED, varname);		
-		}
+		final String varname = sdt.getValue();
 		
 		if (varname.isEmpty())
 			throw exception(sdt, STATEMENT_REQUIRES_VARIABLE, sdt.getName());
@@ -362,8 +353,36 @@ public final class SDTParser implements Parser<Transform> {
 		
 		checkKeywords(sdt, false, Arrays.asList()); // no other statements allowed
 		checkKeywords(sdt, true, Arrays.asList(Keyword.SELECT)); // only select is allowed
+		
+		final Node parent = sdt.getParent();
+		
+		// find all declarations of a param with the specified name
+		List<Node> params = parent.find(n -> n.getName().equals(Keyword.PARAM.tag) 
+				&& ((DataNode) n).getValue().equals(varname));
+		
+		final boolean isParam = sdt.getName().equals(Keyword.PARAM.tag);
+		
+		if ( isParam ) {
+			
+			if (! parent.getName().equals(Transform.TAG)) // params must be global
+				throw exception(sdt, STATEMENT_NOT_ALLOWED, sdt.getName());
+			
+			if (params.size() > 1) // got more than one param
+				throw exception(params.get(1), PARAMETER_REDECLARED, varname);
+			
+			List<Node> vars = parent.findDescendant(n -> n.getName().equals(Keyword.VARIABLE.tag) 
+					&& ((DataNode) n).getValue().equals(varname)); // find variables with this name
+			
+			if (vars.size() > 0) // got a variable with the same name
+				throw exception(vars.get(0), VARIABLE_OVERWRITES_PARAM, varname);
+		}
+		else { // a variable
+			
+			if (params.size() > 0) // got a param with the same name
+				throw exception(params.get(0), PARAM_OVERWRITES_VARIABLE, varname);
+		}
+		
 		DataNode select = getStatement(sdt, Keyword.SELECT, true);
-
 		return isParam 
 			? new ParamStatement(varname, xpathFromNode(select))
 			: new VariableStatement(varname, xpathFromNode(select));
