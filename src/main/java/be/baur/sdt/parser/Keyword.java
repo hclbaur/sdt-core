@@ -10,14 +10,14 @@ public enum Keyword {
 	
 	CHOOSE("choose", false, false),
 	COMPARATOR("comparator", true, true),	// attribute
-	COPY("copy", true, false), 
+	COPY("copy", true, false), 				// leaf statement
 	FOREACH("foreach", false, false), 
 	IF("if", false, false), 
 	NODE("node", false, false), 
 	OTHERWISE("otherwise", false, false),
 	PARAM("param", false, false), 
-	PRINT("print", true, false), 
-	PRINTLN("println", true, false),
+	PRINT("print", true, false), 			// leaf statement
+	PRINTLN("println", true, false),		// leaf statement
 	REVERSE("reverse", true, true),			// attribute
 	SELECT("select", true, true),			// attribute
 	SORT("sort", null, false),
