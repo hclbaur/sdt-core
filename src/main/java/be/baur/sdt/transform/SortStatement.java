@@ -99,21 +99,21 @@ public class SortStatement extends XPathStatement {
 	 * comparator expression has been set, a lexicographical compare is implied.
 	 * 
 	 * @param context the current statement context
-	 * @return a Comparator, not null
+	 * @return a comparator, not null
 	 * @throws JaxenException if an XPath evaluation error occurs
 	 */
-	public Comparator<DataNode> getComparator(StatementContext context) throws JaxenException {
+	public Comparator<Object> getComparator(StatementContext context) throws JaxenException {
 
 		SDAXPath xpath = new SDAXPath(getExpression());
 		xpath.setVariableContext(context);
 
-		Comparator<DataNode> comparator = new Comparator<DataNode>() {
+		Comparator<Object> comparator = new Comparator<Object>() {
 			@Override
-			public int compare(DataNode node1, DataNode node2) {
+			public int compare(Object o1, Object o2) {
 				String s1, s2;
 				try {
-					s1 = xpath.stringValueOf(node1);
-					s2 = xpath.stringValueOf(node2);
+					s1 = xpath.stringValueOf(o1);
+					s2 = xpath.stringValueOf(o2);
 					if (comparatorExpression != null) {
 						String comexpr = comparatorExpression.replaceFirst("\\?", "'"+s1+"'");
 						SDAXPath comxp = new SDAXPath(comexpr.replaceFirst("\\?", "'"+s2+"'"));

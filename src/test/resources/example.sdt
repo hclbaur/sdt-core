@@ -3,6 +3,11 @@ transform {
 	param "filename" { select "'addressbook.sda'" }
 	variable "doc" { select "document($filename)" }
 
+	foreach "sdt:test()" {
+		sort "." { reverse "true()" }
+		println "."
+	}
+	
 	node "contacts" {
 		foreach "$doc/addressbook/contact" {
 			sort "count(phonenumber)" { comparator "sdt:compare-number(?,?)" }
@@ -15,9 +20,5 @@ transform {
 				}
 			}
 		}	
-	}
-	
-	foreach "sdt:test()" {
-		println "sdt:left(.,1)"
 	}
 }

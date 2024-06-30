@@ -62,7 +62,7 @@ public class ForEachStatement extends XPathStatement {
 			 */
 			if (setsize > 1) {
 
-				Comparator<DataNode> comparator = null;
+				Comparator<Object> comparator = null;
 				for (Node statement : statements) {
 					if (statement instanceof SortStatement) {
 						SortStatement sortstat = (SortStatement) statement;
