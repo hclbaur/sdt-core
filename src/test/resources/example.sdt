@@ -2,11 +2,6 @@ transform {
 
 	param "filename" { select "'addressbook.sda'" }
 	variable "doc" { select "document($filename)" }
-
-	foreach "sdt:test()" {
-		sort "." { reverse "true()" }
-		println "."
-	}
 	
 	node "contacts" {
 		foreach "$doc/addressbook/contact" {
