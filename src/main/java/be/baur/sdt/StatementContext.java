@@ -29,7 +29,7 @@ public class StatementContext implements VariableContext {
 	private final StatementContext parent; // parent of this context
     private final Map<String, Object> variables = new HashMap<String, Object>();	
 
-    private Object contextNode = null; // the current context node, initially null!
+    private Object contextNode = new DataNode("dummy"); // dummy (empty) context node
     private DataNode outputNode = new DataNode("output"); // the output document node
     
 	/**

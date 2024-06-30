@@ -53,16 +53,13 @@ public class ForEachStatement extends XPathStatement {
 			int setsize = nodeset.size();
 			if (setsize == 0) return; // do nothing
 			
-			// Breaks if expression does not return a List of nodes, must fix this later!
-			// For example test this with the results of a tokenize (if we have one)
-			
 			/*
 			 * Optionally sort the node-set prior to iteration. If we have at least 2 nodes
 			 * we create a comparator from all sort statements (if any) and sort if needed.
 			 */
 			if (setsize > 1) {
 
-				Comparator<DataNode> comparator = null;
+				Comparator<Object> comparator = null;
 				for (Node statement : statements) {
 					if (statement instanceof SortStatement) {
 						SortStatement sortstat = (SortStatement) statement;

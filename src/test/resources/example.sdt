@@ -2,7 +2,7 @@ transform {
 
 	param "filename" { select "'addressbook.sda'" }
 	variable "doc" { select "document($filename)" }
-
+	
 	node "contacts" {
 		foreach "$doc/addressbook/contact" {
 			sort "count(phonenumber)" { comparator "sdt:compare-number(?,?)" }

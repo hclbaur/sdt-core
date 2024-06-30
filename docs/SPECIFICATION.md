@@ -149,7 +149,7 @@ Following are all functions availabe to XPath expressions in SDT. Obviously, SDA
 
 ### Standard functions
 
-Functions without namespace-prefix are native Jaxen implementations of the XPath (1.0) specification. Documentation for these functions is readily available on the net. 
+Functions without namespace-prefix are native Jaxen implementations of the XPath (1.0) specification.
 
 #### Node-Set functions
 
@@ -225,7 +225,7 @@ Functions without namespace-prefix are native Jaxen implementations of the XPath
 
 ### Extensions
 
-Functions with a namespace-prefix are extensions supplied by the SDT library, and are either SDT specific, or implementations of XPath functions that are not (yet) provided by Jaxen. These functions are explained in more detail.
+Functions with a namespace-prefix are extensions supplied by the SDT library, and are either SDT specific, or implementations of XPath functions that are not (yet) provided by Jaxen.
 
 
 #### SDT string functions

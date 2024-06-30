@@ -64,14 +64,15 @@ public class TestSDAXPath {
 		t.so("S20", "/addressbook/contact[last()]/firstname", doc, "[firstname \"Bob\"]");
 		t.so("S21", "/addressbook/contact[position()<2]/firstname", doc, "[firstname \"Alice\"]");
 		t.so("S22", "count(/addressbook/contact)", doc, "2.0");
-		t.so("S23", "id('1')", doc, "SDA does not support element Ids");
+		t.so("S23", "count(/addressbook/contact[1] | /addressbook/contact[2])", doc, "2.0");
+		t.so("S24", "id('1')", doc, "SDA does not support element Ids");
 
-		t.so("S24", "local-name(/addressbook/contact)", doc, "contact");
-		t.so("S25", "local-name()", alice, "contact");
-		t.so("S26", "local-name()", doc, ""); // returns empty string
+		t.so("S25", "local-name(/addressbook/contact)", doc, "contact");
+		t.so("S26", "local-name()", alice, "contact");
+		t.so("S27", "local-name()", doc, ""); // returns empty string
 
-		t.so("S27", "namespace-uri(/addressbook/contact)", doc, "[null]");
-		t.so("S28", "namespace-uri()", alice, "[null]");
+		t.so("S28", "namespace-uri(/addressbook/contact)", doc, "[null]");
+		t.so("S29", "namespace-uri()", alice, "[null]");
 
 		t.so("S30", "name(/addressbook/contact)", doc, "contact");
 		t.so("S31", "name()", alice, "contact");
@@ -150,7 +151,7 @@ public class TestSDAXPath {
 		System.out.print(" sdt ");
 		
 		t.so("S80", "fn:string-join(/addressbook/contact/phonenumber)", doc, "06-1111111106-2222222206-3333333306-44444444");
-		t.so("S81", "fn:string-join(contact|contact/firstname,':')", addressbook, "1:Alice:2:Bob");
+		t.so("S81", "fn:string-join(contact | contact/firstname,':')", addressbook, "1:Alice:2:Bob");
 		
 		t.so("S82", "sdt:left(/addressbook/contact[1]/firstname,0)", doc, "");
 		t.so("S83", "sdt:left(/addressbook/contact[1]/firstname,2)", doc, "Al");
