@@ -16,4 +16,8 @@ transform {
 			}
 		}	
 	}
+	
+	foreach "sdt:test()" {
+		println "sdt:left(.,1)"
+	}
 }
