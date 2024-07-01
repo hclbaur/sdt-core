@@ -15,7 +15,7 @@ import org.jaxen.function.StringFunction;
 /**
  * <code><i>string*</i> sdt:tokenize( <i>string</i> )</code><br>
  * <code><i>string*</i> sdt:tokenize( <i>string</i>, <i>string pattern</i> )</code><br>
- * <code><i>string*</i> sdt:tokenize( <i>string</i>, <i>string pattern</i>, <i>boolean allowEnpty</i> )</code>
+ * <code><i>string*</i> sdt:tokenize( <i>string</i>, <i>string pattern</i>, <i>boolean keepEmpty</i> )</code>
  * <p>
  * Breaks the supplied string into tokens and returns a sequence of strings. The
  * optional second argument is a regular expression that specifies the
@@ -24,7 +24,7 @@ import org.jaxen.function.StringFunction;
  * <code>sdt:tokenize(normalize-space(<i>string</i>),' ')</code>.
  * <p>
  * The optional third argument is a boolean indicating whether zero length
- * tokens are retained, the default being false. For example:
+ * (empty) tokens are retained, the default being false. For example:
  * <p>
  * <code>sdt:tokenize(' a&nbsp;&nbsp;b&nbsp;&nbsp;&nbsp;c&nbsp;&nbsp;&nbsp;&nbsp;')</code>
  * returns <code>("a","b","c")</code>.<br>
@@ -57,40 +57,39 @@ public class TokenizeFunction implements Function
 	@Override
 	@SuppressWarnings("rawtypes")
 	public Object call(Context context, List args) throws FunctionCallException
-    {
+	{
 		final int argc = args.size();
-        if (argc < 1 || argc > 3)
-            throw new FunctionCallException( "tokenize() requires one, two or three arguments." );
+		if (argc < 1 || argc > 3)
+			throw new FunctionCallException("tokenize() requires one, two or three arguments.");
 
-        final Navigator nav = context.getNavigator();
-        
+		final Navigator nav = context.getNavigator();
+
 		if (argc == 1)
-			return evaluate(NormalizeSpaceFunction.evaluate(args.get(0), nav), " ", false, nav);
+			return evaluate(NormalizeSpaceFunction.evaluate(args.get(0), nav), " ", false);
 		else if (argc == 2)
 			return evaluate(StringFunction.evaluate(args.get(0), nav), 
-					StringFunction.evaluate(args.get(1), nav), false, nav);
-		else // argc ==  3
+				StringFunction.evaluate(args.get(1), nav), false);
+		else // argc == 3
 			return evaluate(StringFunction.evaluate(args.get(0), nav), 
-					StringFunction.evaluate(args.get(1), nav),
-					BooleanFunction.evaluate(args.get(2), nav), nav);
-    }
+				StringFunction.evaluate(args.get(1), nav),
+				BooleanFunction.evaluate(args.get(2), nav));
+	}
 
 
 	/**
 	 * Breaks the supplied string into tokens and returns a sequence of strings.
 	 *
-	 * @param str        the string to be tokenized
-	 * @param pat        the delimiter regular expression
-	 * @param allowEmpty whether to retain empty strings in the result
-	 * @param nav        the navigator used
+	 * @param str       the string to be tokenized
+	 * @param rex       the delimiter regular expression
+	 * @param keepEmpty whether to retain empty strings in the result
 	 * 
 	 * @return a list of strings
 	 */
-	public static List<String> evaluate(String str, String rex, boolean allowEmpty, Navigator nav) {
+	public static List<String> evaluate(String str, String rex, boolean keepEmpty) {
 
-		List<String> tokens = Arrays.asList(str.split(rex, allowEmpty ? -1 : 0));
-		
-		if (! allowEmpty) {
+		List<String> tokens = Arrays.asList(str.split(rex, keepEmpty ? -1 : 0));
+
+		if (!keepEmpty) {
 			tokens = new ArrayList<String>(tokens); // make tokens mutable
 			tokens.removeIf(s -> s.isEmpty()); // before removing empty ones
 		}
