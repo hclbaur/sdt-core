@@ -1,30 +1,37 @@
 package be.baur.sdt.xpath.function;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.jaxen.Context;
 import org.jaxen.Function;
 import org.jaxen.FunctionCallException;
+import org.jaxen.Navigator;
+import org.jaxen.function.BooleanFunction;
+import org.jaxen.function.NormalizeSpaceFunction;
+import org.jaxen.function.StringFunction;
 
 /**
  * <code><i>string*</i> sdt:tokenize( <i>string</i> )</code><br>
- * <code><i>string*</i> sdt:tokenize( <i>string</i>, <i>pattern</i> )</code><br>
+ * <code><i>string*</i> sdt:tokenize( <i>string</i>, <i>string pattern</i> )</code><br>
  * <code><i>string*</i> sdt:tokenize( <i>string</i>, <i>string pattern</i>, <i>boolean allowEnpty</i> )</code>
  * <p>
  * Breaks the supplied string into tokens and returns a sequence of strings. The
- * second argument is a regular expression that specifies the delimiter(s). If
- * absent, tokens are assumed to be whitespace delimited, and the result is
- * equivalent to <code>sdt:tokenize( normalize-space(<i>string</i>),' ')</code>.
+ * optional second argument is a regular expression that specifies the
+ * delimiter(s). If absent, tokens are assumed to be whitespace delimited, and
+ * the result is equivalent to
+ * <code>sdt:tokenize(normalize-space(<i>string</i>),' ')</code>.
  * <p>
  * The optional third argument is a boolean indicating whether zero length
  * tokens are retained, the default being false. For example:
  * <p>
- * <code>sdt:tokenize(' a&nbsp;&nbsp;b&nbsp;&nbsp;&nbsp;c&nbsp;&nbsp;&nbsp;&nbsp;')<code> 
- * returns <code>{"a","b","c"}</code>.<br>
- * <code>sdt:tokenize('a|b||d', '|')</code> returns
- * <code>{"a","b","d"}</code>.<br>
- * <code>sdt:tokenize('a|b||d', '|', true())</code> returns
- * <code>{"a","b","","d"}</code>.
+ * <code>sdt:tokenize(' a&nbsp;&nbsp;b&nbsp;&nbsp;&nbsp;c&nbsp;&nbsp;&nbsp;&nbsp;')</code>
+ * returns <code>("a","b","c")</code>.<br>
+ * <code>sdt:tokenize('a:b::d', ':')</code> returns
+ * <code>("a","b","d")</code>.<br>
+ * <code>sdt:tokenize('a,b,;d;', '[,;]', true())</code> returns
+ * <code>("a","b","","d","")</code>.
  */
 public class TokenizeFunction implements Function
 {
@@ -42,7 +49,7 @@ public class TokenizeFunction implements Function
 	 *                is called.
 	 * @param args    an argument list that contains one, two or three items.
 	 * 
-	 * @return a <code>List<String></code>
+	 * @return a list of strings
 	 * 
 	 * @throws FunctionCallException if <code>args</code> has no or more than three
 	 *                               items.
@@ -55,7 +62,38 @@ public class TokenizeFunction implements Function
         if (argc < 1 || argc > 3)
             throw new FunctionCallException( "tokenize() requires one, two or three arguments." );
 
-        return null;       
+        final Navigator nav = context.getNavigator();
+        
+		if (argc == 1)
+			return evaluate(NormalizeSpaceFunction.evaluate(args.get(0), nav), " ", false, nav);
+		else if (argc == 2)
+			return evaluate(StringFunction.evaluate(args.get(0), nav), 
+					StringFunction.evaluate(args.get(1), nav), false, nav);
+		else // argc ==  3
+			return evaluate(StringFunction.evaluate(args.get(0), nav), 
+					StringFunction.evaluate(args.get(1), nav),
+					BooleanFunction.evaluate(args.get(2), nav), nav);
     }
 
+
+	/**
+	 * Breaks the supplied string into tokens and returns a sequence of strings.
+	 *
+	 * @param str        the string to be tokenized
+	 * @param pat        the delimiter regular expression
+	 * @param allowEmpty whether to retain empty strings in the result
+	 * @param nav        the navigator used
+	 * 
+	 * @return a list of strings
+	 */
+	public static List<String> evaluate(String str, String rex, boolean allowEmpty, Navigator nav) {
+
+		List<String> tokens = Arrays.asList(str.split(rex, allowEmpty ? -1 : 0));
+		
+		if (! allowEmpty) {
+			tokens = new ArrayList<String>(tokens); // make tokens mutable
+			tokens.removeIf(s -> s.isEmpty()); // before removing empty ones
+		}
+		return tokens;
+	}
 }
