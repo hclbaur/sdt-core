@@ -17,15 +17,15 @@ import org.jaxen.function.NumberFunction;
  * numbers and returns -1 if the second argument precedes the first, 1 if it
  * exceeds it, and 0 if the arguments are numerically equal:
  * <p>
- * <code>sdt:compare-number(1,3)</code> returns <code>-1.0</code>.<br>
- * <code>sdt:compare-number(3,'3')</code> returns <code>0.0</code>.<br>
- * <code>sdt:compare-number('6','4')</code> returns <code>1.0</code>.
+ * <code>sdt:compare-number(1, 3)</code> returns <code>-1.0</code>.<br>
+ * <code>sdt:compare-number(3, '3')</code> returns <code>0.0</code>.<br>
+ * <code>sdt:compare-number('6', '4')</code> returns <code>1.0</code>.
  * <p>
  * Objects that are not numbers are considered equal, and greater than all other
  * numbers:
  * <p>
- * <code>sdt:compare-number('a',1)</code> returns <code>1.0</code>.<br>
- * <code>sdt:compare-number('a','b')</code> returns <code>0.0</code>.
+ * <code>sdt:compare-number('a', 1)</code> returns <code>1.0</code>.<br>
+ * <code>sdt:compare-number('a', 'b')</code> returns <code>0.0</code>.
  * <p>
  * If the optional third argument evaluates to true, objects that are not
  * numbers are considered smaller than all numbers.

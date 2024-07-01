@@ -4,6 +4,7 @@
 
 This is work in progress.
 
+- Fixed issue in sort comparator and statement context.
 - Closed issue #12 (possible to overwrite parameter).
 
 ## Compatibility

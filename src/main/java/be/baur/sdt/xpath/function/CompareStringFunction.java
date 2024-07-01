@@ -19,14 +19,14 @@ import org.jaxen.function.StringFunction;
  * exceeds it, and 0 if the arguments are considered equal in the default
  * locale:
  * <p>
- * <code>sdt:compare-string('a','A')</code> returns <code>-1.0</code>.<br>
- * <code>sdt:compare-string(3,'3')</code> returns <code>0.0</code>.<br>
- * <code>sdt:compare-string('b','A')</code> returns <code>1.0</code>.
+ * <code>sdt:compare-string('a', 'A')</code> returns <code>-1.0</code>.<br>
+ * <code>sdt:compare-string(3, '3')</code> returns <code>0.0</code>.<br>
+ * <code>sdt:compare-string('b', 'A')</code> returns <code>1.0</code>.
  * <p>
  * An optional third argument specifies the language tag (IETF BCP 47) to obtain
  * a collation strategy that best fits the tag:
  * <p>
- * <code>sdt:compare-string('Ångström','Zulu','sv')</code> returns
+ * <code>sdt:compare-string('Ångström', 'Zulu', 'sv')</code> returns
  * <code>1.0</code> in accordance with Swedish collation rules.
  * <p>
  * This function can be used as a comparator in a sort statement.

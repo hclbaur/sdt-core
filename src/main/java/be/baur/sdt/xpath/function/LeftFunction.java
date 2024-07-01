@@ -15,7 +15,7 @@ import be.baur.sdt.SDT;
  * Returns the specified number of characters from the start of the argument
  * string. For example,
  * <p>
- * <code>sdt:left("12345",3)</code> returns <code>"123"</code>.
+ * <code>sdt:left('12345', 3)</code> returns <code>"123"</code>.
  * <p>
  * If the second argument is not a number or less than 1, an empty string is
  * returned. If it exceeds the string length of the first argument, the entire
