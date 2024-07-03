@@ -3,6 +3,10 @@ transform {
 	param "filename" { select "'addressbook.sda'" }
 	variable "doc" { select "document($filename)" }
 	
+	foreach "sdt:tokenize('127.0.0.1:80', '[\\.:]')" {
+		println "."
+	}
+	
 	node "contacts" {
 		foreach "$doc/addressbook/contact" {
 			sort "count(phonenumber)" { comparator "sdt:compare-number(?,?)" }

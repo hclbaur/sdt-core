@@ -14,19 +14,18 @@ import org.jaxen.function.StringFunction;
  * <code><i>double</i> sdt:compare-string( <i>string</i>, <i>string</i> )</code><br>
  * <code><i>double</i> sdt:compare-string( <i>string</i>, <i>string</i>, <i>string language</i> )</code>
  * <p>
- * Compares two objects locale-sensitive. This function converts its arguments
- * to strings and returns -1 if the second argument precedes the first, 1 if it
- * exceeds it, and 0 if the arguments are considered equal in the default
- * locale:
+ * Compares two strings locale-sensitive. This function returns -1 if the second
+ * string precedes the first, 1 if it exceeds it, and 0 if they are considered
+ * equal in the default locale:
  * <p>
- * <code>sdt:compare-string('a','A')</code> returns <code>-1.0</code>.<br>
- * <code>sdt:compare-string(3,'3')</code> returns <code>0.0</code>.<br>
- * <code>sdt:compare-string('b','A')</code> returns <code>1.0</code>.
+ * <code>sdt:compare-string('a', 'A')</code> returns <code>-1.0</code>.<br>
+ * <code>sdt:compare-string(3, '3')</code> returns <code>0.0</code>.<br>
+ * <code>sdt:compare-string('b', 'A')</code> returns <code>1.0</code>.
  * <p>
  * An optional third argument specifies the language tag (IETF BCP 47) to obtain
  * a collation strategy that best fits the tag:
  * <p>
- * <code>sdt:compare-string('Ångström','Zulu','sv')</code> returns
+ * <code>sdt:compare-string('Ångström', 'Zulu', 'sv')</code> returns
  * <code>1.0</code> in accordance with Swedish collation rules.
  * <p>
  * This function can be used as a comparator in a sort statement.

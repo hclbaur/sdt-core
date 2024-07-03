@@ -10,7 +10,7 @@ import be.baur.sdt.xpath.function.CompareStringFunction;
 import be.baur.sdt.xpath.function.LeftFunction;
 import be.baur.sdt.xpath.function.RightFunction;
 import be.baur.sdt.xpath.function.StringJoinFunction;
-import be.baur.sdt.xpath.function.TestFunction;
+import be.baur.sdt.xpath.function.TokenizeFunction;
 
 /**
  * An XPath implementation for the SDA object model.
@@ -39,7 +39,7 @@ public class SDAXPath extends BaseXPath {
 		ctx.registerFunction(SDT.FUNCTIONS_NS_URI, "left", new LeftFunction());
 		ctx.registerFunction(SDT.FUNCTIONS_NS_URI, "right", new RightFunction());
 		ctx.registerFunction(SDT.W3CFUNCTIONS_NS_URI, "string-join", new StringJoinFunction());
-		ctx.registerFunction(SDT.FUNCTIONS_NS_URI, "test", new TestFunction());
+		ctx.registerFunction(SDT.FUNCTIONS_NS_URI, "tokenize", new TokenizeFunction());
 	}
 	
 	/**
