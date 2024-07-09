@@ -223,11 +223,19 @@ public final class SDTParser implements Parser<Transform> {
 	private static ForEachStatement parseForEach(final DataNode sdt) throws SDTParseException {
 		
 		ForEachStatement foreach = new ForEachStatement(xpathFromNode(sdt));
+		
+		checkKeywords(sdt, true, Arrays.asList(Keyword.GROUP)); // only group attribute is allowed
+		final DataNode group = getStatement(sdt, Keyword.GROUP, false);
+		
+		if (group != null) // set the optional value expression
+			foreach.setGroupExpression(xpathFromNode(group));
+		
 		int iterations = 0, sortstatements = 0;
 		for (Node node : sdt.nodes()) {
 
+			if (node.getName().equals(Keyword.GROUP.tag)) continue; // skip group attribute
 			++iterations; Statement stat = parseStatement((DataNode) node);
-
+			
 			if (stat instanceof SortStatement && ++sortstatements != iterations)
 				throw exception(node, STATEMENT_MISPLACED, Keyword.SORT.tag);
 
@@ -265,14 +273,14 @@ public final class SDTParser implements Parser<Transform> {
 		if (! SDA.isName(nodename))
 			throw exception(sdt, NODE_NAME_INVALID, nodename);
 		
-		checkKeywords(sdt, true, Arrays.asList(Keyword.VALUE)); // only value is allowed
-		final DataNode nodevalue = getStatement(sdt, Keyword.VALUE, false);
-		
 		NodeStatement nodestat = new NodeStatement(nodename);
-		if (nodevalue != null) // set the optional value expression
-			nodestat.setValueExpression(xpathFromNode(nodevalue));
+		
+		checkKeywords(sdt, true, Arrays.asList(Keyword.VALUE)); // only value attribute is allowed
+		final DataNode value = getStatement(sdt, Keyword.VALUE, false);
+		if (value != null) // set the optional value expression
+			nodestat.setValueExpression(xpathFromNode(value));
 
-		for (Node node : sdt.find(n -> !n.getName().equals(Keyword.VALUE.tag))) // skip value keyword
+		for (Node node : sdt.find(n -> !n.getName().equals(Keyword.VALUE.tag))) // skip value attribute
 			nodestat.add(parseStatement((DataNode) node)); // parse and add child statements
 
 		return nodestat;

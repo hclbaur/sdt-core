@@ -39,7 +39,7 @@ public class SortStatement extends XPathStatement {
 	
 	/**
 	 * Sets the XPath expression to determine whether sort order is reversed. If the
-	 * expression evaluates to true, sort order is descending. If no expression is
+	 * expression evaluates to true, sort order is descending. If no expression was
 	 * set, sort order should be ascending by default.
 	 * 
 	 * @param xpath an XPath object, not null
@@ -63,9 +63,9 @@ public class SortStatement extends XPathStatement {
 	
 	/**
 	 * Sets the comparator XPath expression text to be evaluated during sorting. The
-	 * comparator should accept two objects and return -1, 0, or 1 depending on
-	 * whether the first object is smaller than, equal to, or greater than the
-	 * second object.
+	 * comparator should accept two objects and return a negative integer, zero, or
+	 * a positive integer depending on whether the first object is smaller than,
+	 * equal to, or greater than the second object.
 	 * <p>
 	 * No attempt is made to assert validity of the given expression, other than the
 	 * requirement that it must contain exactly two question marks, which act as a

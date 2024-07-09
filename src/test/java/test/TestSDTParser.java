@@ -67,6 +67,10 @@ public final class TestSDTParser {
 		s.s("S24", "transform { foreach \"/i\" { sort \".\" { reverse \"1\" } } }", null);
 		s.s("S25", "transform { foreach \"/i\" { sort \".\" { comparator \"f(?,?)\" } } }", null);
 		s.s("S26", "transform { foreach \"/i\" { sort \".\" { comparator \"f(?,?)\" reverse \"0\" } } }", "transform { foreach \"/i\" { sort \".\" { reverse \"0\" comparator \"f(?,?)\" } } }");
+		s.s("S27", "transform { foreach \"/i\" { group \".\" } }", null);
+		s.s("S28", "transform { foreach \"/i\" { sort \".\" group \".\" } }", "transform { foreach \"/i\" { group \".\" sort \".\" } }");
+		s.s("S29", "transform { foreach \"/i\" { group \".\" println \".\" } }", null);
+		s.s("S30", "transform { foreach \"/i\" { group \".\" foreach \"$sdt:current-group\" { } } }", null);
 		
 		System.out.print("\n            "); /* test invalid SDT */
 		f.s("F01", "transfrom \"\"", "/transfrom: 'transform' statement expected");
@@ -76,12 +80,12 @@ public final class TestSDTParser {
 		f.s("F05", "transform { test { } }", "/transform/test: statement 'test' is unknown");
 		f.s("F06", "transform { when { } }", "/transform/when: statement 'when' is not allowed here");
 		f.s("F07", "transform { otherwise { } }", "/transform/otherwise: statement 'otherwise' is not allowed here");
-		f.s("F08", "transform { sort { } }", "/transform/sort: statement 'sort' is not allowed here");
-
-		f.s("F09", "transform { print \"\" }", "/transform/print: statement 'print' requires an XPath expression");
-		f.s("F10", "transform { println { } }", "/transform/println: statement 'println' expects no compound statement");
-		f.s("F11", "transform { print \"\" { } }", "/transform/print: statement 'print' expects no compound statement");
-		f.s("F12", "transform { println \"\" { select \"\" } }", "/transform/println: statement 'println' expects no compound statement");
+		f.s("F08", "transform { sort \"\" }", "/transform/sort: statement 'sort' is not allowed here");
+		f.s("F09", "transform { group \"\" }", "/transform/group: statement 'group' is not allowed here");
+		f.s("F10", "transform { print \"\" }", "/transform/print: statement 'print' requires an XPath expression");
+		f.s("F11", "transform { println { } }", "/transform/println: statement 'println' expects no compound statement");
+		f.s("F12", "transform { print \"\" { } }", "/transform/print: statement 'print' expects no compound statement");
+		f.s("F13", "transform { println \"\" { select \"\" } }", "/transform/println: statement 'println' expects no compound statement");
 
 		f.s("F15", "transform { param \"\" }", "/transform/param: statement 'param' requires a compound statement");
 		f.s("F16", "transform { variable { } }", "/transform/variable: statement 'variable' requires a variable name");
@@ -108,14 +112,15 @@ public final class TestSDTParser {
 		s.s("F37", "transform { foreach \"/i\" { sort \".\" { value \"\" } } }", "error at /transform/foreach/sort/value: statement 'value' is not allowed here");
 		s.s("F38", "transform { foreach \"/i\" { print \".\" sort \".\" } }", "error at /transform/foreach/sort: statement 'sort' is misplaced");
 		s.s("F39", "transform { foreach \"/i\" { sort \".\" print \".\" sort \".\" } }", "error at /transform/foreach/sort[2]: statement 'sort' is misplaced");
+		s.s("F40", "transform { foreach \"/i\" { group \".\" { print \".\" } } }", "error at /transform/foreach/sort[2]: statement 'sort' is misplaced");
 		
-		f.s("F40", "transform { if \"\" }", "/transform/if: statement 'if' requires a compound statement");
-		f.s("F41", "transform { if { } }", "/transform/if: statement 'if' requires an XPath expression");
-		f.s("F42", "transform { if \"\" { } }", "/transform/if: statement 'if' requires an XPath expression");
-		f.s("F43", "transform { if \"\" { value \"\" } }", "/transform/if: statement 'if' requires an XPath expression");
-		f.s("F44", "transform { if \"true()\" { value \"\" } }", "/transform/if/value: statement 'value' is not allowed here");
-		f.s("F45", "transform { if \"true()\" { choose { } } }", "/transform/if/choose: 'when' statement expected in 'choose'");
-		f.s("F46", "transform { if \"true()\" { otherwise { } }}", "/transform/if/otherwise: statement 'otherwise' is not allowed here");
+		f.s("F41", "transform { if \"\" }", "/transform/if: statement 'if' requires a compound statement");
+		f.s("F42", "transform { if { } }", "/transform/if: statement 'if' requires an XPath expression");
+		f.s("F43", "transform { if \"\" { } }", "/transform/if: statement 'if' requires an XPath expression");
+		f.s("F44", "transform { if \"\" { value \"\" } }", "/transform/if: statement 'if' requires an XPath expression");
+		f.s("F45", "transform { if \"true()\" { value \"\" } }", "/transform/if/value: statement 'value' is not allowed here");
+		f.s("F46", "transform { if \"true()\" { choose { } } }", "/transform/if/choose: 'when' statement expected in 'choose'");
+		f.s("F47", "transform { if \"true()\" { otherwise { } }}", "/transform/if/otherwise: statement 'otherwise' is not allowed here");
 		
 		System.out.print("\n            ");
 		f.s("F50", "transform { choose \"\" }", "/transform/choose: statement 'choose' requires a compound statement");

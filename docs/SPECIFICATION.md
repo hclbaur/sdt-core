@@ -60,12 +60,30 @@ The `copy` statement evaluates an expression and creates a deep copy of the sele
 
 <pre>
 	foreach "<i>expression</i>" {
+		<i>[</i> group "<i>expression</i>" <i>]</i>
 		<i>[ sort statement(s) ]</i>
 		<i>[ other statement(s) ]</i>
 	}
 </pre>
 
-The `foreach` statement evaluates an expression, iterates the resulting node set and executes a compound statement on each iteration. If present, one or more `sort` statements are applied to order the selected node-set prior to iteration.
+The `foreach` statement evaluates an expression, iterates the resulting node set and executes a compound statement on each iteration. If present, one or more `sort` statements are applied to order the selected node-set prior to iteration. During iteration, the following automatic variables are available to the compound statement:
+
+|    			 |    						     |
+|----------------|-------------------------------|
+| *sdt:position* | the index of the current node |
+| *sdt:last*	 | the index of the last node	 |
+| *sdt:current*	 | the currently iterated node	 |
+
+A `group` attribute may be used to specify an grouping key expression, causing nodes that share the same key to be grouped together in new node-sets. These groups are then iterated - rather than the nodes in them - and the following automatic variables will be available to the compound statement:
+
+|							 |    							  |
+|----------------------------|--------------------------------|
+| *sdt:position*			 | the index of the current group |
+| *sdt:last*				 | the index of the last group	  |
+| *sdt:current-group*		 | the currently iterated group	  |
+| *sdt:current-grouping-key* | the key of the current group	  |
+
+Note that if any sort statements are present, sorting is applied before grouping.
 
 
 #### if
@@ -108,7 +126,7 @@ The `param` statement evaluates an expression and assigns the result to a variab
 	print "<i>expression</i>" <i>|</i> println "<i>expression</i>"
 </pre>
 
-A `print` or `println` statement evaluates an expression and writes the result to the output stream with or without a line separator.
+A `print` statement evaluates an expression and writes the string value to the output stream. The `println` statement does the same, and adds a line separator.
 
 
 #### sort
@@ -121,7 +139,9 @@ A `print` or `println` statement evaluates an expression and writes the result t
 	}
 </pre>
 
-The `sort` statement can only occur in the context of a `foreach` loop. It evaluates an expression and sorts the iterated set using the string value of the selected node as a sorting key. The order is controlled with an optional `reverse` expression that is evaluated to a boolean (default is false). An optional `comparator` expression determines how objects are compared (default is lexicographically).
+The `sort` statement can only occur in the context of a `foreach` loop. It evaluates an expression and sorts the iterated set using the string value of the selected node as a sorting key. The order is controlled with an optional `reverse` expression that is evaluated to a boolean (default is false). 
+
+An optional `comparator` expression determines how objects are compared (default is lexicographically). Comparators are expressions with two question marks as placeholder for the objects to be compared, and must return a negative integer, zero or a positive integer, depending on whether the first object is smaller than, equal to, or greater than the second object.
 
 
 #### transform

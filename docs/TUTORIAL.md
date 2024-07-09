@@ -1,13 +1,14 @@
 # SDT Tutorial
 
 - [PART ONE](/docs/TUTORIAL.md#part-one)
-- [IOpener](/docs/TUTORIAL.md#iopener)
-- [For each their own](/docs/TUTORIAL.md#for-each-their-own)
-- [If only we could choose](/docs/TUTORIAL.md#if-only-we-could-choose)
-- [On a different node](/docs/TUTORIAL.md#on-a-different-node)
+	- [IOpener](/docs/TUTORIAL.md#iopener)
+	- [For each their own](/docs/TUTORIAL.md#for-each-their-own)
+	- [If only we could choose](/docs/TUTORIAL.md#if-only-we-could-choose)
+	- [On a different node](/docs/TUTORIAL.md#on-a-different-node)
 - [PART TWO](/docs/TUTORIAL.md#part-two)
-- [Vars and Pars](/docs/TUTORIAL.md#vars-and-pars)
-- [Sorting it out](/docs/TUTORIAL.md#sorting-it-out)
+	- [Vars and Pars](/docs/TUTORIAL.md#vars-and-pars)
+	- [Sorting it out](/docs/TUTORIAL.md#sorting-it-out)
+	- [A group effort](/docs/TUTORIAL.md#a-group-effort)
 
 
 ## PART ONE
@@ -323,8 +324,7 @@ In this section, we will revisit the subject of iteration, and address a common 
 		println "firstname"
 	}
 
-This will print "Alice", "Bob" and "Christopher" - regardless of how the contacts 
-are ordered in the addressbook node. Reversing sort order - so the output will be "Christopher", "Bob" and "Alice" - is just a matter of using the `reverse` keyword.
+This will print "Alice", "Bob" and "Christopher" - regardless of how the contacts are ordered in the addressbook node. Reversing sort order - so the output will be "Christopher", "Bob" and "Alice" - is just a matter of using the `reverse` keyword.
  
  	foreach "$doc/addressbook/contact" {
 		sort "firstname" { reverse "true()" }
@@ -339,7 +339,7 @@ Sorting keys are not limited to node values, but can be any effective value "ext
 
 Oops. This will print "Christopher", "Bob" and "Alice" again, when obviously "Christopher" - with length 11 - should come last. What went wrong? 
 
-By default, values are compared lexicographically, which means that "11" comes before "3" and "5", rather than after it. When sorting numeric values, we must use an appropriate `comparator``, as in
+By default, values are compared lexicographically, which means that "11" comes before "3" and "5", rather than after it. When sorting numeric values, we should use an appropriate `comparator``, as in
 
  	foreach ... {
 		sort "string-length(firstname)" { comparator "sdt:compare-number(?,?)" }
@@ -363,15 +363,64 @@ This comparator even accepts language tags, so to please our Swedish audience we
 
 because to them, Å is a letter that comes after Z - rather than the funny looking A it is to us.
 
-To wrap things up, here is an example that uses multiple sort statements to order contacts first by the number of phones they own, and then by their first name: 
+To wrap things up, here is an example - without comparators for simplicity - that uses multiple sort statements to order contacts first by the number of phones they own, and then by their first name:
 
 	foreach "$doc/addressbook/contact" {
 		sort "count(phonenumber)" sort "firstname" 
-		println "concat(firstname, ' has ', count(phonenumber), '.')"
+		println "concat(firstname, ' has ', count(phonenumber), ' phone(s).')"
 	}
 
-	Christopher has 1.
-	Alice has 2.
-	Bob has 2.
+	Alice has 1 phone(s).
+	Chris has 1 phone(s).
+	Bob has 2 phone(s).
+
+
+### A group effort
+
+All good things come in threes, so we will visit the subject of iteration once more. The concept of grouping is best explained with an example, applied to our addressbook:
+
+	foreach "$doc/addressbook/contact" {
+		group "count(phonenumber)" 
+		println "concat('Contacts with ', $sdt:current-grouping-key, ' phone(s): ', count($sdt:current-group))" 
+	}
+	
+This will produce the following output:
+
+	Contacts with 1 phone(s): 2
+	Contacts with 2 phone(s): 1
+	
+This appears to be correct, since Alice and Chris both have one phone and only Bob has two. But how? Let's break it down. The first line is just the regular `foreach` statement that we have been using several times already. But obviously it did not iterate the contacts, because only two lines were printed, not three. 
+
+This is due to the use of the `group` attribute on the second line, which states that the specified nodes (e.g. contacts) are to be grouped by the number of phonenumber nodes they contain, and the `foreach` statement will iterate those *groups*. 
+
+As we have one group of contacts with one phonenumber node (Alice and Chris), and another containing a single contact that has two (Bob), the `println` statement on the third line gets executed twice; once for each group.
+
+So what does it print? The automatic variables available in the compound statement speak for themselves. There's the *current-grouping-key*, which in this case is the number of phones - either 1 or 2 - and then there's the corresponding *current-group* which is the set of contact nodes with that particular number of phones.
+
+Typically (but not necessarily) you will not only iterate groups but also the nodes *in* those groups, using a nested foreach loop:
+
+	foreach "$doc/addressbook/contact" {
+		group "count(phonenumber)"
+		println "concat('Contacts with ', $sdt:current-grouping-key, ' phone(s):')" 
+		foreach "$sdt:current-group" {
+			println "concat(' - ', firstname)"
+		}
+	}
+
+	Contacts with 1 phone(s):
+	 - Alice
+	 - Chris
+	Contacts with 2 phone(s):
+	 - Bob
+
+Grouping in SDT is not as versatile as in XSLT, but powerful nonetheless. It is all about choosing the right grouping key expression. For example
+
+	foreach "$doc/addressbook/contact" {
+		sort "firstname" group "sdt:left(firstname,1)"
+		...
+	}
+
+will first sort contacts lexicographically, then group them by the first letter of their name, creating a kind of of dictionary view. Or, if the addressbook would contain a birthday node, a birthday calendar could be created by selecting the month from that birthday as a grouping key.
+
 
 [ TO BE CONTINUED ]

@@ -1,16 +1,15 @@
-addressbook {
-	contact "1" {
-		firstname "Alice"
-		phonenumber "06-11111111"
-		phonenumber "06-22222222"
+	addressbook {
+		contact "1" {
+			firstname "Alice"
+			phonenumber "06-11111111"
+		}
+		contact "2" {
+			firstname "Bob"
+			phonenumber "06-22222222"
+			phonenumber "06-33333333"
+		}
+		contact "3" {
+			firstname "Chris"
+			phonenumber "06-44444444"
+		}
 	}
-	contact "2" {
-		firstname "Bob"
-		phonenumber "06-33333333"
-		phonenumber "06-44444444"
-	}
-	contact "3" {
-		firstname "Christopher"
-		phonenumber "06-55555555"
-	}
-}

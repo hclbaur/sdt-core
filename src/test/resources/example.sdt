@@ -3,8 +3,12 @@ transform {
 	param "filename" { select "'addressbook.sda'" }
 	variable "doc" { select "document($filename)" }
 	
-	foreach "sdt:tokenize('127.0.0.1:80', '[\\.:]')" {
-		println "."
+	foreach "$doc/addressbook/contact" {
+		group "count(phonenumber)"
+		println "concat('Contacts with ', $sdt:current-grouping-key, ' phone(s):')" 
+		foreach "$sdt:current-group" {
+			println "firstname"
+		}
 	}
 	
 	node "contacts" {

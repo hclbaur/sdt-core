@@ -5,6 +5,7 @@
 This is work in progress.
 
 - Added tokenize() function.
+- Added group attribute to foreach statement.
 - Fixed issue in sort comparator and statement context.
 - Closed issue #12 (possible to overwrite parameter).
 

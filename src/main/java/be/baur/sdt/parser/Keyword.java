@@ -13,6 +13,7 @@ public enum Keyword {
 	COPY("copy", true, false), 				// leaf statement
 	FOREACH("foreach", false, false), 
 	IF("if", false, false), 
+	GROUP("group", true, true),				// attribute
 	NODE("node", false, false), 
 	OTHERWISE("otherwise", false, false),
 	PARAM("param", false, false), 
@@ -30,6 +31,7 @@ public enum Keyword {
 		WHEN.setAllowedIn(Arrays.asList(CHOOSE));
 		OTHERWISE.setAllowedIn(Arrays.asList(CHOOSE));
 		
+		GROUP.setAllowedIn(Arrays.asList(FOREACH));
 		SORT.setAllowedIn(Arrays.asList(FOREACH));
 		REVERSE.setAllowedIn(Arrays.asList(SORT));
 		COMPARATOR.setAllowedIn(Arrays.asList(SORT));

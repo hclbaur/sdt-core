@@ -30,8 +30,6 @@ public class TestSDAXPath {
 		Node alice = contacts.get(0); 
 		Node bob = contacts.get(1);
 		
-		System.out.print("general ");
-		
 		t.so("S01", "/", doc, "["+doc.toString()+"]");
 		t.so("S02", ".", doc, "["+doc.toString()+"]");
 		t.so("S03", "*", doc, "["+addressbook.toString()+"]");
@@ -78,7 +76,7 @@ public class TestSDAXPath {
 		t.so("S31", "name()", alice, "contact");
 		t.so("S32", "name()", doc, ""); // returns empty string
 		
-		System.out.print("\n	string ");
+		System.out.print("\n	    string ");
 
 		t.so("S33", "string(/addressbook/contact)", doc, "1");
 		t.so("S34", "string()", addressbook, "");
@@ -123,7 +121,7 @@ public class TestSDAXPath {
 		t.so("S62", "false()", doc, "false");		
 		t.so("S63", "lang(addressbook)", doc, "false");	
 		
-		System.out.print("\n	number ");
+		System.out.print("\n	    number ");
 		
 		t.so("S64", "number(/addressbook/contact)", doc, "1.0");
 		t.so("S65", "number()", bob, "2.0");
@@ -161,7 +159,7 @@ public class TestSDAXPath {
 		t.so("S86", "sdt:right(/addressbook/contact[2]/firstname,2)", doc, "ob");
 		t.so("S87", "sdt:right(/addressbook/contact[2]/firstname,4)", doc, "Bob");
 		
-		System.out.print("\n	");
+		System.out.print("\n	    ");
 		
 		t.so("S90", "sdt:compare-number(1,3)", doc, "-1.0");
 		t.so("S91", "sdt:compare-number(3,'3')", doc, "0.0");
