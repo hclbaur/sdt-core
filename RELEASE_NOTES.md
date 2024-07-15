@@ -4,6 +4,7 @@
 
 This is work in progress.
 
+- SDT parser improvements.
 - Added tokenize() function.
 - Added group attribute to foreach statement.
 - Fixed issue in sort comparator and statement context.

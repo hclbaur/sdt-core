@@ -5,6 +5,10 @@ import java.util.List;
 
 /**
  * Statement and attribute keywords allowed by the SDT syntax.
+ * 
+ * <pre>
+ * Keyword(String tag, Boolean isLeaf, boolean isAttribute)
+ * </pre>
  */
 public enum Keyword {
 	
@@ -22,22 +26,23 @@ public enum Keyword {
 	REVERSE("reverse", true, true),			// attribute
 	SELECT("select", true, true),			// attribute
 	SORT("sort", null, false),
+	TRANSFORM("transform", false, false),
 	VALUE("value", true, true),				// attribute
 	VARIABLE("variable", false, false), 
 	WHEN("when", false, false),
 	;
 	
 	static {
-		WHEN.setAllowedIn(Arrays.asList(CHOOSE));
-		OTHERWISE.setAllowedIn(Arrays.asList(CHOOSE));
-		
-		GROUP.setAllowedIn(Arrays.asList(FOREACH));
-		SORT.setAllowedIn(Arrays.asList(FOREACH));
-		REVERSE.setAllowedIn(Arrays.asList(SORT));
 		COMPARATOR.setAllowedIn(Arrays.asList(SORT));
-		
-		VALUE.setAllowedIn(Arrays.asList(NODE));
+		GROUP.setAllowedIn(Arrays.asList(FOREACH));
+		OTHERWISE.setAllowedIn(Arrays.asList(CHOOSE));
+		PARAM.setAllowedIn(Arrays.asList(TRANSFORM));
+		REVERSE.setAllowedIn(Arrays.asList(SORT));
 		SELECT.setAllowedIn(Arrays.asList(PARAM, VARIABLE));
+		SORT.setAllowedIn(Arrays.asList(FOREACH));
+		TRANSFORM.setAllowedIn(Arrays.asList());
+		VALUE.setAllowedIn(Arrays.asList(NODE));
+		WHEN.setAllowedIn(Arrays.asList(CHOOSE));
 	}
 	
 

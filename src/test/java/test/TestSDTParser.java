@@ -75,83 +75,86 @@ public final class TestSDTParser {
 		System.out.print("\n            "); /* test invalid SDT */
 		f.s("F01", "transfrom \"\"", "/transfrom: 'transform' statement expected");
 		f.s("F02", "transform \"\"", "/transform: statement 'transform' requires a compound statement");
-		f.s("F03", "transform { test \"\" }", "/transform/test: statement 'test' is unknown");
-		f.s("F04", "transform { select \"\" }", "/transform/select: statement 'select' is not allowed here");
-		f.s("F05", "transform { test { } }", "/transform/test: statement 'test' is unknown");
-		f.s("F06", "transform { when { } }", "/transform/when: statement 'when' is not allowed here");
-		f.s("F07", "transform { otherwise { } }", "/transform/otherwise: statement 'otherwise' is not allowed here");
-		f.s("F08", "transform { sort \"\" }", "/transform/sort: statement 'sort' is not allowed here");
-		f.s("F09", "transform { group \"\" }", "/transform/group: statement 'group' is not allowed here");
-		f.s("F10", "transform { print \"\" }", "/transform/print: statement 'print' requires an XPath expression");
-		f.s("F11", "transform { println { } }", "/transform/println: statement 'println' expects no compound statement");
-		f.s("F12", "transform { print \"\" { } }", "/transform/print: statement 'print' expects no compound statement");
-		f.s("F13", "transform { println \"\" { select \"\" } }", "/transform/println: statement 'println' expects no compound statement");
+		f.s("F03", "transform \"a\"", "/transform: statement 'transform' requires no expression");
+		f.s("F04", "transform { test \"\" }", "/transform/test: keyword 'test' is unknown");
+		f.s("F05", "transform { select \"\" }", "/transform/select: attribute 'select' is not allowed here");
+		f.s("F06", "transform { test { } }", "/transform/test: keyword 'test' is unknown");
+		f.s("F07", "transform { when { } }", "/transform/when: statement 'when' is not allowed here");
+		f.s("F08", "transform { otherwise { } }", "/transform/otherwise: statement 'otherwise' is not allowed here");
+		f.s("F09", "transform { sort \"\" }", "/transform/sort: statement 'sort' is not allowed here");
+		f.s("F10", "transform { group \"\" }", "/transform/group: attribute 'group' is not allowed here");
+		f.s("F11", "transform { print \"\" }", "/transform/print: statement 'print' requires an expression");
+		f.s("F12", "transform { println { } }", "/transform/println: statement 'println' expects no compound statement");
+		f.s("F13", "transform { print \"\" { } }", "/transform/print: statement 'print' expects no compound statement");
+		f.s("F14", "transform { println \"\" { select \"\" } }", "/transform/println: statement 'println' expects no compound statement");
 
 		f.s("F15", "transform { param \"\" }", "/transform/param: statement 'param' requires a compound statement");
 		f.s("F16", "transform { variable { } }", "/transform/variable: statement 'variable' requires a variable name");
-		f.s("F17", "transform { param \"\" { } }", "/transform/param: statement 'param' requires a variable name");
-		f.s("F18", "transform { variable \"v\" { value \"\" } }", "/transform/variable/value: statement 'value' is not allowed here");
+		f.s("F17", "transform { param \"v\" { } }", "/transform/param: 'select' attribute expected in 'param'");
+		f.s("F18", "transform { variable \"v\" { value \"\" } }", "/transform/variable/value: attribute 'value' is not allowed here");
 		f.s("F19", "transform { param \"\" { select \"\" } }", "/transform/param: statement 'param' requires a variable name");
-		f.s("F20", "transform { variable \"v\" { select \"\" } }", "/transform/variable/select: statement 'select' requires an XPath expression");
+		f.s("F20", "transform { variable \"v\" { select \"\" } }", "/transform/variable/select: attribute 'select' requires an expression");
 		f.s("F21", "transform { param \"p\" { select \"''\" print \"0\" } }", "/transform/param/print: statement 'print' is not allowed here");
 		f.s("F22", "transform { variable \":v\" { select \"''\" } }", "/transform/variable: variable name ':v' is invalid");
 		f.s("F23", "transform { param \"p\" { select \"0\" } param \"p\" { select \"1\" } }", "/transform/param[2]: parameter 'p' cannot be redeclared");
 		f.s("F24", "transform { if \"1\" { param \"p\" { select \"1\" } } }", "/transform/if/param: statement 'param' is not allowed here");
 		f.s("F25", "transform { param \"p\" { select \"0\" } variable \"p\" { select \"1\" } }", "/transform/variable: variable 'p' cannot overwrite parameter");
 		f.s("F26", "transform { variable \"v\" { select \"0\" } param \"v\" { select \"1\" } }", "/transform/param: parameter 'v' cannot overwrite variable");
+		f.s("F27", "transform { param \"p\" { select \"0\" select \"1\" } }", "/transform/param/select[1]: attribute 'select' can occur only once");
 		
 		System.out.print("\n            ");
 
 		f.s("F30", "transform { foreach \"\" }", "/transform/foreach: statement 'foreach' requires a compound statement");
-		f.s("F31", "transform { foreach { } }", "/transform/foreach: statement 'foreach' requires an XPath expression");
-		f.s("F32", "transform { foreach \"\" { } }", "/transform/foreach: statement 'foreach' requires an XPath expression");
-		f.s("F33", "transform { foreach \"\" { value \"\" } }", "/transform/foreach: statement 'foreach' requires an XPath expression");
-		f.s("F34", "transform { foreach \"a\" { value \"\" } }", "/transform/foreach/value: statement 'value' is not allowed here");
+		f.s("F31", "transform { foreach { } }", "/transform/foreach: statement 'foreach' requires an expression");
+		f.s("F32", "transform { foreach \"\" { } }", "/transform/foreach: statement 'foreach' requires an expression");
+		f.s("F33", "transform { foreach \"\" { test { } } }", "/transform/foreach/test: keyword 'test' is unknown");
+		f.s("F34", "transform { foreach \"\" { value \"\" } }", "/transform/foreach/value: attribute 'value' is not allowed here");
 		f.s("F35", "transform { foreach \"a\" { choose { } } }", "/transform/foreach/choose: 'when' statement expected in 'choose'");
 		f.s("F36", "transform { foreach \"a\" { when { } } }", "/transform/foreach/when: statement 'when' is not allowed here");
-		s.s("F37", "transform { foreach \"/i\" { sort \".\" { value \"\" } } }", "error at /transform/foreach/sort/value: statement 'value' is not allowed here");
+		s.s("F37", "transform { foreach \"/i\" { sort \".\" { value \"\" } } }", "error at /transform/foreach/sort/value: attribute 'value' is not allowed here");
 		s.s("F38", "transform { foreach \"/i\" { print \".\" sort \".\" } }", "error at /transform/foreach/sort: statement 'sort' is misplaced");
 		s.s("F39", "transform { foreach \"/i\" { sort \".\" print \".\" sort \".\" } }", "error at /transform/foreach/sort[2]: statement 'sort' is misplaced");
-		s.s("F40", "transform { foreach \"/i\" { group \".\" { print \".\" } } }", "error at /transform/foreach/sort[2]: statement 'sort' is misplaced");
+		s.s("F40", "transform { foreach \"/i\" { group \".\" { print \".\" } } }", "error at /transform/foreach/group: attribute 'group' expects no compound statement");
 		
 		f.s("F41", "transform { if \"\" }", "/transform/if: statement 'if' requires a compound statement");
-		f.s("F42", "transform { if { } }", "/transform/if: statement 'if' requires an XPath expression");
-		f.s("F43", "transform { if \"\" { } }", "/transform/if: statement 'if' requires an XPath expression");
-		f.s("F44", "transform { if \"\" { value \"\" } }", "/transform/if: statement 'if' requires an XPath expression");
-		f.s("F45", "transform { if \"true()\" { value \"\" } }", "/transform/if/value: statement 'value' is not allowed here");
+		f.s("F42", "transform { if { } }", "/transform/if: statement 'if' requires an expression");
+		f.s("F43", "transform { if \"\" { } }", "/transform/if: statement 'if' requires an expression");
+		f.s("F44", "transform { if \"\" { test { } } }", "/transform/if/test: keyword 'test' is unknown");
+		f.s("F45", "transform { if \"\" { value \"\" } }", "/transform/if/value: attribute 'value' is not allowed here");
 		f.s("F46", "transform { if \"true()\" { choose { } } }", "/transform/if/choose: 'when' statement expected in 'choose'");
 		f.s("F47", "transform { if \"true()\" { otherwise { } }}", "/transform/if/otherwise: statement 'otherwise' is not allowed here");
 		
 		System.out.print("\n            ");
 		f.s("F50", "transform { choose \"\" }", "/transform/choose: statement 'choose' requires a compound statement");
 		f.s("F51", "transform { choose { } }", "/transform/choose: 'when' statement expected in 'choose'");
-		f.s("F52", "transform { choose \"a\" { } }", "/transform/choose: statement 'choose' requires no value");
-		f.s("F53", "transform { choose { value \"\" } }", "/transform/choose/value: statement 'value' is not allowed here");
-		f.s("F54", "transform { choose { if { } } }", "/transform/choose/if: statement 'if' is not allowed here");
-		f.s("F55", "transform { choose { otherwise \"''\" } }", "/transform/choose/otherwise: statement 'otherwise' requires a compound statement");
-		f.s("F56", "transform { choose { otherwise { } } }", "/transform/choose/otherwise: 'when' statement expected");
-		f.s("F57", "transform { choose { otherwise \"\" { } } }", "/transform/choose/otherwise: 'when' statement expected");
-		f.s("F58", "transform { choose { otherwise { print \"''\" } } }", "/transform/choose/otherwise: 'when' statement expected");
-		f.s("F59", "transform { choose { otherwise \"a\" { print \"''\" } } }", "/transform/choose/otherwise: statement 'otherwise' requires no value");
-		f.s("F60", "transform { choose { when \"1\" } }", "/transform/choose/when: statement 'when' requires a compound statement");
-		f.s("F61", "transform { choose { when { } } }", "/transform/choose/when: statement 'when' requires an XPath expression");
-		f.s("F62", "transform { choose { when \"\" { } } }", "/transform/choose/when: statement 'when' requires an XPath expression");
-		f.s("F63", "transform { choose { when { print \"''\" } } }", "/transform/choose/when: statement 'when' requires an XPath expression");
-		f.s("F64", "transform { choose { when \"1\" { select \"\" } } }", "/transform/choose/when/select: statement 'select' is not allowed here");
-		f.s("F65", "transform { choose { when \"1\" { print \"''\" } otherwise { print \"''\" }  when { } } }", "/transform/choose/otherwise: statement 'otherwise' is misplaced");
+		f.s("F52", "transform { choose \"a\" { } }", "/transform/choose: statement 'choose' requires no expression");
+		f.s("F53", "transform { choose { test \"\" } }", "/transform/choose/test: keyword 'test' is unknown");
+		f.s("F54", "transform { choose { value \"\" } }", "/transform/choose/value: attribute 'value' is not allowed here");
+		f.s("F55", "transform { choose { if { } } }", "/transform/choose/if: statement 'if' is not allowed here");
+		f.s("F56", "transform { choose { otherwise \"\" } }", "/transform/choose/otherwise: statement 'otherwise' requires a compound statement");
+		f.s("F57", "transform { choose { otherwise { } } }", "/transform/choose/otherwise: 'when' statement expected");
+		f.s("F58", "transform { choose { otherwise \"\" { } } }", "/transform/choose/otherwise: 'when' statement expected");
+		f.s("F59", "transform { choose { otherwise { value \"\" } } }", "/transform/choose/otherwise/value: attribute 'value' is not allowed here");
+		f.s("F60", "transform { choose { otherwise \"a\" { print \"''\" } } }", "/transform/choose/otherwise: statement 'otherwise' requires no expression");
+		f.s("F61", "transform { choose { when \"1\" } }", "/transform/choose/when: statement 'when' requires a compound statement");
+		f.s("F62", "transform { choose { when { } } }", "/transform/choose/when: statement 'when' requires an expression");
+		f.s("F63", "transform { choose { when \"\" { } } }", "/transform/choose/when: statement 'when' requires an expression");
+		f.s("F64", "transform { choose { when { print \"''\" } } }", "/transform/choose/when: statement 'when' requires an expression");
+		f.s("F65", "transform { choose { when \"1\" { select \"\" } } }", "/transform/choose/when/select: attribute 'select' is not allowed here");
+		f.s("F66", "transform { choose { when \"1\" { print \"''\" } otherwise { print \"''\" }  when { } } }", "/transform/choose/otherwise: statement 'otherwise' is misplaced");
 		
 		f.s("F70", "transform { node \"\" }", "/transform/node: statement 'node' requires a compound statement");
 		f.s("F71", "transform { node { } }", "/transform/node: statement 'node' requires a node name");
-		f.s("F72", "transform { node \"a\" { select \"\" } }", "/transform/node/select: statement 'select' is not allowed here");
-		f.s("F73", "transform { node \"a\" { value \"\" } }", "/transform/node/value: statement 'value' requires an XPath expression");
+		f.s("F72", "transform { node \"a\" { select \"\" } }", "/transform/node/select: attribute 'select' is not allowed here");
+		f.s("F73", "transform { node \"a\" { value \"\" } }", "/transform/node/value: attribute 'value' requires an expression");
 		f.s("F74", "transform { node \"2\" { value \"''\" } }", "/transform/node: node name '2' is invalid");
 		
-		f.s("F80", "transform { copy \"\" }", "/transform/copy: statement 'copy' requires an XPath expression");
+		f.s("F80", "transform { copy \"\" }", "/transform/copy: statement 'copy' requires an expression");
 		f.s("F81", "transform { copy { } }", "/transform/copy: statement 'copy' expects no compound statement");
 		f.s("F82", "transform { copy \"/item\" { } }", "/transform/copy: statement 'copy' expects no compound statement");
 		f.s("F83", "transform { copy \"/item\" { value \"\" } }", "/transform/copy: statement 'copy' expects no compound statement");
 		
-		/* odd */ f.s("F84", "transform { transform { } }", "/transform/transform: statement 'transform' is unknown");
+		f.s("F84", "transform { transform { } }", "/transform/transform: statement 'transform' is not allowed here");
 	
 		
 		// test performance
@@ -166,6 +169,6 @@ public final class TestSDTParser {
 			}
 		});
 	
-		p.test("\nPerformance: P01", sdt, 12500, 30);
+		p.test("\nPerformance: P01", sdt, 12500, 1);
 	}
 }
