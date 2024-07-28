@@ -29,12 +29,12 @@ import be.baur.sdt.parser.SDTParser;
 public final class Transform extends AbstractNode {
 	
 	/**
-	 * Executes this transform in the supplied {@code TransformContext}. This method
-	 * returns an output {@code DataNode} which will empty if no nodes were created
-	 * during transformation.
+	 * Executes this transform with the supplied {@code TransformContext}. This method
+	 * returns an output {@code DataNode} which may be empty if no nodes were created
+	 * during transformation, but not null.
 	 * 
 	 * @param context the transformation context, not null
-	 * @return an output node, may be null
+	 * @return an output node, not null
 	 * @throws TransformException if an exception occurs during execution
 	 * @see TransformContext
 	 */

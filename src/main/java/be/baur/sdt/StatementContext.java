@@ -26,7 +26,7 @@ import be.baur.sda.DataNode;
  */
 public class StatementContext implements VariableContext {
 
-	private final StatementContext parent; // parent of this context
+	private final StatementContext parent; // the parent of this context
     private final Map<String, Object> variables = new HashMap<String, Object>();	
 
     private Object contextNode = new DataNode("dummy"); // dummy (empty) context node
@@ -42,7 +42,7 @@ public class StatementContext implements VariableContext {
 	
 	/*
 	 * Private constructor to create a context from a parent context. The child
-	 * context will inherit the current context node and current output node.
+	 * context will inherit the current context node and the current output node.
 	 */
 	private StatementContext(StatementContext parent) {
 		this.parent = parent;
@@ -85,7 +85,7 @@ public class StatementContext implements VariableContext {
 	/**
 	 * Returns the output document node.
 	 * 
-	 * @return a data node, never null
+	 * @return a data node, not null
 	 */
 	public DataNode getOutputNode() {
 		return outputNode;
@@ -95,7 +95,7 @@ public class StatementContext implements VariableContext {
 	/**
 	 * Sets the current output node. A null value is not allowed.
 	 * 
-	 * @param outputNode a Node, not null
+	 * @param outputNode a data node, not null
 	 */
 	public void setOutputNode(DataNode outputNode) {
 		Objects.requireNonNull(outputNode, "outputNode must not be null");

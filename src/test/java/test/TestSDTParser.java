@@ -168,7 +168,7 @@ public final class TestSDTParser {
 				e.printStackTrace();
 			}
 		});
-	
+
 		p.test("\nPerformance: P01", sdt, 12500, 1);
 	}
 }

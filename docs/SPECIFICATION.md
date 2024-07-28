@@ -21,6 +21,7 @@
 	- [compare-number](#compare-number)
 	- [compare-string](#compare-string)
 	- [left](#left)
+	- [render-sda](#render-sda)
 	- [right](#right)
 	- [string-join](#string-join)
 	- [tokenize](#tokenize)
@@ -296,6 +297,16 @@ Returns the specified number of characters from the start of the argument string
 <code>sdt:left('12345', 3)</code> returns <code>"123"</code>.
 
 If the second argument is not a number or less than 1, an empty string is returned. If it exceeds the string length of the first argument, the entire string is returned.
+
+
+#### render-sda
+
+<code><i>string</i> sdt:render-sda( <i>node(set)</i> )</code><br>
+<code><i>string</i> sdt:render-sda( <i>node(set)</i>, <i>boolean pretty</i> )</code>
+
+Renders the first SDA node in the set as an SDA string in "canonical" format. If the optional second argument evaluates to true, the default SDA formatter is used to produce a reader friendly representation.
+ 
+This functions returns an empty string if the node set is empty or contains something that is not an SDA node.
 
 
 #### right

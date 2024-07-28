@@ -5,14 +5,14 @@
 This is work in progress.
 
 - SDT parser improvements.
-- Added tokenize() function.
-- Added group attribute to foreach statement.
+- Added foreach group functionality.
+- Added functions tokenize() and render-sda().
 - Fixed issue in sort comparator and statement context.
 - Closed issue #12 (possible to overwrite parameter).
 
 ## Compatibility
 
-- Requires at least Java 8, sda-core 2.2.1 and Jaxen 2.0.0.
+- Requires Java 8, sda-core 2.2.1 and Jaxen 2.0.0.
 
 ## Previous releases
 

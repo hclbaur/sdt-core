@@ -122,7 +122,7 @@ public class TransformContext {
 	 * Returns the {@code Writer} defined in this context. If no writer was set
 	 * explicitly, this will be a writer to standard output.
 	 * 
-	 * @return a writer, never null
+	 * @return a writer, not null
 	 */
 	public Writer getWriter() {
 		return writer;
@@ -132,7 +132,7 @@ public class TransformContext {
 	/**
 	 * Returns an unmodifiable view of the parameters defined in this context.
 	 * 
-	 * @return a map, never null, can be empty
+	 * @return a map, not null, may be empty
 	 */
 	public  Map<String, Object> getParameters() {
 		return Collections.unmodifiableMap(parameters);

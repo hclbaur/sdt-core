@@ -7,7 +7,7 @@ transform {
 		group "count(phonenumber)"
 		println "concat('Contacts with ', $sdt:current-grouping-key, ' phone(s):')" 
 		foreach "$sdt:current-group" {
-			println "firstname"
+			println "sdt:render-sda(.)"
 		}
 	}
 	

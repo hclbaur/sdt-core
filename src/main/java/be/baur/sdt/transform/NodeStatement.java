@@ -14,16 +14,16 @@ import be.baur.sdt.xpath.SDAXPath;
 
 /**
  * The {@code NodeStatement} creates a new node with the specified name and an
- * optional value from an evaluated XPath expression. Any number of child nodes
- * can be created by the compound statement.
+ * optional value from an evaluated XPath expression. Any child nodes can be
+ * created by the compound statement.
  */
 public class NodeStatement extends Statement {
 	
 	private String nodeName; // name of the node created by this statement
-	private String valueExpression; // Expression that determines if order is reversed (descending)
+	private String valueExpression; // expression that sets the node value
 
 	/**
-	 * Creates a node statement without a value.
+	 * Creates a {@code NodeStatement} with the name of the node to create.
 	 * 
 	 * @param name a valid node name
 	 * @throws IllegalArgumentException if name is invalid
@@ -84,8 +84,8 @@ public class NodeStatement extends Statement {
 	void execute(TransformContext traco, StatementContext staco) throws TransformException {
 		/*
 		 * Execution: create a new SDA node, and add it to the current output node.
-		 * Then, execute the compound statement with the new node set as the current
-		 * output node to collect any child nodes created "downstream".
+		 * Then, execute the compound statement with the new node as the current output
+		 * node to collect any child nodes created "downstream".
 		 */
 		try {
 			
