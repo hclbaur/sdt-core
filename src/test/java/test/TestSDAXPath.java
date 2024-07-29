@@ -1,7 +1,4 @@
 package test;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
 import java.util.List;
 
 import be.baur.sda.Node;
@@ -20,10 +17,8 @@ public class TestSDAXPath {
 			}
 		});
 		
-		URL url = TestSDAXPath.class.getResource("/addressbook.sda");
-		String file = url.getFile(); InputStream in = url.openStream();
-		
-		Node doc = (Node) DocumentNavigator.getDocument(new InputStreamReader(in, "UTF-8"));
+		String file = TestSDAXPath.class.getResource("/addressbook.sda").getFile();
+		Node doc = (Node) DocumentNavigator.getInstance().getDocument(file);
 		
 		Node addressbook = doc.nodes().get(0);
 		List<Node> contacts = addressbook.nodes();
