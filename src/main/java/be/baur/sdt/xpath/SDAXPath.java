@@ -40,8 +40,8 @@ public class SDAXPath extends BaseXPath {
 		ctx.registerFunction(SDT.FUNCTIONS_NS_URI, "left", new LeftFunction());
 		ctx.registerFunction(SDT.FUNCTIONS_NS_URI, "right", new RightFunction());
 		ctx.registerFunction(SDT.FUNCTIONS_NS_URI, "render-sda", new RenderSDAFunction());
-		ctx.registerFunction(SDT.W3CFUNCTIONS_NS_URI, "string-join", new StringJoinFunction());
 		ctx.registerFunction(SDT.FUNCTIONS_NS_URI, "tokenize", new TokenizeFunction());
+		ctx.registerFunction(SDT.W3CFUNCTIONS_NS_URI, "string-join", new StringJoinFunction());
 	}
 	
 	/**
@@ -53,8 +53,8 @@ public class SDAXPath extends BaseXPath {
 	public SDAXPath(String expression) throws JaxenException {
 		
 		super(expression, DocumentNavigator.getInstance());
-		this.addNamespace(SDT.W3CFUNCTIONS_NS_PFX, SDT.W3CFUNCTIONS_NS_URI);
 		this.addNamespace(SDT.FUNCTIONS_NS_PFX, SDT.FUNCTIONS_NS_URI);
+		this.addNamespace(SDT.W3CFUNCTIONS_NS_PFX, SDT.W3CFUNCTIONS_NS_URI);
 	}
 
 }
