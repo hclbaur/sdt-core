@@ -85,7 +85,7 @@ public class NodeStatement extends Statement {
 		/*
 		 * Execution: create a new SDA node, and add it to the current output node.
 		 * Then, execute the compound statement with the new node as the current output
-		 * node to collect any child nodes created "downstream".
+		 * node to collect any child nodes that happen to be created.
 		 */
 		try {
 			
@@ -102,6 +102,11 @@ public class NodeStatement extends Statement {
 
 			List<Statement> statements = nodes();
 			if (statements.isEmpty()) return; // nothing to do
+			
+			// if any child nodes may be created downstream, this will be a (vacant) parent 
+			if ( ! findDescendant(n -> n instanceof NodeStatement || n instanceof CopyStatement).isEmpty() ) {
+				newNode.add(null);
+			}
 			
 			StatementContext coco = staco.newChild();
 			coco.setOutputNode(newNode);

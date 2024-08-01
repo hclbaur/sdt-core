@@ -2,7 +2,7 @@ transform {
 
 	param "filename" { select "'addressbook.sda'" }
 	variable "doc" { select "document($filename)" }
-	
+
 	node "contacts" {
 		foreach "$doc/addressbook/contact" {
 			group "count(phonenumber)"		
