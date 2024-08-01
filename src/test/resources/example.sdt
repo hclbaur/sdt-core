@@ -2,25 +2,25 @@ transform {
 
 	param "filename" { select "'addressbook.sda'" }
 	variable "doc" { select "document($filename)" }
-	
-	foreach "$doc/addressbook/contact" {
-		group "count(phonenumber)"
-		println "concat('Contacts with ', $sdt:current-grouping-key, ' phone(s):')" 
-		foreach "$sdt:current-group" {
-			println "sdt:render-sda(.)"
-		}
-	}
-	
+
 	node "contacts" {
 		foreach "$doc/addressbook/contact" {
+			group "count(phonenumber)"		
 			sort "count(phonenumber)" { comparator "sdt:compare-number(?,?)" }
 			sort "firstname" { reverse "true()" }
-			node "person" { 
-				value "concat(upper-case(firstname),.)"
-				copy "firstname"
-				node "phones" {
-					value "fn:string-join(phonenumber,',')"
+			node "group" {
+				node "phones" { 
+					value "$sdt:current-grouping-key" 
 				}
+				foreach "$sdt:current-group" {
+					node "person" { 
+						value "concat(upper-case(firstname),.)"
+						copy "firstname"
+						node "phonenumbers" {
+							value "fn:string-join(phonenumber,',')"
+						}
+					}
+				}		
 			}
 		}	
 	}

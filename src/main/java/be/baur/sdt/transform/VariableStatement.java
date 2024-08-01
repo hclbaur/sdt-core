@@ -65,10 +65,10 @@ public class VariableStatement extends XPathStatement {
 	 * @return true or false
 	 */
 	public static boolean isVarName(String name) {
-		// No attempt is made to check if name is a valid XPath variable name
-		// (see https://www.w3.org/TR/REC-xml/#NT-Name). At least, we disallow
+		// No attempt is made to check if name is a valid XSLT variable name
+		// (see https://www.w3.org/TR/REC-xml-names/#NT-QName). At least, we disallow
 		// the declaration of variables with a namespace prefix (for now).
-		return !(name.isEmpty() || name.contains(":"));
+		return !(name == null || name.isEmpty() || name.contains(":"));
 	}
 
 

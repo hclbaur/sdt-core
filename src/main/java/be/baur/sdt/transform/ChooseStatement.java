@@ -57,7 +57,7 @@ public class ChooseStatement extends Statement {
 				// we have a when that applies, or an otherwise, or neither.
 				if (test || statement instanceof OtherwiseStatement) {
 					
-					// execute compound of when or otherwise in new context
+					// execute compound of when or otherwise in new compound context (coco)
 					StatementContext coco = staco.newChild();
 					for (Node compound : statement.nodes()) {
 						((Statement) compound).execute(traco, coco);

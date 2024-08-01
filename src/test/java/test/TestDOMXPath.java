@@ -1,19 +1,12 @@
 package test;
-import java.io.IOException;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
 import org.jaxen.dom.DOMXPath;
+import org.jaxen.dom.DocumentNavigator;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
 public class TestDOMXPath {
 
-	public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException {
+	public static void main(String[] args) throws Exception {
 
 		Test t = new Test( (str,obj) -> {
 			try {
@@ -23,23 +16,21 @@ public class TestDOMXPath {
 			}
 		});
 		
-		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();   
-		factory.setNamespaceAware(true);  
-		DocumentBuilder builder = factory.newDocumentBuilder();   
-		InputSource data = new InputSource(TestDOMXPath.class.getResourceAsStream("/addressbook.xml"));
-		Node doc = builder.parse(data); 
+
+		String file = TestDOMXPath.class.getResource("/addressbook.xml").getFile(); 
+		Node doc = (Node) DocumentNavigator.getInstance().getDocument(file);
 		
 		Node addressbook = doc.getChildNodes().item(0);
 		NodeList contacts = addressbook.getChildNodes();
 		Node alice = contacts.item(1); 
 		Node bob = contacts.item(3);
 		
-		t.so("S01", "/", doc, "["+doc.toString()+"]");
-		t.so("S02", ".", doc, "["+doc.toString()+"]");
-		t.so("S03", "*", doc, "["+addressbook.toString()+"]");
+		t.so("S01", "/", doc, "[[#document: null]]");
+		t.so("S02", ".", doc, "[[#document: null]]");
+		t.so("S03", "*", doc, "[[addressbook: null]]");
 		
-		t.so("S04", "/addressbook", doc, "["+addressbook.toString()+"]");
-		t.so("S05", "/addressbook/contact", doc, "["+alice.toString()+", "+bob.toString()+"]");
+		t.so("S04", "/addressbook", doc, "[[addressbook: null]]");
+		t.so("S05", "/addressbook/contact", doc, "[[contact: null], [contact: null]]");
 		t.so("S06", "/addressbook/contact/*", doc, "[[firstname: null], [phonenumber: null], [phonenumber: null], [firstname: null], [phonenumber: null], [phonenumber: null]]");
 		
 		t.so("S07", "/addressbook/contact/phonenumber/text()", doc, "[[#text: 06-11111111], [#text: 06-22222222], [#text: 06-33333333], [#text: 06-44444444]]");
@@ -147,7 +138,7 @@ public class TestDOMXPath {
 		t.so("S77", "lower-case(/addressbook/contact/firstname)", doc, "alice");
 		t.so("S78", "upper-case(firstname)", bob, "BOB");
 		
-		t.so("S79", "document('/tmp/addressbook.xml')", addressbook, "[[#document: null]]");
+		t.so("S79", "document('"+ file + "')", addressbook, "[[#document: null]]");
 	}
 
 }

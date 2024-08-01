@@ -8,6 +8,7 @@ This is work in progress.
 - Added foreach group functionality.
 - Added functions tokenize() and render-sda().
 - Fixed issue in sort comparator and statement context.
+- Closed issue #11 (impossible to create a vacant parent).
 - Closed issue #12 (possible to overwrite parameter).
 
 ## Compatibility
