@@ -1,12 +1,13 @@
 package be.baur.sdt.transform;
 
-import be.baur.sda.Node;
+import org.jaxen.XPath;
+
 import be.baur.sda.DataNode;
+import be.baur.sda.Node;
 import be.baur.sdt.StatementContext;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.TransformException;
 import be.baur.sdt.parser.Keyword;
-import be.baur.sdt.xpath.SDAXPath;
 
 /**
  * The <code>WhenStatement</code> is a mandatory subordinate statement of the
@@ -20,7 +21,7 @@ public class WhenStatement extends XPathStatement {
 	 * 
 	 * @param xpath the XPath to be evaluated, not null
 	 */
-	public WhenStatement(SDAXPath xpath) {
+	public WhenStatement(XPath xpath) {
 		super(xpath);
 	}
 

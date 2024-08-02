@@ -3,6 +3,8 @@ package be.baur.sdt.transform;
 import java.util.List;
 import java.util.Objects;
 
+import org.jaxen.XPath;
+
 import be.baur.sda.DataNode;
 import be.baur.sdt.StatementContext;
 import be.baur.sdt.TransformContext;
@@ -29,7 +31,7 @@ public class VariableStatement extends XPathStatement {
 	 * @param xpath the XPath to be evaluated, not null
 	 * @throws IllegalArgumentException if name is invalid
 	 */
-	public VariableStatement(String name, SDAXPath xpath) {
+	public VariableStatement(String name, XPath xpath) {
 		super(xpath); setVarName(name);
 	}
 
@@ -81,7 +83,7 @@ public class VariableStatement extends XPathStatement {
 		 * the same name).
 		 */
 		try {
-			SDAXPath xpath = new SDAXPath(getExpression());
+			XPath xpath = new SDAXPath(getExpression());
 			xpath.setVariableContext(staco);
 			Object value = xpath.evaluate(staco.getContextNode());
 			

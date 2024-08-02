@@ -3,6 +3,8 @@ package be.baur.sdt.transform;
 import java.util.List;
 import java.util.Objects;
 
+import org.jaxen.XPath;
+
 import be.baur.sda.DataNode;
 import be.baur.sda.Node;
 import be.baur.sda.SDA;
@@ -63,7 +65,7 @@ public class NodeStatement extends Statement {
 	 * 
 	 * @param xpath an XPath object, not null
 	 */
-	public void setValueExpression(SDAXPath xpath) {
+	public void setValueExpression(XPath xpath) {
 		valueExpression = Objects.requireNonNull(xpath, "xpath must not be null").toString();
 	}
 
@@ -92,7 +94,7 @@ public class NodeStatement extends Statement {
 			String value = null;
 			
 			if (valueExpression != null) {
-				SDAXPath xpath = new SDAXPath(valueExpression);
+				XPath xpath = new SDAXPath(valueExpression);
 				xpath.setVariableContext(staco);
 				value = xpath.stringValueOf(staco.getContextNode());
 			}

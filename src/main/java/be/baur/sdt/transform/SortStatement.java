@@ -5,6 +5,7 @@ import java.util.Objects;
 
 import org.jaxen.JaxenException;
 import org.jaxen.JaxenRuntimeException;
+import org.jaxen.XPath;
 
 import be.baur.sda.DataNode;
 import be.baur.sdt.StatementContext;
@@ -32,7 +33,7 @@ public class SortStatement extends XPathStatement {
 	 * 
 	 * @param xpath the XPath to be evaluated, not null
 	 */
-	public SortStatement(SDAXPath xpath) {
+	public SortStatement(XPath xpath) {
 		super(xpath);
 	}
 	
@@ -44,7 +45,7 @@ public class SortStatement extends XPathStatement {
 	 * 
 	 * @param xpath an XPath object, not null
 	 */
-	public void setReverseExpression(SDAXPath xpath) {
+	public void setReverseExpression(XPath xpath) {
 		reverseExpression = Objects.requireNonNull(xpath, "xpath must not be null").toString();
 	}
 
@@ -104,7 +105,7 @@ public class SortStatement extends XPathStatement {
 	 */
 	public Comparator<Object> getComparator(StatementContext context) throws JaxenException {
 
-		SDAXPath xpath = new SDAXPath(getExpression());
+		XPath xpath = new SDAXPath(getExpression());
 		xpath.setVariableContext(context);
 
 		Comparator<Object> comparator = new Comparator<Object>() {
@@ -116,7 +117,7 @@ public class SortStatement extends XPathStatement {
 					s2 = xpath.stringValueOf(o2);
 					if (comparatorExpression != null) {
 						String comexpr = comparatorExpression.replaceFirst("\\?", "'"+s1+"'");
-						SDAXPath comxp = new SDAXPath(comexpr.replaceFirst("\\?", "'"+s2+"'"));
+						XPath comxp = new SDAXPath(comexpr.replaceFirst("\\?", "'"+s2+"'"));
 						comxp.setVariableContext(context);
 						return (int) Math.signum((double) comxp.numberValueOf(context.getContextNode()));
 					}
@@ -128,7 +129,7 @@ public class SortStatement extends XPathStatement {
 		};
 
 		if (reverseExpression != null) {
-			SDAXPath revxp = new SDAXPath(reverseExpression);
+			XPath revxp = new SDAXPath(reverseExpression);
 			revxp.setVariableContext(context);
 			if (revxp.booleanValueOf(context.getContextNode()))
 				return comparator.reversed();

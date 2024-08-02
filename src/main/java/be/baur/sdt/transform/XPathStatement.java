@@ -2,7 +2,7 @@ package be.baur.sdt.transform;
 
 import java.util.Objects;
 
-import be.baur.sdt.xpath.SDAXPath;
+import org.jaxen.XPath;
 
 /**
  * The abstract superclass of all transform statements that evaluate at least
@@ -27,7 +27,7 @@ public abstract class XPathStatement extends Statement {
 	 * 
 	 * @param xpath an XPath object, not null
 	 */
-	public XPathStatement(SDAXPath xpath) {
+	public XPathStatement(XPath xpath) {
 		expression = Objects.requireNonNull(xpath, "xpath must not be null").toString();
 	}
 

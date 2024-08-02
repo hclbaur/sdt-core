@@ -1,11 +1,12 @@
 package be.baur.sdt.transform;
 
+import org.jaxen.XPath;
+
 import be.baur.sda.DataNode;
 import be.baur.sdt.StatementContext;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.TransformException;
 import be.baur.sdt.parser.Keyword;
-import be.baur.sdt.xpath.SDAXPath;
 
 /**
  * The {@code ParamStatement} evaluates an XPath expression and assigns the
@@ -25,7 +26,7 @@ public class ParamStatement extends VariableStatement {
 	 * @param xpath the XPath to be evaluated, not null
 	 * @throws IllegalArgumentException if name is invalid
 	 */
-	public ParamStatement(String name, SDAXPath xpath) {
+	public ParamStatement(String name, XPath xpath) {
 		super(name, xpath);
 	}
 

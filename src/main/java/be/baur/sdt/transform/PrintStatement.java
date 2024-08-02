@@ -2,6 +2,8 @@ package be.baur.sdt.transform;
 
 import java.io.Writer;
 
+import org.jaxen.XPath;
+
 import be.baur.sda.DataNode;
 import be.baur.sdt.StatementContext;
 import be.baur.sdt.TransformContext;
@@ -23,7 +25,7 @@ public class PrintStatement extends XPathStatement {
 	 * @param xpath     the XPath to be evaluated, not null
 	 * @param terminate whether to terminate the line
 	 */
-	public PrintStatement(SDAXPath xpath, boolean terminate) {
+	public PrintStatement(XPath xpath, boolean terminate) {
 		super(xpath); this.terminate = terminate;
 	}
 
@@ -45,7 +47,7 @@ public class PrintStatement extends XPathStatement {
 		 * separator) is written to the output and flushed.
 		 */
 		try {
-			SDAXPath xpath = new SDAXPath(getExpression()); 
+			XPath xpath = new SDAXPath(getExpression()); 
 			xpath.setVariableContext(staco);
 			String value = xpath.stringValueOf(staco.getContextNode());
 			
