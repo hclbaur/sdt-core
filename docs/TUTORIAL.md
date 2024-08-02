@@ -335,19 +335,15 @@ This will print "Alice", "Bob" and "Christopher" - regardless of how the contact
 
 Sorting keys are not limited to node values, but can be any effective value "extracted" by the sort expression. For instance, to sort contacts in order of increasing length of their firstname, you can use the *string-lenght()* function:
 
- 	foreach ... {
 		sort "string-length(firstname)"
-	... }
 
 Oops. This will print "Christopher", "Bob" and "Alice" again, when obviously "Christopher" - with length 11 - should come last. What went wrong? 
 
-By default, values are compared lexicographically, which means that "11" comes before "3" and "5", rather than after it. When sorting numeric values, we should use an appropriate `comparator``, as in
+By default, values are compared lexicographically, which means that "11" comes before "3" and "5", rather than after it. When sorting numeric values, we should use an appropriate `comparator`, like this:
 
- 	foreach ... {
 		sort "string-length(firstname)" { comparator "sdt:compare-number(?,?)" }
-	... }
 
-A comparator is a function with at least two arguments, and returns a negative number, zero, or a positive number, depending on whether the effective value of the first argument collates before, equal to, or after the second one. The question marks - in what is effectively a Lambda expression - act as a placeholder for the objects to be compared.
+A comparator is a function with at least two arguments, that returns a negative number, zero, or a positive number, depending on whether the effective value of the first argument collates before, equal to, or after the second one. The question marks - in what is effectively a Lambda expression - act as a placeholder for the objects to be compared.
 
 Let's go back to sorting names. If your addressbook neatly capitalizes all names, you may get away with a lexicographical sort. Otherwise, you are in trouble, because lowercase letters collate after *all* uppercase ones, so for example "alice" would come after "Zoey".
 
@@ -355,7 +351,7 @@ To address this we could sort in a case-insensitive manner, like so:
 
 	sort "lower-case(firstname)"
 
-However, this will ignore case rather than handle it. A better solution is to use a locale-sensitive comparator that takes case differences as well as accented characters into account:
+However, this will ignore case altogether. A better solution is to use a locale-sensitive comparator that takes case differences as well as accented characters into account:
 
 	sort "firstname" { comparator "sdt:compare-string(?,?)" }
 
