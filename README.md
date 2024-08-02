@@ -50,7 +50,7 @@ This will transform the data in the file `addressbook.sda` according to the reci
 		}
 	}
 
-to
+into
 
 	output {
 		contacts {
