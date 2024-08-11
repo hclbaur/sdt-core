@@ -47,8 +47,7 @@ public class RenderSDAFunction implements Function
 	 * @return a <code>String</code>
 	 * 
 	 * @throws FunctionCallException if <code>args</code> has more than two or less
-	 *                               than one item, or if the first is not an SDA
-	 *                               node.
+	 *                               than one item.
 	 */
 	@Override
 	@SuppressWarnings("rawtypes")
