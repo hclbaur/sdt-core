@@ -1,15 +1,15 @@
 # Release Notes
 
-## [1.3.1] - 2024-08-02 (requires SDA v2.2.1)
+## [1.3.1] - 2024-08-11 (requires SDA v2.2.1)
 
 This release fixes several issues and adds foreach group functionality.
 
 - SDT parser improvements.
-- Added foreach group functionality.
+- Added foreach group iteration.
 - Added functions tokenize() and render-sda().
 - Fixed issue in sort comparator and statement context.
 - Closed issue #11 (impossible to create a vacant parent).
-- Closed issue #12 (possible to overwrite parameter).
+- Closed issue #12 (possible to overwrite a parameter).
 
 ## Compatibility
 
