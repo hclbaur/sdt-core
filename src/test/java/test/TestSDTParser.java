@@ -5,6 +5,8 @@ import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.util.function.Function;
 
+import org.jaxen.XPath;
+
 import be.baur.sda.DataNode;
 import be.baur.sda.SDA;
 import be.baur.sdt.parser.SDTParseException;
@@ -31,7 +33,7 @@ public final class TestSDTParser {
 		Test f = new Test(pf, "error at ");
 		
 		Transform t1 = new Transform();
-		SDAXPath x = new SDAXPath("'Hello World!'");
+		XPath x = new SDAXPath("'Hello World!'");
 		t1.add(new PrintStatement(x, false));
 		System.out.print(t1);
 		t1.verify();

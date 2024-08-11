@@ -3,6 +3,10 @@ transform {
 	param "filename" { select "'addressbook.sda'" }
 	variable "doc" { select "document($filename)" }
 
+	foreach "$doc/addressbook/contact/phonenumber" {
+		println "concat('Number ', $sdt:position, ' of ', $sdt:last, ': ', ., ' (', ../firstname, ')')"
+	}
+	
 	node "contacts" {
 		foreach "$doc/addressbook/contact" {
 			group "count(phonenumber)"		

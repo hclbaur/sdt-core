@@ -22,7 +22,7 @@ public class CopyStatement extends XPathStatement {
 	 * 
 	 * @param xpath an XPath object, not null
 	 */
-	public CopyStatement(SDAXPath xpath) {
+	public CopyStatement(XPath xpath) {
 		super(xpath);
 	}
 

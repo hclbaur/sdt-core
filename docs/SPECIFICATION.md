@@ -18,13 +18,10 @@
 	- [Number functions](#number-functions)
 	- [Other functions](#other-functions)
 - [SDT Extensions](#sdt-extensions)
-	- [compare-number](#compare-number)
-	- [compare-string](#compare-string)
-	- [left](#left)
+	- [compare-number](#compare-number), [compare-string](#compare-string)
+	- [left](#left), [right](#right)
 	- [render-sda](#render-sda)
-	- [right](#right)
-	- [string-join](#string-join)
-	- [tokenize](#tokenize)
+	- [string-join](#string-join), [tokenize](#tokenize)
 
 
 ## Statements
@@ -39,9 +36,10 @@ Following is an overview of all SDT statements and their syntax, as well as a su
 	  when "<i>expression</i>" {
 		<i>[ statement(s) ]</i>
 	  }
-	  otherwise {
+	  <i>[ when statement(s) ]</i>
+	  <i>[ </i>otherwise {
 		<i>[ statement(s) ]</i>
-	  }
+	  }<i> }</i>
 	}
 </pre>
 

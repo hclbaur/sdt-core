@@ -5,6 +5,8 @@ import java.io.Reader;
 import java.util.Arrays;
 import java.util.List;
 
+import org.jaxen.XPath;
+
 import be.baur.sda.DataNode;
 import be.baur.sda.Node;
 import be.baur.sda.SDA;
@@ -408,12 +410,12 @@ public final class SDTParser implements Parser<Transform> {
 	 * @param node the Node to create the XPath from
 	 * @throws SDTParseException if the XPath expression is invalid
 	 */
-	private static SDAXPath xpathFromNode(final DataNode node) throws SDTParseException {
+	private static XPath xpathFromNode(final DataNode node) throws SDTParseException {
 
 		if (node.getValue().isEmpty())
 			throw exception(node, STATEMENT_REQUIRES_EXPRESSION, node.getName());
 
-		SDAXPath xpath;
+		XPath xpath;
 		try {
 			xpath = new SDAXPath(node.getValue());
 		} catch (Exception e) {

@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import org.jaxen.XPath;
+
 import be.baur.sda.DataNode;
 import be.baur.sda.Node;
 import be.baur.sdt.SDT;
@@ -35,7 +37,7 @@ public class ForEachStatement extends XPathStatement {
 	 * 
 	 * @param xpath the XPath to be evaluated, not null
 	 */
-	public ForEachStatement(SDAXPath xpath) {
+	public ForEachStatement(XPath xpath) {
 		super(xpath);
 	}
 
@@ -46,7 +48,7 @@ public class ForEachStatement extends XPathStatement {
 	 * 
 	 * @param xpath an XPath object, not null
 	 */
-	public void setGroupExpression(SDAXPath xpath) {
+	public void setGroupExpression(XPath xpath) {
 		groupExpression = Objects.requireNonNull(xpath, "xpath must not be null").toString();
 	}
 
@@ -77,7 +79,7 @@ public class ForEachStatement extends XPathStatement {
 		try {
 
 			// select the node-set to be iterated
-			SDAXPath xpath = new SDAXPath(getExpression());
+			XPath xpath = new SDAXPath(getExpression());
 			xpath.setVariableContext(staco);
 			List nodeset = xpath.selectNodes(staco.getContextNode());
 			final int setsize = nodeset.size();

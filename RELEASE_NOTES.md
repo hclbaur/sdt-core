@@ -1,15 +1,15 @@
 # Release Notes
 
-## [1.3.1] - In development
+## [1.3.1] - 2024-08-11 (requires SDA v2.2.1)
 
-This is work in progress.
+This release fixes several issues and adds foreach group functionality.
 
 - SDT parser improvements.
-- Added foreach group functionality.
+- Added foreach group iteration.
 - Added functions tokenize() and render-sda().
 - Fixed issue in sort comparator and statement context.
 - Closed issue #11 (impossible to create a vacant parent).
-- Closed issue #12 (possible to overwrite parameter).
+- Closed issue #12 (possible to overwrite a parameter).
 
 ## Compatibility
 
@@ -17,7 +17,7 @@ This is work in progress.
 
 ## Previous releases
 
-### [1.3.0] - 2024-06-26 (requires at least SDA v2.2.0)
+### [1.3.0] - 2024-06-26 (requires SDA v2.2.0)
 
 This release has a few changes with respect to the syntax of some SDT statements,
 and the parser internals and validation error messages have been improved. This 
@@ -37,7 +37,7 @@ release also introduces the sort statement and updates the documentation.
 - Closed issue #10 (copy should be a leaf statement).
 - Closed issue #13 (rename Statements and sdt.statements package).
 
-### [1.2.0] - 2024-05-12 (requires at least SDA v2.2.0)
+### [1.2.0] - 2024-05-12 (requires SDA v2.2.0)
 
 This is a compatibility release for sda-core 2.2.x but has quite a few 
 changes with regards to naming and packaging.
@@ -52,14 +52,14 @@ changes with regards to naming and packaging.
 - `Renamed` ParseException to SDTParseException.
 - Closed issue #4.
 
-### [1.1.0] - 2023-10-04 (requires at least SDA v2.1.0)
+### [1.1.0] - 2023-10-04 (requires SDA v2.1.0)
 
 This is a compatibility release for sda-core 2.1.x with minor changes.
 
 - `Changed` parameters to be global variables only.
 - Added VariableStatement.isVarName().
 
-### [1.0.0] - 2023-07-04 (requires at least SDA v2.0.0)
+### [1.0.0] - 2023-07-04 (requires v2.0.0)
 
 More than anything else, this release is a proof of concept.
 

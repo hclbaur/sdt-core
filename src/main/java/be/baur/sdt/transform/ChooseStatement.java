@@ -2,6 +2,8 @@ package be.baur.sdt.transform;
 
 import java.util.Objects;
 
+import org.jaxen.XPath;
+
 import be.baur.sda.Node;
 import be.baur.sda.DataNode;
 import be.baur.sdt.StatementContext;
@@ -48,7 +50,7 @@ public class ChooseStatement extends Statement {
 				Boolean test = false;
 				if (statement instanceof WhenStatement) {
 					
-					SDAXPath xpath = new SDAXPath( ((WhenStatement) statement).getExpression() );
+					XPath xpath = new SDAXPath( ((WhenStatement) statement).getExpression() );
 					xpath.setVariableContext(staco);
 					test = xpath.booleanValueOf(staco.getContextNode());
 					if (! test) continue; // test next when clause

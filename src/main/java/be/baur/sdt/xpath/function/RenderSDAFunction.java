@@ -71,7 +71,7 @@ public class RenderSDAFunction implements Function
 	 * @param nav    the navigator used
 	 * 
 	 * @return a <code>String</code>
-	 * @throws FunctionCallException
+	 * @throws FunctionCallException if an exception occurs.
 	 */
 	@SuppressWarnings("rawtypes")
 	public static String evaluate(List list, boolean pretty, Navigator nav) throws FunctionCallException {
