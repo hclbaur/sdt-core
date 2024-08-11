@@ -3,6 +3,8 @@ package be.baur.sdt.transform;
 import java.util.List;
 import java.util.Objects;
 
+import org.jaxen.XPath;
+
 import be.baur.sda.DataNode;
 import be.baur.sdt.StatementContext;
 import be.baur.sdt.TransformContext;
@@ -29,7 +31,7 @@ public class VariableStatement extends XPathStatement {
 	 * @param xpath the XPath to be evaluated, not null
 	 * @throws IllegalArgumentException if name is invalid
 	 */
-	public VariableStatement(String name, SDAXPath xpath) {
+	public VariableStatement(String name, XPath xpath) {
 		super(xpath); setVarName(name);
 	}
 
@@ -65,10 +67,10 @@ public class VariableStatement extends XPathStatement {
 	 * @return true or false
 	 */
 	public static boolean isVarName(String name) {
-		// No attempt is made to check if name is a valid XPath variable name
-		// (see https://www.w3.org/TR/REC-xml/#NT-Name). At least, we disallow
+		// No attempt is made to check if name is a valid XSLT variable name
+		// (see https://www.w3.org/TR/REC-xml-names/#NT-QName). At least, we disallow
 		// the declaration of variables with a namespace prefix (for now).
-		return !(name.isEmpty() || name.contains(":"));
+		return !(name == null || name.isEmpty() || name.contains(":"));
 	}
 
 
@@ -81,7 +83,7 @@ public class VariableStatement extends XPathStatement {
 		 * the same name).
 		 */
 		try {
-			SDAXPath xpath = new SDAXPath(getExpression());
+			XPath xpath = new SDAXPath(getExpression());
 			xpath.setVariableContext(staco);
 			Object value = xpath.evaluate(staco.getContextNode());
 			

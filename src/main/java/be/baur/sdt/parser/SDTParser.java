@@ -5,6 +5,8 @@ import java.io.Reader;
 import java.util.Arrays;
 import java.util.List;
 
+import org.jaxen.XPath;
+
 import be.baur.sda.DataNode;
 import be.baur.sda.Node;
 import be.baur.sda.SDA;
@@ -49,24 +51,27 @@ import be.baur.sdt.xpath.SDAXPath;
  */
 public final class SDTParser implements Parser<Transform> {
 
+	private static final String ATTRIBUTE_EXPECTS_NO_COMPOUND = "attribute '%s' expects no compound statement";
+	private static final String ATTRIBUTE_NOT_ALLOWED = "attribute '%s' is not allowed here";
+	private static final String KEYWORD_UNKNOWN = "keyword '%s' is unknown";
+	private static final String NODE_NAME_INVALID = "node name '%s' is invalid";
+	private static final String PARAMETER_REDECLARED = "parameter '%s' cannot be redeclared";
+	private static final String PARAM_OVERWRITES_VARIABLE = "parameter '%s' cannot overwrite variable";
 	private static final String STATEMENT_EXPECTED = "'%s' statement expected";
+	private static final String ATTRIBUTE_EXPECTED_IN = "'%s' attribute expected in '%s'";
 	private static final String STATEMENT_EXPECTED_IN = "'%s' statement expected in '%s'";
+	private static final String STATEMENT_EXPECTS_NO_COMPOUND = "statement '%s' expects no compound statement";
 	private static final String STATEMENT_MISPLACED = "statement '%s' is misplaced";
 	private static final String STATEMENT_NOT_ALLOWED = "statement '%s' is not allowed here";
-	private static final String STATEMENT_REQUIRES_XPATH = "statement '%s' requires an XPath expression";
-	//private static final String STATEMENT_REQUIRES_NO_XPATH = "statement '%s' requires no XPath expression";
-	private static final String STATEMENT_REQUIRES_VARIABLE = "statement '%s' requires a variable name";
-	private static final String STATEMENT_REQUIRES_NODENAME = "statement '%s' requires a node name";
-	private static final String STATEMENT_REQUIRES_NO_VALUE = "statement '%s' requires no value";
+	private static final String ATTRIBUTE_NOT_SINGULAR = "attribute '%s' can occur only once";
 	private static final String STATEMENT_REQUIRES_COMPOUND = "statement '%s' requires a compound statement";
-	private static final String STATEMENT_EXPECTS_NO_COMPOUND = "statement '%s' expects no compound statement";
-	private static final String STATEMENT_NOT_SINGULAR = "statement '%s' can occur only once";
-	private static final String STATEMENT_UNKNOWN = "statement '%s' is unknown";
-	
-	private static final String NODE_NAME_INVALID = "node name '%s' is invalid";
+	private static final String STATEMENT_REQUIRES_NODENAME = "statement '%s' requires a node name";
+	private static final String STATEMENT_REQUIRES_NO_EXPRESSION = "statement '%s' requires no expression";
+	private static final String STATEMENT_REQUIRES_VARIABLE = "statement '%s' requires a variable name";
+	private static final String STATEMENT_REQUIRES_EXPRESSION = "statement '%s' requires an expression";
+	private static final String ATTRIBUTE_REQUIRES_EXPRESSION = "attribute '%s' requires an expression";
 	private static final String VARIABLE_NAME_INVALID = "variable name '%s' is invalid";
-	private static final String PARAMETER_REDECLARED = "parameter '%s' cannot be redeclared";
-
+	private static final String VARIABLE_OVERWRITES_PARAM = "variable '%s' cannot overwrite parameter";
 
 	/**
 	 * Creates a transform from a character input stream in SDT format.
@@ -87,7 +92,7 @@ public final class SDTParser implements Parser<Transform> {
 		return parse(sdt);
 	}
 
-	
+
 	/**
 	 * Creates a transform from an SDA node representing a transformation recipe
 	 * (what an SDA parser returns upon processing an input stream in SDT format).
@@ -98,15 +103,17 @@ public final class SDTParser implements Parser<Transform> {
 	 */
 	public static Transform parse(final DataNode sdt) throws SDTParseException {
 
-		if (! sdt.getName().equals(Transform.TAG))
-			throw exception(sdt, STATEMENT_EXPECTED, Transform.TAG);
+		if (! sdt.getName().equals(Keyword.TRANSFORM.tag))
+			throw exception(sdt, STATEMENT_EXPECTED, Keyword.TRANSFORM);
 
 		if (! sdt.getValue().isEmpty())
-			throw exception(sdt, STATEMENT_REQUIRES_NO_VALUE, sdt.getName());
+			throw exception(sdt, STATEMENT_REQUIRES_NO_EXPRESSION, sdt.getName());
 
 		if (sdt.isLeaf()) // a transform should have a compound statement, even if empty
-			throw exception(sdt, STATEMENT_REQUIRES_COMPOUND, Transform.TAG);
+			throw exception(sdt, STATEMENT_REQUIRES_COMPOUND, Keyword.TRANSFORM);
 
+		validateStatement(sdt, null, null);
+		
 		Transform transform = new Transform();
 		for (Node node : sdt.nodes())  // parse and add child statements
 			transform.add(parseStatement((DataNode) node));
@@ -118,34 +125,17 @@ public final class SDTParser implements Parser<Transform> {
 	/**
 	 * This method parses an SDA node representing an SDT statement, and returns a
 	 * Statement which itself may contain other statements. Whatever we get must be
-	 * an existing leaf or parent statement. This method is called recursively and
-	 * must deal with every possible statement.
+	 * an existing statement - the assumption is that validateStatement() has been
+	 * called prior to calling this method.
 	 */
 	private static Statement parseStatement(final DataNode sdt) throws SDTParseException {
 
 		final String name = sdt.getName();
-		Keyword statement = Keyword.get(name);
-
-		if (statement == null) // this statement is unknown
-			throw exception(sdt, STATEMENT_UNKNOWN, name);
-
-		if (statement.isLeaf != null) {
-			
-			if (statement.isLeaf && ! sdt.isLeaf()) // statement should be a leaf node
-				throw exception(sdt, STATEMENT_EXPECTS_NO_COMPOUND, name);
-			
-			if (! statement.isLeaf && sdt.isLeaf()) // statement should not be a leaf node
-				throw exception(sdt, STATEMENT_REQUIRES_COMPOUND, name);
-		} 
-		// else either is allowed - statement may be a leaf or not, both are OK
-		
-		Keyword parent = Keyword.get(sdt.getParent().getName()); // returns null if parent is transform
-		if (! statement.isAllowedIn(parent)) // this statement is not allowed in this context
-			throw exception(sdt, STATEMENT_NOT_ALLOWED, name);
+		final Keyword kw = Keyword.get(name);
 
 		Statement stat;
 
-		switch (statement) {
+		switch (kw) {
 			case CHOOSE: stat = parseChoose(sdt); break;
 			case COPY: stat = parseCopy(sdt); break;
 			case FOREACH: stat = parseForEach(sdt); break;
@@ -172,34 +162,35 @@ public final class SDTParser implements Parser<Transform> {
 	 * statement.
 	 */
 	private static ChooseStatement parseChoose(final DataNode sdt) throws SDTParseException {
-
+	
 		if (! sdt.getValue().isEmpty())
-			throw exception(sdt, STATEMENT_REQUIRES_NO_VALUE, sdt.getName());
+			throw exception(sdt, STATEMENT_REQUIRES_NO_EXPRESSION, sdt.getName());
 		
 		if (! sdt.isParent()) // at least one "when" statement is expected
 			throw exception(sdt, STATEMENT_EXPECTED_IN, "when", sdt.getName());
-
-		checkKeywords(sdt, false, Arrays.asList(Keyword.WHEN, Keyword.OTHERWISE));
-
+	
+		validateStatement(sdt, null, Arrays.asList(Keyword.WHEN, Keyword.OTHERWISE)); 
+	
 		ChooseStatement choose = null;
-		int i = 0, last = sdt.nodes().size();
+		int iterations = 0, last = sdt.nodes().size();
 		for (Node node : sdt.nodes()) {
-
-			++i; Statement substat = parseStatement((DataNode) node);
-
-			if (i == 1) {
-				if (! (substat instanceof WhenStatement))
+	
+			++iterations; 
+			final Statement stat = parseStatement((DataNode) node);
+	
+			if (iterations == 1) {
+				if (! (stat instanceof WhenStatement))
 					throw exception(node, STATEMENT_EXPECTED, Keyword.WHEN.tag);
-				choose = new ChooseStatement((WhenStatement) substat);
+				choose = new ChooseStatement((WhenStatement) stat);
 				continue;
 			}
-
-			if (substat instanceof OtherwiseStatement && i < last)
+	
+			if (stat instanceof OtherwiseStatement && iterations < last)
 				throw exception(node, STATEMENT_MISPLACED, Keyword.OTHERWISE.tag);
-
-			choose.add(parseStatement((DataNode) node));
+	
+			choose.add(stat);
 		}
-
+	
 		return choose;
 	}
 
@@ -221,12 +212,19 @@ public final class SDTParser implements Parser<Transform> {
 	 */
 	private static ForEachStatement parseForEach(final DataNode sdt) throws SDTParseException {
 		
+		validateStatement(sdt, Arrays.asList(Keyword.GROUP), null);
+		
 		ForEachStatement foreach = new ForEachStatement(xpathFromNode(sdt));
+		DataNode group = getAttribute(sdt, Keyword.GROUP, false);
+		if (group != null) // set the optional value expression
+			foreach.setGroupExpression(xpathFromNode(group));
+		
 		int iterations = 0, sortstatements = 0;
 		for (Node node : sdt.nodes()) {
 
+			if (node.getName().equals(Keyword.GROUP.tag)) continue; // skip group attribute
 			++iterations; Statement stat = parseStatement((DataNode) node);
-
+			
 			if (stat instanceof SortStatement && ++sortstatements != iterations)
 				throw exception(node, STATEMENT_MISPLACED, Keyword.SORT.tag);
 
@@ -242,11 +240,13 @@ public final class SDTParser implements Parser<Transform> {
 	 */
 	private static IfStatement parseIf(final DataNode sdt) throws SDTParseException {
 
-		IfStatement statement = new IfStatement(xpathFromNode(sdt));
+		validateStatement(sdt, null, null);
+		
+		final IfStatement stat = new IfStatement(xpathFromNode(sdt));
 		for (Node node : sdt.nodes()) // parse and add child statements
-			statement.add(parseStatement((DataNode) node));
+			stat.add(parseStatement((DataNode) node));
 
-		return statement;
+		return stat;
 	}
 
 
@@ -257,24 +257,24 @@ public final class SDTParser implements Parser<Transform> {
 	 */
 	private static Statement parseNode(final DataNode sdt) throws SDTParseException {
 
+		validateStatement(sdt, Arrays.asList(Keyword.VALUE), null);
+		
 		final String nodename = sdt.getValue();
-
 		if (nodename.isEmpty())
 			throw exception(sdt, STATEMENT_REQUIRES_NODENAME, sdt.getName());
+
 		if (! SDA.isName(nodename))
 			throw exception(sdt, NODE_NAME_INVALID, nodename);
 		
-		checkKeywords(sdt, true, Arrays.asList(Keyword.VALUE)); // only value is allowed
-		final DataNode nodevalue = getStatement(sdt, Keyword.VALUE, false);
-		
-		NodeStatement nodestat = new NodeStatement(nodename);
-		if (nodevalue != null) // set the optional value expression
-			nodestat.setValueExpression(xpathFromNode(nodevalue));
+		final NodeStatement stat = new NodeStatement(nodename);
+		final DataNode value = getAttribute(sdt, Keyword.VALUE, false);
+		if (value != null) // set the optional value expression
+			stat.setValueExpression(xpathFromNode(value));
 
-		for (Node node : sdt.find(n -> !n.getName().equals(Keyword.VALUE.tag))) // skip value keyword
-			nodestat.add(parseStatement((DataNode) node)); // parse and add child statements
+		for (Node node : sdt.find(n -> !n.getName().equals(Keyword.VALUE.tag))) // skip value attribute
+			stat.add(parseStatement((DataNode) node)); // parse and add child statements
 
-		return nodestat;
+		return stat;
 	}
 
 
@@ -284,14 +284,16 @@ public final class SDTParser implements Parser<Transform> {
 	 */
 	private static OtherwiseStatement parseOtherwise(final DataNode sdt) throws SDTParseException {
 
+		validateStatement(sdt, null, null);
+		
 		if (! sdt.getValue().isEmpty())
-			throw exception(sdt, STATEMENT_REQUIRES_NO_VALUE, sdt.getName());
+			throw exception(sdt, STATEMENT_REQUIRES_NO_EXPRESSION, sdt.getName());
 
-		OtherwiseStatement statement = new OtherwiseStatement();
+		final OtherwiseStatement stat = new OtherwiseStatement();
 		for (Node node : sdt.nodes()) // parse and add child statements
-			statement.add(parseStatement((DataNode) node));
+			stat.add(parseStatement((DataNode) node));
 
-		return statement;
+		return stat;
 	}
 
 
@@ -314,18 +316,16 @@ public final class SDTParser implements Parser<Transform> {
 	 */
 	private static SortStatement parseSort(final DataNode sdt) throws SDTParseException {
 
-		SortStatement sort = new SortStatement(xpathFromNode(sdt));
-
+		validateStatement(sdt, Arrays.asList(Keyword.REVERSE, Keyword.COMPARATOR), Arrays.asList());
+		
+		final SortStatement sort = new SortStatement(xpathFromNode(sdt));
 		if (sdt.isLeaf()) return sort;
 
-		checkKeywords(sdt, false, Arrays.asList()); // no other statements allowed
-		checkKeywords(sdt, true, Arrays.asList(Keyword.REVERSE, Keyword.COMPARATOR));
-
-		DataNode reverse = getStatement(sdt, Keyword.REVERSE, false);
+		DataNode reverse = getAttribute(sdt, Keyword.REVERSE, false);
 		if (reverse != null)
 			sort.setReverseExpression(xpathFromNode(reverse));
 
-		DataNode comparator = getStatement(sdt, Keyword.COMPARATOR, false);
+		DataNode comparator = getAttribute(sdt, Keyword.COMPARATOR, false);
 		if (comparator != null)
 			sort.setComparatorExpression(comparator.getValue());
 
@@ -336,34 +336,48 @@ public final class SDTParser implements Parser<Transform> {
 	/**
 	 * This method parses an SDA node representing a VARIABLE or PARAM statement.
 	 * Expected is a parent node with a non-empty variable name as the value, and a
-	 * single, mandatory SELECT keyword with an XPath expression. Also, parameters
-	 * must be declared globally (in the transform node) and not more than once.
+	 * single, mandatory SELECT keyword with an XPath expression. Parameters must be
+	 * declared globally (in the transform node) and not more than once. Variables
+	 * can be declared anywhere any number of times. It is not possible to have both
+	 * a parameter and a variable with the same name.
 	 */
 	private static VariableStatement parseVariableOrParam(final DataNode sdt) throws SDTParseException {
 
-		String varname = sdt.getValue();
+		validateStatement(sdt, Arrays.asList(Keyword.SELECT), Arrays.asList());
 		
-		boolean isParam = sdt.getName().equals(Keyword.PARAM.tag);	
-		if ( isParam ) {
-			final Node parent = sdt.getParent();
-			if (! parent.getName().equals(Transform.TAG)) // parent cannot be null
-				throw exception(sdt, STATEMENT_NOT_ALLOWED, sdt.getName());
-			
-			if (parent.find(n -> 
-				n.getName().equals(Keyword.PARAM.tag) 
-					&& ((DataNode) n).getValue().equals(varname)).size() > 1)
-				throw exception(sdt, PARAMETER_REDECLARED, varname);		
-		}
-		
+		final String varname = sdt.getValue();
 		if (varname.isEmpty())
 			throw exception(sdt, STATEMENT_REQUIRES_VARIABLE, sdt.getName());
+
 		if (! VariableStatement.isVarName(varname))
 			throw exception(sdt, VARIABLE_NAME_INVALID, varname);
 		
-		checkKeywords(sdt, false, Arrays.asList()); // no other statements allowed
-		checkKeywords(sdt, true, Arrays.asList(Keyword.SELECT)); // only select is allowed
-		DataNode select = getStatement(sdt, Keyword.SELECT, true);
-
+		final Node parent = sdt.getParent();
+		
+		// find all declarations of a param with the specified name
+		List<Node> params = parent.find(n -> n.getName().equals(Keyword.PARAM.tag) 
+				&& ((DataNode) n).getValue().equals(varname));
+		
+		final boolean isParam = sdt.getName().equals(Keyword.PARAM.tag);
+		
+		if ( isParam ) {
+			
+			if (params.size() > 1) // got more than one param
+				throw exception(params.get(1), PARAMETER_REDECLARED, varname);
+			
+			List<Node> vars = parent.findDescendant(n -> n.getName().equals(Keyword.VARIABLE.tag) 
+					&& ((DataNode) n).getValue().equals(varname)); // find variables with this name
+			
+			if (vars.size() > 0) // got a variable with the same name
+				throw exception(vars.get(0), VARIABLE_OVERWRITES_PARAM, varname);
+		}
+		else { // a variable
+			
+			if (params.size() > 0) // got a param with the same name
+				throw exception(params.get(0), PARAM_OVERWRITES_VARIABLE, varname);
+		}
+		
+		DataNode select = getAttribute(sdt, Keyword.SELECT, true);
 		return isParam 
 			? new ParamStatement(varname, xpathFromNode(select))
 			: new VariableStatement(varname, xpathFromNode(select));
@@ -376,11 +390,13 @@ public final class SDTParser implements Parser<Transform> {
 	 */
 	private static WhenStatement parseWhen(final DataNode sdt) throws SDTParseException {
 
-		WhenStatement statement = new WhenStatement(xpathFromNode(sdt));
-		for (Node node : sdt.nodes()) // parse and add child statements
-			statement.add(parseStatement((DataNode) node));
+		validateStatement(sdt, null, null); // no attributes allowed
 
-		return statement;
+		WhenStatement stat = new WhenStatement(xpathFromNode(sdt));
+		for (Node node : sdt.nodes()) // parse and add child statements
+			stat.add(parseStatement((DataNode) node));
+
+		return stat;
 	}
 
 
@@ -394,12 +410,12 @@ public final class SDTParser implements Parser<Transform> {
 	 * @param node the Node to create the XPath from
 	 * @throws SDTParseException if the XPath expression is invalid
 	 */
-	private static SDAXPath xpathFromNode(final DataNode node) throws SDTParseException {
+	private static XPath xpathFromNode(final DataNode node) throws SDTParseException {
 
 		if (node.getValue().isEmpty())
-			throw exception(node, STATEMENT_REQUIRES_XPATH, node.getName());
+			throw exception(node, STATEMENT_REQUIRES_EXPRESSION, node.getName());
 
-		SDAXPath xpath;
+		XPath xpath;
 		try {
 			xpath = new SDAXPath(node.getValue());
 		} catch (Exception e) {
@@ -410,66 +426,83 @@ public final class SDTParser implements Parser<Transform> {
 
 	
 	/**
-	 * This helper method iterates all attribute or statements in a statement node,
-	 * and checks for unknown or forbidden ones.
+	 * This helper validates attributes and statements in a parent statement node.
 	 *
-	 * @param sdt        a node representing an SDT statement, not null
-	 * @param attributes whether to check only attributes
-	 * @param allowed    a list of allowed keywords, null if none are allowed
-	 * @throws SDTParseException if unknown or forbidden keywords are found
+	 * @param sdt   a node representing an SDT statement, not null
+	 * @param atts  a list of allowed attributes, null if NONE are allowed
+	 * @param stats a list of allowed statements, null if ALL are allowed
 	 */
-	private static void checkKeywords(final DataNode sdt, boolean attributes, List<Keyword> allowed) throws SDTParseException {
+	private static void validateStatement(final DataNode sdt, List<Keyword> atts, List<Keyword> stats) throws SDTParseException {
 
-		List<Node> nodes = attributes ? sdt.find(n -> n.isLeaf()) : sdt.nodes();
+		final Keyword parent = Keyword.get(sdt.getName());
 		
-		for (Node node : nodes) {
+		for (Node node : sdt.nodes()) {
 
-			Keyword stat = Keyword.get(node.getName());
-			if (stat == null) // no statement with that name
-				throw exception(node, STATEMENT_UNKNOWN, node.getName());
+			final String name = node.getName();
+			Keyword kw = Keyword.get(name);
+			if (kw == null) // no keyword with that name
+				throw exception(node, KEYWORD_UNKNOWN, name);
 
-			if (stat.isAttribute == attributes && (allowed == null || ! allowed.contains(stat)))
-				throw exception(node, STATEMENT_NOT_ALLOWED, node.getName());
+			if (kw.isAttribute) {
+				if (!node.isLeaf()) // all attributes are leaf nodes
+					throw exception(node, ATTRIBUTE_EXPECTS_NO_COMPOUND, name);
+
+				if (atts == null || !atts.contains(kw))
+					throw exception(node, ATTRIBUTE_NOT_ALLOWED, name);
+			}
+			else if (kw.isLeaf != null) {
+				if (kw.isLeaf && !node.isLeaf()) // statement should be leaf
+					throw exception(node, STATEMENT_EXPECTS_NO_COMPOUND, name);
+
+				if (!kw.isLeaf && node.isLeaf()) // statement should not be leaf
+					throw exception(node, STATEMENT_REQUIRES_COMPOUND, name);
+
+				if (stats != null && !stats.contains(kw))
+					throw exception(node, STATEMENT_NOT_ALLOWED, name);
+			}
+			
+			if (! kw.isAllowedIn(parent)) // this statement is not allowed in this context
+				throw exception(node, STATEMENT_NOT_ALLOWED, name);
 		}
 	}
 
 
 	/**
-	 * This helper method gets a specific statement node from a parent statement node.
+	 * This helper gets a specific attribute node from a parent statement node.
 	 *
-	 * @param sdt       is a statement node, with child nodes.
-	 * @param stat is the statement we want to retrieve.
-	 * @param required  controls the behavior:<br>
-	 *                  when <em>true</em>, the statement is required and an
-	 *                  exception is thrown if absent.<br>
-	 *                  when <em>false</em>, the statement is optional and
-	 *                  <code>null</code> is returned if absent.<br>
-	 *                  when <em>null</em>, the statement is forbidden and an
-	 *                  exception is thrown if present.<br>
-	 *                  An exception is also thrown if more than one statement is
-	 *                  found or if it has an empty value.
+	 * @param sdt      is the statement node, with child nodes.
+	 * @param att      is the attribute we want to retrieve.
+	 * @param required controls the behavior:<br>
+	 *                 when <em>true</em>, the attribute is required and an
+	 *                 exception is thrown if absent.<br>
+	 *                 when <em>false</em>, the attribute is optional and
+	 *                 <code>null</code> is returned if absent.<br>
+	 *                 when <em>null</em>, the attribute is forbidden and an
+	 *                 exception is thrown if present.<br>
+	 *                 An exception is also thrown if more than one attribute is
+	 *                 found or if it has an empty value.
 	 *
 	 * @return a data node, may be null
 	 * @throws SDTParseException
 	 */
-	private static DataNode getStatement(final DataNode sdt, Keyword stat, Boolean required) throws SDTParseException {
+	private static DataNode getAttribute(final DataNode sdt, Keyword att, Boolean required) throws SDTParseException {
 
-		List<DataNode> alist = sdt.find(n -> n.isLeaf() && n.getName().equals(stat.tag));
+		List<DataNode> alist = sdt.find(n -> n.isLeaf() && n.getName().equals(att.tag));
 		int size = alist.size();
-		
+
 		if (size == 0) {
 			if (required == null || !required)
 				return null;
-			throw exception(sdt, STATEMENT_EXPECTED_IN, stat.tag, sdt.getName());
+			throw exception(sdt, ATTRIBUTE_EXPECTED_IN, att.tag, sdt.getName());
 		}
 		if (required == null)
-			throw exception(sdt, STATEMENT_NOT_ALLOWED, stat.tag);
+			throw exception(sdt, ATTRIBUTE_NOT_ALLOWED, att.tag);
 
 		DataNode node = alist.get(0);
 		if (node.getValue().isEmpty())
-			throw exception(node, STATEMENT_REQUIRES_XPATH, stat.tag);
+			throw exception(node, ATTRIBUTE_REQUIRES_EXPRESSION, att.tag);
 		if (size > 1)
-			throw exception(node, STATEMENT_NOT_SINGULAR, stat.tag);
+			throw exception(node, ATTRIBUTE_NOT_SINGULAR, att.tag);
 
 		return node;
 	}

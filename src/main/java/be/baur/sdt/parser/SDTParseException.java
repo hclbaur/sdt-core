@@ -17,7 +17,7 @@ public class SDTParseException extends ProcessingException {
 	 * @param message an error message
 	 */
 	public SDTParseException(Node node, String message) {
-		super(node, (node != null ? ("error at " + node.path() + ": ") : "") + message);
+		super(node, message);
 	}
 
 	
@@ -29,7 +29,7 @@ public class SDTParseException extends ProcessingException {
 	 * @param cause   the exception causing this exception to be thrown
 	 */
 	public SDTParseException(Node node, String message, Throwable cause) {
-		this(node, message); initCause(cause);
+		super(node, cause.getMessage()); initCause(cause);
 	}
 
 }

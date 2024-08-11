@@ -2,6 +2,8 @@ package be.baur.sdt.transform;
 
 import java.util.List;
 
+import org.jaxen.XPath;
+
 import be.baur.sda.DataNode;
 import be.baur.sdt.StatementContext;
 import be.baur.sdt.TransformContext;
@@ -16,11 +18,11 @@ import be.baur.sdt.xpath.SDAXPath;
 public class CopyStatement extends XPathStatement {
 
 	/**
-	 * Creates a CopyStatement.
+	 * Creates a CopyStatement with an expression of what to copy.
 	 * 
-	 * @param xpath the XPath to be evaluated, not null
+	 * @param xpath an XPath object, not null
 	 */
-	public CopyStatement(SDAXPath xpath) {
+	public CopyStatement(XPath xpath) {
 		super(xpath);
 	}
 
@@ -29,11 +31,11 @@ public class CopyStatement extends XPathStatement {
 	@Override void execute(TransformContext traco, StatementContext staco) throws TransformException {
 		/*
 		 * Execution: create an XPath from the statement expression, set the variable
-		 * context and evaluate. If the result is a node(set), copy and add the node(s)
+		 * context and evaluate. If the result is a node set, copy and add the node(s)
 		 * to the current output node. Otherwise, do nothing.
 		 */
 		try {
-			SDAXPath xpath = new SDAXPath(getExpression());
+			XPath xpath = new SDAXPath(getExpression());
 			xpath.setVariableContext(staco);
 			Object value = xpath.evaluate(staco.getContextNode());
 
@@ -57,7 +59,6 @@ public class CopyStatement extends XPathStatement {
 	@Override
 	public DataNode toSDA() {
 		DataNode node = new DataNode(Keyword.COPY.tag, getExpression());
-		//node.add( new DataNode(Statements.SELECT.tag, getExpression()) ); 
 		return node;
 	}
 

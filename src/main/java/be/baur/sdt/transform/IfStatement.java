@@ -2,6 +2,8 @@ package be.baur.sdt.transform;
 
 import java.util.List;
 
+import org.jaxen.XPath;
+
 import be.baur.sda.Node;
 import be.baur.sda.DataNode;
 import be.baur.sdt.StatementContext;
@@ -21,9 +23,8 @@ public class IfStatement extends XPathStatement {
 	 * 
 	 * @param xpath the XPath to be evaluated, not null
 	 */
-	public IfStatement(SDAXPath xpath) {
+	public IfStatement(XPath xpath) {
 		super(xpath);
-		add(null); // must have child statements so initialize it with an empty node set
 	}
 
 
@@ -37,7 +38,7 @@ public class IfStatement extends XPathStatement {
 		if (statements.isEmpty()) return; // nothing to do
 
 		try {
-			SDAXPath xpath = new SDAXPath(getExpression());
+			XPath xpath = new SDAXPath(getExpression());
 			xpath.setVariableContext(staco);
 			Boolean test = xpath.booleanValueOf(staco.getContextNode());
 

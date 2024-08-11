@@ -5,6 +5,7 @@ import java.util.Objects;
 
 import org.jaxen.JaxenException;
 import org.jaxen.JaxenRuntimeException;
+import org.jaxen.XPath;
 
 import be.baur.sda.DataNode;
 import be.baur.sdt.StatementContext;
@@ -32,19 +33,19 @@ public class SortStatement extends XPathStatement {
 	 * 
 	 * @param xpath the XPath to be evaluated, not null
 	 */
-	public SortStatement(SDAXPath xpath) {
+	public SortStatement(XPath xpath) {
 		super(xpath);
 	}
 	
 	
 	/**
 	 * Sets the XPath expression to determine whether sort order is reversed. If the
-	 * expression evaluates to true, sort order is descending. If no expression is
+	 * expression evaluates to true, sort order is descending. If no expression was
 	 * set, sort order should be ascending by default.
 	 * 
 	 * @param xpath an XPath object, not null
 	 */
-	public void setReverseExpression(SDAXPath xpath) {
+	public void setReverseExpression(XPath xpath) {
 		reverseExpression = Objects.requireNonNull(xpath, "xpath must not be null").toString();
 	}
 
@@ -63,9 +64,9 @@ public class SortStatement extends XPathStatement {
 	
 	/**
 	 * Sets the comparator XPath expression text to be evaluated during sorting. The
-	 * comparator should accept two objects and return -1, 0, or 1 depending on
-	 * whether the first object is smaller than, equal to, or greater than the
-	 * second object.
+	 * comparator should accept two objects and return a negative integer, zero, or
+	 * a positive integer depending on whether the first object is smaller than,
+	 * equal to, or greater than the second object.
 	 * <p>
 	 * No attempt is made to assert validity of the given expression, other than the
 	 * requirement that it must contain exactly two question marks, which act as a
@@ -99,24 +100,24 @@ public class SortStatement extends XPathStatement {
 	 * comparator expression has been set, a lexicographical compare is implied.
 	 * 
 	 * @param context the current statement context
-	 * @return a Comparator, not null
+	 * @return a comparator, not null
 	 * @throws JaxenException if an XPath evaluation error occurs
 	 */
-	public Comparator<DataNode> getComparator(StatementContext context) throws JaxenException {
+	public Comparator<Object> getComparator(StatementContext context) throws JaxenException {
 
-		SDAXPath xpath = new SDAXPath(getExpression());
+		XPath xpath = new SDAXPath(getExpression());
 		xpath.setVariableContext(context);
 
-		Comparator<DataNode> comparator = new Comparator<DataNode>() {
+		Comparator<Object> comparator = new Comparator<Object>() {
 			@Override
-			public int compare(DataNode node1, DataNode node2) {
+			public int compare(Object o1, Object o2) {
 				String s1, s2;
 				try {
-					s1 = xpath.stringValueOf(node1);
-					s2 = xpath.stringValueOf(node2);
+					s1 = xpath.stringValueOf(o1);
+					s2 = xpath.stringValueOf(o2);
 					if (comparatorExpression != null) {
 						String comexpr = comparatorExpression.replaceFirst("\\?", "'"+s1+"'");
-						SDAXPath comxp = new SDAXPath(comexpr.replaceFirst("\\?", "'"+s2+"'"));
+						XPath comxp = new SDAXPath(comexpr.replaceFirst("\\?", "'"+s2+"'"));
 						comxp.setVariableContext(context);
 						return (int) Math.signum((double) comxp.numberValueOf(context.getContextNode()));
 					}
@@ -128,7 +129,7 @@ public class SortStatement extends XPathStatement {
 		};
 
 		if (reverseExpression != null) {
-			SDAXPath revxp = new SDAXPath(reverseExpression);
+			XPath revxp = new SDAXPath(reverseExpression);
 			revxp.setVariableContext(context);
 			if (revxp.booleanValueOf(context.getContextNode()))
 				return comparator.reversed();

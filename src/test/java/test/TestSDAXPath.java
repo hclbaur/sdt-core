@@ -1,7 +1,4 @@
 package test;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
 import java.util.List;
 
 import be.baur.sda.Node;
@@ -20,17 +17,13 @@ public class TestSDAXPath {
 			}
 		});
 		
-		URL url = TestSDAXPath.class.getResource("/addressbook.sda");
-		String file = url.getFile(); InputStream in = url.openStream();
-		
-		Node doc = (Node) DocumentNavigator.getDocument(new InputStreamReader(in, "UTF-8"));
+		String file = TestSDAXPath.class.getResource("/addressbook.sda").getFile();
+		Node doc = (Node) DocumentNavigator.getInstance().getDocument(file);
 		
 		Node addressbook = doc.nodes().get(0);
 		List<Node> contacts = addressbook.nodes();
 		Node alice = contacts.get(0); 
 		Node bob = contacts.get(1);
-		
-		System.out.print("general ");
 		
 		t.so("S01", "/", doc, "["+doc.toString()+"]");
 		t.so("S02", ".", doc, "["+doc.toString()+"]");
@@ -64,20 +57,21 @@ public class TestSDAXPath {
 		t.so("S20", "/addressbook/contact[last()]/firstname", doc, "[firstname \"Bob\"]");
 		t.so("S21", "/addressbook/contact[position()<2]/firstname", doc, "[firstname \"Alice\"]");
 		t.so("S22", "count(/addressbook/contact)", doc, "2.0");
-		t.so("S23", "id('1')", doc, "SDA does not support element Ids");
+		t.so("S23", "count(/addressbook/contact[1] | /addressbook/contact[2])", doc, "2.0");
+		t.so("S24", "id('1')", doc, "SDA does not support element Ids");
 
-		t.so("S24", "local-name(/addressbook/contact)", doc, "contact");
-		t.so("S25", "local-name()", alice, "contact");
-		t.so("S26", "local-name()", doc, ""); // returns empty string
+		t.so("S25", "local-name(/addressbook/contact)", doc, "contact");
+		t.so("S26", "local-name()", alice, "contact");
+		t.so("S27", "local-name()", doc, ""); // returns empty string
 
-		t.so("S27", "namespace-uri(/addressbook/contact)", doc, "[null]");
-		t.so("S28", "namespace-uri()", alice, "[null]");
+		t.so("S28", "namespace-uri(/addressbook/contact)", doc, "[null]");
+		t.so("S29", "namespace-uri()", alice, "[null]");
 
 		t.so("S30", "name(/addressbook/contact)", doc, "contact");
 		t.so("S31", "name()", alice, "contact");
 		t.so("S32", "name()", doc, ""); // returns empty string
 		
-		System.out.print("\n            string ");
+		System.out.print("\n	    string ");
 
 		t.so("S33", "string(/addressbook/contact)", doc, "1");
 		t.so("S34", "string()", addressbook, "");
@@ -122,7 +116,7 @@ public class TestSDAXPath {
 		t.so("S62", "false()", doc, "false");		
 		t.so("S63", "lang(addressbook)", doc, "false");	
 		
-		System.out.print("\n            number ");
+		System.out.print("\n	    number ");
 		
 		t.so("S64", "number(/addressbook/contact)", doc, "1.0");
 		t.so("S65", "number()", bob, "2.0");
@@ -132,7 +126,7 @@ public class TestSDAXPath {
 		t.so("S69", "round(1.5)", doc, "2.0");
 		t.so("S70", "((1+1)*2mod3)div2-1", doc, "-0.5");
 		
-		System.out.print(" jaxen ");
+		System.out.print("jaxen ");
 
 		t.so("S71", "ends-with(/addressbook/contact/firstname,'e')", doc, "true");
 		t.so("S72", "ends-with(firstname,'b')", bob, "true");
@@ -147,10 +141,10 @@ public class TestSDAXPath {
 		
 		t.so("S79", "document('"+ file + "')", addressbook, "["+doc.toString()+"]");
 		
-		System.out.print(" sdt ");
+		System.out.print("sdt ");
 		
 		t.so("S80", "fn:string-join(/addressbook/contact/phonenumber)", doc, "06-1111111106-2222222206-3333333306-44444444");
-		t.so("S81", "fn:string-join(contact|contact/firstname,':')", addressbook, "1:Alice:2:Bob");
+		t.so("S81", "fn:string-join(contact | contact/firstname,':')", addressbook, "1:Alice:2:Bob");
 		
 		t.so("S82", "sdt:left(/addressbook/contact[1]/firstname,0)", doc, "");
 		t.so("S83", "sdt:left(/addressbook/contact[1]/firstname,2)", doc, "Al");
@@ -160,21 +154,38 @@ public class TestSDAXPath {
 		t.so("S86", "sdt:right(/addressbook/contact[2]/firstname,2)", doc, "ob");
 		t.so("S87", "sdt:right(/addressbook/contact[2]/firstname,4)", doc, "Bob");
 		
-		t.so("S88", "sdt:compare-number(1,3)", doc, "-1.0");
-		t.so("S89", "sdt:compare-number(3,'3')", doc, "0.0");
-		t.so("S90", "sdt:compare-number('6','4')", doc, "1.0");
-		t.so("S91", "sdt:compare-number('a',1)", doc, "1.0");
-		t.so("S92", "sdt:compare-number('a','b')", doc, "0.0");
-		t.so("S91", "sdt:compare-number('a',1,true())", doc, "-1.0");
-		t.so("S91", "sdt:compare-number('a',1,false())", doc, "1.0");
-		t.so("S92", "sdt:compare-number('a','b',true())", doc, "0.0");
-		t.so("S93", "sdt:compare-number('a','b',false())", doc, "0.0");
+		System.out.print("\n	    ");
 		
-		t.so("S94", "sdt:compare-string('a','A')", doc, "-1.0");
-		t.so("S95", "sdt:compare-string(3,'3')", doc, "0.0");
-		t.so("S96", "sdt:compare-string('b','A')", doc, "1.0");
-		t.so("S97", "sdt:compare-string('Ångström','Zulu','en')", doc, "-1.0");
-		t.so("S98", "sdt:compare-string('Ångström','Zulu','sv')", doc, "1.0");
+		t.so("S90", "sdt:compare-number(1,3)", doc, "-1.0");
+		t.so("S91", "sdt:compare-number(3,'3')", doc, "0.0");
+		t.so("S92", "sdt:compare-number('6','4')", doc, "1.0");
+		t.so("S93", "sdt:compare-number('a',1)", doc, "1.0");
+		t.so("S94", "sdt:compare-number('a','b')", doc, "0.0");
+		t.so("S95", "sdt:compare-number('a',1,true())", doc, "-1.0");
+		t.so("S96", "sdt:compare-number('a',1,false())", doc, "1.0");
+		t.so("S97", "sdt:compare-number('a','b',true())", doc, "0.0");
+		t.so("S98", "sdt:compare-number('a','b',false())", doc, "0.0");
+		
+		t.so("S100", "sdt:compare-string('a','A')", doc, "-1.0");
+		t.so("S101", "sdt:compare-string(3,'3')", doc, "0.0");
+		t.so("S102", "sdt:compare-string('b','A')", doc, "1.0");
+		t.so("S103", "sdt:compare-string('Ångström','Zulu','en')", doc, "-1.0");
+		t.so("S104", "sdt:compare-string('Ångström','Zulu','sv')", doc, "1.0");
+		
+		t.so("S110", "sdt:tokenize('')", doc, "[]");
+		t.so("S111", "sdt:tokenize('abc')", doc, "abc");
+		t.so("S112", "sdt:tokenize('abc','')", doc, "[a, b, c]");
+		t.so("S113", "sdt:tokenize(' a  b   c    ')", doc, "[a, b, c]");
+		t.so("S114", "sdt:tokenize('127.0.0.1:80','[\\.:]')", doc, "[127, 0, 0, 1, 80]");
+		t.so("S115", "sdt:tokenize('1;2;;3;',';')", doc, "[1, 2, 3]");
+		t.so("S116", "sdt:tokenize('1; 2; ; 3; ','; ',true())", doc, "[1, 2, , 3, ]");
+		
+		t.so("S120", "sdt:render-sda('')", doc, "");
+		t.so("S121", "sdt:render-sda(unknown)", doc, "");
+		t.so("S122", "sdt:render-sda()", doc, "render-sda() requires one or two arguments.");
+		t.so("S123", "sdt:render-sda(/addressbook/contact/firstname)", doc, "firstname \"Alice\"");
+		t.so("S124", "sdt:render-sda(/addressbook/contact/phonenumber)", doc, "phonenumber \"06-11111111\"");
+		t.so("S125", "sdt:render-sda(/addressbook/contact[2])", doc, "contact \"2\" { firstname \"Bob\" phonenumber \"06-33333333\" phonenumber \"06-44444444\" }");
 	}
 
 }

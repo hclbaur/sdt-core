@@ -65,8 +65,6 @@ public class DocumentNavigator extends DefaultNavigator {
     	Node parent = ((Node) contextNode).getParent();
         if (parent != null) {
         	return Collections.singletonList(parent).iterator();
-        	//ArrayList<Node> l = new ArrayList<Node>();
-        	//l.add(parent); return l.iterator();
         }
     	return JaxenConstants.EMPTY_ITERATOR;
     }
@@ -86,7 +84,7 @@ public class DocumentNavigator extends DefaultNavigator {
 	@Override
     public Object getDocumentNode(Object contextNode)
     {
-		//if (contextNode == null) return new Node("empty");  // good idea? 
+		// The root node is considered the document node
         return ((Node) contextNode).root();
     }
     
@@ -162,7 +160,7 @@ public class DocumentNavigator extends DefaultNavigator {
 
 	@Override
 	public String getAttributeNamespaceUri(Object attr) {
-		throw new UnsupportedOperationException("SDA does not support namespaces");
+		throw new UnsupportedOperationException("SDA does not support attributes");
 	}
 
 	@Override

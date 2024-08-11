@@ -26,10 +26,10 @@ import be.baur.sda.DataNode;
  */
 public class StatementContext implements VariableContext {
 
-	private final StatementContext parent; // parent of this context
+	private final StatementContext parent; // the parent of this context
     private final Map<String, Object> variables = new HashMap<String, Object>();	
 
-    private Object contextNode = null; // the current context node, initially null!
+    private Object contextNode = new DataNode("dummy"); // dummy (empty) context node
     private DataNode outputNode = new DataNode("output"); // the output document node
     
 	/**
@@ -42,7 +42,7 @@ public class StatementContext implements VariableContext {
 	
 	/*
 	 * Private constructor to create a context from a parent context. The child
-	 * context will inherit the current context node and current output node.
+	 * context will inherit the current context node and the current output node.
 	 */
 	private StatementContext(StatementContext parent) {
 		this.parent = parent;
@@ -85,7 +85,7 @@ public class StatementContext implements VariableContext {
 	/**
 	 * Returns the output document node.
 	 * 
-	 * @return a data node, never null
+	 * @return a data node, not null
 	 */
 	public DataNode getOutputNode() {
 		return outputNode;
@@ -95,7 +95,7 @@ public class StatementContext implements VariableContext {
 	/**
 	 * Sets the current output node. A null value is not allowed.
 	 * 
-	 * @param outputNode a Node, not null
+	 * @param outputNode a data node, not null
 	 */
 	public void setOutputNode(DataNode outputNode) {
 		Objects.requireNonNull(outputNode, "outputNode must not be null");
@@ -112,19 +112,19 @@ public class StatementContext implements VariableContext {
 
 
 	/**
-	 * Sets the value of a variable in this context. The variable will be
-	 * created if it does not exist, and overwritten if it does.
+	 * Sets the value of a variable in this context. The variable will be created if
+	 * it does not exist, and overwritten if it does.
 	 * <p>
 	 * The variable is optionally associated with a namespace URI.
 	 * 
-	 * @param namespaceURI namespace URI of the variable, may be null
-	 * @param localName    local name of the variable, not null
-	 * @param value        value to be set, may be null
+	 * @param nsURI     namespace URI of the variable, may be null
+	 * @param localName local name of the variable, not null
+	 * @param value     value to be set, may be null
 	 */
-	public void setVariableValue(String namespaceURI, String localName, Object value) {
+	public void setVariableValue(String nsURI, String localName, Object value) {
 		
 		Objects.requireNonNull(localName, "localName must not be null");
-		this.variables.put(key(namespaceURI, localName), value);
+		this.variables.put(key(nsURI, localName), value);
 	}
 
 

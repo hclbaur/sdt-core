@@ -3,6 +3,8 @@ package be.baur.sdt.transform;
 import java.util.List;
 import java.util.Objects;
 
+import org.jaxen.XPath;
+
 import be.baur.sda.DataNode;
 import be.baur.sda.Node;
 import be.baur.sda.SDA;
@@ -14,16 +16,16 @@ import be.baur.sdt.xpath.SDAXPath;
 
 /**
  * The {@code NodeStatement} creates a new node with the specified name and an
- * optional value from an evaluated XPath expression. Any number of child nodes
- * can be created by the compound statement.
+ * optional value from an evaluated XPath expression. Any child nodes can be
+ * created by the compound statement.
  */
 public class NodeStatement extends Statement {
 	
 	private String nodeName; // name of the node created by this statement
-	private String valueExpression; // Expression that determines if order is reversed (descending)
+	private String valueExpression; // expression that sets the node value
 
 	/**
-	 * Creates a node statement without a value.
+	 * Creates a {@code NodeStatement} with the name of the node to create.
 	 * 
 	 * @param name a valid node name
 	 * @throws IllegalArgumentException if name is invalid
@@ -63,7 +65,7 @@ public class NodeStatement extends Statement {
 	 * 
 	 * @param xpath an XPath object, not null
 	 */
-	public void setValueExpression(SDAXPath xpath) {
+	public void setValueExpression(XPath xpath) {
 		valueExpression = Objects.requireNonNull(xpath, "xpath must not be null").toString();
 	}
 
@@ -84,15 +86,15 @@ public class NodeStatement extends Statement {
 	void execute(TransformContext traco, StatementContext staco) throws TransformException {
 		/*
 		 * Execution: create a new SDA node, and add it to the current output node.
-		 * Then, execute the compound statement with the new node set as the current
-		 * output node to collect any child nodes created "downstream".
+		 * Then, execute the compound statement with the new node as the current output
+		 * node to collect any child nodes that happen to be created.
 		 */
 		try {
 			
 			String value = null;
 			
 			if (valueExpression != null) {
-				SDAXPath xpath = new SDAXPath(valueExpression);
+				XPath xpath = new SDAXPath(valueExpression);
 				xpath.setVariableContext(staco);
 				value = xpath.stringValueOf(staco.getContextNode());
 			}
@@ -102,6 +104,11 @@ public class NodeStatement extends Statement {
 
 			List<Statement> statements = nodes();
 			if (statements.isEmpty()) return; // nothing to do
+			
+			// if any child nodes may be created downstream, this will be a (vacant) parent 
+			if ( ! findDescendant(n -> n instanceof NodeStatement || n instanceof CopyStatement).isEmpty() ) {
+				newNode.add(null);
+			}
 			
 			StatementContext coco = staco.newChild();
 			coco.setOutputNode(newNode);

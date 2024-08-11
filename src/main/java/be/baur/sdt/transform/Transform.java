@@ -14,6 +14,7 @@ import be.baur.sdt.SDT;
 import be.baur.sdt.StatementContext;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.TransformException;
+import be.baur.sdt.parser.Keyword;
 import be.baur.sdt.parser.SDTParseException;
 import be.baur.sdt.parser.SDTParser;
 
@@ -26,16 +27,14 @@ import be.baur.sdt.parser.SDTParser;
  * @see SDTParser
  */
 public final class Transform extends AbstractNode {
-
-	public static final String TAG = "transform";	
 	
 	/**
-	 * Executes this transform in the supplied {@code TransformContext}. This method
-	 * returns an output {@code DataNode} which will empty if no nodes were created
-	 * during transformation.
+	 * Executes this transform with the supplied {@code TransformContext}. This method
+	 * returns an output {@code DataNode} which may be empty if no nodes were created
+	 * during transformation, but not null.
 	 * 
 	 * @param context the transformation context, not null
-	 * @return an output node, may be null
+	 * @return an output node, not null
 	 * @throws TransformException if an exception occurs during execution
 	 * @see TransformContext
 	 */
@@ -65,7 +64,8 @@ public final class Transform extends AbstractNode {
 	 *         <code>transform { <i>statement*</i> }</code>
 	 */
 	public DataNode toSDA() {
-		DataNode node = new DataNode(TAG); node.add(null); // in case there are no statements
+		DataNode node = new DataNode(Keyword.TRANSFORM.tag); 
+		node.add(null); // in case there are no statements
 		for (Node statement : nodes()) // add child statements
 			node.add(((Statement) statement).toSDA());
 		return node;
