@@ -182,10 +182,12 @@ public class TestSDAXPath {
 		
 		t.so("S120", "sdt:render-sda('')", doc, "");
 		t.so("S121", "sdt:render-sda(unknown)", doc, "");
-		t.so("S122", "sdt:render-sda()", doc, "render-sda() requires one or two arguments.");
-		t.so("S123", "sdt:render-sda(/addressbook/contact/firstname)", doc, "firstname \"Alice\"");
-		t.so("S124", "sdt:render-sda(/addressbook/contact/phonenumber)", doc, "phonenumber \"06-11111111\"");
-		t.so("S125", "sdt:render-sda(/addressbook/contact[2])", doc, "contact \"2\" { firstname \"Bob\" phonenumber \"06-33333333\" phonenumber \"06-44444444\" }");
+		t.so("S122", "sdt:render-sda(/addressbook/contact/firstname)", doc, "firstname \"Alice\"");
+		t.so("S123", "sdt:render-sda(/addressbook/contact/phonenumber)", doc, "phonenumber \"06-11111111\"");
+		t.so("S124", "sdt:render-sda(/addressbook/contact[2])", doc, "contact \"2\" { firstname \"Bob\" phonenumber \"06-33333333\" phonenumber \"06-44444444\" }");
+		t.so("F125", "sdt:parse-sda('')", doc, "unexpected end of input");
+		t.so("F126", "sdt:parse-sda('greeting message \"hello\" }')", doc, "unexpected character 'm'");
+		t.so("S127", "sdt:parse-sda('greeting { message \"hello\" }')", doc, "[greeting { message \"hello\" }]");
 	}
 
 }

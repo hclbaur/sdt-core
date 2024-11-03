@@ -20,7 +20,7 @@
 - [SDT Extensions](#sdt-extensions)
 	- [compare-number](#compare-number), [compare-string](#compare-string)
 	- [left](#left), [right](#right)
-	- [render-sda](#render-sda)
+	- [render-sda](#render-sda), [parse-sda](#parse-sda)
 	- [string-join](#string-join), [tokenize](#tokenize)
 
 
@@ -305,6 +305,13 @@ If the second argument is not a number or less than 1, an empty string is return
 Renders the first SDA node in the set as an SDA string in "canonical" format. If the optional second argument evaluates to true, the default SDA formatter is used to produce a reader friendly representation.
  
 This functions returns an empty string if the node set is empty or contains something that is not an SDA node.
+
+
+#### parse-sda
+
+<code><i>node</i> sdt:parse-sda( <i>string</i> )</code><br>
+
+Parses a string in SDA format and returns a data node.
 
 
 #### right
