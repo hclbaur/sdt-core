@@ -75,7 +75,7 @@ public class RenderSDAFunction implements Function
 	@SuppressWarnings("rawtypes")
 	public static String evaluate(List list, boolean pretty, Navigator nav) throws FunctionCallException {
 
-		if (!list.isEmpty()) {
+		if (! list.isEmpty()) {
 
 			Object first = list.get(0);
 			if (first instanceof List)

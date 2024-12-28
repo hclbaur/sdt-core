@@ -84,8 +84,26 @@ public class DocumentNavigator extends DefaultNavigator {
 	@Override
     public Object getDocumentNode(Object contextNode)
     {
-		// The root node is considered the document node
-        return ((Node) contextNode).root();
+        Node root = ((Node) contextNode).root();
+        return root instanceof DocumentNode ? root : null;
+    }
+	
+	/**
+	 * Returns a document node containing the specified data node. This method is
+	 * supplied to create a document node like in XML DOM, which will allow XPath
+	 * expressions to select "/" and the root node by name.
+	 * <p>
+	 * <i>Note: this method will modify the data node (add it to a parent) and may
+	 * have side effects (consider supplying a copy of the real root node). This
+	 * method is experimental and may be obsoleted or removed in the future.</i>
+	 * 
+	 * @see DocumentNode
+	 *
+	 * @param root a root node (e.g. not a parent), and not null
+	 */
+    public static DocumentNode newDocumentNode(DataNode root)
+    {
+    	return new DocumentNode(root);
     }
     
 	@Override
@@ -122,17 +140,13 @@ public class DocumentNavigator extends DefaultNavigator {
 		}
     }
 	
-    public static DataNode getDocument(Reader input) throws FunctionCallException
+    public static Node getDocument(Reader input) throws FunctionCallException
     {
-    	DataNode root, document;
     	try {
-			root = SDA.parse(input);
+			return SDA.parse(input);
 		} catch (Exception e) {
 			throw new FunctionCallException(e.getMessage(), e);
 		}
-    	// add the root to a "document node" for XPath to work as expected
-    	document = new DataNode("document"); document.add(root); 
-    	return document;
     }
     
 	@Override
@@ -175,14 +189,13 @@ public class DocumentNavigator extends DefaultNavigator {
 
 	@Override
 	public boolean isDocument(Object object) {
-		// The root node is considered the document node
-		return (object instanceof Node && ((Node) object).getParent() == null);
+		return (object instanceof DocumentNode);
 	}
 
 	@Override
 	public boolean isElement(Object object) {
-		// All SDA nodes except the root node are considered elements
-		return (object instanceof Node && ((Node) object).getParent() != null);
+		// All SDA nodes except the document node are considered elements
+		return (object instanceof DocumentNode) ? false : (object instanceof Node);
 	}
 
 	@Override
@@ -222,7 +235,10 @@ public class DocumentNavigator extends DefaultNavigator {
 
 	@Override
 	public String getElementStringValue(Object element) {
-		return ((DataNode) element).getValue();
+		if (element instanceof DataNode)
+			return ((DataNode) element).getValue();
+		else
+			return "";
 	}
 
 	@Override

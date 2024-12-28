@@ -19,8 +19,9 @@
 	- [Other functions](#other-functions)
 - [SDT Extensions](#sdt-extensions)
 	- [compare-number](#compare-number), [compare-string](#compare-string)
+	- [document-node](#document-node)
 	- [left](#left), [right](#right)
-	- [render-sda](#render-sda), [parse-sda](#parse-sda)
+	- [parse-sda](#parse-sda), [render-sda](#render-sda)
 	- [string-join](#string-join), [tokenize](#tokenize)
 
 
@@ -286,6 +287,13 @@ An optional third argument specifies the language tag (IETF BCP 47) to obtain a 
 This function can be used as a comparator in a sort statement.
 
 
+#### document-node
+
+<code><i>node</i> sdt:document-node( <i>node(set)</i> )</code>
+
+Constructs a new document node from the first SDA node in the set. This function is supplied mainly for backwards compatibility reasons.
+
+
 #### left
 
 <code><i>string</i> sdt:left( <i>string</i>, <i>number</i> )</code>
@@ -297,6 +305,13 @@ Returns the specified number of characters from the start of the argument string
 If the second argument is not a number or less than 1, an empty string is returned. If it exceeds the string length of the first argument, the entire string is returned.
 
 
+#### parse-sda
+
+<code><i>node</i> sdt:parse-sda( <i>string</i> )</code><br>
+
+Parses a string in SDA format and returns a data node.
+
+
 #### render-sda
 
 <code><i>string</i> sdt:render-sda( <i>node(set)</i> )</code><br>
@@ -305,13 +320,6 @@ If the second argument is not a number or less than 1, an empty string is return
 Renders the first SDA node in the set as an SDA string in "canonical" format. If the optional second argument evaluates to true, the default SDA formatter is used to produce a reader friendly representation.
  
 This functions returns an empty string if the node set is empty or contains something that is not an SDA node.
-
-
-#### parse-sda
-
-<code><i>node</i> sdt:parse-sda( <i>string</i> )</code><br>
-
-Parses a string in SDA format and returns a data node.
 
 
 #### right

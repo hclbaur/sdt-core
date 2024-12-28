@@ -1,10 +1,12 @@
 # Release Notes
 
-## [1.3.2] - 2024-??-?? (requires SDA v2.2.1)
+## [1.4.0] - 2024-??-?? (requires SDA v2.2.1)
 
-This release is in development.
+This release is still in development.
 
 - Added function parse-sda().
+- Added function document-node().
+- Closed issue #17 (document() adds a fake document node...).
 
 ## Compatibility
 
@@ -14,7 +16,7 @@ This release is in development.
 
 ### [1.3.1] - 2024-08-11 (requires SDA v2.2.1)
 
-This release fixes several issues and adds foreach group functionality.
+This release fixes several issues and adds grouping functionality.
 
 - SDT parser improvements.
 - Added foreach group iteration.

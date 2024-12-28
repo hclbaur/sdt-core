@@ -1,8 +1,8 @@
 transform {
 
 	param "filename" { select "'addressbook.sda'" }
-	variable "doc" { select "document($filename)" }
-
+	variable "doc" { select "sdt:document-node(document($filename))" }
+		
 	foreach "$doc/addressbook/contact/phonenumber" {
 		println "concat('Number ', $sdt:position, ' of ', $sdt:last, ': ', ., ' (', ../firstname, ')')"
 	}

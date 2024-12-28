@@ -7,6 +7,7 @@ import org.jaxen.JaxenException;
 import org.jaxen.SimpleVariableContext;
 import org.jaxen.XPath;
 
+import be.baur.sda.DataNode;
 import be.baur.sda.Node;
 import be.baur.sdt.xpath.DocumentNavigator;
 import be.baur.sdt.xpath.SDAXPath;
@@ -16,8 +17,11 @@ public class addressbook {
 
 	public static void main(String[] args) throws JaxenException, UnsupportedEncodingException {
 
-		InputStream in = addressbook.class.getResourceAsStream("addressbook.sda");
-		Node doc = DocumentNavigator.getDocument(new InputStreamReader(in, "UTF-8"));
+		InputStream in = addressbook.class.getResourceAsStream("/addressbook.sda");
+		Node doc = DocumentNavigator.newDocumentNode(
+			(DataNode) DocumentNavigator.getDocument(new InputStreamReader(in, "UTF-8"))
+		);
+		
 		
 		XPath x;
 		SimpleVariableContext v;

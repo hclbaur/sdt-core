@@ -11,10 +11,10 @@ For example, this recipe parses an 'addressbook' in SDA format and produces a ne
 	transform {
 
 		param "filename" { select "'addressbook.sda'" }
-		variable "doc" { select "document($filename)" }
+		variable "addressbook" { select "document($filename)" }
 
 		node "contacts" {
-			foreach "$doc/addressbook/contact" {
+			foreach "$addressbook/contact" {
 				node "person" { 
 					value "upper-case(firstname)"
 					node "phones" {

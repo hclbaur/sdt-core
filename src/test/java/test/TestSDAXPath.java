@@ -1,6 +1,7 @@
 package test;
 import java.util.List;
 
+import be.baur.sda.DataNode;
 import be.baur.sda.Node;
 import be.baur.sdt.xpath.DocumentNavigator;
 import be.baur.sdt.xpath.SDAXPath;
@@ -18,7 +19,8 @@ public class TestSDAXPath {
 		});
 		
 		String file = TestSDAXPath.class.getResource("/addressbook.sda").getFile();
-		Node doc = (Node) DocumentNavigator.getInstance().getDocument(file);
+		DocumentNavigator nav = (DocumentNavigator) DocumentNavigator.getInstance();
+		Node doc = DocumentNavigator.newDocumentNode((DataNode) nav.getDocument(file));
 		
 		Node addressbook = doc.nodes().get(0);
 		List<Node> contacts = addressbook.nodes();

@@ -1,16 +1,16 @@
-	transform {
+transform {
 
-		param "filename" { select "'addressbook.sda'" }
-		variable "doc" { select "document($filename)" }
+	param "filename" { select "'addressbook.sda'" }
+	variable "addressbook" { select "document($filename)" }
 
-		node "contacts" {
-			foreach "$doc/addressbook/contact" {
-				node "person" { 
-					value "upper-case(firstname)"
-					node "phones" {
-						value "fn:string-join(phonenumber,',')"
-					}
+	node "contacts" {
+		foreach "$addressbook/contact" {
+			node "person" { 
+				value "upper-case(firstname)"
+				node "phones" {
+					value "fn:string-join(phonenumber,',')"
 				}
 			}
 		}
 	}
+}
