@@ -7,10 +7,13 @@ This release is still in development. This release impacts the way XPath express
 a result, existing transformations will need to be rewritten.
 
 - `Removed` StatementContext.hasVariable().
+- `Removed` VariableStatement.isVarName().
+- Added SDT.isVariableName().
 - Added function parse-sda().
 - Added function document-node().
 - Added StatementContext.getVariableContext().
-- Closed issue #17 (document() adds a fake document node...).
+- Closed issue #16 (restrict user defined variable names).
+- Closed issue #17 (document() adds a fake document node).
 - Closed issue #19 (review scoping of variables).
 
 ## Compatibility

@@ -11,6 +11,7 @@ import be.baur.sda.DataNode;
 import be.baur.sda.Node;
 import be.baur.sda.SDA;
 import be.baur.sda.serialization.Parser;
+import be.baur.sdt.SDT;
 import be.baur.sdt.transform.ChooseStatement;
 import be.baur.sdt.transform.CopyStatement;
 import be.baur.sdt.transform.ForEachStatement;
@@ -349,7 +350,7 @@ public final class SDTParser implements Parser<Transform> {
 		if (varname.isEmpty())
 			throw exception(sdt, STATEMENT_REQUIRES_VARIABLE, sdt.getName());
 
-		if (! VariableStatement.isVarName(varname))
+		if (! SDT.isVariableName(varname))
 			throw exception(sdt, VARIABLE_NAME_INVALID, varname);
 		
 		final Node parent = sdt.getParent();

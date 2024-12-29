@@ -6,6 +6,7 @@ import java.util.Objects;
 import org.jaxen.XPath;
 
 import be.baur.sda.DataNode;
+import be.baur.sdt.SDT;
 import be.baur.sdt.StatementContext;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.TransformException;
@@ -54,23 +55,9 @@ public class VariableStatement extends XPathStatement {
 	 */
 	public void setVarName(String name) {
 		Objects.requireNonNull(name, "name must not be null");
-		if (! isVarName(name))
+		if (! SDT.isVariableName(name))
 			throw new IllegalArgumentException("name '" + name + "' is invalid");
 		varName = name;
-	}
-
-
-	/**
-	 * Determines if {@code name} is a valid variable name.
-	 * 
-	 * @param name a variable name
-	 * @return true or false
-	 */
-	public static boolean isVarName(String name) {
-		// No attempt is made to check if name is a valid XSLT variable name
-		// (see https://www.w3.org/TR/REC-xml-names/#NT-QName). At least, we disallow
-		// the declaration of variables with a namespace prefix (for now).
-		return !(name == null || name.isEmpty() || name.contains(":"));
 	}
 
 
