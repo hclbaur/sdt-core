@@ -245,16 +245,16 @@ The first part of this tutorial introduced the basic features of SDT: variables,
 
 ### Vars and Pars
 
-Earlier in this tutorial, the `param` statement was introduced. Parameters are global variables that are assigned a default value that can be overwritten by the "outside world", prior to execution of the transform. A parameter can be declared and assigned only once, and *only* on the transform level.
+Earlier in this tutorial, the `param` statement was introduced. Parameters are global variables that are assigned a default value that can be overwritten by the "outside world", prior to execution of the transform. A parameter can be declared and assigned only *once*, and only on the transform level.
 
-In other words, this is *not* allowed, because *P* is declared twice:
+In other words, this is *not* allowed, because *P* is reassigned:
 
 	transform {
 		param "P" { select "1" }
 		param "P" { select "2" }
 	}
 
-And neither is this, because *P* has no global scope:
+And neither is this, because *P* has no global scope (or may not be declared at all):
 
 <pre>
 transform {
@@ -266,7 +266,7 @@ transform {
 
 Other than that, you can hardly go wrong with parameters.
 
-Variables are quite different. For starters, you can (re)declare them as often as you like, and practically anywhere you like:
+Variables, on the other hand, are quite different. For starters, you can declare and reassign them as often as you like, and practically anywhere you like.
 
 This is perfectly fine (*V* will equal 2 at the end of the transform):
 
@@ -279,37 +279,39 @@ And so is this (*V* will increment by 1 with each iteration):
 
 <pre>
 transform {
-	variable "V" { select "1" }
+	variable "V" { select "0" }
 	foreach "<i>some node-set</i>" {
 		variable "V" { select "$V + 1" }
 	}
 }
 </pre>
 
-Note that due to the local scope of variables, *V* will equal 1 after the last iteration. After all, the inner *V* shadows the outer one (which is not incremented). 
+After the last iteration, *V* will be equal to the number of iterations, due to its global scope. 
 
-Also, a variable with the same name can be declared in unrelated contexts:
+Variables with the same name can be declared and used in unrelated contexts:
 
 <pre>
 transform {
 	if "<i>some condition</i>" {
 		variable "V" { select "1" }
+		<i>...</i>
 	}
 	if "<i>some condition</i>" {
 		variable "V" { select "2" }
+		<i>...</i>
 	}
 }
 </pre>
 
-Obviously, neither *V* can be referenced outside the *if* clauses.
+Note that due to their local scope, neither *V* can be referenced outside the *if* clauses.
 
-For *automatic* variables, the same rules apply with regards to scoping, but it is not possible to declare or re-assign them. Automatic variables "live" within the reserved SDT namespace, which ensures there is no overlap with the ones you declare yourself (in the "unnamed" namespace). The following example illustrates this:
+For *automatic* variables in iterations, different rules apply. Their scope is limited to the current iteration block and they cannot be declared or reassigned. They "live" within the reserved SDT namespace, which ensures there is no overlap with the variables you declare yourself (in the "unnamed" namespace). The following example illustrates this:
 
 	transform {
 		foreach "..." {
 			variable "position" { select "$sdt:position" }
 			foreach "..." {
-				println "concat('outer ', $position, ' inner ', $sdt:position)" }
+				println "concat('outer ', $position, ' inner ', $sdt:position)"
 			}
 		}
 	}
@@ -393,7 +395,7 @@ This is due to the use of the `group` attribute on the second line, which states
 
 As we have one group of contacts with one phonenumber node (Alice and Chris), and another containing a single contact that has two (Bob), the `println` statement on the third line gets executed twice; once for each group.
 
-So what does it print? The automatic variables available in the compound statement speak for themselves. There's the *current-grouping-key*, which in this case is the number of phones - either 1 or 2 - and then there's the corresponding *current-group* which is the set of contact nodes with that particular number of phones.
+So what does it print? The automatic variables available in the compound statement speak for themselves. There's the *sdt:current-grouping-key*, which in this case is the number of phones - either 1 or 2 - and then there's the corresponding *sdt:current-group* which is the set of contact nodes with that particular number of phones.
 
 Typically (but not necessarily) you will not only iterate groups but also the nodes *in* those groups, using a nested foreach loop:
 

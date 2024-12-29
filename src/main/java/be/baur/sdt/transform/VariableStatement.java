@@ -74,25 +74,28 @@ public class VariableStatement extends XPathStatement {
 	}
 
 
-	@SuppressWarnings("rawtypes")
-	@Override void execute(TransformContext traco, StatementContext staco) throws TransformException {
+	@Override @SuppressWarnings("rawtypes")
+	void execute(TransformContext traco, StatementContext staco) throws TransformException {
 		/*
-		 * Execution: Execution: create an XPath from the statement expression, set the
-		 * variable context, and evaluate. The resulting value is used to add a new
-		 * variable to the statement context (or overwrite an existing variable with
-		 * the same name).
+		 * Execution: create an XPath from the statement expression, set the variable
+		 * context, and evaluate. The resulting value is used to add a new variable to
+		 * the statement context or overwrite an existing variable with the same name.
 		 */
 		try {
 			XPath xpath = new SDAXPath(getExpression());
 			xpath.setVariableContext(staco);
 			Object value = xpath.evaluate(staco.getContextNode());
-			
+
 			if (value instanceof List && ((List) value).size() == 1) {
 				value = ((List) value).get(0); // replace a list of one node with that node
 			}
-			
-			staco.setVariableValue(null, varName, value);
-		
+
+			StatementContext vcx = staco.getVariableContext(null, varName);
+			if (vcx != null) // existing variable, will be updated
+				vcx.setVariableValue(null, varName, value);
+			else // new variable, add to current statement context
+				staco.setVariableValue(null, varName, value);
+
 		} catch (Exception e) {
 			throw new TransformException(this, e);
 		}

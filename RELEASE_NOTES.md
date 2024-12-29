@@ -2,11 +2,16 @@
 
 ## [1.4.0] - 2024-??-?? (requires SDA v2.2.1)
 
-This release is still in development.
+This release is still in development. This release impacts the way XPath expressions are written 
+(without referencing the root node) and how variables are (re)assigned with regards to scope. As 
+a result, existing transformations will need to be rewritten.
 
+- `Removed` StatementContext.hasVariable().
 - Added function parse-sda().
 - Added function document-node().
+- Added StatementContext.getVariableContext().
 - Closed issue #17 (document() adds a fake document node...).
+- Closed issue #19 (review scoping of variables).
 
 ## Compatibility
 

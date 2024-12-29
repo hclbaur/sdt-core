@@ -117,73 +117,65 @@ public class StatementContext implements VariableContext {
 	 * <p>
 	 * The variable is optionally associated with a namespace URI.
 	 * 
-	 * @param nsURI     namespace URI of the variable, may be null
-	 * @param localName local name of the variable, not null
-	 * @param value     value to be set, may be null
+	 * @param namespaceURI namespace URI of the variable, may be null
+	 * @param localName    local name of the variable, not null
+	 * @param value        value to be set, may be null
 	 */
-	public void setVariableValue(String nsURI, String localName, Object value) {
+	public void setVariableValue(String namespaceURI, String localName, Object value) {
 		
 		Objects.requireNonNull(localName, "localName must not be null");
-		this.variables.put(key(nsURI, localName), value);
-	}
-
-
-	/*
-	 * Private recursive method that returns the value of a variable if this or any
-	 * of the parent contexts contain the specified variable key. Otherwise, an
-	 * UnresolvableException is thrown. The pfxname is the name of the variable
-	 * including the namespace prefix.
-	 */
-	private Object getVariableValueByKey(String key, String pfxname) throws UnresolvableException {
-
-		if (this.variables.containsKey(key))
-			return this.variables.get(key);
-
-		if (parent == null)
-			throw new UnresolvableException("variable '" + pfxname + "' not found");
-
-		return parent.getVariableValueByKey(key, pfxname);
+		this.variables.put(key(namespaceURI, localName), value);
 	}
 
 
 	/**
-	 * Returns the value of an XPath variable based on the namespace URI and local
-	 * name of the variable-reference expression.
+	 * Returns the value of a variable specified by a local name and optional
+	 * namespace URI. If the variable is found in the current context or in any
+	 * ancestor context, its value will be returned. Otherwise an
+	 * {@code UnresolvableException} is thrown.
 	 * 
-	 * @throws NullPointerException if localName is null
+	 * @param namespaceURI namespace URI of the variable, may be null
+	 * @param prefix       namespace prefix of the variable
+	 * @param localName    local name of the variable, not null
 	 */
 	@Override
 	public Object getVariableValue(String namespaceURI, String prefix, String localName) throws UnresolvableException {
 
 		Objects.requireNonNull(localName, "localName must not be null");
-		return getVariableValueByKey(key(namespaceURI, localName), prefix == "" ? localName : prefix + ":" + localName);
-	}
+		final String key = key(namespaceURI, localName);
 
-
-	/*
-	 * Private recursive method that returns true if this or any of the parent
-	 * contexts contain the specified variable key. Otherwise false is returned.
-	 */
-	private boolean containsVariableKey(String key) {
-		
 		if (this.variables.containsKey(key))
-			return true;
-		
-		return (parent == null) ? false : parent.containsVariableKey(key);
+			return this.variables.get(key);
+
+		if (parent != null)
+			return parent.getVariableValue(namespaceURI, prefix, localName);
+
+		final String pfxname = (prefix == null || prefix.isEmpty()) ? localName : prefix + ":" + localName;
+		throw new UnresolvableException("variable '" + pfxname + "' not found");
 	}
 
-
+	
 	/**
-	 * Returns whether this context can resolve the specified XPath variable.
+	 * Returns the context of a variable specified by a local name and optional
+	 * namespace URI. If found in the current context, this will be returned.
+	 * Otherwise, the first ancestor context that contains it is returned, or null
+	 * if the variable is not found at all.
 	 * 
 	 * @param namespaceURI namespace URI of the variable, may be null
 	 * @param localName    local name of the variable, not null
-	 * @return true if the variable can be resolved
+	 * @return StatementContext the context of the variable, may be null
 	 */
-	public boolean hasVariable(String namespaceURI, String localName) {
+	public StatementContext getVariableContext(String namespaceURI, String localName) {
 
 		Objects.requireNonNull(localName, "localName must not be null");
-		return containsVariableKey(key(namespaceURI, localName));
+
+		if (this.variables.containsKey(key(namespaceURI, localName)))
+			return this;
+
+		if (parent != null)
+			return parent.getVariableContext(namespaceURI, localName);
+
+		return null;
 	}
 
 }

@@ -98,7 +98,7 @@ public final class TestSDTParser {
 		f.s("F20", "transform { variable \"v\" { select \"\" } }", "/transform/variable/select: attribute 'select' requires an expression");
 		f.s("F21", "transform { param \"p\" { select \"''\" print \"0\" } }", "/transform/param/print: statement 'print' is not allowed here");
 		f.s("F22", "transform { variable \":v\" { select \"''\" } }", "/transform/variable: variable name ':v' is invalid");
-		f.s("F23", "transform { param \"p\" { select \"0\" } param \"p\" { select \"1\" } }", "/transform/param[2]: parameter 'p' cannot be redeclared");
+		f.s("F23", "transform { param \"p\" { select \"0\" } param \"p\" { select \"1\" } }", "/transform/param[2]: parameter 'p' cannot be reassigned");
 		f.s("F24", "transform { if \"1\" { param \"p\" { select \"1\" } } }", "/transform/if/param: statement 'param' is not allowed here");
 		f.s("F25", "transform { param \"p\" { select \"0\" } variable \"p\" { select \"1\" } }", "/transform/variable: variable 'p' cannot overwrite parameter");
 		f.s("F26", "transform { variable \"v\" { select \"0\" } param \"v\" { select \"1\" } }", "/transform/param: parameter 'v' cannot overwrite variable");

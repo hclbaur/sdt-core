@@ -55,7 +55,7 @@ public final class SDTParser implements Parser<Transform> {
 	private static final String ATTRIBUTE_NOT_ALLOWED = "attribute '%s' is not allowed here";
 	private static final String KEYWORD_UNKNOWN = "keyword '%s' is unknown";
 	private static final String NODE_NAME_INVALID = "node name '%s' is invalid";
-	private static final String PARAMETER_REDECLARED = "parameter '%s' cannot be redeclared";
+	private static final String PARAMETER_REASSIGNED = "parameter '%s' cannot be reassigned";
 	private static final String PARAM_OVERWRITES_VARIABLE = "parameter '%s' cannot overwrite variable";
 	private static final String STATEMENT_EXPECTED = "'%s' statement expected";
 	private static final String ATTRIBUTE_EXPECTED_IN = "'%s' attribute expected in '%s'";
@@ -363,7 +363,7 @@ public final class SDTParser implements Parser<Transform> {
 		if ( isParam ) {
 			
 			if (params.size() > 1) // got more than one param
-				throw exception(params.get(1), PARAMETER_REDECLARED, varname);
+				throw exception(params.get(1), PARAMETER_REASSIGNED, varname);
 			
 			List<Node> vars = parent.findDescendant(n -> n.getName().equals(Keyword.VARIABLE.tag) 
 					&& ((DataNode) n).getValue().equals(varname)); // find variables with this name
