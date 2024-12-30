@@ -59,7 +59,8 @@ public class ParseSDAFunction implements Function
 	 *
 	 * @param str a string in SDA format
 	 * 
-	 * @return a <code>DataNode/code>
+	 * @return a data node
+	 * 
 	 * @throws FunctionCallException if an exception occurs.
 	 */
 	public static DataNode evaluate(String str) throws FunctionCallException {

@@ -24,7 +24,7 @@ import be.baur.sdt.xpath.function.TokenizeFunction;
  * example:
  *
  * <pre>
- * XPath path = new SDAXPath("/addressbook");
+ * XPath path = new SDAXPath("<i>expression</i>");
  * List results = path.selectNodes(node);
  * </pre>
  *
@@ -52,6 +52,7 @@ public class SDAXPath extends BaseXPath {
 	 * Create a new <code>SDAXPath</code> from an XPath expression.
 	 *
 	 * @param expression the XPath expression
+	 * 
 	 * @throws JaxenException if there is a syntax error in the expression
 	 */
 	public SDAXPath(String expression) throws JaxenException {

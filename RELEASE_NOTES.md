@@ -14,6 +14,7 @@ a result, existing transformations will need to be rewritten.
 - Added StatementContext.getVariableContext().
 - Closed issue #16 (restrict user defined variable names).
 - Closed issue #17 (document() adds a fake document node).
+- Closed issue #18 (update Javadoc of Navigator).
 - Closed issue #19 (review scoping of variables).
 
 ## Compatibility

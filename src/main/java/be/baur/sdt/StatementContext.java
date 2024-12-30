@@ -163,7 +163,7 @@ public class StatementContext implements VariableContext {
 	 * 
 	 * @param namespaceURI namespace URI of the variable, may be null
 	 * @param localName    local name of the variable, not null
-	 * @return StatementContext the context of the variable, may be null
+	 * @return the context of the variable, may be null
 	 */
 	public StatementContext getVariableContext(String namespaceURI, String localName) {
 
