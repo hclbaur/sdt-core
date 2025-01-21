@@ -4,7 +4,8 @@
 
 This release is still in development. This release impacts the way XPath expressions are written 
 (without referencing the root node) and how variables are (re)assigned with regards to scope. As 
-a result, existing transformations will need to be rewritten.
+a result, existing transformations will need to be rewritten. Also, a transform no longer adds a 
+default 'output' node.
 
 - `Removed` StatementContext.hasVariable().
 - `Removed` VariableStatement.isVarName().
@@ -16,6 +17,7 @@ a result, existing transformations will need to be rewritten.
 - Closed issue #17 (document() adds a fake document node).
 - Closed issue #18 (update Javadoc of Navigator).
 - Closed issue #19 (review scoping of variables).
+- Closed issue #20 (remove default output node).
 
 ## Compatibility
 

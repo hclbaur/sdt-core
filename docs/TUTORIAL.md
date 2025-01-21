@@ -207,9 +207,11 @@ This will produce the following SDA document:
 		phonenumbers "06-44444444"
 	}
 
-The `node` statement will instantiate a new node with the specified name and (an optional) `value` equal to the string evaluation of the given expression. And any nodes created within the node statement block become children of the enclosing node. As promised, it's pretty straight-forward.
+The `node` statement will instantiate a new node with the specified name and (an optional) `value` equal to the string evaluation of the given expression. And any nodes created within the node statement block become children of the enclosing node. 
 
-If you need an output node to be *identical* to an input node, you can use the `copy` statement to clone the selected one(s):
+As promised, it's pretty straight-forward, but you need to keep one thing in mind: a transform must never create more than a single root (top-level) node. In this example, that is the 'contacts' node. If you were to create a (sibling) node after that, the transform will fail.
+
+Also node (ok, lame pun) that if you need an output node to be *identical* to an input node, you can use the `copy` statement to clone the selected one(s):
 
 	...
 	node "contacts" {

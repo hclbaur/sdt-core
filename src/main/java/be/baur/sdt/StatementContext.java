@@ -18,9 +18,9 @@ import be.baur.sda.DataNode;
  * same name. A statement context will first try to resolve a variable binding
  * in its own context before checking its ancestor contexts.
  * <p>
- * In addition, the statement context provides the current context node for the
- * evaluation of XPath expressions, and the current output node that will be the
- * parent of newly created nodes.
+ * In addition, the statement context may provide the current context node for
+ * the evaluation of XPath expressions, and the current output node that will be
+ * the parent of newly created nodes.
  * 
  * @see VariableContext
  */
@@ -29,8 +29,8 @@ public class StatementContext implements VariableContext {
 	private final StatementContext parent; // the parent of this context
     private final Map<String, Object> variables = new HashMap<String, Object>();	
 
-    private Object contextNode = new DataNode("dummy"); // dummy (empty) context node
-    private DataNode outputNode = new DataNode("output"); // the output document node
+    private Object contextNode; // the (initial) context node
+    private DataNode outputNode; // the (initial) output node
     
 	/**
 	 * Creates a {@code StatementContext}.
@@ -64,7 +64,7 @@ public class StatementContext implements VariableContext {
 	/**
 	 * Returns the current context node.
 	 * 
-	 * @return a context node, may be null
+	 * @return a context node, initially null
 	 */
 	public Object getContextNode() {
 		return contextNode;
@@ -83,9 +83,9 @@ public class StatementContext implements VariableContext {
 
 	
 	/**
-	 * Returns the output document node.
+	 * Returns the current output node.
 	 * 
-	 * @return a data node, not null
+	 * @return a data node, initially null
 	 */
 	public DataNode getOutputNode() {
 		return outputNode;

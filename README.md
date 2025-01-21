@@ -52,14 +52,12 @@ This will transform the data in the file `addressbook.sda` according to the reci
 
 into
 
-	output {
-		contacts {
-			person "ALICE" {
-				phones "06-11111111,06-22222222"
-			}
-			person "BOB" {
-				phones "06-33333333,06-44444444"
-			}
+	contacts {
+		person "ALICE" {
+			phones "06-11111111,06-22222222"
+		}
+		person "BOB" {
+			phones "06-33333333,06-44444444"
 		}
 	}
 
