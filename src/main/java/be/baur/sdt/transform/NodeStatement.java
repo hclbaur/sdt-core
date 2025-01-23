@@ -96,7 +96,7 @@ public class NodeStatement extends Statement {
 			if (valueExpression != null) {
 				XPath xpath = new SDAXPath(valueExpression);
 				xpath.setVariableContext(staco);
-				value = xpath.stringValueOf(staco.getContextNode());
+				value = xpath.stringValueOf(staco.getXPathContext());
 			}
 			
 			DataNode newNode = new DataNode(nodeName, value);

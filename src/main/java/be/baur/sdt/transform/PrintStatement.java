@@ -49,7 +49,7 @@ public class PrintStatement extends XPathStatement {
 		try {
 			XPath xpath = new SDAXPath(getExpression()); 
 			xpath.setVariableContext(staco);
-			String value = xpath.stringValueOf(staco.getContextNode());
+			String value = xpath.stringValueOf(staco.getXPathContext());
 			
 			Writer writer = traco.getWriter();
 			writer.write(value); 

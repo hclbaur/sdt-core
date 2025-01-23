@@ -71,7 +71,7 @@ public class VariableStatement extends XPathStatement {
 		try {
 			XPath xpath = new SDAXPath(getExpression());
 			xpath.setVariableContext(staco);
-			Object value = xpath.evaluate(staco.getContextNode());
+			Object value = xpath.evaluate(staco.getXPathContext());
 
 			if (value instanceof List && ((List) value).size() == 1) {
 				value = ((List) value).get(0); // replace a list of one node with that node

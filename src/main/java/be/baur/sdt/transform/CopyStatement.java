@@ -37,7 +37,7 @@ public class CopyStatement extends XPathStatement {
 		try {
 			XPath xpath = new SDAXPath(getExpression());
 			xpath.setVariableContext(staco);
-			Object value = xpath.evaluate(staco.getContextNode());
+			Object value = xpath.evaluate(staco.getXPathContext());
 
 			if (!(value instanceof List)) return;
 			

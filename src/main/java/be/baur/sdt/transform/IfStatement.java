@@ -40,7 +40,7 @@ public class IfStatement extends XPathStatement {
 		try {
 			XPath xpath = new SDAXPath(getExpression());
 			xpath.setVariableContext(staco);
-			Boolean test = xpath.booleanValueOf(staco.getContextNode());
+			Boolean test = xpath.booleanValueOf(staco.getXPathContext());
 
 			if (! test) return; // do nothing
 			

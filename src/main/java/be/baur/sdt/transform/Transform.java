@@ -43,8 +43,7 @@ public final class Transform extends AbstractNode {
 		Objects.requireNonNull(context, "context must not be null");
 
 		StatementContext staco = new StatementContext();
-	    staco.setContextNode(new DataNode("context")); // initial context, just some node, not null
-	    DataNode output = new DataNode("output");      // to collect nodes created during transform
+	    DataNode output = new DataNode("output"); // collects nodes created during transform
 	    staco.setOutputNode(output);
 	    
 	    List<Statement> statements = nodes();

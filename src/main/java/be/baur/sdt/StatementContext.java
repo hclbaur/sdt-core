@@ -1,5 +1,6 @@
 package be.baur.sdt;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -18,9 +19,9 @@ import be.baur.sda.DataNode;
  * same name. A statement context will first try to resolve a variable binding
  * in its own context before checking its ancestor contexts.
  * <p>
- * In addition, the statement context may provide the current context node for
- * the evaluation of XPath expressions, and the current output node that will be
- * the parent of newly created nodes.
+ * In addition, the statement context provides the context node(set) for the
+ * evaluation of XPath expressions, and the current output context node that
+ * will be the parent of newly created nodes.
  * 
  * @see VariableContext
  */
@@ -29,8 +30,8 @@ public class StatementContext implements VariableContext {
 	private final StatementContext parent; // the parent of this context
     private final Map<String, Object> variables = new HashMap<String, Object>();	
 
-    private Object contextNode; // the (initial) context node
-    private DataNode outputNode; // the (initial) output node
+    private Object xpathContext = Collections.EMPTY_LIST; // the (initial) XPath context
+    private DataNode outputNode = null; // the (initial) output context node
     
 	/**
 	 * Creates a {@code StatementContext}.
@@ -42,11 +43,11 @@ public class StatementContext implements VariableContext {
 	
 	/*
 	 * Private constructor to create a context from a parent context. The child
-	 * context will inherit the current context node and the current output node.
+	 * context will inherit the current XPath context and output context node.
 	 */
 	private StatementContext(StatementContext parent) {
 		this.parent = parent;
-		this.contextNode = parent.getContextNode();
+		this.xpathContext = parent.getXPathContext();
 		this.outputNode = parent.getOutputNode();
 	}
 
@@ -62,28 +63,28 @@ public class StatementContext implements VariableContext {
 
 
 	/**
-	 * Returns the current context node.
+	 * Returns the current XPath context.
 	 * 
-	 * @return a context node, initially null
+	 * @return a context object, not null
 	 */
-	public Object getContextNode() {
-		return contextNode;
+	public Object getXPathContext() {
+		return xpathContext;
 	}
 
 
 	/**
-	 * Sets the current context node. A null value is not allowed.
+	 * Sets the current XPath context. A null value is not allowed.
 	 * 
-	 * @param contextNode a context node, not null
+	 * @param xpathContext a context node, not null
 	 */
-	public void setContextNode(Object contextNode) {
-		Objects.requireNonNull(contextNode, "contextNode must not be null");
-		this.contextNode = contextNode;
+	public void setContextNode(Object xpathContext) {
+		Objects.requireNonNull(xpathContext, "xpathContext must not be null");
+		this.xpathContext = xpathContext;
 	}
 
 	
 	/**
-	 * Returns the current output node.
+	 * Returns the current output context node.
 	 * 
 	 * @return a data node, initially null
 	 */
@@ -93,7 +94,7 @@ public class StatementContext implements VariableContext {
 
 
 	/**
-	 * Sets the current output node. A null value is not allowed.
+	 * Sets the current output context node. A null value is not allowed.
 	 * 
 	 * @param outputNode a data node, not null
 	 */

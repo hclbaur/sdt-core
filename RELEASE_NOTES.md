@@ -8,8 +8,8 @@ a result, existing transformations will need to be rewritten. Also, a transform 
 default 'output' node.
 
 - `Removed` StatementContext.hasVariable().
-- `Removed` VariableStatement.isVarName().
-- Added SDT.isVariableName().
+- `Changed` VariableStatement.isVarName() to SDT.isVariableName().
+- `Changed` StatementContext.get/setContextNode() to get/setXPathContext().
 - Added function parse-sda().
 - Added function document-node().
 - Added StatementContext.getVariableContext().
