@@ -1,7 +1,6 @@
 package be.baur.sdt.xpath.function;
 
 import java.io.IOException;
-import java.io.StringWriter;
 import java.util.List;
 
 import org.jaxen.Context;
@@ -83,13 +82,11 @@ public class RenderSDAFunction implements Function
 
 			if (first instanceof DataNode) {
 				if (pretty) {
-					StringWriter s = new StringWriter();
 					try {
-						SDA.format(s, (DataNode) first);
+						return SDA.format((DataNode) first);
 					} catch (IOException e) {
 						throw new FunctionCallException(e);
 					}
-					return s.toString();
 				} else
 					return first.toString();
 			}

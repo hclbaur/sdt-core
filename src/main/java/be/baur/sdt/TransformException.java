@@ -24,8 +24,8 @@ public final class TransformException extends ProcessingException {
 	/**
 	 * Creates a transform exception caused by another exception.
 	 * 
-	 * @param node    the node where an exception occurred
-	 * @param cause   the exception causing this exception to be thrown
+	 * @param node  the node where an exception occurred
+	 * @param cause the exception causing this exception to be thrown
 	 */
 	public TransformException(Node node, Throwable cause) {
 		super(node, cause.getMessage()); initCause(cause);

@@ -1,7 +1,6 @@
 package be.baur.sdt.xpath;
 
 import java.io.File;
-import java.io.FileReader;
 import java.io.Reader;
 import java.util.Collections;
 import java.util.Iterator;
@@ -14,9 +13,9 @@ import org.jaxen.Navigator;
 import org.jaxen.UnsupportedAxisException;
 import org.jaxen.XPath;
 
+import be.baur.sda.DataNode;
 import be.baur.sda.Node;
 import be.baur.sda.SDA;
-import be.baur.sda.DataNode;
 
 /**
  * Interface for navigating around the SDA object model.
@@ -209,7 +208,7 @@ public class DocumentNavigator extends DefaultNavigator {
     public Object getDocument(String uri) throws FunctionCallException
     {
     	try {
-			return getDocument(new FileReader(new File(uri)));
+			return SDA.parse(new File(uri));
 		} catch (Exception e) {
 			throw new FunctionCallException(e.getMessage(), e);
 		}

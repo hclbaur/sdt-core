@@ -1,6 +1,6 @@
 # Release Notes
 
-## [1.4.0] - 2024-??-?? (requires SDA v2.2.1)
+## [1.4.0] - 2025-??-?? (requires SDA v2.2.1)
 
 This release is still in development. This release impacts the way XPath expressions are written 
 (without referencing the root node) and how variables are (re)assigned with regards to scope. As 
@@ -21,7 +21,7 @@ default 'output' node.
 
 ## Compatibility
 
-- Requires Java 8, sda-core 2.2.1 and Jaxen 2.0.0.
+- Requires Java 8, sda-core 2.2.1 or higher and Jaxen 2.0.0.
 
 ## Previous releases
 

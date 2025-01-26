@@ -1,8 +1,7 @@
 import java.io.FileReader;
-import java.io.PrintWriter;
 
-import be.baur.sda.SDA;
 import be.baur.sda.DataNode;
+import be.baur.sda.SDA;
 import be.baur.sdt.SDT;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.transform.Transform;
@@ -20,6 +19,6 @@ public class demo {
 			.build();
 		
 		DataNode output = transform.execute(c); 
-		SDA.format(new PrintWriter(System.out), output);
+		System.out.println(SDA.format(output));
 	}
 }

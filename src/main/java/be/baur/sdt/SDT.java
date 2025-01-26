@@ -81,35 +81,40 @@ public final class SDT {
 	 * @return true or false
 	 */
 	public static boolean isVariableName(String name) {
-	    
-		if (name == null || name.isEmpty())return false;
+
+		if (name == null || name.isEmpty())
+			return false;
 		return VARNAME.matcher(name).matches();
 	}
-	
-//	public static void main(String[] args) {
-//
-//		String s;
-//		s="@"; System.out.println(s + ": " + isVariableName(s));
-//		s="2"; System.out.println(s + ": " + isVariableName(s));
-//		s="_"; System.out.println(s + ": " + isVariableName(s));
-//		s="_@"; System.out.println(s + ": " + isVariableName(s));
-//		s="__"; System.out.println(s + ": " + isVariableName(s));
-//		s=".a"; System.out.println(s + ": " + isVariableName(s));
-//		s="-a"; System.out.println(s + ": " + isVariableName(s));
-//		
-//		s="a"; System.out.println(s + ": " + isVariableName(s));
-//		s="aa"; System.out.println(s + ": " + isVariableName(s));
-//		s="_a"; System.out.println(s + ": " + isVariableName(s));
-//		s="a_"; System.out.println(s + ": " + isVariableName(s));
-//		s="a2"; System.out.println(s + ": " + isVariableName(s));
-//		s="a."; System.out.println(s + ": " + isVariableName(s));
-//		s="a-"; System.out.println(s + ": " + isVariableName(s));
-//		
-//		s="a a"; System.out.println(s + ": " + isVariableName(s));	
-//		s="___"; System.out.println(s + ": " + isVariableName(s));	
-//		
-//		s="_a_"; System.out.println(s + ": " + isVariableName(s));	
-//		s="a_a"; System.out.println(s + ": " + isVariableName(s));
-//		s="a-a"; System.out.println(s + ": " + isVariableName(s));
-//	}
+
+/*
+	public static void main(String[] args) {
+
+		String s;
+		s="@"; System.out.println(s + ": " + isVariableName(s));
+		s="2"; System.out.println(s + ": " + isVariableName(s));
+		s="_"; System.out.println(s + ": " + isVariableName(s));
+		s="_@"; System.out.println(s + ": " + isVariableName(s));
+		s="__"; System.out.println(s + ": " + isVariableName(s));
+		s=".a"; System.out.println(s + ": " + isVariableName(s));
+		s="-a"; System.out.println(s + ": " + isVariableName(s));
+		
+		s="a"; System.out.println(s + ": " + isVariableName(s));
+		s="aa"; System.out.println(s + ": " + isVariableName(s));
+		s="_a"; System.out.println(s + ": " + isVariableName(s));
+		s="a_"; System.out.println(s + ": " + isVariableName(s));
+		s="_2"; System.out.println(s + ": " + isVariableName(s));
+		s="a2"; System.out.println(s + ": " + isVariableName(s));
+		s="2a"; System.out.println(s + ": " + isVariableName(s));
+		s="a."; System.out.println(s + ": " + isVariableName(s));
+		s="a-"; System.out.println(s + ": " + isVariableName(s));
+		
+		s="a a"; System.out.println(s + ": " + isVariableName(s));	
+		s="___"; System.out.println(s + ": " + isVariableName(s));	
+		
+		s="_a_"; System.out.println(s + ": " + isVariableName(s));	
+		s="a_a"; System.out.println(s + ": " + isVariableName(s));
+		s="a-a"; System.out.println(s + ": " + isVariableName(s));
+	}
+*/
 }

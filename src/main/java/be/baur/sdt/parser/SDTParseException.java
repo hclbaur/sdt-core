@@ -25,10 +25,9 @@ public class SDTParseException extends ProcessingException {
 	 * Creates an SDT parse exception caused by another exception.
 	 * 
 	 * @param node    the node where an exception occurred
-	 * @param message an error message
 	 * @param cause   the exception causing this exception to be thrown
 	 */
-	public SDTParseException(Node node, String message, Throwable cause) {
+	public SDTParseException(Node node, Throwable cause) {
 		super(node, cause.getMessage()); initCause(cause);
 	}
 

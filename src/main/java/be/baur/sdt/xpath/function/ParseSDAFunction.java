@@ -1,7 +1,6 @@
 package be.baur.sdt.xpath.function;
 
 import java.io.IOException;
-import java.io.StringReader;
 import java.util.List;
 
 import org.jaxen.Context;
@@ -11,7 +10,7 @@ import org.jaxen.function.StringFunction;
 
 import be.baur.sda.DataNode;
 import be.baur.sda.SDA;
-import be.baur.sda.serialization.SDAParseException;
+import be.baur.sda.serialization.ParseException;
 import be.baur.sda.serialization.SDAParser;
 
 /**
@@ -66,8 +65,8 @@ public class ParseSDAFunction implements Function
 	public static DataNode evaluate(String str) throws FunctionCallException {
 
 		try {
-			return SDA.parse(new StringReader(str));
-		} catch (SDAParseException | IOException e) {
+			return SDA.parse(str);
+		} catch (ParseException | IOException e) {
 			throw new FunctionCallException(e);
 		}
 	}

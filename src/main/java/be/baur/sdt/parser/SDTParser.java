@@ -88,7 +88,7 @@ public final class SDTParser implements Parser<Transform> {
 		try {
 			sdt = SDA.parse(input);
 		} catch (Exception e) {
-			throw new SDTParseException(null, e.getMessage(), e);
+			throw new SDTParseException(null, e);
 		}
 		return parse(sdt);
 	}
@@ -420,7 +420,7 @@ public final class SDTParser implements Parser<Transform> {
 		try {
 			xpath = new SDAXPath(node.getValue());
 		} catch (Exception e) {
-			throw new SDTParseException(node, e.getMessage(), e);
+			throw new SDTParseException(node, e);
 		}
 		return xpath;
 	}
