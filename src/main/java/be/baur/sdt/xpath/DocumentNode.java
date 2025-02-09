@@ -4,6 +4,7 @@ import java.util.Objects;
 
 import be.baur.sda.AbstractNode;
 import be.baur.sda.DataNode;
+import be.baur.sda.Node;
 
 /**
  * A document node is a node that encapsulates the entire document. In SDA there
@@ -20,14 +21,29 @@ final class DocumentNode extends AbstractNode {
 	 */
 	DocumentNode(DataNode root) {
 		Objects.requireNonNull(root, "root node must not be null");
-		add(root); // will throw an exception if root has a parent!
+		super.add(root); // one and only child; we override the add/remove methods.
 	}
 
-	/*
-	 * DocumentNodes should not be tampered with after creation. We should override
-	 * the add/remove methods to prevent modifying them, but this will require a
-	 * change in sda-core, as currently they cannot be overridden.
+
+	/**
+	 * This method throws an {@code UnsupportedOperationException}. DocumentNodes
+	 * must not be tampered with after creation.
 	 */
+	@Override
+	public boolean add(Node node) {
+		throw new UnsupportedOperationException("cannot add to a document node");
+	}
+
+
+	/**
+	 * This method throws an {@code UnsupportedOperationException}. DocumentNodes
+	 * must not be tampered with after creation.
+	 */
+	@Override
+	public boolean remove(Node node) {
+		throw new UnsupportedOperationException("cannot remove from a document node");
+	}
+
 
 	/**
 	 * Returns a string representing the root node.
