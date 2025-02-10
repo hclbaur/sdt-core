@@ -11,7 +11,7 @@ import org.jaxen.function.BooleanFunction;
 
 import be.baur.sda.DataNode;
 import be.baur.sda.SDA;
-import be.baur.sda.serialization.SDAFormatter;
+import be.baur.sda.io.SDAFormatter;
 
 /**
  * <code><i>string</i> sdt:render-sda( <i>node(set)</i> )</code><br>

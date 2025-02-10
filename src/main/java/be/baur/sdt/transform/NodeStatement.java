@@ -106,7 +106,7 @@ public class NodeStatement extends Statement {
 			if (statements.isEmpty()) return; // nothing to do
 			
 			// if any child nodes may be created downstream, this will be a (vacant) parent 
-			if ( ! findDescendant(n -> n instanceof NodeStatement || n instanceof CopyStatement).isEmpty() ) {
+			if ( ! find(n -> n instanceof NodeStatement || n instanceof CopyStatement).isEmpty() ) {
 				newNode.add(null);
 			}
 			

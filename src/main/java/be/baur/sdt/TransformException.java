@@ -1,14 +1,14 @@
 package be.baur.sdt;
 
 import be.baur.sda.Node;
-import be.baur.sda.ProcessingException;
+import be.baur.sda.NodeException;
 
 /**
  * An {@code TransformException} may be thrown during the execution of a
  * transformation recipe.
  */
 @SuppressWarnings("serial")
-public final class TransformException extends ProcessingException {
+public final class TransformException extends NodeException {
 
 	/**
 	 * Creates a transform exception with an error node and message.

@@ -1,14 +1,14 @@
 package be.baur.sdt.parser;
 
 import be.baur.sda.Node;
-import be.baur.sda.ProcessingException;
+import be.baur.sda.NodeException;
 
 /**
  * An {@code SDTParseException} is thrown by an {@code SDTParser} if the SDS
  * syntax or semantics are violated.
  */
 @SuppressWarnings("serial")
-public class SDTParseException extends ProcessingException {
+public class SDTParseException extends NodeException {
 
 	/**
 	 * Creates an SDT parse exception with an error node and message.

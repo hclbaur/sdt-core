@@ -10,7 +10,7 @@ import org.jaxen.XPath;
 import be.baur.sda.DataNode;
 import be.baur.sda.Node;
 import be.baur.sda.SDA;
-import be.baur.sda.serialization.Parser;
+import be.baur.sda.io.Parser;
 import be.baur.sdt.SDT;
 import be.baur.sdt.transform.ChooseStatement;
 import be.baur.sdt.transform.CopyStatement;
@@ -272,7 +272,7 @@ public final class SDTParser implements Parser<Transform> {
 		if (value != null) // set the optional value expression
 			stat.setValueExpression(xpathFromNode(value));
 
-		for (Node node : sdt.find(n -> !n.getName().equals(Keyword.VALUE.tag))) // skip value attribute
+		for (Node node : sdt.getAll(n -> !n.getName().equals(Keyword.VALUE.tag))) // skip value attribute
 			stat.add(parseStatement((DataNode) node)); // parse and add child statements
 
 		return stat;
@@ -356,7 +356,7 @@ public final class SDTParser implements Parser<Transform> {
 		final Node parent = sdt.getParent();
 		
 		// find all declarations of a param with the specified name
-		List<Node> params = parent.find(n -> n.getName().equals(Keyword.PARAM.tag) 
+		List<Node> params = parent.getAll(n -> n.getName().equals(Keyword.PARAM.tag) 
 				&& ((DataNode) n).getValue().equals(varname));
 		
 		final boolean isParam = sdt.getName().equals(Keyword.PARAM.tag);
@@ -366,7 +366,7 @@ public final class SDTParser implements Parser<Transform> {
 			if (params.size() > 1) // got more than one param
 				throw exception(params.get(1), PARAMETER_REASSIGNED, varname);
 			
-			List<Node> vars = parent.findDescendant(n -> n.getName().equals(Keyword.VARIABLE.tag) 
+			List<Node> vars = parent.find(n -> n.getName().equals(Keyword.VARIABLE.tag) 
 					&& ((DataNode) n).getValue().equals(varname)); // find variables with this name
 			
 			if (vars.size() > 0) // got a variable with the same name
@@ -488,7 +488,7 @@ public final class SDTParser implements Parser<Transform> {
 	 */
 	private static DataNode getAttribute(final DataNode sdt, Keyword att, Boolean required) throws SDTParseException {
 
-		List<DataNode> alist = sdt.find(n -> n.isLeaf() && n.getName().equals(att.tag));
+		List<DataNode> alist = sdt.getAll(n -> n.isLeaf() && n.getName().equals(att.tag));
 		int size = alist.size();
 
 		if (size == 0) {

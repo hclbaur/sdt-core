@@ -10,8 +10,8 @@ import org.jaxen.function.StringFunction;
 
 import be.baur.sda.DataNode;
 import be.baur.sda.SDA;
-import be.baur.sda.serialization.ParseException;
-import be.baur.sda.serialization.SDAParser;
+import be.baur.sda.io.ParseException;
+import be.baur.sda.io.SDAParser;
 
 /**
  * <code><i>node</i> sdt:parse-sda( <i>string</i> )</code><br>
