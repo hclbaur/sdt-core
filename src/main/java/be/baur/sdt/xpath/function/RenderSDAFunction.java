@@ -1,7 +1,6 @@
 package be.baur.sdt.xpath.function;
 
 import java.io.IOException;
-import java.io.StringWriter;
 import java.util.List;
 
 import org.jaxen.Context;
@@ -12,7 +11,7 @@ import org.jaxen.function.BooleanFunction;
 
 import be.baur.sda.DataNode;
 import be.baur.sda.SDA;
-import be.baur.sda.serialization.SDAFormatter;
+import be.baur.sda.io.SDAFormatter;
 
 /**
  * <code><i>string</i> sdt:render-sda( <i>node(set)</i> )</code><br>
@@ -47,8 +46,7 @@ public class RenderSDAFunction implements Function
 	 * @return a <code>String</code>
 	 * 
 	 * @throws FunctionCallException if <code>args</code> has more than two or less
-	 *                               than one item, or if the first is not an SDA
-	 *                               node.
+	 *                               than one item.
 	 */
 	@Override
 	@SuppressWarnings("rawtypes")
@@ -76,7 +74,7 @@ public class RenderSDAFunction implements Function
 	@SuppressWarnings("rawtypes")
 	public static String evaluate(List list, boolean pretty, Navigator nav) throws FunctionCallException {
 
-		if (!list.isEmpty()) {
+		if (! list.isEmpty()) {
 
 			Object first = list.get(0);
 			if (first instanceof List)
@@ -84,13 +82,11 @@ public class RenderSDAFunction implements Function
 
 			if (first instanceof DataNode) {
 				if (pretty) {
-					StringWriter s = new StringWriter();
 					try {
-						SDA.format(s, (DataNode) first);
+						return SDA.format((DataNode) first);
 					} catch (IOException e) {
 						throw new FunctionCallException(e);
 					}
-					return s.toString();
 				} else
 					return first.toString();
 			}

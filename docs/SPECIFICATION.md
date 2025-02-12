@@ -19,8 +19,9 @@
 	- [Other functions](#other-functions)
 - [SDT Extensions](#sdt-extensions)
 	- [compare-number](#compare-number), [compare-string](#compare-string)
+	- [document-node](#document-node)
 	- [left](#left), [right](#right)
-	- [render-sda](#render-sda)
+	- [parse-sda](#parse-sda), [render-sda](#render-sda)
 	- [string-join](#string-join), [tokenize](#tokenize)
 
 
@@ -286,6 +287,13 @@ An optional third argument specifies the language tag (IETF BCP 47) to obtain a 
 This function can be used as a comparator in a sort statement.
 
 
+#### document-node
+
+<code><i>node</i> sdt:document-node( <i>node(set)</i> )</code>
+
+Constructs a new document node from the first SDA node in the set. This function is supplied mainly for backwards compatibility reasons.
+
+
 #### left
 
 <code><i>string</i> sdt:left( <i>string</i>, <i>number</i> )</code>
@@ -295,6 +303,13 @@ Returns the specified number of characters from the start of the argument string
 <code>sdt:left('12345', 3)</code> returns <code>"123"</code>.
 
 If the second argument is not a number or less than 1, an empty string is returned. If it exceeds the string length of the first argument, the entire string is returned.
+
+
+#### parse-sda
+
+<code><i>node</i> sdt:parse-sda( <i>string</i> )</code><br>
+
+Parses a string in SDA format and returns a data node.
 
 
 #### render-sda

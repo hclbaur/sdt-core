@@ -8,8 +8,8 @@ import java.util.Objects;
 import be.baur.sda.AbstractNode;
 import be.baur.sda.DataNode;
 import be.baur.sda.Node;
-import be.baur.sda.serialization.SDAFormatter;
-import be.baur.sda.serialization.SDAParseException;
+import be.baur.sda.io.SDAFormatter;
+import be.baur.sda.io.SDAParseException;
 import be.baur.sdt.SDT;
 import be.baur.sdt.StatementContext;
 import be.baur.sdt.TransformContext;
@@ -29,12 +29,12 @@ import be.baur.sdt.parser.SDTParser;
 public final class Transform extends AbstractNode {
 	
 	/**
-	 * Executes this transform with the supplied {@code TransformContext}. This method
-	 * returns an output {@code DataNode} which may be empty if no nodes were created
-	 * during transformation, but not null.
+	 * Executes this transform with the supplied {@code TransformContext}. This
+	 * method returns an output {@code DataNode} or null if no nodes were created
+	 * during transformation.
 	 * 
 	 * @param context the transformation context, not null
-	 * @return an output node, not null
+	 * @return an output node, may be null
 	 * @throws TransformException if an exception occurs during execution
 	 * @see TransformContext
 	 */
@@ -42,16 +42,36 @@ public final class Transform extends AbstractNode {
 
 		Objects.requireNonNull(context, "context must not be null");
 
-		List<Statement> statements = nodes();
 		StatementContext staco = new StatementContext();
-
+	    DataNode output = new DataNode("output"); // collects nodes created during transform
+	    staco.setOutputNode(output);
+	    
+	    List<Statement> statements = nodes();
 		for (Statement statement : statements) {
 			statement.execute(context, staco);
 		}
 
-		// At the end of the transform return the output node
-		// this is probably not the best design, must improve!
-		return staco.getOutputNode();
+		/*
+		 * At the end of the transform the output node will contain zero or more child
+		 * nodes that have been created during transformation. However, a transform must
+		 * return at most one data node. If additional nodes were created, an exception
+		 * is thrown.
+		 */
+ 
+		List<DataNode> nodes = output.nodes();
+		
+		switch (nodes.size()) {
+		case 0:
+			return null;
+		case 1:
+			DataNode first = nodes.get(0);
+			output.remove(first);
+			return first;
+		}
+		
+		// if we get here at least 2 top-level nodes were created, which is illegal
+		throw new TransformException(null,
+			"an additional root node '" + nodes.get(1).getName() + "' was created");
 	}
 	
 	

@@ -96,7 +96,7 @@ public class NodeStatement extends Statement {
 			if (valueExpression != null) {
 				XPath xpath = new SDAXPath(valueExpression);
 				xpath.setVariableContext(staco);
-				value = xpath.stringValueOf(staco.getContextNode());
+				value = xpath.stringValueOf(staco.getXPathContext());
 			}
 			
 			DataNode newNode = new DataNode(nodeName, value);
@@ -106,7 +106,7 @@ public class NodeStatement extends Statement {
 			if (statements.isEmpty()) return; // nothing to do
 			
 			// if any child nodes may be created downstream, this will be a (vacant) parent 
-			if ( ! findDescendant(n -> n instanceof NodeStatement || n instanceof CopyStatement).isEmpty() ) {
+			if ( ! find(n -> n instanceof NodeStatement || n instanceof CopyStatement).isEmpty() ) {
 				newNode.add(null);
 			}
 			

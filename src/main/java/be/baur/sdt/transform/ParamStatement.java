@@ -42,14 +42,14 @@ public class ParamStatement extends VariableStatement {
 		 */
 		final String param = getVarName();
 		
-		if (staco.hasVariable(null, param))
-			throw new TransformException(this, "parameter '" + param + "' cannot be redeclared.");
+		if (staco.getVariableContext(null, param) != null)
+			throw new TransformException(this, "parameter '" + param + "' cannot be reassigned.");
 			
 		Object value = traco.getParameters().get(param);
 		if (value != null)
 			staco.setVariableValue(null, param, value);
 		else
-			super.execute(traco, staco);
+			super.execute(traco, staco); // wise?
 	}
 	
 	

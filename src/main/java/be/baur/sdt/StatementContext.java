@@ -1,5 +1,6 @@
 package be.baur.sdt;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -18,9 +19,9 @@ import be.baur.sda.DataNode;
  * same name. A statement context will first try to resolve a variable binding
  * in its own context before checking its ancestor contexts.
  * <p>
- * In addition, the statement context provides the current context node for the
- * evaluation of XPath expressions, and the current output node that will be the
- * parent of newly created nodes.
+ * In addition, the statement context provides the context node(set) for the
+ * evaluation of XPath expressions, and the current output context node that
+ * will be the parent of newly created nodes.
  * 
  * @see VariableContext
  */
@@ -29,8 +30,8 @@ public class StatementContext implements VariableContext {
 	private final StatementContext parent; // the parent of this context
     private final Map<String, Object> variables = new HashMap<String, Object>();	
 
-    private Object contextNode = new DataNode("dummy"); // dummy (empty) context node
-    private DataNode outputNode = new DataNode("output"); // the output document node
+    private Object xpathContext = Collections.EMPTY_LIST; // the (initial) XPath context
+    private DataNode outputNode = null; // the (initial) output context node
     
 	/**
 	 * Creates a {@code StatementContext}.
@@ -42,11 +43,11 @@ public class StatementContext implements VariableContext {
 	
 	/*
 	 * Private constructor to create a context from a parent context. The child
-	 * context will inherit the current context node and the current output node.
+	 * context will inherit the current XPath context and output context node.
 	 */
 	private StatementContext(StatementContext parent) {
 		this.parent = parent;
-		this.contextNode = parent.getContextNode();
+		this.xpathContext = parent.getXPathContext();
 		this.outputNode = parent.getOutputNode();
 	}
 
@@ -62,30 +63,30 @@ public class StatementContext implements VariableContext {
 
 
 	/**
-	 * Returns the current context node.
+	 * Returns the current XPath context.
 	 * 
-	 * @return a context node, may be null
+	 * @return a context object, not null
 	 */
-	public Object getContextNode() {
-		return contextNode;
+	public Object getXPathContext() {
+		return xpathContext;
 	}
 
 
 	/**
-	 * Sets the current context node. A null value is not allowed.
+	 * Sets the current XPath context. A null value is not allowed.
 	 * 
-	 * @param contextNode a context node, not null
+	 * @param xpathContext a context node, not null
 	 */
-	public void setContextNode(Object contextNode) {
-		Objects.requireNonNull(contextNode, "contextNode must not be null");
-		this.contextNode = contextNode;
+	public void setContextNode(Object xpathContext) {
+		Objects.requireNonNull(xpathContext, "xpathContext must not be null");
+		this.xpathContext = xpathContext;
 	}
 
 	
 	/**
-	 * Returns the output document node.
+	 * Returns the current output context node.
 	 * 
-	 * @return a data node, not null
+	 * @return a data node, initially null
 	 */
 	public DataNode getOutputNode() {
 		return outputNode;
@@ -93,7 +94,7 @@ public class StatementContext implements VariableContext {
 
 
 	/**
-	 * Sets the current output node. A null value is not allowed.
+	 * Sets the current output context node. A null value is not allowed.
 	 * 
 	 * @param outputNode a data node, not null
 	 */
@@ -117,73 +118,65 @@ public class StatementContext implements VariableContext {
 	 * <p>
 	 * The variable is optionally associated with a namespace URI.
 	 * 
-	 * @param nsURI     namespace URI of the variable, may be null
-	 * @param localName local name of the variable, not null
-	 * @param value     value to be set, may be null
+	 * @param namespaceURI namespace URI of the variable, may be null
+	 * @param localName    local name of the variable, not null
+	 * @param value        value to be set, may be null
 	 */
-	public void setVariableValue(String nsURI, String localName, Object value) {
+	public void setVariableValue(String namespaceURI, String localName, Object value) {
 		
 		Objects.requireNonNull(localName, "localName must not be null");
-		this.variables.put(key(nsURI, localName), value);
-	}
-
-
-	/*
-	 * Private recursive method that returns the value of a variable if this or any
-	 * of the parent contexts contain the specified variable key. Otherwise, an
-	 * UnresolvableException is thrown. The pfxname is the name of the variable
-	 * including the namespace prefix.
-	 */
-	private Object getVariableValueByKey(String key, String pfxname) throws UnresolvableException {
-
-		if (this.variables.containsKey(key))
-			return this.variables.get(key);
-
-		if (parent == null)
-			throw new UnresolvableException("variable '" + pfxname + "' not found");
-
-		return parent.getVariableValueByKey(key, pfxname);
+		this.variables.put(key(namespaceURI, localName), value);
 	}
 
 
 	/**
-	 * Returns the value of an XPath variable based on the namespace URI and local
-	 * name of the variable-reference expression.
+	 * Returns the value of a variable specified by a local name and optional
+	 * namespace URI. If the variable is found in the current context or in any
+	 * ancestor context, its value will be returned. Otherwise an
+	 * {@code UnresolvableException} is thrown.
 	 * 
-	 * @throws NullPointerException if localName is null
+	 * @param namespaceURI namespace URI of the variable, may be null
+	 * @param prefix       namespace prefix of the variable
+	 * @param localName    local name of the variable, not null
 	 */
 	@Override
 	public Object getVariableValue(String namespaceURI, String prefix, String localName) throws UnresolvableException {
 
 		Objects.requireNonNull(localName, "localName must not be null");
-		return getVariableValueByKey(key(namespaceURI, localName), prefix == "" ? localName : prefix + ":" + localName);
-	}
+		final String key = key(namespaceURI, localName);
 
-
-	/*
-	 * Private recursive method that returns true if this or any of the parent
-	 * contexts contain the specified variable key. Otherwise false is returned.
-	 */
-	private boolean containsVariableKey(String key) {
-		
 		if (this.variables.containsKey(key))
-			return true;
-		
-		return (parent == null) ? false : parent.containsVariableKey(key);
+			return this.variables.get(key);
+
+		if (parent != null)
+			return parent.getVariableValue(namespaceURI, prefix, localName);
+
+		final String pfxname = (prefix == null || prefix.isEmpty()) ? localName : prefix + ":" + localName;
+		throw new UnresolvableException("variable '" + pfxname + "' not found");
 	}
 
-
+	
 	/**
-	 * Returns whether this context can resolve the specified XPath variable.
+	 * Returns the context of a variable specified by a local name and optional
+	 * namespace URI. If found in the current context, this will be returned.
+	 * Otherwise, the first ancestor context that contains it is returned, or null
+	 * if the variable is not found at all.
 	 * 
 	 * @param namespaceURI namespace URI of the variable, may be null
 	 * @param localName    local name of the variable, not null
-	 * @return true if the variable can be resolved
+	 * @return the context of the variable, may be null
 	 */
-	public boolean hasVariable(String namespaceURI, String localName) {
+	public StatementContext getVariableContext(String namespaceURI, String localName) {
 
 		Objects.requireNonNull(localName, "localName must not be null");
-		return containsVariableKey(key(namespaceURI, localName));
+
+		if (this.variables.containsKey(key(namespaceURI, localName)))
+			return this;
+
+		if (parent != null)
+			return parent.getVariableContext(namespaceURI, localName);
+
+		return null;
 	}
 
 }

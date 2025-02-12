@@ -119,7 +119,7 @@ public class SortStatement extends XPathStatement {
 						String comexpr = comparatorExpression.replaceFirst("\\?", "'"+s1+"'");
 						XPath comxp = new SDAXPath(comexpr.replaceFirst("\\?", "'"+s2+"'"));
 						comxp.setVariableContext(context);
-						return (int) Math.signum((double) comxp.numberValueOf(context.getContextNode()));
+						return (int) Math.signum((double) comxp.numberValueOf(context.getXPathContext()));
 					}
 				} catch (JaxenException e) {
 					throw new JaxenRuntimeException(e);
@@ -131,7 +131,7 @@ public class SortStatement extends XPathStatement {
 		if (reverseExpression != null) {
 			XPath revxp = new SDAXPath(reverseExpression);
 			revxp.setVariableContext(context);
-			if (revxp.booleanValueOf(context.getContextNode()))
+			if (revxp.booleanValueOf(context.getXPathContext()))
 				return comparator.reversed();
 		}
 

@@ -74,11 +74,11 @@ The address book might be in an SDA file called `addressbook.sda`, located in wh
 
 	transform {
 		param "filename" { select "'addressbook.sda'" }
-		variable "doc" { select "document($filename)" }
-		println "concat('Hello ', $doc/addressbook/contact[1]/firstname, '!')"
+		variable "addressbook" { select "document($filename)" }
+		println "concat('Hello ', $addressbook/contact[1]/firstname, '!')"
 	}
 
-We use the *document()* function to read and parse it into an SDA node tree, which is bound to a variable *doc* for reference in subsequent expressions. Note that unlike `param`, the `variable` statement declares a variable that can *not* be overriden by the transformation context. Executing this recipe would produce:
+We use the *document()* function to read and parse it into an SDA node tree, which is bound to a variable *addressbook* for reference in subsequent expressions. Note that unlike `param`, the `variable` statement declares a variable that can *not* be overriden by the transformation context. Executing this recipe would produce:
 
 	Hello Alice!
 
@@ -92,7 +92,7 @@ Suppose we want to iterate over all phone numbers in the address book and list t
 <pre>
 transform {
 	<i>...(read address book)...</i>
-	foreach "$doc/addressbook/contact/phonenumber" {
+	foreach "$addressbook/contact/phonenumber" {
 		println "concat('Number ', $sdt:position, ' of ', $sdt:last, ': ', ., ' (', ../firstname, ')')"
 	}
 }
@@ -110,7 +110,7 @@ Inside the loop, the 'phonenumber' node currenlty iterated is the *context node*
 Now, we will add a predicate that selects only the "odd" phone numbers (1 and 3) and see what happens:
 
 	...
-	foreach "($doc//phonenumber)[(position() mod 2) = 1]" {
+	foreach "($addressbook//phonenumber)[(position() mod 2) = 1]" {
 		println "concat('Number ', $sdt:position, ' of ', $sdt:last, ': ', ., ' (', ../firstname, ')')"
 	}
 
@@ -131,7 +131,7 @@ There's more to say about iterations, and we will come back to this subject late
 Whether you are iterating a set or not, processing may be *conditional*. That is, you may want to process something in a different way - or not at all - depending on the outcome of some pre-defined test. For example, here is how to print the odd phone numbers in a different way:
 
 	...
-	foreach "$doc//phonenumber" {
+	foreach "$addressbook//phonenumber" {
 		if "($sdt:position mod 2) = 1" {
 			println "concat('Number ', $sdt:position, ' of ', $sdt:last, ': ', ., ' (', ../firstname, ')')"
 		}
@@ -153,7 +153,7 @@ would have worked equally well, since *boolean(1)* evaluates to true.
 Just like in XSLT, there is no `else(if)` clause, but we do have a way to test against multiple conditions. Here is how that works:
 
 	...
-	foreach "$doc//phonenumber" {
+	foreach "$addressbook//phonenumber" {
 		print "concat('Number ', $sdt:position, ' of ', $sdt:last, ': ', .)"
 		choose {
 			when "$sdt:position mod 2" {
@@ -188,7 +188,7 @@ Luckily, creating nodes is rather straight-forward:
 transform {
 	<i>... read address book ...</i>
 		node "contacts" {
-			foreach "$doc/addressbook/contact" {
+			foreach "$addressbook/contact" {
 				node "person" { value "upper-case(firstname)" }
 				node "phonenumbers" { value "fn:string-join(phonenumber,',')" }
 			}
@@ -207,13 +207,15 @@ This will produce the following SDA document:
 		phonenumbers "06-44444444"
 	}
 
-The `node` statement will instantiate a new node with the specified name and (an optional) `value` equal to the string evaluation of the given expression. And any nodes created within the node statement block become children of the enclosing node. As promised, it's pretty straight-forward.
+The `node` statement will instantiate a new node with the specified name and (an optional) `value` equal to the string evaluation of the given expression. And any nodes created within the node statement block become children of the enclosing node. 
 
-If you need an output node to be *identical* to an input node, you can use the `copy` statement to clone the selected one(s):
+As promised, it's pretty straight-forward, but you need to keep one thing in mind: a transform must never create more than a single root (top-level) node. In this example, that is the 'contacts' node. If you were to create a (sibling) node after that, the transform will fail.
+
+Also node (ok, lame pun) that if you need an output node to be *identical* to an input node, you can use the `copy` statement to clone the selected one(s):
 
 	...
 	node "contacts" {
-		foreach "$doc/addressbook/contact" {
+		foreach "$addressbook/contact" {
 			node "person" { 
 				value "upper-case(firstname)" 
 				copy "phonenumber"
@@ -245,16 +247,16 @@ The first part of this tutorial introduced the basic features of SDT: variables,
 
 ### Vars and Pars
 
-Earlier in this tutorial, the `param` statement was introduced. Parameters are global variables that are assigned a default value that can be overwritten by the "outside world", prior to execution of the transform. A parameter can be declared and assigned only once, and *only* on the transform level.
+Earlier in this tutorial, the `param` statement was introduced. Parameters are global variables that are assigned a default value that can be overwritten by the "outside world", prior to execution of the transform. A parameter can be declared and assigned only *once*, and only on the transform level.
 
-In other words, this is *not* allowed, because *P* is declared twice:
+In other words, this is *not* allowed, because *P* is reassigned:
 
 	transform {
 		param "P" { select "1" }
 		param "P" { select "2" }
 	}
 
-And neither is this, because *P* has no global scope:
+And neither is this, because *P* has no global scope (or may not be declared at all):
 
 <pre>
 transform {
@@ -266,7 +268,7 @@ transform {
 
 Other than that, you can hardly go wrong with parameters.
 
-Variables are quite different. For starters, you can (re)declare them as often as you like, and practically anywhere you like:
+Variables, on the other hand, are quite different. For starters, you can declare and reassign them as often as you like, and practically anywhere you like.
 
 This is perfectly fine (*V* will equal 2 at the end of the transform):
 
@@ -279,37 +281,39 @@ And so is this (*V* will increment by 1 with each iteration):
 
 <pre>
 transform {
-	variable "V" { select "1" }
+	variable "V" { select "0" }
 	foreach "<i>some node-set</i>" {
 		variable "V" { select "$V + 1" }
 	}
 }
 </pre>
 
-Note that due to the local scope of variables, *V* will equal 1 after the last iteration. After all, the inner *V* shadows the outer one (which is not incremented). 
+After the last iteration, *V* will be equal to the number of iterations, due to its global scope. 
 
-Also, a variable with the same name can be declared in unrelated contexts:
+Variables with the same name can be declared and used in unrelated contexts:
 
 <pre>
 transform {
 	if "<i>some condition</i>" {
 		variable "V" { select "1" }
+		<i>...</i>
 	}
 	if "<i>some condition</i>" {
 		variable "V" { select "2" }
+		<i>...</i>
 	}
 }
 </pre>
 
-Obviously, neither *V* can be referenced outside the *if* clauses.
+Note that due to their local scope, neither *V* can be referenced outside the *if* clauses.
 
-For *automatic* variables, the same rules apply with regards to scoping, but it is not possible to declare or re-assign them. Automatic variables "live" within the reserved SDT namespace, which ensures there is no overlap with the ones you declare yourself (in the "unnamed" namespace). The following example illustrates this:
+For *automatic* variables in iterations, different rules apply. Their scope is limited to the current iteration block and they cannot be declared or reassigned. They "live" within the reserved SDT namespace, which ensures there is no overlap with the variables you declare yourself (in the "unnamed" namespace). The following example illustrates this:
 
 	transform {
 		foreach "..." {
 			variable "position" { select "$sdt:position" }
 			foreach "..." {
-				println "concat('outer ', $position, ' inner ', $sdt:position)" }
+				println "concat('outer ', $position, ' inner ', $sdt:position)"
 			}
 		}
 	}
@@ -321,14 +325,14 @@ There is no way to reference the outer *sdt:position* variable as it is shadowed
 
 In this section, we will revisit the subject of iteration, and address a common requirement: sorting. In its basic form, sorting a node-set is just a matter of specifying the sorting key, like this:
 
-	foreach "$doc/addressbook/contact" {
+	foreach "$addressbook/contact" {
 		sort "firstname"
 		println "firstname"
 	}
 
 This will print "Alice", "Bob" and "Christopher" - regardless of how the contacts are ordered in the addressbook node. Reversing sort order - so the output will be "Christopher", "Bob" and "Alice" - is just a matter of adding a `reverse` expression that evaluates to true.
  
- 	foreach "$doc/addressbook/contact" {
+ 	foreach "$addressbook/contact" {
 		sort "firstname" { reverse "true()" }
 		println "firstname"
 	}
@@ -363,7 +367,7 @@ because to them, Å is a letter that comes after Z - rather than the funny looki
 
 To wrap things up, here is an example - without comparators for simplicity - that uses multiple sort statements to order contacts first by the number of phones they own, and then by their first name:
 
-	foreach "$doc/addressbook/contact" {
+	foreach "$addressbook/contact" {
 		sort "count(phonenumber)" sort "firstname" 
 		println "concat(firstname, ' has ', count(phonenumber), ' phone(s).')"
 	}
@@ -377,7 +381,7 @@ To wrap things up, here is an example - without comparators for simplicity - tha
 
 All good things come in threes, so we will visit the subject of iteration once more. The concept of grouping is best explained with an example, applied to our addressbook:
 
-	foreach "$doc/addressbook/contact" {
+	foreach "$addressbook/contact" {
 		group "count(phonenumber)" 
 		println "concat('Contacts with ', $sdt:current-grouping-key, ' phone(s): ', count($sdt:current-group))" 
 	}
@@ -393,11 +397,11 @@ This is due to the use of the `group` attribute on the second line, which states
 
 As we have one group of contacts with one phonenumber node (Alice and Chris), and another containing a single contact that has two (Bob), the `println` statement on the third line gets executed twice; once for each group.
 
-So what does it print? The automatic variables available in the compound statement speak for themselves. There's the *current-grouping-key*, which in this case is the number of phones - either 1 or 2 - and then there's the corresponding *current-group* which is the set of contact nodes with that particular number of phones.
+So what does it print? The automatic variables available in the compound statement speak for themselves. There's the *sdt:current-grouping-key*, which in this case is the number of phones - either 1 or 2 - and then there's the corresponding *sdt:current-group* which is the set of contact nodes with that particular number of phones.
 
 Typically (but not necessarily) you will not only iterate groups but also the nodes *in* those groups, using a nested foreach loop:
 
-	foreach "$doc/addressbook/contact" {
+	foreach "$addressbook/contact" {
 		group "count(phonenumber)"
 		println "concat('Contacts with ', $sdt:current-grouping-key, ' phone(s):')" 
 		foreach "$sdt:current-group" {
@@ -413,7 +417,7 @@ Typically (but not necessarily) you will not only iterate groups but also the no
 
 Grouping in SDT is not as versatile as in XSLT, but powerful nonetheless. It is all about choosing the right grouping key expression. For example
 
-	foreach "$doc/addressbook/contact" {
+	foreach "$addressbook/contact" {
 		sort "firstname" group "sdt:left(firstname,1)"
 		...
 	}

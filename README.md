@@ -11,10 +11,10 @@ For example, this recipe parses an 'addressbook' in SDA format and produces a ne
 	transform {
 
 		param "filename" { select "'addressbook.sda'" }
-		variable "doc" { select "document($filename)" }
+		variable "addressbook" { select "document($filename)" }
 
 		node "contacts" {
-			foreach "$doc/addressbook/contact" {
+			foreach "$addressbook/contact" {
 				node "person" { 
 					value "upper-case(firstname)"
 					node "phones" {
@@ -35,7 +35,7 @@ In order to run the demo, get `demo.jar`, `addressbook.sda` and `addressbook.sdt
 
 	java -jar demo.jar addressbook.sdt addressbook.sda
 	
-This will transform the data in the file `addressbook.sda` according to the recipe shown earlier.
+This will transform the data in the file `addressbook.sda` from
 
 	addressbook {
 		contact "1" {
@@ -52,16 +52,16 @@ This will transform the data in the file `addressbook.sda` according to the reci
 
 into
 
-	output {
-		contacts {
-			person "ALICE" {
-				phones "06-11111111,06-22222222"
-			}
-			person "BOB" {
-				phones "06-33333333,06-44444444"
-			}
+	contacts {
+		person "ALICE" {
+			phones "06-11111111,06-22222222"
+		}
+		person "BOB" {
+			phones "06-33333333,06-44444444"
 		}
 	}
+
+according to the recipe shown earlier.
 
 Have a look at the [code](src/main/java/demo.java) to see how it was done. I hope this demonstrates the use of SDT for transformation of SDA content. This also concludes my SDA trilogy, but who knows - there may be more to come. 
 

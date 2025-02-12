@@ -81,7 +81,7 @@ public class ForEachStatement extends XPathStatement {
 			// select the node-set to be iterated
 			XPath xpath = new SDAXPath(getExpression());
 			xpath.setVariableContext(staco);
-			List nodeset = xpath.selectNodes(staco.getContextNode());
+			List nodeset = xpath.selectNodes(staco.getXPathContext());
 			final int setsize = nodeset.size();
 			if (setsize == 0) return; // do nothing
 			

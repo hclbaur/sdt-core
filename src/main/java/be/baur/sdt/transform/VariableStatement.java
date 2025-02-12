@@ -6,6 +6,7 @@ import java.util.Objects;
 import org.jaxen.XPath;
 
 import be.baur.sda.DataNode;
+import be.baur.sdt.SDT;
 import be.baur.sdt.StatementContext;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.TransformException;
@@ -54,45 +55,34 @@ public class VariableStatement extends XPathStatement {
 	 */
 	public void setVarName(String name) {
 		Objects.requireNonNull(name, "name must not be null");
-		if (! isVarName(name))
+		if (! SDT.isVariableName(name))
 			throw new IllegalArgumentException("name '" + name + "' is invalid");
 		varName = name;
 	}
 
 
-	/**
-	 * Determines if {@code name} is a valid variable name.
-	 * 
-	 * @param name a variable name
-	 * @return true or false
-	 */
-	public static boolean isVarName(String name) {
-		// No attempt is made to check if name is a valid XSLT variable name
-		// (see https://www.w3.org/TR/REC-xml-names/#NT-QName). At least, we disallow
-		// the declaration of variables with a namespace prefix (for now).
-		return !(name == null || name.isEmpty() || name.contains(":"));
-	}
-
-
-	@SuppressWarnings("rawtypes")
-	@Override void execute(TransformContext traco, StatementContext staco) throws TransformException {
+	@Override @SuppressWarnings("rawtypes")
+	void execute(TransformContext traco, StatementContext staco) throws TransformException {
 		/*
-		 * Execution: Execution: create an XPath from the statement expression, set the
-		 * variable context, and evaluate. The resulting value is used to add a new
-		 * variable to the statement context (or overwrite an existing variable with
-		 * the same name).
+		 * Execution: create an XPath from the statement expression, set the variable
+		 * context, and evaluate. The resulting value is used to add a new variable to
+		 * the statement context or overwrite an existing variable with the same name.
 		 */
 		try {
 			XPath xpath = new SDAXPath(getExpression());
 			xpath.setVariableContext(staco);
-			Object value = xpath.evaluate(staco.getContextNode());
-			
+			Object value = xpath.evaluate(staco.getXPathContext());
+
 			if (value instanceof List && ((List) value).size() == 1) {
 				value = ((List) value).get(0); // replace a list of one node with that node
 			}
-			
-			staco.setVariableValue(null, varName, value);
-		
+
+			StatementContext vcx = staco.getVariableContext(null, varName);
+			if (vcx != null) // existing variable, will be updated
+				vcx.setVariableValue(null, varName, value);
+			else // new variable, add to current statement context
+				staco.setVariableValue(null, varName, value);
+
 		} catch (Exception e) {
 			throw new TransformException(this, e);
 		}

@@ -1,8 +1,31 @@
 # Release Notes
 
-## [1.3.1] - 2024-08-11 (requires SDA v2.2.1)
+## [1.4.0] - 2025-02-12
 
-This release fixes several issues and adds foreach group functionality.
+This release impacts the way XPath expressions are written (without referencing the root node) 
+and how variables are (re)assigned with regards to scope. As a result, existing transformations 
+will need to be rewritten. Also, a transform no longer adds a default 'output' node.
+
+- `Removed` StatementContext.hasVariable().
+- `Changed` VariableStatement.isVarName() to SDT.isVariableName().
+- `Changed` StatementContext.get/setContextNode() to get/setXPathContext().
+- Added function parse-sda() and document-node().
+- Added StatementContext.getVariableContext().
+- Closed issue #16 (restrict user defined variable names).
+- Closed issue #17 (document() adds a fake document node).
+- Closed issue #18 (update Javadoc of Navigator).
+- Closed issue #19 (review scoping of variables).
+- Closed issue #20 (remove default output node).
+
+## Compatibility
+
+- Requires Java 8, sda-core 2.3.0 and Jaxen 2.0.0.
+
+## Previous releases
+
+### [1.3.1] - 2024-08-11 (requires SDA v2.2.1)
+
+This release fixes several issues and adds grouping functionality.
 
 - SDT parser improvements.
 - Added foreach group iteration.
@@ -10,12 +33,6 @@ This release fixes several issues and adds foreach group functionality.
 - Fixed issue in sort comparator and statement context.
 - Closed issue #11 (impossible to create a vacant parent).
 - Closed issue #12 (possible to overwrite a parameter).
-
-## Compatibility
-
-- Requires Java 8, sda-core 2.2.1 and Jaxen 2.0.0.
-
-## Previous releases
 
 ### [1.3.0] - 2024-06-26 (requires SDA v2.2.0)
 

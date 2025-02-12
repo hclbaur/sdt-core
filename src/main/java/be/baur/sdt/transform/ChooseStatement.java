@@ -52,7 +52,7 @@ public class ChooseStatement extends Statement {
 					
 					XPath xpath = new SDAXPath( ((WhenStatement) statement).getExpression() );
 					xpath.setVariableContext(staco);
-					test = xpath.booleanValueOf(staco.getContextNode());
+					test = xpath.booleanValueOf(staco.getXPathContext());
 					if (! test) continue; // test next when clause
 				}
 				
