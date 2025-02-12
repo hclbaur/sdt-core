@@ -35,7 +35,7 @@ In order to run the demo, get `demo.jar`, `addressbook.sda` and `addressbook.sdt
 
 	java -jar demo.jar addressbook.sdt addressbook.sda
 	
-This will transform the data in the file `addressbook.sda` according to the recipe shown earlier.
+This will transform the data in the file `addressbook.sda` from
 
 	addressbook {
 		contact "1" {
@@ -60,6 +60,8 @@ into
 			phones "06-33333333,06-44444444"
 		}
 	}
+
+according to the recipe shown earlier.
 
 Have a look at the [code](src/main/java/demo.java) to see how it was done. I hope this demonstrates the use of SDT for transformation of SDA content. This also concludes my SDA trilogy, but who knows - there may be more to come. 
 

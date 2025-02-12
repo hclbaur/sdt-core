@@ -1,17 +1,15 @@
 # Release Notes
 
-## [1.4.0] - 2025-??-??
+## [1.4.0] - 2025-02-12
 
-This release is still in development. This release impacts the way XPath expressions are written 
-(without referencing the root node) and how variables are (re)assigned with regards to scope. As 
-a result, existing transformations will need to be rewritten. Also, a transform no longer adds a 
-default 'output' node.
+This release impacts the way XPath expressions are written (without referencing the root node) 
+and how variables are (re)assigned with regards to scope. As a result, existing transformations 
+will need to be rewritten. Also, a transform no longer adds a default 'output' node.
 
 - `Removed` StatementContext.hasVariable().
 - `Changed` VariableStatement.isVarName() to SDT.isVariableName().
 - `Changed` StatementContext.get/setContextNode() to get/setXPathContext().
-- Added function parse-sda().
-- Added function document-node().
+- Added function parse-sda() and document-node().
 - Added StatementContext.getVariableContext().
 - Closed issue #16 (restrict user defined variable names).
 - Closed issue #17 (document() adds a fake document node).
@@ -21,7 +19,7 @@ default 'output' node.
 
 ## Compatibility
 
-- Requires Java 8, sda-core 2.3.0 or higher and Jaxen 2.0.0.
+- Requires Java 8, sda-core 2.3.0 and Jaxen 2.0.0.
 
 ## Previous releases
 
