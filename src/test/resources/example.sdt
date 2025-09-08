@@ -45,4 +45,6 @@ transform {
 			println "concat('outer ', $position, ' inner ', $sdt:position)"
 		}
 	}
+	
+	println "fn:current-dateTime()"
 }
