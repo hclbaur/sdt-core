@@ -1,6 +1,9 @@
 package be.baur.sdt.xpath.function;
 
+import java.time.Instant;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.jaxen.Context;
@@ -8,9 +11,9 @@ import org.jaxen.Function;
 import org.jaxen.FunctionCallException;
 
 /**
- * <code><i>ZonedDateTime</i> fn:current-dateTime()</code><br>
+ * <code><i>string</i> fn:current-dateTime()</code><br>
  * <p>
- * Returns the current date and time (with time-zone).
+ * Returns the current date and time (with time-zone) in ISO-8601 format.
  * 
  * @see <a href=
  *      "https://www.w3.org/TR/xpath-functions/#func-current-dateTime">Section 15.3
@@ -52,8 +55,11 @@ public class CurrentDateTimeFunction implements Function
 	 * 
 	 * @return the current date and time, not null
 	 */
-	public ZonedDateTime evaluate() {
-		return ZonedDateTime.now();
+	public static String evaluate() {
+		return ZonedDateTime.now().format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+		//return Instant.now().toString();
+		//return Instant.ofEpochMilli(3600000).toString();
+		//return ZoneId.of("UTC+02:00").toString();
 	}
     
 }
