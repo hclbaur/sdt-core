@@ -1,9 +1,6 @@
 package be.baur.sdt.xpath.function;
 
-import java.time.Instant;
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.jaxen.Context;
@@ -13,11 +10,13 @@ import org.jaxen.FunctionCallException;
 /**
  * <code><i>string</i> fn:current-dateTime()</code><br>
  * <p>
- * Returns the current date and time (with time-zone) in ISO-8601 format.
+ * Returns the current date and time in extended ISO-8601 format.
+ * <p>
+ * Note: this implementation is non-deterministic.
  * 
  * @see <a href=
- *      "https://www.w3.org/TR/xpath-functions/#func-current-dateTime">Section 15.3
- *      of the XPath Specification</a>
+ *      "https://www.w3.org/TR/xpath-functions/#func-current-dateTime">Section
+ *      15.3 of the XPath Specification</a>
  */
 public class CurrentDateTimeFunction implements Function
 {
@@ -28,38 +27,31 @@ public class CurrentDateTimeFunction implements Function
     public CurrentDateTimeFunction() {}
     
 	/**
-	 * Returns the current date and time (with time-zone).
+	 * Returns the current date and time in extended ISO-8601 format.
 	 *
 	 * @param context will be ignored
 	 * @param args    an empty list
-	 * 
-	 * @return a <code>ZonedDateTime</code>
-	 * 
+	 * @return a zoned date-time string
 	 * @throws FunctionCallException if <code>args</code> is not empty
 	 */
     @Override
 	@SuppressWarnings("rawtypes")
 	public Object call(Context context, List args) throws FunctionCallException
-    {
-        if (args.size() == 0)
-        {
-            return evaluate();
-        }
+	{
+		if (args.size() == 0)
+			return evaluate();
 
-        throw new FunctionCallException( "current-dateTime() requires no arguments." );
-    }
+		throw new FunctionCallException("current-dateTime() requires no arguments.");
+	}
 
   
 	/**
-	 * Returns the current date and time from the system clock in the default time-zone.
+	 * Returns the current date and time in extended ISO-8601 format.
 	 * 
-	 * @return the current date and time, not null
+	 * @return a zoned date-time string
 	 */
 	public static String evaluate() {
-		return ZonedDateTime.now().format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
-		//return Instant.now().toString();
-		//return Instant.ofEpochMilli(3600000).toString();
-		//return ZoneId.of("UTC+02:00").toString();
+		return DateTimeFunction.format(ZonedDateTime.now());
 	}
-    
+
 }

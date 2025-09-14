@@ -36,7 +36,7 @@ transform {
 	}
 	println "concat('Last V = ', $V)"
 	if "true()" {
-		variable "V" { select "9" }
+		variable "V" { select "fn:current-dateTime()" }
 	}
 	println "concat('Final V = ', $V)"
 	
@@ -46,10 +46,5 @@ transform {
 			println "concat('outer ', $position, ' inner ', $sdt:position)"
 		}
 	}
-	
-	println "sdt:dateTime('1968-02-28T12:00:00.123Z')"
-	println "sdt:dateTime('1968-02-28T12:00:00.000Z')"
-	println "sdt:dateTime('1968-02-28T12:00:00Z')"
-	println "sdt:dateTime()"
-	println "sdt:dateTime(0)"
+
 }

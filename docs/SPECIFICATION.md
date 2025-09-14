@@ -19,6 +19,7 @@
 	- [Other functions](#other-functions)
 - [SDT Extensions](#sdt-extensions)
 	- [compare-number](#compare-number), [compare-string](#compare-string)
+	- [current-dateTime](#current-dateTime), [dateTime](#dateTime)
 	- [document-node](#document-node)
 	- [left](#left), [right](#right)
 	- [parse-sda](#parse-sda), [render-sda](#render-sda)
@@ -245,7 +246,7 @@ Functions without namespace-prefix are native Jaxen implementations of the XPath
 
 ## SDT Extensions
 
-Functions with a namespace-prefix are extensions supplied by the SDT library, and are either SDT specific, or implementations of XPath functions that are not (yet) provided by Jaxen.
+Functions with a namespace-prefix are extensions supplied by the SDT library, and are either SDT specific, or implementations of XPath (3.0) functions that are not (yet) provided by Jaxen.
 
 
 #### compare-number
@@ -285,6 +286,36 @@ An optional third argument specifies the language tag (IETF BCP 47) to obtain a 
 <code>sdt:compare-string('Ångström', 'Zulu', 'sv')</code> returns <code>1.0</code> in accordance with Swedish collation rules.
 
 This function can be used as a comparator in a sort statement.
+
+
+#### current-dateTime
+
+<code><i>string</i> fn:current-dateTime()</code>
+ 
+Returns the current date and time in extended ISO-8601 format.
+
+Note: this implementation is non-deterministic.
+
+See also [Section 15.3 of the XPath Specification](https://www.w3.org/TR/xpath-functions/#func-current-dateTime)
+
+
+#### dateTime
+
+
+<code><i>date-time</i> sdt:dateTime( <i>string</i> )</code><br>
+<code><i>date-time</i> sdt:dateTime( <i>number</i> )</code>
+
+A constructor function that returns a date-time as a <i>string</i> in extended ISO-8601 format. Real date-time objects are currently not supported by SDT, so all date and time functions operate on strings.
+
+If the argument is a string compliant with extended ISO-8601 format, this function returns a local or zoned date-time string in ISO_LOCAL_DATE_TIME or ISO_OFFSET_DATE_TIME format, or it will throw an exception if no date-time string can be constructed.
+
+If a numeric argument is supplied, this is taken to represent the number of milliseconds after the epoch (or before it in case of a negative number), and the result will be a UTC zoned date-time string.
+
+Examples:
+
+<code>sdt:dateTime(0)</code> returns <code>1970-01-01T00:00:00Z</code>.<br>
+<code>sdt:dateTime('1968-02-28T12:00')</code> returns <code>1968-02-28T12:00:00</code>.<br>
+<code>sdt:dateTime('1968-02-28T12:00+01:00')</code> returns <code>1968-02-28T12:00:00+01:00</code>.
 
 
 #### document-node
