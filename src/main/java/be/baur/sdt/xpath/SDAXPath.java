@@ -7,6 +7,8 @@ import org.jaxen.XPathFunctionContext;
 import be.baur.sdt.SDT;
 import be.baur.sdt.xpath.function.CompareNumberFunction;
 import be.baur.sdt.xpath.function.CompareStringFunction;
+import be.baur.sdt.xpath.function.CurrentDateTimeFunction;
+import be.baur.sdt.xpath.function.DateTimeFunction;
 import be.baur.sdt.xpath.function.DocumentNodeFunction;
 import be.baur.sdt.xpath.function.LeftFunction;
 import be.baur.sdt.xpath.function.ParseSDAFunction;
@@ -39,7 +41,9 @@ public class SDAXPath extends BaseXPath {
 		XPathFunctionContext ctx = (XPathFunctionContext) XPathFunctionContext.getInstance();
 		ctx.registerFunction(SDT.FUNCTIONS_NS_URI, "compare-number", new CompareNumberFunction());
 		ctx.registerFunction(SDT.FUNCTIONS_NS_URI, "compare-string", new CompareStringFunction());
+		ctx.registerFunction(SDT.W3CFUNCTIONS_NS_URI, "current-dateTime", new CurrentDateTimeFunction());
 		ctx.registerFunction(SDT.FUNCTIONS_NS_URI, "document-node", new DocumentNodeFunction());
+		ctx.registerFunction(SDT.FUNCTIONS_NS_URI, "dateTime", new DateTimeFunction());
 		ctx.registerFunction(SDT.FUNCTIONS_NS_URI, "left", new LeftFunction());
 		ctx.registerFunction(SDT.FUNCTIONS_NS_URI, "parse-sda", new ParseSDAFunction());
 		ctx.registerFunction(SDT.FUNCTIONS_NS_URI, "right", new RightFunction());

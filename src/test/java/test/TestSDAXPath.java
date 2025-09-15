@@ -5,6 +5,7 @@ import be.baur.sda.DataNode;
 import be.baur.sda.Node;
 import be.baur.sdt.xpath.DocumentNavigator;
 import be.baur.sdt.xpath.SDAXPath;
+import be.baur.sdt.xpath.function.CurrentDateTimeFunction;
 
 public class TestSDAXPath {
 
@@ -53,7 +54,7 @@ public class TestSDAXPath {
 		
 		t.so("S19", "/addressbook/contact/@id", doc ,"SDA does not support attributes");
 		
-		System.out.print("nodeset ");
+		System.out.print("jaxen functions ");
 		// https://www.edankert.com/xpathfunctions.html
 		
 		t.so("S20", "/addressbook/contact[last()]/firstname", doc, "[firstname \"Bob\"]");
@@ -73,11 +74,11 @@ public class TestSDAXPath {
 		t.so("S31", "name()", alice, "contact");
 		t.so("S32", "name()", doc, ""); // returns empty string
 		
-		System.out.print("\n	    string ");
-
 		t.so("S33", "string(/addressbook/contact)", doc, "1");
 		t.so("S34", "string()", addressbook, "");
 		t.so("S35", "string()", bob, "2");
+		
+		System.out.print("\n	    ");
 		
 		t.so("S36", "concat(/addressbook/contact/firstname,/addressbook/contact)", doc, "Alice1");
 		t.so("S37", "concat(firstname,.)", bob, "Bob2");
@@ -104,8 +105,6 @@ public class TestSDAXPath {
 		t.so("S53", "normalize-space()", bob, "2");
 		
 		t.so("S54", "translate(/addressbook/contact/firstname,'ie','13')", doc, "Al1c3");
-		
-		System.out.print("boolean ");
 
 		t.so("S55", "boolean(/addressbook/contact)", doc, "true");
 		t.so("S56", "boolean(firstname)", bob, "true");
@@ -118,8 +117,6 @@ public class TestSDAXPath {
 		t.so("S62", "false()", doc, "false");		
 		t.so("S63", "lang(addressbook)", doc, "false");	
 		
-		System.out.print("\n	    number ");
-		
 		t.so("S64", "number(/addressbook/contact)", doc, "1.0");
 		t.so("S65", "number()", bob, "2.0");
 		t.so("S66", "sum(contact)", addressbook, "3.0");
@@ -127,9 +124,9 @@ public class TestSDAXPath {
 		t.so("S68", "ceiling(1.5)", doc, "2.0");
 		t.so("S69", "round(1.5)", doc, "2.0");
 		t.so("S70", "((1+1)*2mod3)div2-1", doc, "-0.5");
-		
-		System.out.print("jaxen ");
 
+		System.out.print("\n	    ");
+		
 		t.so("S71", "ends-with(/addressbook/contact/firstname,'e')", doc, "true");
 		t.so("S72", "ends-with(firstname,'b')", bob, "true");
 		t.so("S73", "ends-with(contact,'1')", addressbook, "true");
@@ -143,7 +140,7 @@ public class TestSDAXPath {
 		
 		t.so("S79", "document('"+ file + "')", addressbook, "["+doc.toString()+"]");
 		
-		System.out.print("sdt ");
+		System.out.print("sdt functions ");
 		
 		t.so("S80", "fn:string-join(/addressbook/contact/phonenumber)", doc, "06-1111111106-2222222206-3333333306-44444444");
 		t.so("S81", "fn:string-join(contact | contact/firstname,':')", addressbook, "1:Alice:2:Bob");
@@ -155,8 +152,6 @@ public class TestSDAXPath {
 		t.so("S85", "sdt:right(/addressbook/contact[2]/firstname,0)", doc, "");
 		t.so("S86", "sdt:right(/addressbook/contact[2]/firstname,2)", doc, "ob");
 		t.so("S87", "sdt:right(/addressbook/contact[2]/firstname,4)", doc, "Bob");
-		
-		System.out.print("\n	    ");
 		
 		t.so("S90", "sdt:compare-number(1,3)", doc, "-1.0");
 		t.so("S91", "sdt:compare-number(3,'3')", doc, "0.0");
@@ -174,6 +169,8 @@ public class TestSDAXPath {
 		t.so("S103", "sdt:compare-string('Ångström','Zulu','en')", doc, "-1.0");
 		t.so("S104", "sdt:compare-string('Ångström','Zulu','sv')", doc, "1.0");
 		
+		System.out.print("\n	    ");
+		
 		t.so("S110", "sdt:tokenize('')", doc, "[]");
 		t.so("S111", "sdt:tokenize('abc')", doc, "abc");
 		t.so("S112", "sdt:tokenize('abc','')", doc, "[a, b, c]");
@@ -190,6 +187,13 @@ public class TestSDAXPath {
 		t.so("F125", "sdt:parse-sda('')", doc, "unexpected end of input");
 		t.so("F126", "sdt:parse-sda('greeting message \"hello\" }')", doc, "unexpected character 'm'");
 		t.so("S127", "sdt:parse-sda('greeting { message \"hello\" }')", doc, "[greeting { message \"hello\" }]");
+		
+		t.so("S130", "sdt:dateTime(0)", doc, "1970-01-01T00:00:00Z");
+		t.so("S131", "sdt:dateTime('1968-02-28T12:00')", doc, "1968-02-28T12:00:00");
+		t.so("S132", "sdt:dateTime('1968-02-28T12:00+01:00')", doc, "1968-02-28T12:00:00+01:00");
+		t.so("S133", "sdt:dateTime('1968-02-28T12:00:00.000Z')", doc, "1968-02-28T12:00:00Z");
+		t.so("S134", "fn:current-dateTime()", doc, CurrentDateTimeFunction.evaluate());
+
 	}
 
 }
