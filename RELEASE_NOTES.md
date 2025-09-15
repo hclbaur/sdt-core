@@ -1,6 +1,18 @@
 # Release Notes
 
-## [1.4.0] - 2025-02-12
+## [1.4.1] - 202?-??-??
+
+This release is in development.
+
+- Added function dateTime() and current-dateTime().
+
+## Compatibility
+
+- Requires Java 8, sda-core 2.3.0 and Jaxen 2.0.0.
+
+## Previous releases
+
+### [1.4.0] - 2025-02-12
 
 This release impacts the way XPath expressions are written (without referencing the root node) 
 and how variables are (re)assigned with regards to scope. As a result, existing transformations 
@@ -16,12 +28,6 @@ will need to be rewritten. Also, a transform no longer adds a default 'output' n
 - Closed issue #18 (update Javadoc of Navigator).
 - Closed issue #19 (review scoping of variables).
 - Closed issue #20 (remove default output node).
-
-## Compatibility
-
-- Requires Java 8, sda-core 2.3.0 and Jaxen 2.0.0.
-
-## Previous releases
 
 ### [1.3.1] - 2024-08-11 (requires SDA v2.2.1)
 

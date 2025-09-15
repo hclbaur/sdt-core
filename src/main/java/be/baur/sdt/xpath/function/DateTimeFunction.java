@@ -84,13 +84,20 @@ public class DateTimeFunction implements Function
 
 
 	/**
-	 * Returns a UTC date-time object using milliseconds before or after the epoch.
+	 * Returns a local or zoned date-time object parsed from a string value.
 	 * 
-	 * @param msecs a number of milliseconds, may be negative
-	 * @return an instant, not null
+	 * @param dtms a date-time string in extended ISO-8601 format
+	 * @return a LocalDate or ZonedDateTime, not null
+	 * @throws FunctionCallException if parsing failed
 	 */
-	public static TemporalAccessor ofEpochMilli(long msecs) {
-		return Instant.ofEpochMilli(msecs);
+	public static TemporalAccessor parse(String dtms) throws FunctionCallException {
+
+		try {
+			DateTimeFormatter f = DateTimeFormatter.ISO_DATE_TIME;
+			return f.parseBest(dtms, ZonedDateTime::from, LocalDateTime::from);
+		} catch (Exception e) {
+			throw new FunctionCallException("dateTime() evaluation of '" + dtms + "' failed.", e);
+		}
 	}
 
 
@@ -112,20 +119,13 @@ public class DateTimeFunction implements Function
 
 
 	/**
-	 * Returns a local or zoned date-time object parsed from a string value.
+	 * Returns a UTC date-time object using milliseconds before or after the epoch.
 	 * 
-	 * @param dtms a date-time string in extended ISO-8601 format
-	 * @return a LocalDate or ZonedDateTime, not null
-	 * @throws FunctionCallException if parsing failed
+	 * @param msecs a number of milliseconds, may be negative
+	 * @return an instant, not null
 	 */
-	public static TemporalAccessor parse(String dtms) throws FunctionCallException {
-
-		try {
-			DateTimeFormatter f = DateTimeFormatter.ISO_DATE_TIME;
-			return f.parseBest(dtms, ZonedDateTime::from, LocalDateTime::from);
-		} catch (Exception e) {
-			throw new FunctionCallException("dateTime() evaluation of '" + dtms + "' failed.", e);
-		}
+	public static TemporalAccessor ofEpochMilli(long msecs) {
+		return Instant.ofEpochMilli(msecs);
 	}
 
 
