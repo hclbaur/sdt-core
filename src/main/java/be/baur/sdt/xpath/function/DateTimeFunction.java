@@ -103,7 +103,7 @@ public class DateTimeFunction implements Function
 
 	/**
 	 * Renders a local or zoned date-time object as a string in extended ISO-8601
-	 * format.
+	 * format. Supported objects are Instant, LocalDateTime and ZonedDateTime.
 	 * 
 	 * @param dtm a temporal object, not null
 	 * @return a date-time string, not null
@@ -114,7 +114,10 @@ public class DateTimeFunction implements Function
 			return ((Instant) dtm).toString();
 		if (dtm instanceof LocalDateTime)
 			return ((LocalDateTime) dtm).format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-		return ((ZonedDateTime) dtm).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+		if (dtm instanceof ZonedDateTime)
+			return ((ZonedDateTime) dtm).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+		
+		throw new IllegalArgumentException("unsupported class " + dtm.getClass().getName());
 	}
 
 
