@@ -1,8 +1,10 @@
 transform {
-
+	
 	param "filename" { select "'addressbook.sda'" }
 	variable "doc" { select "sdt:document-node(document($filename))" }
 
+	variable "start" { select "sdt:timestamp()" }
+	
 	foreach "$doc/addressbook/contact/phonenumber" {
 		println "concat('Number ', $sdt:position, ' of ', $sdt:last, ': ', ., ' (', ../firstname, ')')"
 	}
@@ -28,23 +30,10 @@ transform {
 			}
 		}	
 	}
-	
-	variable "V" { select "0" }
-	foreach "sdt:tokenize('a b c')" {
-		variable "V" { select "$V + 1" }
-		println "concat('V = ', $V)"
-	}
-	println "concat('Last V = ', $V)"
-	if "true()" {
-		variable "V" { select "fn:current-dateTime()" }
-	}
-	println "concat('Final V = ', $V)"
-	
-	foreach "sdt:tokenize('a b c')" {
-		variable "position" { select "$sdt:position" }
-		foreach "sdt:tokenize('d e')" {
-			println "concat('outer ', $position, ' inner ', $sdt:position)"
-		}
-	}
+
+	variable "stop" { select "sdt:timestamp()" }
+	println "concat('started:', $start)"	
+	println "concat('stopped:', $stop)"
+	println "concat('elapsed:', $stop - $start)"
 
 }

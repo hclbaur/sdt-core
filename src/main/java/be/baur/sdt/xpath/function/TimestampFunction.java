@@ -2,13 +2,11 @@ package be.baur.sdt.xpath.function;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.time.ZonedDateTime;
 import java.util.List;
 
 import org.jaxen.Context;
 import org.jaxen.Function;
 import org.jaxen.FunctionCallException;
-import org.jaxen.function.StringFunction;
 
 /**
  * <code><i>number</i> sdt:timestamp()</code><br>
@@ -53,7 +51,4 @@ public class TimestampFunction implements Function
 		return (double) elapsed.toMillis();
 	}
 
-	public static void main(String[] args) {
-		System.out.printf("%f", evaluate());
-	}
 }

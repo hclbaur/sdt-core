@@ -6,6 +6,7 @@ import be.baur.sda.Node;
 import be.baur.sdt.xpath.DocumentNavigator;
 import be.baur.sdt.xpath.SDAXPath;
 import be.baur.sdt.xpath.function.CurrentDateTimeFunction;
+import be.baur.sdt.xpath.function.TimestampFunction;
 
 public class TestSDAXPath {
 
@@ -192,7 +193,9 @@ public class TestSDAXPath {
 		t.so("S131", "sdt:dateTime('1968-02-28T12:00')", doc, "1968-02-28T12:00:00");
 		t.so("S132", "sdt:dateTime('1968-02-28T12:00+01:00')", doc, "1968-02-28T12:00:00+01:00");
 		t.so("S133", "sdt:dateTime('1968-02-28T12:00:00.000Z')", doc, "1968-02-28T12:00:00Z");
+		t.so("S133", "sdt:dateTime('abc')", doc, "dateTime() evaluation of 'abc' failed.");
 		t.so("S134", "fn:current-dateTime()", doc, CurrentDateTimeFunction.evaluate());
+		t.so("S135", "string(sdt:timestamp())", doc, String.format("%d", TimestampFunction.evaluate().longValue()));
 
 	}
 

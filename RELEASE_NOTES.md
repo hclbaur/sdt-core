@@ -4,7 +4,7 @@
 
 This release is in development.
 
-- Added function dateTime() and current-dateTime().
+- Added functions dateTime(), current-dateTime(), timestamp().
 
 ## Compatibility
 

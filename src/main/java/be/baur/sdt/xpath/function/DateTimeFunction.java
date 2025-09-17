@@ -28,7 +28,7 @@ import org.jaxen.function.StringFunction;
  * string can be constructed.
  * <p>
  * If a numeric argument is supplied, this is taken to represent the number of
- * milliseconds after the epoch (or before it in case of a negative number), and
+ * milliseconds after the epoch (or before in case of a negative number), and
  * the result will be a UTC zoned date-time string.
  * <p>
  * Examples:

@@ -15,6 +15,7 @@ import be.baur.sdt.xpath.function.ParseSDAFunction;
 import be.baur.sdt.xpath.function.RenderSDAFunction;
 import be.baur.sdt.xpath.function.RightFunction;
 import be.baur.sdt.xpath.function.StringJoinFunction;
+import be.baur.sdt.xpath.function.TimestampFunction;
 import be.baur.sdt.xpath.function.TokenizeFunction;
 
 /**
@@ -48,6 +49,7 @@ public class SDAXPath extends BaseXPath {
 		ctx.registerFunction(SDT.FUNCTIONS_NS_URI, "parse-sda", new ParseSDAFunction());
 		ctx.registerFunction(SDT.FUNCTIONS_NS_URI, "right", new RightFunction());
 		ctx.registerFunction(SDT.FUNCTIONS_NS_URI, "render-sda", new RenderSDAFunction());
+		ctx.registerFunction(SDT.FUNCTIONS_NS_URI, "timestamp", new TimestampFunction());
 		ctx.registerFunction(SDT.FUNCTIONS_NS_URI, "tokenize", new TokenizeFunction());
 		ctx.registerFunction(SDT.W3CFUNCTIONS_NS_URI, "string-join", new StringJoinFunction());
 	}

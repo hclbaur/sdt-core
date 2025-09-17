@@ -18,12 +18,13 @@
 	- [Number functions](#number-functions)
 	- [Other functions](#other-functions)
 - [SDT Extensions](#sdt-extensions)
-	- [compare-number](#compare-number), [compare-string](#compare-string)
-	- [current-dateTime](#current-dateTime), [dateTime](#dateTime)
-	- [document-node](#document-node)
-	- [left](#left), [right](#right)
-	- [parse-sda](#parse-sda), [render-sda](#render-sda)
-	- [string-join](#string-join), [tokenize](#tokenize)
+	- [compare-number](#compare-number), [compare-string](#compare-string), [current-dateTime](#current-dateTime)
+	- [dateTime](#dateTime), [document-node](#document-node)
+	- [left](#left)
+	- [parse-sda](#parse-sda)
+	- [render-sda](#render-sda), [right](#right)
+	- [string-join](#string-join)
+	- [timestamp](#timestamp), [tokenize](#tokenize)
 
 
 ## Statements
@@ -309,7 +310,7 @@ A constructor function that returns a date-time as a <i>string</i> in extended I
 
 If the argument is a string compliant with extended ISO-8601 format, this function returns a local or zoned date-time string in ISO_LOCAL_DATE_TIME or ISO_OFFSET_DATE_TIME format, or it will throw an exception if no date-time string can be constructed.
 
-If a numeric argument is supplied, this is taken to represent the number of milliseconds after the epoch (or before it in case of a negative number), and the result will be a UTC zoned date-time string.
+If a numeric argument is supplied, this is taken to represent the number of milliseconds after the epoch (or before in case of a negative number), and the result will be a UTC zoned date-time string.
 
 Examples:
 
@@ -372,6 +373,13 @@ If the second argument is not a number or less than 1, an empty string is return
 Returns a string created by concatenating the items in a sequence, with an optional separator between adjacent items. If the sequence is empty, the function returns the zero-length string.
 
 See also [Section 5.4.2 of the XPath Specification](https://www.w3.org/TR/xpath-functions/#func-string-join)
+
+
+#### timestamp
+
+<code><i>number</i> sdt:timestamp()</code><br>
+
+Returns the current time in milliseconds elapsed since the epoch.
 
 
 #### tokenize
