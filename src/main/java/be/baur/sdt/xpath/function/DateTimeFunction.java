@@ -69,8 +69,10 @@ public class DateTimeFunction implements Function
 	/**
 	 * Returns a local or zoned date-time string in extended ISO-8601 format.
 	 * 
-	 * @return a date-time string, not null
-	 * @throws FunctionCallException
+	 * @param obj a string or a number
+	 * @param nav the navigator used
+	 * @return a date-time string
+	 * @throws FunctionCallException if no date-time could be constructed
 	 */
 	public static TemporalAccessor evaluate(Object obj, Navigator nav) throws FunctionCallException {
 
@@ -87,7 +89,7 @@ public class DateTimeFunction implements Function
 	 * Returns a local or zoned date-time object parsed from a string value.
 	 * 
 	 * @param dtms a date-time string in extended ISO-8601 format
-	 * @return a LocalDate or ZonedDateTime, not null
+	 * @return a LocalDate or ZonedDateTime
 	 * @throws FunctionCallException if parsing failed
 	 */
 	public static TemporalAccessor parse(String dtms) throws FunctionCallException {
