@@ -22,6 +22,8 @@ import org.jaxen.function.StringFunction;
  * <p>
  * <code>sdt:format-dateTime('1968-02-28T12:00','yyyy/MM/dd HH:mm')</code>
  * returns <code>1968/02/28 12:00</code>.<br>
+ * <code>sdt:format-dateTime(sdt:dateTime(0),'yyyyMMddHHmmss')</code> returns
+ * <code>19700101000000</code>
  * 
  * @see DateTimeFormatter
  */
