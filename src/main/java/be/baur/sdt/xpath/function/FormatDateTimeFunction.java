@@ -1,8 +1,5 @@
 package be.baur.sdt.xpath.function;
 
-import java.time.DateTimeException;
-import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAccessor;
 import java.util.List;
@@ -72,37 +69,11 @@ public class FormatDateTimeFunction implements Function
 		String fmt = StringFunction.evaluate(pattern, nav);
 		
 		try {
-			return format(dtm, DateTimeFormatter.ofPattern(fmt));
+			return DateTimeFunction.format(dtm, DateTimeFormatter.ofPattern(fmt));
 		}
 		catch (Exception e) {
 			throw new FunctionCallException("format-dateTime() formatting failed.", e);
 		}
 	}
 
-
-	/**
-	 * Renders a local or zoned date-time object as a string, using a formatter.
-	 * Supported objects are LocalDateTime and ZonedDateTime.
-	 * 
-	 * @param dtm a temporal object, not null
-	 * @param fmt a formatter, not null
-	 * @return a date-time string
-	 * @throws DateTimeException if formatting failed
-	 */
-	public static String format(TemporalAccessor dtm, DateTimeFormatter fmt) {
-		
-		if (dtm instanceof LocalDateTime)
-			return ((LocalDateTime) dtm).format(fmt);
-		if (dtm instanceof ZonedDateTime)
-			return ((ZonedDateTime) dtm).format(fmt);
-		
-		throw new IllegalArgumentException("unsupported class " + dtm.getClass().getName());
-	}
-
-
-//	public static void main(String[] args) throws FunctionCallException {
-//		System.out.println(format(LocalDateTime.now(), DateTimeFormatter.ofPattern("yyyyMMddHHmmss")));
-//		System.out.println(format(ZonedDateTime.now(), DateTimeFormatter.ofPattern("yyyyMMddHHmmss")));
-//		System.out.println(format(DateTimeFunction.parse("1968-02-28T12:00"), DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm")));
-//	}
 }

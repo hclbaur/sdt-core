@@ -20,6 +20,7 @@
 - [SDT Extensions](#sdt-extensions)
 	- [compare-number](#compare-number), [compare-string](#compare-string), [current-dateTime](#current-dateTime)
 	- [dateTime](#dateTime), [document-node](#document-node)
+	- [format-dateTime](#format-dateTime)
 	- [left](#left)
 	- [parse-sda](#parse-sda)
 	- [render-sda](#render-sda), [right](#right)
@@ -326,13 +327,27 @@ Examples:
 Constructs a new document node from the first SDA node in the set. This function is supplied mainly for backwards compatibility reasons.
 
 
+#### format-dateTime
+
+<code><i>string</i> sdt:format-dateTime( <i>date-time</i>, <i>string</i> )</code><br>
+
+Returns a formatted date-time string, using a pattern.
+
+Examples:
+
+<code>sdt:format-dateTime('1968-02-28T12:00','yyyy/MM/dd HH:mm')</code> 
+returns <code>1968/02/28 12:00</code>.<br>
+<code>sdt:format-dateTime(sdt:dateTime(0),'yyyyMMddHHmmss')</code> 
+returns <code>19700101000000</code>.
+
+
 #### left
 
 <code><i>string</i> sdt:left( <i>string</i>, <i>number</i> )</code>
 
 Returns the specified number of characters from the start of the argument string. For example,
 
-<code>sdt:left('12345', 3)</code> returns <code>"123"</code>.
+<code>sdt:left('12345', 3)</code> returns <code>123</code>.
 
 If the second argument is not a number or less than 1, an empty string is returned. If it exceeds the string length of the first argument, the entire string is returned.
 
@@ -360,7 +375,7 @@ This functions returns an empty string if the node set is empty or contains some
 
 Returns the specified number of characters from the end of the argument string. For example,
 
-<code>sdt:right('12345', 3)</code> returns <code>"345"</code>.
+<code>sdt:right('12345', 3)</code> returns <code>345</code>.
 
 If the second argument is not a number or less than 1, an empty string is returned. If it exceeds the string length of the first argument, the entire string is returned.
 

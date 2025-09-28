@@ -1,11 +1,13 @@
 package be.baur.sdt.xpath.function;
 
+import java.time.DateTimeException;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAccessor;
 import java.util.List;
+import java.util.Objects;
 
 import org.jaxen.Context;
 import org.jaxen.Function;
@@ -105,23 +107,49 @@ public class DateTimeFunction implements Function
 
 	/**
 	 * Renders a local or zoned date-time object as a string in extended ISO-8601
-	 * format. Supported objects are Instant, LocalDateTime and ZonedDateTime.
+	 * format.
 	 * 
 	 * @param dtm a temporal object, not null
-	 * @return a date-time string, not null
+	 * @return a date-time string
 	 */
-	public static String format(TemporalAccessor dtm) {
+	public static String format(TemporalAccessor dtm) {		
+		return formatTemporal(dtm, null);
+	}
 
+
+	/**
+	 * Renders a local or zoned date-time object as a string, using a formatter.
+	 * Supported objects are LocalDateTime and ZonedDateTime.
+	 * 
+	 * @param dtm a temporal object, not null
+	 * @param fmt a formatter, not null
+	 * @return a date-time string
+	 * @throws DateTimeException if formatting failed
+	 */
+	public static String format(TemporalAccessor dtm, DateTimeFormatter fmt) {
+		
+		Objects.requireNonNull(fmt, "formatter must not be null");
+		return formatTemporal(dtm, fmt);
+	}
+
+	
+	/*
+	 * Private helper that renders a temporal object as a string, using a formatter.
+	 * Supported objects are Instant, LocalDateTime and ZonedDateTime. Will throw a
+	 * DateTimeException if formatting failed.
+	 */
+	private static String formatTemporal(TemporalAccessor dtm, DateTimeFormatter fmt) {
+		
 		if (dtm instanceof Instant)
 			return ((Instant) dtm).toString();
 		if (dtm instanceof LocalDateTime)
-			return ((LocalDateTime) dtm).format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+			return ((LocalDateTime) dtm).format(fmt == null ? DateTimeFormatter.ISO_LOCAL_DATE_TIME : fmt);
 		if (dtm instanceof ZonedDateTime)
-			return ((ZonedDateTime) dtm).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+			return ((ZonedDateTime) dtm).format(fmt == null ? DateTimeFormatter.ISO_OFFSET_DATE_TIME : fmt);
 		
 		throw new IllegalArgumentException("unsupported class " + dtm.getClass().getName());
 	}
-
+	
 
 	/**
 	 * Returns a UTC date-time object using milliseconds before or after the epoch.
