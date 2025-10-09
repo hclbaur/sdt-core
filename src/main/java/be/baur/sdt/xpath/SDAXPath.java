@@ -12,6 +12,7 @@ import be.baur.sdt.xpath.function.DateTimeFunction;
 import be.baur.sdt.xpath.function.DocumentNodeFunction;
 import be.baur.sdt.xpath.function.FormatDateTimeFunction;
 import be.baur.sdt.xpath.function.LeftFunction;
+import be.baur.sdt.xpath.function.MillisToDateTimeFunction;
 import be.baur.sdt.xpath.function.ParseSDAFunction;
 import be.baur.sdt.xpath.function.RenderSDAFunction;
 import be.baur.sdt.xpath.function.RightFunction;
@@ -48,6 +49,7 @@ public class SDAXPath extends BaseXPath {
 		ctx.registerFunction(SDT.FUNCTIONS_NS_URI, "dateTime", new DateTimeFunction());
 		ctx.registerFunction(SDT.FUNCTIONS_NS_URI, "format-dateTime", new FormatDateTimeFunction());
 		ctx.registerFunction(SDT.FUNCTIONS_NS_URI, "left", new LeftFunction());
+		ctx.registerFunction(SDT.FUNCTIONS_NS_URI, "millis-to-dateTime", new MillisToDateTimeFunction());
 		ctx.registerFunction(SDT.FUNCTIONS_NS_URI, "parse-sda", new ParseSDAFunction());
 		ctx.registerFunction(SDT.FUNCTIONS_NS_URI, "right", new RightFunction());
 		ctx.registerFunction(SDT.FUNCTIONS_NS_URI, "render-sda", new RenderSDAFunction());

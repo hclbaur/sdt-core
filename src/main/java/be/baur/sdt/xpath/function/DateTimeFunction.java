@@ -13,12 +13,10 @@ import org.jaxen.Context;
 import org.jaxen.Function;
 import org.jaxen.FunctionCallException;
 import org.jaxen.Navigator;
-import org.jaxen.function.NumberFunction;
 import org.jaxen.function.StringFunction;
 
 /**
  * <code><i>date-time</i> sdt:dateTime( <i>string</i> )</code><br>
- * <code><i>date-time</i> sdt:dateTime( <i>number</i> )</code><br>
  * <p>
  * A constructor function that returns a date-time as a <i>string</i> in
  * extended ISO-8601 format. Real date-time objects are currently not supported
@@ -29,15 +27,12 @@ import org.jaxen.function.StringFunction;
  * ISO_OFFSET_DATE_TIME format, or it will throw an exception if no date-time
  * string can be constructed.
  * <p>
- * If a numeric argument is supplied, this is taken to represent the number of
- * milliseconds after the epoch (or before in case of a negative number), and
- * the result will be a UTC zoned date-time string.
- * <p>
  * Examples:
  * <p>
- * <code>sdt:dateTime(0)</code> returns <code>1970-01-01T00:00:00Z</code>.<br>
- * <code>sdt:dateTime('1968-02-28T12:00')</code> returns <code>1968-02-28T12:00:00</code>.<br>
- * <code>sdt:dateTime('1968-02-28T12:00+01:00')</code> returns <code>1968-02-28T12:00:00+01:00</code>.<br>
+ * <code>sdt:dateTime('1968-02-28T12:00')</code> returns
+ * <code>1968-02-28T12:00:00</code>.<br>
+ * <code>sdt:dateTime('1968-02-28T12:00+01:00')</code> returns
+ * <code>1968-02-28T12:00:00+01:00</code>.<br>
  */
 public class DateTimeFunction implements Function
 {
@@ -78,12 +73,7 @@ public class DateTimeFunction implements Function
 	 */
 	public static TemporalAccessor evaluate(Object obj, Navigator nav) throws FunctionCallException {
 
-		double msecs = NumberFunction.evaluate(obj, nav);
-
-		if (Double.isNaN(msecs))
-			return parse(StringFunction.evaluate(obj, nav));
-
-		return ofEpochMilli((long) msecs);
+		return parse(StringFunction.evaluate(obj, nav));
 	}
 
 
@@ -111,6 +101,7 @@ public class DateTimeFunction implements Function
 	 * 
 	 * @param dtm a temporal object, not null
 	 * @return a date-time string
+	 * @throws DateTimeException if formatting failed
 	 */
 	public static String format(TemporalAccessor dtm) {		
 		return formatTemporal(dtm, null);
@@ -149,30 +140,5 @@ public class DateTimeFunction implements Function
 		
 		throw new IllegalArgumentException("unsupported class " + dtm.getClass().getName());
 	}
-	
 
-	/**
-	 * Returns a UTC date-time object using milliseconds before or after the epoch.
-	 * 
-	 * @param msecs a number of milliseconds, may be negative
-	 * @return an instant, not null
-	 */
-	public static TemporalAccessor ofEpochMilli(long msecs) {
-		return Instant.ofEpochMilli(msecs);
-	}
-
-
-//	public static void main(String[] args) throws FunctionCallException {
-//		System.out.println(format(parse("1968-02-28T12:01")));
-//		System.out.println(format(parse("1968-02-28T12:01:02")));
-//
-//		System.out.println(format(parse("1968-02-28T12:01Z")));
-//		System.out.println(format(parse("1968-02-28T12:01:02Z")));
-//
-//		System.out.println(format(parse("1968-02-28T12:01+03:00")));
-//		System.out.println(format(parse("1968-02-28T12:01:02+03:00")));
-//
-//		System.out.println(format(parse("1968-02-28T12:01-04:00")));
-//		System.out.println(format(parse("1968-02-28T12:01:02-04:00")));
-//	}
 }

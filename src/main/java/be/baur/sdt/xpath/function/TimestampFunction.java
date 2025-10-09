@@ -17,7 +17,7 @@ public class TimestampFunction implements Function
 {
 
     /**
-     * Create a new <code>CurrentDateTimeFunction</code> object.
+     * Create a new <code>TimestampFunction</code> object.
      */
     public TimestampFunction() {}
     
@@ -26,7 +26,7 @@ public class TimestampFunction implements Function
 	 *
 	 * @param context will be ignored
 	 * @param args    an empty list
-	 * @return a zoned date-time string
+	 * @return milliseconds
 	 * @throws FunctionCallException if <code>args</code> is not empty
 	 */
     @Override
@@ -43,7 +43,7 @@ public class TimestampFunction implements Function
 	/**
 	 * Returns the current time in milliseconds elapsed since the epoch.
 	 * 
-	 * @return a Double
+	 * @return milliseconds
 	 */
 	public static Double evaluate() {
 		

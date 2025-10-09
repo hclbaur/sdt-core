@@ -22,6 +22,7 @@
 	- [dateTime](#dateTime), [document-node](#document-node)
 	- [format-dateTime](#format-dateTime)
 	- [left](#left)
+	- [millis-to-dateTime](#millis-to-dateTime)
 	- [parse-sda](#parse-sda)
 	- [render-sda](#render-sda), [right](#right)
 	- [string-join](#string-join)
@@ -305,17 +306,13 @@ See also [Section 15.3 of the XPath Specification](https://www.w3.org/TR/xpath-f
 
 
 <code><i>date-time</i> sdt:dateTime( <i>string</i> )</code><br>
-<code><i>date-time</i> sdt:dateTime( <i>number</i> )</code>
 
 A constructor function that returns a date-time as a <i>string</i> in extended ISO-8601 format. Real date-time objects are currently not supported by SDT, so all date and time functions operate on strings.
 
 If the argument is a string compliant with extended ISO-8601 format, this function returns a local or zoned date-time string in ISO_LOCAL_DATE_TIME or ISO_OFFSET_DATE_TIME format, or it will throw an exception if no date-time string can be constructed.
 
-If a numeric argument is supplied, this is taken to represent the number of milliseconds after the epoch (or before in case of a negative number), and the result will be a UTC zoned date-time string.
-
 Examples:
 
-<code>sdt:dateTime(0)</code> returns <code>1970-01-01T00:00:00Z</code>.<br>
 <code>sdt:dateTime('1968-02-28T12:00')</code> returns <code>1968-02-28T12:00:00</code>.<br>
 <code>sdt:dateTime('1968-02-28T12:00+01:00')</code> returns <code>1968-02-28T12:00:00+01:00</code>.
 
@@ -350,6 +347,18 @@ Returns the specified number of characters from the start of the argument string
 <code>sdt:left('12345', 3)</code> returns <code>123</code>.
 
 If the second argument is not a number or less than 1, an empty string is returned. If it exceeds the string length of the first argument, the entire string is returned.
+
+
+#### millis-to-dateTime
+<code><i>date-time</i> sdt:millis-to-dateTime( <i>number</i> )</code><br>
+
+Accepts the number of milliseconds after the epoch (or before in case of a
+negative number), and returns a UTC zoned date-time string.
+
+Examples:
+
+<code>sdt:millis-to-dateTime(0)</code> returns <code>1970-01-01T00:00:00Z</code>.<br>
+<code>sdt:millis-to-dateTime(sdt:timestamp())</code> returns the current UTC date and time.<br>
 
 
 #### parse-sda

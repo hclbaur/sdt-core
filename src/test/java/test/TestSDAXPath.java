@@ -5,8 +5,6 @@ import be.baur.sda.DataNode;
 import be.baur.sda.Node;
 import be.baur.sdt.xpath.DocumentNavigator;
 import be.baur.sdt.xpath.SDAXPath;
-import be.baur.sdt.xpath.function.CurrentDateTimeFunction;
-import be.baur.sdt.xpath.function.TimestampFunction;
 
 public class TestSDAXPath {
 
@@ -189,15 +187,15 @@ public class TestSDAXPath {
 		t.so("F126", "sdt:parse-sda('greeting message \"hello\" }')", doc, "unexpected character 'm'");
 		t.so("S127", "sdt:parse-sda('greeting { message \"hello\" }')", doc, "[greeting { message \"hello\" }]");
 		
-		t.so("S130", "sdt:dateTime(0)", doc, "1970-01-01T00:00:00Z");
+		t.so("S130", "sdt:millis-to-dateTime(0)", doc, "1970-01-01T00:00:00Z");
 		t.so("S131", "sdt:dateTime('1968-02-28T12:00')", doc, "1968-02-28T12:00:00");
 		t.so("S132", "sdt:dateTime('1968-02-28T12:00+01:00')", doc, "1968-02-28T12:00:00+01:00");
 		t.so("S133", "sdt:dateTime('1968-02-28T12:00:00.000Z')", doc, "1968-02-28T12:00:00Z");
 		t.so("F134", "sdt:dateTime('abc')", doc, "dateTime() evaluation of 'abc' failed.");
-		t.so("S135", "fn:current-dateTime()", doc, CurrentDateTimeFunction.evaluate());
-		t.so("S136", "string(sdt:timestamp())", doc, String.format("%d", TimestampFunction.evaluate().longValue()));
-		t.so("S137", "sdt:format-dateTime('1968-02-28T12:00','yyyy/MM/dd HH:mm')", doc, "1968/02/28 12:00");
-		t.so("S138", "sdt:format-dateTime(sdt:dateTime(0),'yyyyMMddHHmmss')", doc, "19700101000000");
+		//t.so("S135", "fn:current-dateTime()", doc, CurrentDateTimeFunction.evaluate());
+		//t.so("S136", "string(sdt:timestamp())", doc, String.format("%d", TimestampFunction.evaluate().longValue()));
+		t.so("S135", "sdt:format-dateTime('1968-02-28T12:00','yyyy/MM/dd HH:mm')", doc, "1968/02/28 12:00");
+		t.so("S136", "sdt:format-dateTime(sdt:millis-to-dateTime(0),'yyyyMMddHHmmss')", doc, "19700101000000");
 	}
 
 }

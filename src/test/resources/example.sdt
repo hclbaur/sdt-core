@@ -32,8 +32,7 @@ transform {
 	}
 
 	variable "stop" { select "sdt:timestamp()" }
-	println "concat('started:', $start)"	
-	println "concat('stopped:', $stop)"
 	println "concat('elapsed:', $stop - $start)"
+	println "concat('current:', sdt:millis-to-dateTime(sdt:timestamp()))"
 
 }
