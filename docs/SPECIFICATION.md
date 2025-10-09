@@ -18,12 +18,15 @@
 	- [Number functions](#number-functions)
 	- [Other functions](#other-functions)
 - [SDT Extensions](#sdt-extensions)
-	- [compare-number](#compare-number), [compare-string](#compare-string)
-	- [current-dateTime](#current-dateTime), [dateTime](#dateTime)
-	- [document-node](#document-node)
-	- [left](#left), [right](#right)
-	- [parse-sda](#parse-sda), [render-sda](#render-sda)
-	- [string-join](#string-join), [tokenize](#tokenize)
+	- [compare-number](#compare-number), [compare-string](#compare-string), [current-dateTime](#current-dateTime)
+	- [dateTime](#dateTime), [document-node](#document-node)
+	- [format-dateTime](#format-dateTime)
+	- [left](#left)
+	- [millis-to-dateTime](#millis-to-dateTime)
+	- [parse-sda](#parse-sda)
+	- [render-sda](#render-sda), [right](#right)
+	- [string-join](#string-join)
+	- [timestamp](#timestamp), [tokenize](#tokenize)
 
 
 ## Statements
@@ -303,17 +306,13 @@ See also [Section 15.3 of the XPath Specification](https://www.w3.org/TR/xpath-f
 
 
 <code><i>date-time</i> sdt:dateTime( <i>string</i> )</code><br>
-<code><i>date-time</i> sdt:dateTime( <i>number</i> )</code>
 
 A constructor function that returns a date-time as a <i>string</i> in extended ISO-8601 format. Real date-time objects are currently not supported by SDT, so all date and time functions operate on strings.
 
 If the argument is a string compliant with extended ISO-8601 format, this function returns a local or zoned date-time string in ISO_LOCAL_DATE_TIME or ISO_OFFSET_DATE_TIME format, or it will throw an exception if no date-time string can be constructed.
 
-If a numeric argument is supplied, this is taken to represent the number of milliseconds after the epoch (or before it in case of a negative number), and the result will be a UTC zoned date-time string.
-
 Examples:
 
-<code>sdt:dateTime(0)</code> returns <code>1970-01-01T00:00:00Z</code>.<br>
 <code>sdt:dateTime('1968-02-28T12:00')</code> returns <code>1968-02-28T12:00:00</code>.<br>
 <code>sdt:dateTime('1968-02-28T12:00+01:00')</code> returns <code>1968-02-28T12:00:00+01:00</code>.
 
@@ -325,15 +324,41 @@ Examples:
 Constructs a new document node from the first SDA node in the set. This function is supplied mainly for backwards compatibility reasons.
 
 
+#### format-dateTime
+
+<code><i>string</i> sdt:format-dateTime( <i>date-time</i>, <i>string</i> )</code><br>
+
+Returns a formatted date-time string, using a pattern.
+
+Examples:
+
+<code>sdt:format-dateTime('1968-02-28T12:00','yyyy/MM/dd HH:mm')</code> 
+returns <code>1968/02/28 12:00</code>.<br>
+<code>sdt:format-dateTime(sdt:dateTime(0),'yyyyMMddHHmmss')</code> 
+returns <code>19700101000000</code>.
+
+
 #### left
 
 <code><i>string</i> sdt:left( <i>string</i>, <i>number</i> )</code>
 
 Returns the specified number of characters from the start of the argument string. For example,
 
-<code>sdt:left('12345', 3)</code> returns <code>"123"</code>.
+<code>sdt:left('12345', 3)</code> returns <code>123</code>.
 
 If the second argument is not a number or less than 1, an empty string is returned. If it exceeds the string length of the first argument, the entire string is returned.
+
+
+#### millis-to-dateTime
+<code><i>date-time</i> sdt:millis-to-dateTime( <i>number</i> )</code><br>
+
+Accepts the number of milliseconds after the epoch (or before in case of a
+negative number), and returns a UTC zoned date-time string.
+
+Examples:
+
+<code>sdt:millis-to-dateTime(0)</code> returns <code>1970-01-01T00:00:00Z</code>.<br>
+<code>sdt:millis-to-dateTime(sdt:timestamp())</code> returns the current UTC date and time.<br>
 
 
 #### parse-sda
@@ -359,7 +384,7 @@ This functions returns an empty string if the node set is empty or contains some
 
 Returns the specified number of characters from the end of the argument string. For example,
 
-<code>sdt:right('12345', 3)</code> returns <code>"345"</code>.
+<code>sdt:right('12345', 3)</code> returns <code>345</code>.
 
 If the second argument is not a number or less than 1, an empty string is returned. If it exceeds the string length of the first argument, the entire string is returned.
 
@@ -372,6 +397,13 @@ If the second argument is not a number or less than 1, an empty string is return
 Returns a string created by concatenating the items in a sequence, with an optional separator between adjacent items. If the sequence is empty, the function returns the zero-length string.
 
 See also [Section 5.4.2 of the XPath Specification](https://www.w3.org/TR/xpath-functions/#func-string-join)
+
+
+#### timestamp
+
+<code><i>number</i> sdt:timestamp()</code><br>
+
+Returns the current time in milliseconds elapsed since the epoch.
 
 
 #### tokenize
