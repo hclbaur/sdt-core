@@ -10,7 +10,8 @@ import org.jaxen.FunctionCallException;
 /**
  * <code><i>string</i> fn:current-dateTime()</code><br>
  * <p>
- * Returns the current date and time in extended ISO-8601 format.
+ * Returns the current date and time in extended ISO-8601 format from the system
+ * clock in the default time-zone.
  * <p>
  * Note: this implementation is non-deterministic.
  * 

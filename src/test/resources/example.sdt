@@ -2,8 +2,6 @@ transform {
 	
 	param "filename" { select "'addressbook.sda'" }
 	variable "doc" { select "sdt:document-node(document($filename))" }
-
-	variable "start" { select "sdt:timestamp()" }
 	
 	foreach "$doc/addressbook/contact/phonenumber" {
 		println "concat('Number ', $sdt:position, ' of ', $sdt:last, ': ', ., ' (', ../firstname, ')')"
@@ -31,8 +29,8 @@ transform {
 		}	
 	}
 
-	variable "stop" { select "sdt:timestamp()" }
-	println "concat('elapsed:', $stop - $start)"
-	println "concat('current:', sdt:millis-to-dateTime(sdt:timestamp()))"
-
+	variable "msecs" { select "sdt:timestamp()" }
+	variable "curdt" { select "fn:current-dateTime()" }
+	println "concat('msecs:', $msecs, ' = ', sdt:millis-to-dateTime($msecs))"
+	println "concat('curdt:', sdt:dateTime-to-millis($curdt), ' = ', $curdt)"
 }

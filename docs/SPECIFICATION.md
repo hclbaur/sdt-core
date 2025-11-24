@@ -19,11 +19,11 @@
 	- [Other functions](#other-functions)
 - [SDT Extensions](#sdt-extensions)
 	- [compare-number](#compare-number), [compare-string](#compare-string), [current-dateTime](#current-dateTime)
-	- [dateTime](#dateTime), [document-node](#document-node)
+	- [dateTime](#dateTime), [dateTime-to-millis](#dateTime-to-millis), [document-node](#document-node)
 	- [format-dateTime](#format-dateTime)
 	- [left](#left)
 	- [millis-to-dateTime](#millis-to-dateTime)
-	- [parse-sda](#parse-sda)
+	- [parse-dateTime](#parse-dateTime), [parse-sda](#parse-sda)
 	- [render-sda](#render-sda), [right](#right)
 	- [string-join](#string-join)
 	- [timestamp](#timestamp), [tokenize](#tokenize)
@@ -295,7 +295,7 @@ This function can be used as a comparator in a sort statement.
 
 <code><i>string</i> fn:current-dateTime()</code>
  
-Returns the current date and time in extended ISO-8601 format.
+Returns the current date and time in extended ISO-8601 format from the system clock in the default time-zone.
 
 Note: this implementation is non-deterministic.
 
@@ -304,10 +304,9 @@ See also [Section 15.3 of the XPath Specification](https://www.w3.org/TR/xpath-f
 
 #### dateTime
 
-
 <code><i>date-time</i> sdt:dateTime( <i>string</i> )</code><br>
 
-A constructor function that returns a date-time as a <i>string</i> in extended ISO-8601 format. Real date-time objects are currently not supported by SDT, so all date and time functions operate on strings.
+A constructor function that returns a date-time as a <i>string</i> in extended ISO-8601 format. Real date-time objects are currently not supported, so all date and time functions operate on strings instead.
 
 If the argument is a string compliant with extended ISO-8601 format, this function returns a local or zoned date-time string in ISO_LOCAL_DATE_TIME or ISO_OFFSET_DATE_TIME format, or it will throw an exception if no date-time string can be constructed.
 
@@ -316,6 +315,17 @@ Examples:
 <code>sdt:dateTime('1968-02-28T12:00')</code> returns <code>1968-02-28T12:00:00</code>.<br>
 <code>sdt:dateTime('1968-02-28T12:00+01:00')</code> returns <code>1968-02-28T12:00:00+01:00</code>.
 
+
+### dateTime-to-millis
+
+<code><i>number</i> sdt:dateTime-to-millis( <i>date-time</i> )</code>
+ 
+Converts a zoned date-time into the number of milliseconds elapsed since the epoch. A negative number is returned for a point in time prior to the epoch.
+
+Examples:
+
+<code>sdt:dateTime-to-millis('1970-01-01T00:00:00Z')</code> returns <code>0</code>.
+ 
 
 #### document-node
 
@@ -328,14 +338,16 @@ Constructs a new document node from the first SDA node in the set. This function
 
 <code><i>string</i> sdt:format-dateTime( <i>date-time</i>, <i>string</i> )</code><br>
 
-Returns a formatted date-time string, using a pattern.
+Returns a formatted date-time string, using a formatting pattern. The pattern must be valid and appropriate for the supplied date-time.
 
 Examples:
 
 <code>sdt:format-dateTime('1968-02-28T12:00','yyyy/MM/dd HH:mm')</code> 
 returns <code>1968/02/28 12:00</code>.<br>
-<code>sdt:format-dateTime(sdt:dateTime(0),'yyyyMMddHHmmss')</code> 
+<code>sdt:format-dateTime(sdt:millis-to-dateTime(0),'yyyyMMddHHmmss')</code> 
 returns <code>19700101000000</code>.
+
+See also [Patterns for Formatting and Parsing](https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html#patterns)
 
 
 #### left
@@ -359,6 +371,19 @@ Examples:
 
 <code>sdt:millis-to-dateTime(0)</code> returns <code>1970-01-01T00:00:00Z</code>.<br>
 <code>sdt:millis-to-dateTime(sdt:timestamp())</code> returns the current UTC date and time.<br>
+
+
+#### parse-dateTime
+
+<code><i>date-time</i> sdt:parse-dateTime( <i>string</i>, <i>string</i> )</code><br>
+
+Parses the supplied string into a date-time, using the second argument as a formatting pattern. The pattern must be valid and appropriate for the input string.
+
+Example:
+
+<code>sdt:parse-dateTime('1968/02/28 12:00','yyyy/MM/dd HH:mm')</code> returns <code>1968-02-28T12:00:00</code>.
+
+See also [Patterns for Formatting and Parsing](https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html#patterns)
 
 
 #### parse-sda

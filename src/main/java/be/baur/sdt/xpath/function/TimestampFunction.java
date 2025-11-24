@@ -26,7 +26,7 @@ public class TimestampFunction implements Function
 	 *
 	 * @param context will be ignored
 	 * @param args    an empty list
-	 * @return milliseconds
+	 * @return a number of milliseconds
 	 * @throws FunctionCallException if <code>args</code> is not empty
 	 */
     @Override
@@ -43,7 +43,7 @@ public class TimestampFunction implements Function
 	/**
 	 * Returns the current time in milliseconds elapsed since the epoch.
 	 * 
-	 * @return milliseconds
+	 * @return a number of milliseconds
 	 */
 	public static Double evaluate() {
 		

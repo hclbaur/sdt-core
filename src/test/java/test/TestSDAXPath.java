@@ -187,15 +187,31 @@ public class TestSDAXPath {
 		t.so("F126", "sdt:parse-sda('greeting message \"hello\" }')", doc, "unexpected character 'm'");
 		t.so("S127", "sdt:parse-sda('greeting { message \"hello\" }')", doc, "[greeting { message \"hello\" }]");
 		
-		t.so("S130", "sdt:millis-to-dateTime(0)", doc, "1970-01-01T00:00:00Z");
-		t.so("S131", "sdt:dateTime('1968-02-28T12:00')", doc, "1968-02-28T12:00:00");
-		t.so("S132", "sdt:dateTime('1968-02-28T12:00+01:00')", doc, "1968-02-28T12:00:00+01:00");
-		t.so("S133", "sdt:dateTime('1968-02-28T12:00:00.000Z')", doc, "1968-02-28T12:00:00Z");
-		t.so("F134", "sdt:dateTime('abc')", doc, "dateTime() evaluation of 'abc' failed.");
-		//t.so("S135", "fn:current-dateTime()", doc, CurrentDateTimeFunction.evaluate());
-		//t.so("S136", "string(sdt:timestamp())", doc, String.format("%d", TimestampFunction.evaluate().longValue()));
+		t.so("S130", "sdt:dateTime('1968-02-28T12:00')", doc, "1968-02-28T12:00:00");
+		t.so("S131", "sdt:dateTime('1968-02-28T12:00+01:00')", doc, "1968-02-28T12:00:00+01:00");
+		t.so("S132", "sdt:dateTime('1968-02-28T12:00:00.000Z')", doc, "1968-02-28T12:00:00Z");
+		t.so("F133", "sdt:dateTime('a')", doc, "dateTime() argument 'a' is invalid.");
+		t.so("F134", "sdt:dateTime()", doc, "dateTime() requires exactly one argument.");
 		t.so("S135", "sdt:format-dateTime('1968-02-28T12:00','yyyy/MM/dd HH:mm')", doc, "1968/02/28 12:00");
 		t.so("S136", "sdt:format-dateTime(sdt:millis-to-dateTime(0),'yyyyMMddHHmmss')", doc, "19700101000000");
+		t.so("F137", "sdt:format-dateTime('a','yyyyMMddHHmmss')", doc, "format-dateTime() argument 'a' is invalid.");
+		t.so("F138", "sdt:format-dateTime()", doc, "format-dateTime() requires two arguments.");
+		
+		t.so("S140", "sdt:millis-to-dateTime(0)", doc, "1970-01-01T00:00:00Z");
+		t.so("S141", "sdt:millis-to-dateTime(-3600000)", doc, "1969-12-31T23:00:00Z");
+		t.so("S142", "sdt:millis-to-dateTime(3600000)", doc, "1970-01-01T01:00:00Z");
+		t.so("F143", "sdt:millis-to-dateTime()", doc, "millis-to-dateTime() requires exactly one argument.");
+		t.so("F144", "sdt:millis-to-dateTime('a')", doc, "millis-to-dateTime() requires a number.");
+		t.so("S145", "sdt:dateTime-to-millis('1970-01-01T00:00:00Z')", doc, "0.0");
+		t.so("S146", "sdt:dateTime-to-millis('1969-12-31T23:00:00Z')", doc, "-3600000.0");
+		t.so("S147", "sdt:dateTime-to-millis('1970-01-01T01:00:00Z')", doc, "3600000.0");
+		t.so("F148", "sdt:dateTime-to-millis(0)", doc, "dateTime-to-millis() argument '0.0' is invalid.");
+		t.so("F149", "sdt:dateTime-to-millis()", doc, "dateTime-to-millis() requires exactly one argument.");
+		
+		t.so("S150", "sdt:parse-dateTime('1968/02/28 12:00','yyyy/MM/dd HH:mm')", doc, "1968-02-28T12:00:00");
+		t.so("S151", "sdt:parse-dateTime('19700101000000+00:00','yyyyMMddHHmmssz')", doc, "1970-01-01T00:00:00Z");
+		t.so("F152", "sdt:parse-dateTime('a','yyyyMMddHHmmss')", doc, "parse-dateTime() failed to parse 'a'.");
+		t.so("F153", "sdt:parse-dateTime()", doc, "parse-dateTime() requires two arguments.");
 	}
 
 }

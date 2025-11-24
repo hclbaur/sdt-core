@@ -39,7 +39,8 @@ public class MillisToDateTimeFunction implements Function
 	 *                is called
 	 * @param args    an argument list that contains one item.
 	 * @return a date-time string
-	 * @throws FunctionCallException if <code>args</code> has more than one item.
+	 * @throws FunctionCallException if <code>args</code> has more than one item or
+	 *                               no date-time could be constructed.
 	 */
     @Override
 	@SuppressWarnings("rawtypes")
@@ -67,7 +68,7 @@ public class MillisToDateTimeFunction implements Function
 
 		if (Double.isNaN(msecs))
 			throw new FunctionCallException("millis-to-dateTime() requires a number.");
-		
+
 		try {
 			return DateTimeFunction.format(Instant.ofEpochMilli((long) msecs));
 		} catch (Exception e) {

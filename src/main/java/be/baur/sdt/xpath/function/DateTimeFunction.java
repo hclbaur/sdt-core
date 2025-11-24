@@ -5,6 +5,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.time.temporal.TemporalAccessor;
 import java.util.List;
 import java.util.Objects;
@@ -19,8 +20,8 @@ import org.jaxen.function.StringFunction;
  * <code><i>date-time</i> sdt:dateTime( <i>string</i> )</code><br>
  * <p>
  * A constructor function that returns a date-time as a <i>string</i> in
- * extended ISO-8601 format. Real date-time objects are currently not supported
- * by SDT, so all date and time functions operate on strings.
+ * extended ISO-8601 format. Real date-time objects are currently not supported,
+ * so all date and time functions operate on strings instead.
  * <p>
  * If the argument is a string compliant with extended ISO-8601 format, this
  * function returns a local or zoned date-time string in ISO_LOCAL_DATE_TIME or
@@ -56,42 +57,59 @@ public class DateTimeFunction implements Function
 	@SuppressWarnings("rawtypes")
 	public Object call(Context context, List args) throws FunctionCallException {
 
-		if (args.size() == 1)
-			return format(evaluate(args.get(0), context.getNavigator()));
-
-		throw new FunctionCallException("dateTime() requires exactly one argument.");
+		if (args.size() != 1)
+			throw new FunctionCallException("dateTime() requires exactly one argument.");
+		
+			return format(evaluate("dateTime()", args.get(0), context.getNavigator()));
 	}
 
 
 	/**
-	 * Returns a local or zoned date-time string in extended ISO-8601 format.
+	 * Returns a local or zoned date-time object.
 	 * 
-	 * @param obj a string or a number
+	 * @param fun name of the calling function
+	 * @param obj a date-time string
 	 * @param nav the navigator used
-	 * @return a date-time string
-	 * @throws FunctionCallException if no date-time could be constructed
+	 * @return a date-time object
+	 * @throws FunctionCallException if date-time construction failed
 	 */
-	public static TemporalAccessor evaluate(Object obj, Navigator nav) throws FunctionCallException {
-
-		return parse(StringFunction.evaluate(obj, nav));
-	}
-
-
-	/**
-	 * Returns a local or zoned date-time object parsed from a string value.
-	 * 
-	 * @param dtms a date-time string in extended ISO-8601 format
-	 * @return a LocalDate or ZonedDateTime
-	 * @throws FunctionCallException if parsing failed
-	 */
-	public static TemporalAccessor parse(String dtms) throws FunctionCallException {
+	public static TemporalAccessor evaluate(String fun, Object obj, Navigator nav) throws FunctionCallException {
 
 		try {
-			DateTimeFormatter f = DateTimeFormatter.ISO_DATE_TIME;
-			return f.parseBest(dtms, ZonedDateTime::from, LocalDateTime::from);
-		} catch (Exception e) {
-			throw new FunctionCallException("dateTime() evaluation of '" + dtms + "' failed.", e);
+			return parse( StringFunction.evaluate(obj, nav) );
 		}
+		catch (Exception e) {
+			throw new FunctionCallException(fun + " argument '" + obj + "' is invalid.", e);
+		}
+	}
+
+
+	/**
+	 * Returns a local or zoned date-time object parsed from a string.
+	 * 
+	 * @param dtms a string in extended ISO-8601 format
+	 * @return a Local- or ZonedDateTime
+	 * @throws DateTimeParseException if no date-time could be constructed
+	 */
+	public static TemporalAccessor parse(String dtms) {
+
+		return parse(dtms, DateTimeFormatter.ISO_DATE_TIME);
+	}
+	
+	
+	/**
+	 * Returns a local or zoned date-time object parsed from a string, using a
+	 * formatter.
+	 * 
+	 * @param dtms a representing a date-time in a custom format, not null
+	 * @param fmt  a formatter, not null
+	 * @return a Local- or ZonedDateTime
+	 * @throws DateTimeParseException if no date-time could be constructed
+	 */
+	public static TemporalAccessor parse(String dtms, DateTimeFormatter fmt) {
+
+		Objects.requireNonNull(fmt, "formatter must not be null");
+		return fmt.parseBest(dtms, ZonedDateTime::from, LocalDateTime::from);
 	}
 
 

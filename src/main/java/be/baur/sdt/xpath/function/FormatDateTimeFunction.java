@@ -1,5 +1,6 @@
 package be.baur.sdt.xpath.function;
 
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAccessor;
 import java.util.List;
@@ -13,14 +14,15 @@ import org.jaxen.function.StringFunction;
 /**
  * <code><i>string</i> sdt:format-dateTime( <i>date-time</i>, <i>string</i> )</code><br>
  * <p>
- * Returns a formatted date-time string, using a pattern.
+ * Returns a formatted date-time string, using a formatting pattern. The pattern
+ * must be valid and appropriate for the supplied date-time.
  * <p>
  * Examples:
  * <p>
  * <code>sdt:format-dateTime('1968-02-28T12:00','yyyy/MM/dd HH:mm')</code>
  * returns <code>1968/02/28 12:00</code>.<br>
- * <code>sdt:format-dateTime(sdt:dateTime(0),'yyyyMMddHHmmss')</code> returns
- * <code>19700101000000</code>
+ * <code>sdt:format-dateTime(sdt:millis-to-dateTime(0),'yyyyMMddHHmmss')</code> returns
+ * <code>19700101000000</code>.
  * 
  * @see DateTimeFormatter
  */
@@ -63,17 +65,24 @@ public class FormatDateTimeFunction implements Function
 	 * @return a formatted date-time string
 	 * @throws FunctionCallException if formatting failed
 	 */
-	public static String evaluate(Object datetime, Object pattern, Navigator nav) throws FunctionCallException {
+	public static String evaluate(Object obj, Object pattern, Navigator nav) throws FunctionCallException {
 
-		TemporalAccessor dtm = DateTimeFunction.evaluate(datetime, nav);
+		TemporalAccessor dtm = DateTimeFunction.evaluate("format-dateTime()", obj, nav);
+
 		String fmt = StringFunction.evaluate(pattern, nav);
-		
 		try {
-			return DateTimeFunction.format(dtm, DateTimeFormatter.ofPattern(fmt));
-		}
-		catch (Exception e) {
-			throw new FunctionCallException("format-dateTime() formatting failed.", e);
+		
+			DateTimeFormatter dtf;
+			try {
+				dtf = DateTimeFormatter.ofPattern(fmt);
+			} catch (Exception e) {
+				throw new FunctionCallException("format-dateTime() pattern is invalid.", e);
+			}
+			return DateTimeFunction.format(dtm, dtf);
+		
+		} catch (Exception e) {
+			throw new FunctionCallException("format-dateTime() failed to format "
+					+ ((dtm instanceof LocalDateTime) ? "local" : "zoned") + " date-time.", e);
 		}
 	}
-
 }
