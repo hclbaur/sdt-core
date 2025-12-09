@@ -12,7 +12,7 @@ import org.jaxen.Navigator;
 import org.jaxen.function.StringFunction;
 
 /**
- * <code><i>string</i> sdt:format-dateTime( <i>date-time</i>, <i>string</i> )</code><br>
+ * <code><i>string</i> sdt:format-dateTime( <i>date-time</i>, <i>pattern</i> )</code><br>
  * <p>
  * Returns a formatted date-time string, using a formatting pattern. The pattern
  * must be valid and appropriate for the supplied date-time.
@@ -28,7 +28,8 @@ import org.jaxen.function.StringFunction;
  */
 public class FormatDateTimeFunction implements Function
 {
-
+	static String FUNC = "format-dateTime()";
+	
     /**
      * Create a new <code>FormatDateTimeFunction</code> object.
      */
@@ -52,36 +53,36 @@ public class FormatDateTimeFunction implements Function
 		if (args.size() == 2) 
 			return evaluate(args.get(0), args.get(1), context.getNavigator());
 		
-		throw new FunctionCallException("format-dateTime() requires two arguments.");
+		throw new FunctionCallException(FUNC + " requires two arguments.");
 	}
 
 
 	/**
 	 * Returns a formatted date-time string, using a pattern.
 	 * 
-	 * @param datetime the date-time to be formatted, not null
-	 * @param pattern  the pattern to be used, not null
-	 * @param nav      the navigator used
+	 * @param obj the date-time to be formatted, not null
+	 * @param pat the pattern to be used, not null
+	 * @param nav the navigator used
 	 * @return a formatted date-time string
 	 * @throws FunctionCallException if formatting failed
 	 */
-	public static String evaluate(Object obj, Object pattern, Navigator nav) throws FunctionCallException {
+	public static String evaluate(Object obj, Object pat, Navigator nav) throws FunctionCallException {
 
-		TemporalAccessor dtm = DateTimeFunction.evaluate("format-dateTime()", obj, nav);
+		TemporalAccessor dtm = DateTimeFunction.evaluate(FUNC, obj, nav);
 
-		String fmt = StringFunction.evaluate(pattern, nav);
+		String fmt = StringFunction.evaluate(pat, nav);
 		try {
 		
 			DateTimeFormatter dtf;
 			try {
 				dtf = DateTimeFormatter.ofPattern(fmt);
 			} catch (Exception e) {
-				throw new FunctionCallException("format-dateTime() pattern is invalid.", e);
+				throw new FunctionCallException(FUNC + " pattern '" + fmt + "' is invalid.", e);
 			}
 			return DateTimeFunction.format(dtm, dtf);
 		
 		} catch (Exception e) {
-			throw new FunctionCallException("format-dateTime() failed to format "
+			throw new FunctionCallException(FUNC + " failed to format "
 					+ ((dtm instanceof LocalDateTime) ? "local" : "zoned") + " date-time.", e);
 		}
 	}

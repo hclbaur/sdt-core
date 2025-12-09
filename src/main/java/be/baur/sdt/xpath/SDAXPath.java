@@ -10,6 +10,7 @@ import be.baur.sdt.xpath.function.CompareStringFunction;
 import be.baur.sdt.xpath.function.CurrentDateTimeFunction;
 import be.baur.sdt.xpath.function.DateTimeFunction;
 import be.baur.sdt.xpath.function.DateTimeToMillisFunction;
+import be.baur.sdt.xpath.function.DateTimeToTimeZoneFunction;
 import be.baur.sdt.xpath.function.DocumentNodeFunction;
 import be.baur.sdt.xpath.function.FormatDateTimeFunction;
 import be.baur.sdt.xpath.function.LeftFunction;
@@ -49,6 +50,7 @@ public class SDAXPath extends BaseXPath {
 		ctx.registerFunction(SDT.W3CFUNCTIONS_NS_URI, "current-dateTime", new CurrentDateTimeFunction());
 		ctx.registerFunction(SDT.FUNCTIONS_NS_URI, "dateTime", new DateTimeFunction());
 		ctx.registerFunction(SDT.FUNCTIONS_NS_URI, "dateTime-to-millis", new DateTimeToMillisFunction());
+		ctx.registerFunction(SDT.FUNCTIONS_NS_URI, "dateTime-to-timezone", new DateTimeToTimeZoneFunction());
 		ctx.registerFunction(SDT.FUNCTIONS_NS_URI, "document-node", new DocumentNodeFunction());
 		ctx.registerFunction(SDT.FUNCTIONS_NS_URI, "format-dateTime", new FormatDateTimeFunction());
 		ctx.registerFunction(SDT.FUNCTIONS_NS_URI, "left", new LeftFunction());

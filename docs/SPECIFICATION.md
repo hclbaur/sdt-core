@@ -19,7 +19,7 @@
 	- [Other functions](#other-functions)
 - [SDT Extensions](#sdt-extensions)
 	- [compare-number](#compare-number), [compare-string](#compare-string), [current-dateTime](#current-dateTime)
-	- [dateTime](#dateTime), [dateTime-to-millis](#dateTime-to-millis), [document-node](#document-node)
+	- [dateTime](#dateTime), [dateTime-to-millis](#dateTime-to-millis), [dateTime-to-timezone](#dateTime-to-timezone), [document-node](#document-node)
 	- [format-dateTime](#format-dateTime)
 	- [left](#left)
 	- [millis-to-dateTime](#millis-to-dateTime)
@@ -295,7 +295,7 @@ This function can be used as a comparator in a sort statement.
 
 <code><i>string</i> fn:current-dateTime()</code>
  
-Returns the current date and time in extended ISO-8601 format from the system clock in the default time-zone.
+Returns the current date and time in extended ISO-8601 format from the system clock in the default time zone.
 
 Note: this implementation is non-deterministic.
 
@@ -325,7 +325,25 @@ Converts a zoned date-time into the number of milliseconds elapsed since the epo
 Examples:
 
 <code>sdt:dateTime-to-millis('1970-01-01T00:00:00Z')</code> returns <code>0</code>.
+
+
+#### dateTime-to-timezone
+
+<code><i>date-time</i> sdt:dateTime-to-timezone( <i>date-time</i>, <i>time-zone</i> )</code><br>
  
+Creates a date-time from the given date-time and time zone or offset. If a local date-time is supplied, the result will be a zoned date-time in the requested time zone. Otherwise, the supplied date-time will be translated to the given time zone (while the absolute time stays the same). If appropriate, daylight savings will be accounted for.
+
+Examples:
+
+<code>sdt:dateTime-to-timezone('2025-03-30T01:00:00Z', 'Europe/Amsterdam')</code> returns <code>2025-03-30T03:00:00+02:00</code>.<br>
+<code>sdt:dateTime-to-timezone('2025-10-26T00:00:00Z', 'Europe/Amsterdam')</code> returns <code>2025-10-26T02:00:00+02:00</code>.<br>
+<code>sdt:dateTime-to-timezone('2025-10-26T01:00:00Z', 'Europe/Amsterdam')</code> returns <code>2025-10-26T02:00:00+01:00</code>.<br>
+<code>sdt:dateTime-to-timezone('2025-03-30T02:00:00', 'Europe/Amsterdam')</code> returns <code>2025-03-30T03:00:00+02:00</code>.<br>
+<code>sdt:dateTime-to-timezone('2025-10-26T02:00:00', 'Europe/Amsterdam')</code> returns <code>2025-10-26T02:00:00+02:00</code>.<br>
+<code>sdt:dateTime-to-timezone('2025-10-26T03:00:00', 'Europe/Amsterdam')</code> returns <code>2025-10-26T03:00:00+01:00</code>.<br>
+
+See also the [List of tz database time zones](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) 
+
 
 #### document-node
 
@@ -336,7 +354,7 @@ Constructs a new document node from the first SDA node in the set. This function
 
 #### format-dateTime
 
-<code><i>string</i> sdt:format-dateTime( <i>date-time</i>, <i>string</i> )</code><br>
+<code><i>string</i> sdt:format-dateTime( <i>date-time</i>, <i>pattern</i> )</code><br>
 
 Returns a formatted date-time string, using a formatting pattern. The pattern must be valid and appropriate for the supplied date-time.
 

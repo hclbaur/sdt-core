@@ -202,6 +202,9 @@ public class TestSDAXPath {
 		t.so("S142", "sdt:millis-to-dateTime(3600000)", doc, "1970-01-01T01:00:00Z");
 		t.so("F143", "sdt:millis-to-dateTime()", doc, "millis-to-dateTime() requires exactly one argument.");
 		t.so("F144", "sdt:millis-to-dateTime('a')", doc, "millis-to-dateTime() requires a number.");
+
+		System.out.print("\n	    ");
+
 		t.so("S145", "sdt:dateTime-to-millis('1970-01-01T00:00:00Z')", doc, "0.0");
 		t.so("S146", "sdt:dateTime-to-millis('1969-12-31T23:00:00Z')", doc, "-3600000.0");
 		t.so("S147", "sdt:dateTime-to-millis('1970-01-01T01:00:00Z')", doc, "3600000.0");
@@ -212,6 +215,15 @@ public class TestSDAXPath {
 		t.so("S151", "sdt:parse-dateTime('19700101000000+00:00','yyyyMMddHHmmssz')", doc, "1970-01-01T00:00:00Z");
 		t.so("F152", "sdt:parse-dateTime('a','yyyyMMddHHmmss')", doc, "parse-dateTime() failed to parse 'a'.");
 		t.so("F153", "sdt:parse-dateTime()", doc, "parse-dateTime() requires two arguments.");
+		
+		t.so("S154", "sdt:dateTime-to-timezone('2025-03-30T01:00:00Z', 'Europe/Amsterdam')", doc, "2025-03-30T03:00:00+02:00");
+		t.so("S155", "sdt:dateTime-to-timezone('2025-10-26T00:00:00Z', 'Europe/Amsterdam')", doc, "2025-10-26T02:00:00+02:00");
+		t.so("S156", "sdt:dateTime-to-timezone('2025-10-26T01:00:00Z', 'Europe/Amsterdam')", doc, "2025-10-26T02:00:00+01:00");
+		t.so("S157", "sdt:dateTime-to-timezone('2025-03-30T02:00:00', 'Europe/Amsterdam')", doc, "2025-03-30T03:00:00+02:00");
+		t.so("S158", "sdt:dateTime-to-timezone('2025-10-26T02:00:00', 'Europe/Amsterdam')", doc, "2025-10-26T02:00:00+02:00");
+		t.so("S159", "sdt:dateTime-to-timezone('2025-10-26T03:00:00', 'Europe/Amsterdam')", doc, "2025-10-26T03:00:00+01:00");
+		t.so("F160", "sdt:dateTime-to-timezone('a', 'Europe/Amsterdam')", doc, "dateTime-to-timezone() argument 'a' is invalid.");
+		t.so("F161", "sdt:dateTime-to-timezone('2025-03-30T01:00:00Z', 'a')", doc, "dateTime-to-timezone() time zone 'a' is invalid.");
 	}
 
 }
