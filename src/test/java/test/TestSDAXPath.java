@@ -224,6 +224,11 @@ public class TestSDAXPath {
 		t.so("S159", "sdt:dateTime-to-timezone('2025-10-26T03:00:00', 'Europe/Amsterdam')", doc, "2025-10-26T03:00:00+01:00");
 		t.so("F160", "sdt:dateTime-to-timezone('a', 'Europe/Amsterdam')", doc, "dateTime-to-timezone() argument 'a' is invalid.");
 		t.so("F161", "sdt:dateTime-to-timezone('2025-03-30T01:00:00Z', 'a')", doc, "dateTime-to-timezone() time zone 'a' is invalid.");
+		
+		t.so("S163", "sdt:dateTime-to-local('1970-01-01T00:00:00')", doc, "1970-01-01T00:00:00");
+		t.so("S163", "sdt:dateTime-to-local('1970-01-01T00:00:00Z')", doc, "1970-01-01T00:00:00");
+		t.so("F164", "sdt:dateTime-to-local()", doc, "dateTime-to-local() requires exactly one argument.");
+		t.so("F165", "sdt:dateTime-to-local('a')", doc, "dateTime-to-local() argument 'a' is invalid.");
 	}
 
 }

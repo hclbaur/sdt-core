@@ -25,7 +25,8 @@ import org.jaxen.function.StringFunction;
  */
 public class ParseDateTimeFunction implements Function
 {
-
+	static String FUNC = "parse-dateTime()";
+	
     /**
      * Create a new <code>ParseDateTimeFunction</code> object.
      */
@@ -49,7 +50,7 @@ public class ParseDateTimeFunction implements Function
 		if (args.size() == 2) 
 			return evaluate(args.get(0), args.get(1), context.getNavigator());
 		
-		throw new FunctionCallException("parse-dateTime() requires two arguments.");
+		throw new FunctionCallException(FUNC + " requires two arguments.");
 	}
 
 
@@ -73,12 +74,12 @@ public class ParseDateTimeFunction implements Function
 				dtf = DateTimeFormatter.ofPattern(fmts);
 			}
 			catch (Exception e) {
-				throw new FunctionCallException("parse-dateTime() pattern is invalid.", e);
+				throw new FunctionCallException(FUNC + " pattern is invalid.", e);
 			}
 			return DateTimeFunction.format(DateTimeFunction.parse(dtms, dtf));
 		}
 		catch (Exception e) {
-			throw new FunctionCallException("parse-dateTime() failed to parse '" + dtms + "'.", e);
+			throw new FunctionCallException(FUNC + " failed to parse '" + dtms + "'.", e);
 		}
 	}
 

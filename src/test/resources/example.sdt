@@ -29,8 +29,4 @@ transform {
 		}	
 	}
 
-	variable "msecs" { select "sdt:timestamp()" }
-	variable "curdt" { select "fn:current-dateTime()" }
-	println "concat('msecs:', $msecs, ' = ', sdt:millis-to-dateTime($msecs))"
-	println "concat('curdt:', sdt:dateTime-to-millis($curdt), ' = ', $curdt)"
 }

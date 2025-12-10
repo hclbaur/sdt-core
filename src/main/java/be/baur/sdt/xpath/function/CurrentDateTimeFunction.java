@@ -8,7 +8,7 @@ import org.jaxen.Function;
 import org.jaxen.FunctionCallException;
 
 /**
- * <code><i>string</i> fn:current-dateTime()</code><br>
+ * <code><i>date-time</i> sdt:current-dateTime()</code><br>
  * <p>
  * Returns the current date and time in extended ISO-8601 format from the system
  * clock in the default time zone.

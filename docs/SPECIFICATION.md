@@ -19,7 +19,7 @@
 	- [Other functions](#other-functions)
 - [SDT Extensions](#sdt-extensions)
 	- [compare-number](#compare-number), [compare-string](#compare-string), [current-dateTime](#current-dateTime)
-	- [dateTime](#dateTime), [dateTime-to-millis](#dateTime-to-millis), [dateTime-to-timezone](#dateTime-to-timezone), [document-node](#document-node)
+	- [dateTime](#dateTime), [dateTime-to-local](#dateTime-to-local), [dateTime-to-millis](#dateTime-to-millis), [dateTime-to-timezone](#dateTime-to-timezone), [document-node](#document-node)
 	- [format-dateTime](#format-dateTime)
 	- [left](#left)
 	- [millis-to-dateTime](#millis-to-dateTime)
@@ -293,7 +293,7 @@ This function can be used as a comparator in a sort statement.
 
 #### current-dateTime
 
-<code><i>string</i> fn:current-dateTime()</code>
+<code><i>date-time</i> sdt:current-dateTime()</code>
  
 Returns the current date and time in extended ISO-8601 format from the system clock in the default time zone.
 
@@ -304,7 +304,7 @@ See also [Section 15.3 of the XPath Specification](https://www.w3.org/TR/xpath-f
 
 #### dateTime
 
-<code><i>date-time</i> sdt:dateTime( <i>string</i> )</code><br>
+<code><i>date-time</i> sdt:dateTime( <i>string</i> )</code>
 
 A constructor function that returns a date-time as a <i>string</i> in extended ISO-8601 format. Real date-time objects are currently not supported, so all date and time functions operate on strings instead.
 
@@ -314,6 +314,18 @@ Examples:
 
 <code>sdt:dateTime('1968-02-28T12:00')</code> returns <code>1968-02-28T12:00:00</code>.<br>
 <code>sdt:dateTime('1968-02-28T12:00+01:00')</code> returns <code>1968-02-28T12:00:00+01:00</code>.
+
+
+### dateTime-to-local
+
+<code><i>date-time</i> dateTime-to-local( <i>date-time</i> )</code>
+
+Removes the time zone component from a date-time and returns a local date-time with the same year, month, day and time as the one supplied.
+
+Examples:
+
+<code>sdt:dateTime-to-local('1970-01-01T00:00:00Z')</code> returns
+<code>1970-01-01T00:00:00</code>.<br>
 
 
 ### dateTime-to-millis
@@ -329,7 +341,7 @@ Examples:
 
 #### dateTime-to-timezone
 
-<code><i>date-time</i> sdt:dateTime-to-timezone( <i>date-time</i>, <i>time-zone</i> )</code><br>
+<code><i>date-time</i> sdt:dateTime-to-timezone( <i>date-time</i>, <i>time-zone</i> )</code>
  
 Creates a date-time from the given date-time and time zone or offset. If a local date-time is supplied, the result will be a zoned date-time in the requested time zone. Otherwise, the supplied date-time will be translated to the given time zone (while the absolute time stays the same). If appropriate, daylight savings will be accounted for.
 
@@ -354,7 +366,7 @@ Constructs a new document node from the first SDA node in the set. This function
 
 #### format-dateTime
 
-<code><i>string</i> sdt:format-dateTime( <i>date-time</i>, <i>pattern</i> )</code><br>
+<code><i>string</i> sdt:format-dateTime( <i>date-time</i>, <i>pattern</i> )</code>
 
 Returns a formatted date-time string, using a formatting pattern. The pattern must be valid and appropriate for the supplied date-time.
 
@@ -380,7 +392,8 @@ If the second argument is not a number or less than 1, an empty string is return
 
 
 #### millis-to-dateTime
-<code><i>date-time</i> sdt:millis-to-dateTime( <i>number</i> )</code><br>
+
+<code><i>date-time</i> sdt:millis-to-dateTime( <i>number</i> )</code>
 
 Accepts the number of milliseconds after the epoch (or before in case of a
 negative number), and returns a UTC zoned date-time string.
@@ -393,7 +406,7 @@ Examples:
 
 #### parse-dateTime
 
-<code><i>date-time</i> sdt:parse-dateTime( <i>string</i>, <i>string</i> )</code><br>
+<code><i>date-time</i> sdt:parse-dateTime( <i>string</i>, <i>string</i> )</code>
 
 Parses the supplied string into a date-time, using the second argument as a formatting pattern. The pattern must be valid and appropriate for the input string.
 

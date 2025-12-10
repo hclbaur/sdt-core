@@ -4,7 +4,7 @@
 
 This release is in development.
 
-- Added functions current-dateTime(), dateTime(), dateTime-to-millis(), dateTime-to-timezone(), format-dateTime(), millis-to-dateTime(), parse-dateTime(), timestamp().
+- Added functions current-dateTime(), dateTime(), dateTime-to-local(), dateTime-to-millis(), dateTime-to-timezone(), format-dateTime(), millis-to-dateTime(), parse-dateTime(), timestamp().
 
 ## Compatibility
 

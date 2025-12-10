@@ -51,7 +51,8 @@ public class DateTimeFunction implements Function
 	 *                is called
 	 * @param args    an argument list that contains one item.
 	 * @return a date-time string
-	 * @throws FunctionCallException if <code>args</code> has more than one item.
+	 * @throws FunctionCallException if <code>args</code> has more or less than one
+	 *                               item or evaluation failed.
 	 */
     @Override
 	@SuppressWarnings("rawtypes")
@@ -60,7 +61,7 @@ public class DateTimeFunction implements Function
 		if (args.size() != 1)
 			throw new FunctionCallException("dateTime() requires exactly one argument.");
 		
-			return format(evaluate("dateTime()", args.get(0), context.getNavigator()));
+		return format(evaluate("dateTime()", args.get(0), context.getNavigator()));
 	}
 
 
