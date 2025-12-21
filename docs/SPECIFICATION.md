@@ -25,7 +25,7 @@
 	- [millis-to-dateTime](#millis-to-dateTime)
 	- [parse-dateTime](#parse-dateTime), [parse-sda](#parse-sda)
 	- [render-sda](#render-sda), [right](#right)
-	- [string-join](#string-join)
+	- [string-join](#string-join), [system-timezone](#system-timezone)
 	- [timestamp](#timestamp), [tokenize](#tokenize)
 
 
@@ -454,6 +454,15 @@ Returns a string created by concatenating the items in a sequence, with an optio
 
 See also [Section 5.4.2 of the XPath Specification](https://www.w3.org/TR/xpath-functions/#func-string-join)
 
+
+#### system-timezone
+
+<code><i>time-zone</i> sdt:system-timezone()</code><br>
+
+Returns the system default time-zone ID.
+
+See also [List of tz database time zones](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)
+ 
 
 #### timestamp
 

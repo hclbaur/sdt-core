@@ -1,4 +1,5 @@
 package test;
+import java.time.ZoneId;
 import java.util.List;
 
 import be.baur.sda.DataNode;
@@ -229,6 +230,9 @@ public class TestSDAXPath {
 		t.so("S163", "sdt:dateTime-to-local('1970-01-01T00:00:00Z')", doc, "1970-01-01T00:00:00");
 		t.so("F164", "sdt:dateTime-to-local()", doc, "dateTime-to-local() requires exactly one argument.");
 		t.so("F165", "sdt:dateTime-to-local('a')", doc, "dateTime-to-local() argument 'a' is invalid.");
+		
+		t.so("S166", "sdt:system-timezone()", doc, ZoneId.systemDefault().toString());
+		t.so("F167", "sdt:system-timezone('a')", doc, "system-timezone() requires no arguments.");
 	}
 
 }
