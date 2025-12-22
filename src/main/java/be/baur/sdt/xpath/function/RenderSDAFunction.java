@@ -29,7 +29,8 @@ import be.baur.sda.io.SDAFormatter;
  */
 public class RenderSDAFunction implements Function
 {
-
+	public static final String NAME = "render-sda";
+	
 	/**
      * Create a new <code>RenderSDAFunction</code> object.
      */

@@ -35,7 +35,8 @@ import org.jaxen.function.StringFunction;
  */
 public class TokenizeFunction implements Function
 {
-
+	public static final String NAME = "tokenize";
+	
     /**
      * Create a new <code>TokenizeFunction</code> object.
      */

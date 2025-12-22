@@ -28,7 +28,7 @@ import org.jaxen.function.StringFunction;
  */
 public class FormatDateTimeFunction implements Function
 {
-	static String FUNC = "format-dateTime()";
+	public static final String NAME = "format-dateTime";
 	
     /**
      * Create a new <code>FormatDateTimeFunction</code> object.
@@ -53,7 +53,7 @@ public class FormatDateTimeFunction implements Function
 		if (args.size() == 2) 
 			return evaluate(args.get(0), args.get(1), context.getNavigator());
 		
-		throw new FunctionCallException(FUNC + " requires two arguments.");
+		throw new FunctionCallException(NAME + "() requires two arguments.");
 	}
 
 
@@ -68,7 +68,7 @@ public class FormatDateTimeFunction implements Function
 	 */
 	public static String evaluate(Object obj, Object pat, Navigator nav) throws FunctionCallException {
 
-		TemporalAccessor dtm = DateTimeFunction.evaluate(FUNC, obj, nav);
+		TemporalAccessor dtm = DateTimeFunction.evaluate(NAME, obj, nav);
 
 		String fmt = StringFunction.evaluate(pat, nav);
 		try {
@@ -77,12 +77,12 @@ public class FormatDateTimeFunction implements Function
 			try {
 				dtf = DateTimeFormatter.ofPattern(fmt);
 			} catch (Exception e) {
-				throw new FunctionCallException(FUNC + " pattern '" + fmt + "' is invalid.", e);
+				throw new FunctionCallException(NAME + "() pattern '" + fmt + "' is invalid.", e);
 			}
 			return DateTimeFunction.format(dtm, dtf);
 		
 		} catch (Exception e) {
-			throw new FunctionCallException(FUNC + " failed to format "
+			throw new FunctionCallException(NAME + "() failed to format "
 					+ ((dtm instanceof LocalDateTime) ? "local" : "zoned") + " date-time.", e);
 		}
 	}

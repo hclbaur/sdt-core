@@ -15,7 +15,8 @@ import org.jaxen.FunctionCallException;
  */
 public class TimestampFunction implements Function
 {
-
+	public static final String NAME = "timestamp";
+	
     /**
      * Create a new <code>TimestampFunction</code> object.
      */

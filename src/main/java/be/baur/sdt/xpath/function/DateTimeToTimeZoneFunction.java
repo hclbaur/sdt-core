@@ -41,7 +41,7 @@ import org.jaxen.function.StringFunction;
  */
 public class DateTimeToTimeZoneFunction implements Function
 {
-	static String FUNC = "dateTime-to-timezone()";
+	public static final String NAME = "dateTime-to-timezone";
 
     /**
      * Create a new <code>DateTimeToTimeZoneFunction</code> object.
@@ -66,7 +66,7 @@ public class DateTimeToTimeZoneFunction implements Function
 		if (args.size() == 2)
 			return evaluate(args.get(0), args.get(1), context.getNavigator());
 
-		throw new FunctionCallException(FUNC + " requires two arguments.");
+		throw new FunctionCallException(NAME + "() requires two arguments.");
 	}
 
 
@@ -82,14 +82,14 @@ public class DateTimeToTimeZoneFunction implements Function
 	 */
 	public static String evaluate(Object dtm, Object tmz, Navigator nav) throws FunctionCallException {
 
-		TemporalAccessor temporal = DateTimeFunction.evaluate(FUNC, dtm, nav);
+		TemporalAccessor temporal = DateTimeFunction.evaluate(NAME, dtm, nav);
 		
 		String zone = StringFunction.evaluate(tmz, nav);
 		ZoneId zoneId;
 		try {
 			zoneId = ZoneId.of(zone);
 		} catch (Exception e) {
-			throw new FunctionCallException(FUNC + " time zone '" + zone + "' is invalid.", e);
+			throw new FunctionCallException(NAME + "() time zone '" + zone + "' is invalid.", e);
 		}
 
 		ZonedDateTime zdtm;
@@ -103,7 +103,7 @@ public class DateTimeToTimeZoneFunction implements Function
 			return DateTimeFunction.format(zdtm);
 			
 		} catch (Exception e) {
-			throw new FunctionCallException(FUNC + " conversion of '" + dtm + "' failed.", e);
+			throw new FunctionCallException(NAME + "() conversion of '" + dtm + "' failed.", e);
 		}
 	}
 }

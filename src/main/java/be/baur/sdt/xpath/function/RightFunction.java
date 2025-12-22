@@ -26,7 +26,8 @@ import be.baur.sdt.SDT;
  */
 public class RightFunction implements Function
 {
-
+	public static final String NAME = "right";
+	
     /**
      * Create a new <code>RightFunction</code> object.
      */

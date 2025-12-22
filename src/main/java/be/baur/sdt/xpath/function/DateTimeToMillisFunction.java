@@ -23,7 +23,7 @@ import org.jaxen.Navigator;
  */
 public class DateTimeToMillisFunction implements Function
 {
-	static String FUNC = "dateTime-to-millis()";
+	public static final String NAME = "dateTime-to-millis";
 	
     /**
      * Create a new <code>DateTimeToMillisFunction</code> object.
@@ -50,7 +50,7 @@ public class DateTimeToMillisFunction implements Function
 		if (args.size() == 1)
 			return evaluate(args.get(0), context.getNavigator());
 
-		throw new FunctionCallException(FUNC + " requires exactly one argument.");
+		throw new FunctionCallException(NAME + "() requires exactly one argument.");
 	}
 
 
@@ -66,15 +66,15 @@ public class DateTimeToMillisFunction implements Function
 	 */
 	public static Double evaluate(Object obj, Navigator nav) throws FunctionCallException {
 
-		TemporalAccessor dtm = DateTimeFunction.evaluate(FUNC, obj, nav);
+		TemporalAccessor dtm = DateTimeFunction.evaluate(NAME, obj, nav);
 
 		if (!(dtm instanceof ZonedDateTime))
-			throw new FunctionCallException(FUNC + " requires a zoned date-time.");
+			throw new FunctionCallException(NAME + "() requires a zoned date-time.");
 
 		try {
 			return (double) Instant.from(dtm).toEpochMilli();
 		} catch (Exception e) {
-			throw new FunctionCallException(FUNC + " conversion of '" + dtm + "' failed.", e);
+			throw new FunctionCallException(NAME + "() conversion of '" + dtm + "' failed.", e);
 		}
 	}
 }

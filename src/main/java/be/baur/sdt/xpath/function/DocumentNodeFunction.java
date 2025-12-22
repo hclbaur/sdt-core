@@ -22,7 +22,8 @@ import be.baur.sdt.xpath.DocumentNavigator;
  */
 public class DocumentNodeFunction implements Function
 {
-
+	public static final String NAME = "document-node";
+			
 	/**
      * Create a new <code>DocumentNodeFunction</code> object.
      */

@@ -37,7 +37,8 @@ import org.jaxen.function.StringFunction;
  */
 public class DateTimeFunction implements Function
 {
-
+	public static final String NAME = "dateTime";
+	
     /**
      * Create a new <code>DateTimeFunction</code> object.
      */
@@ -59,9 +60,9 @@ public class DateTimeFunction implements Function
 	public Object call(Context context, List args) throws FunctionCallException {
 
 		if (args.size() != 1)
-			throw new FunctionCallException("dateTime() requires exactly one argument.");
+			throw new FunctionCallException(NAME + "() requires exactly one argument.");
 		
-		return format(evaluate("dateTime()", args.get(0), context.getNavigator()));
+		return format(evaluate(NAME, args.get(0), context.getNavigator()));
 	}
 
 
@@ -80,7 +81,7 @@ public class DateTimeFunction implements Function
 			return parse( StringFunction.evaluate(obj, nav) );
 		}
 		catch (Exception e) {
-			throw new FunctionCallException(fun + " argument '" + obj + "' is invalid.", e);
+			throw new FunctionCallException(fun + "() argument '" + obj + "' is invalid.", e);
 		}
 	}
 

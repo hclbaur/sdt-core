@@ -22,7 +22,7 @@ import org.jaxen.Navigator;
  */
 public class DateTimeToLocalFunction implements Function
 {
-	static String FUNC = "dateTime-to-local()";
+	public static final String NAME = "dateTime-to-local";
 
     /**
      * Create a new <code>DateTimeToLocalFunction</code> object.
@@ -45,7 +45,7 @@ public class DateTimeToLocalFunction implements Function
 	public Object call(Context context, List args) throws FunctionCallException {
 
 		if (args.size() != 1)
-			throw new FunctionCallException(FUNC + " requires exactly one argument.");
+			throw new FunctionCallException(NAME + "() requires exactly one argument.");
 
 		return evaluate(args.get(0), context.getNavigator());
 	}
@@ -62,7 +62,7 @@ public class DateTimeToLocalFunction implements Function
 	 */
 	public static String evaluate(Object dtm, Navigator nav) throws FunctionCallException {
 
-		TemporalAccessor temporal = DateTimeFunction.evaluate(FUNC, dtm, nav);
+		TemporalAccessor temporal = DateTimeFunction.evaluate(NAME, dtm, nav);
 
 		if (temporal instanceof ZonedDateTime)
 			temporal = ((ZonedDateTime) temporal).toLocalDateTime();

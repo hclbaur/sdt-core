@@ -24,7 +24,7 @@ import org.jaxen.function.NumberFunction;
  */
 public class MillisToDateTimeFunction implements Function
 {
-	static String FUNC = "millis-to-dateTime()";
+	public static final String NAME = "millis-to-dateTime";
 	
     /**
      * Create a new <code>MillisToDateTimeFunction</code> object.
@@ -50,7 +50,7 @@ public class MillisToDateTimeFunction implements Function
 		if (args.size() == 1)
 			return evaluate(args.get(0), context.getNavigator());
 
-		throw new FunctionCallException(FUNC + " requires exactly one argument.");
+		throw new FunctionCallException(NAME + "() requires exactly one argument.");
 	}
 
 
@@ -68,12 +68,12 @@ public class MillisToDateTimeFunction implements Function
 		double msecs = NumberFunction.evaluate(obj, nav);
 
 		if (Double.isNaN(msecs))
-			throw new FunctionCallException(FUNC + " requires a number.");
+			throw new FunctionCallException(NAME + "() requires a number.");
 
 		try {
 			return DateTimeFunction.format(Instant.ofEpochMilli((long) msecs));
 		} catch (Exception e) {
-			throw new FunctionCallException(FUNC + " evaluation of '" + msecs + "' failed.", e);
+			throw new FunctionCallException(NAME + "() evaluation of '" + msecs + "' failed.", e);
 		}
 	}
 

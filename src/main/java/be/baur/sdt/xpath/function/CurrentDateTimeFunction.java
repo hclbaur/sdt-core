@@ -21,7 +21,8 @@ import org.jaxen.FunctionCallException;
  */
 public class CurrentDateTimeFunction implements Function
 {
-
+	public static final String NAME = "current-dateTime";
+	
     /**
      * Create a new <code>CurrentDateTimeFunction</code> object.
      */
@@ -42,7 +43,7 @@ public class CurrentDateTimeFunction implements Function
 		if (args.size() == 0)
 			return evaluate();
 
-		throw new FunctionCallException("current-dateTime() requires no arguments.");
+		throw new FunctionCallException(NAME + "() requires no arguments.");
 	}
 
   

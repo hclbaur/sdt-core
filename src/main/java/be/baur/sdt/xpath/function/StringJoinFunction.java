@@ -23,7 +23,8 @@ import org.jaxen.function.StringFunction;
  */
 public class StringJoinFunction implements Function
 {
-
+	public static final String NAME = "string-join";
+	
     /**
      * Create a new <code>StringJoinFunction</code> object.
      */

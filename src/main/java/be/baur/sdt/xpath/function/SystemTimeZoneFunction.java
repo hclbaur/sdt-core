@@ -19,7 +19,7 @@ import org.jaxen.FunctionCallException;
  */
 public class SystemTimeZoneFunction implements Function
 {
-	static String FUNC = "system-timezone()";
+	public static final String NAME = "system-timezone";
 	
     /**
      * Create a new <code>SystemTimeZoneFunction</code> object.
@@ -40,7 +40,7 @@ public class SystemTimeZoneFunction implements Function
 	public Object call(Context context, List args) throws FunctionCallException {
 
 		if (!args.isEmpty())
-			throw new FunctionCallException(FUNC + " requires no arguments.");
+			throw new FunctionCallException(NAME + "() requires no arguments.");
 
 		return evaluate();
 	}
@@ -57,7 +57,7 @@ public class SystemTimeZoneFunction implements Function
 		try {
 			return ZoneId.systemDefault().toString();
 		} catch (Exception e) {
-			throw new FunctionCallException(FUNC + " time zone not found or invalid.", e);
+			throw new FunctionCallException(NAME + "() time zone not found or invalid.", e);
 		}
 	}
 

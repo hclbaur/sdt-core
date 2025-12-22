@@ -32,7 +32,8 @@ import org.jaxen.function.StringFunction;
  */
 public class CompareStringFunction implements Function
 {
-
+	public static final String NAME = "compare-string";
+	
     /**
      * Create a new <code>CompareStringFunction</code> object.
      */
@@ -58,7 +59,7 @@ public class CompareStringFunction implements Function
 
 		final int argc = args.size();
 		if (argc < 2 || argc > 3)
-			throw new FunctionCallException("compare-string() requires two or three arguments.");
+			throw new FunctionCallException(NAME + "() requires two or three arguments.");
 
 		final Navigator nav = context.getNavigator();
 		

@@ -34,7 +34,8 @@ import org.jaxen.function.NumberFunction;
  */
 public class CompareNumberFunction implements Function
 {
-
+	public static final String NAME = "compare-number";
+	
     /**
      * Create a new <code>CompareNumberFunction</code> object.
      */
@@ -61,7 +62,7 @@ public class CompareNumberFunction implements Function
 
 		final int argc = args.size();
 		if (argc < 2 || argc > 3)
-			throw new FunctionCallException("compare-number() requires two or three arguments.");
+			throw new FunctionCallException(NAME + "() requires two or three arguments.");
 
 		final Navigator nav = context.getNavigator();
 

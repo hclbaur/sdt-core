@@ -22,7 +22,8 @@ import be.baur.sda.io.SDAParser;
  */
 public class ParseSDAFunction implements Function
 {
-
+	public static final String NAME = "parse-sda";
+	
 	/**
      * Create a new <code>ParseSDAFunction</code> object.
      */

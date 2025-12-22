@@ -23,7 +23,8 @@ import be.baur.sdt.SDT;
  */
 public class LeftFunction implements Function
 {
-
+	public static final String NAME = "left";
+	
     /**
      * Create a new <code>LeftFunction</code> object.
      */
