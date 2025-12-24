@@ -16,7 +16,6 @@ import be.baur.sdt.StatementContext;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.TransformException;
 import be.baur.sdt.parser.Keyword;
-import be.baur.sdt.xpath.SDAXPath;
 
 /**
  * The <code>ForEachStatement</code> evaluates an XPath expression, iterates the
@@ -79,7 +78,7 @@ public class ForEachStatement extends XPathStatement {
 		try {
 
 			// select the node-set to be iterated
-			XPath xpath = new SDAXPath(getExpression());
+			XPath xpath = traco.getXPath( getExpression() );
 			xpath.setVariableContext(staco);
 			List nodeset = xpath.selectNodes(staco.getXPathContext());
 			final int setsize = nodeset.size();
@@ -96,9 +95,9 @@ public class ForEachStatement extends XPathStatement {
 					if (statement instanceof SortStatement) {
 						SortStatement sortstat = (SortStatement) statement;
 						if (comparator == null) // new comparator
-							comparator = sortstat.getComparator(staco);
+							comparator = sortstat.getComparator(traco, staco);
 						else // add "if-equals" comparator for subsequent sort statement(s)
-							comparator = comparator.thenComparing(sortstat.getComparator(staco));
+							comparator = comparator.thenComparing(sortstat.getComparator(traco, staco));
 					}
 				}
 
@@ -113,7 +112,7 @@ public class ForEachStatement extends XPathStatement {
 			Map<String, List> groups = null;
 			if (groupExpression != null) {
 
-				SDAXPath groupxp = new SDAXPath(groupExpression);
+				XPath groupxp = traco.getXPath(groupExpression);
 				groupxp.setVariableContext(staco);
 				groups = new LinkedHashMap<String,List>();
 				

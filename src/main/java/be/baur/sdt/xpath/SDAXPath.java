@@ -40,11 +40,11 @@ public class SDAXPath extends BaseXPath {
 	}
 
 
-	@Override
-	protected SDTFunctionContext createFunctionContext() {
-		
-		// the default SDT function context
-		return SDTFunctionContext.getInstance();
-	}
+//	@Override
+//	protected SDTFunctionContext createFunctionContext() {
+//		
+//		// the default SDT function context
+//		return SDTFunctionContext.getInstance();
+//	}
 	
 }

@@ -4,13 +4,12 @@ import java.util.List;
 
 import org.jaxen.XPath;
 
-import be.baur.sda.Node;
 import be.baur.sda.DataNode;
+import be.baur.sda.Node;
 import be.baur.sdt.StatementContext;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.TransformException;
 import be.baur.sdt.parser.Keyword;
-import be.baur.sdt.xpath.SDAXPath;
 
 /**
  * The <code>IfStatement</code> evaluates an XPath expression and executes a
@@ -38,7 +37,7 @@ public class IfStatement extends XPathStatement {
 		if (statements.isEmpty()) return; // nothing to do
 
 		try {
-			XPath xpath = new SDAXPath(getExpression());
+			XPath xpath = traco.getXPath( getExpression() );
 			xpath.setVariableContext(staco);
 			Boolean test = xpath.booleanValueOf(staco.getXPathContext());
 
