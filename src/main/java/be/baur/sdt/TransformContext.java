@@ -13,6 +13,7 @@ import org.jaxen.saxpath.SAXPathException;
 
 import be.baur.sdt.transform.Transform;
 import be.baur.sdt.xpath.DocumentNavigator;
+import be.baur.sdt.xpath.SDTFunctionContext;
 
 /**
  * A {@code TransformContext} is created prior to, and used during execution of
@@ -40,7 +41,7 @@ public class TransformContext {
 
 
 	/**
-	 * Returns the {@code Writer} set for this context. If no writer was set
+	 * Returns the {@code Writer} provided by this context. If no writer was set
 	 * explicitly, this will be a writer to standard output.
 	 * 
 	 * @return a writer, not null
@@ -51,7 +52,8 @@ public class TransformContext {
 
 	
 	/**
-	 * Returns an unmodifiable view of the parameters for this transform context.
+	 * Returns an unmodifiable view of the parameters provided by this transform
+	 * context.
 	 * 
 	 * @return a map, not null, may be empty
 	 */
@@ -71,15 +73,21 @@ public class TransformContext {
 
 
 	/**
-	 * Creates an XPath expression object suitable for this transform context.
+	 * Creates an XPath expression object suitable for this transform context. By
+	 * default, this also includes the <code>SDTFunctionContext</code>.
 	 * 
 	 * @param expression an XPath expression
 	 * @return a new XPath expression object, not null
 	 * @throws SAXPathException if the XPath expression is invalid
+	 * 
+	 * @see SDTFunctionContext
 	 */
 	public XPath getXPath(String expression) throws SAXPathException {
 		
 		XPath xpath = navigator.parseXPath(expression);
+		xpath.setFunctionContext( SDTFunctionContext.getInstance() );
+		xpath.addNamespace(SDT.FUNCTIONS_NS_PFX, SDT.FUNCTIONS_NS_URI);
+		xpath.addNamespace(SDT.W3CFUNCTIONS_NS_PFX, SDT.W3CFUNCTIONS_NS_URI);
 		return xpath;
 	}
 

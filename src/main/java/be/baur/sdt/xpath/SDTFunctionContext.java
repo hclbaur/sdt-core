@@ -26,7 +26,7 @@ import be.baur.sdt.xpath.function.TokenizeFunction;
 
 /**
  * A <code>FunctionContext</code> implementing the core XPath function library,
- * plus Jaxen extensions, as well as all SDT extensions.
+ * plus Jaxen extensions, and all SDT extensions.
  * 
  * @see FunctionContext
  */
@@ -34,18 +34,22 @@ public class SDTFunctionContext extends XPathFunctionContext
 {
     private static final SDTFunctionContext instance = new SDTFunctionContext();
 
-    /** Returns the singleton SDT function context.
-    *
-    *  @return a function context
-    */
+	/**
+	 * Returns the default SDT function context. Do not extend this with your own
+	 * functions, as it will affect all XPath instances that use this global
+	 * default. Instead, extend <code>SDTFunctionContext</code> or create a new
+	 * instance to include your own functions.
+	 *
+	 * @return a function context
+	 */
 	public static SDTFunctionContext getInstance() {
 		return instance;
 	}
 
  
 	/**
-	 * Create a new XPath function context with all available XPath functions and
-	 * extensions, including all SDT functions.
+	 * Create a new XPath function context including the core XPath function
+	 * library, plus Jaxen extensions, and all SDT extensions.
 	 */
 	public SDTFunctionContext() {
 		
