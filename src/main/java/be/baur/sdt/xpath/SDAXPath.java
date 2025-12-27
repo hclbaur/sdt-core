@@ -3,8 +3,6 @@ package be.baur.sdt.xpath;
 import org.jaxen.BaseXPath;
 import org.jaxen.JaxenException;
 
-import be.baur.sdt.SDT;
-
 
 /**
  * An XPath implementation for the SDA object model.
@@ -50,9 +48,8 @@ public class SDAXPath extends BaseXPath {
 	public static SDAXPath withSDTSupport(String expression) throws JaxenException {
 
 		SDAXPath xpath = new SDAXPath(expression);
-		xpath.setFunctionContext(SDTFunctionContext.getInstance());
-		xpath.addNamespace(SDT.FUNCTIONS_NS_PFX, SDT.FUNCTIONS_NS_URI);
-		xpath.addNamespace(SDT.W3CFUNCTIONS_NS_PFX, SDT.W3CFUNCTIONS_NS_URI);
+		xpath.setFunctionContext( SDTFunctionContext.getInstance() );
+		xpath.setNamespaceContext( SDTNamespaceContext.getInstance() );
 		return xpath;
 	}
 

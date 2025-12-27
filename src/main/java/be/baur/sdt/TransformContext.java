@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import org.jaxen.FunctionContext;
+import org.jaxen.NamespaceContext;
 import org.jaxen.Navigator;
 import org.jaxen.XPath;
 import org.jaxen.saxpath.SAXPathException;
@@ -14,6 +16,7 @@ import org.jaxen.saxpath.SAXPathException;
 import be.baur.sdt.transform.Transform;
 import be.baur.sdt.xpath.DocumentNavigator;
 import be.baur.sdt.xpath.SDTFunctionContext;
+import be.baur.sdt.xpath.SDTNamespaceContext;
 
 /**
  * A {@code TransformContext} is created prior to, and used during execution of
@@ -32,7 +35,9 @@ public class TransformContext {
 	private final Writer writer;
 	private final Map<String, Object> parameters;
 	private final Navigator navigator = DocumentNavigator.getInstance();
-
+	private final FunctionContext funcontext = SDTFunctionContext.getInstance();
+	private final NamespaceContext nspcontext = SDTNamespaceContext.getInstance();
+	
 	private TransformContext(Builder builder) {
 
 		this.writer = builder.writer;
@@ -85,9 +90,8 @@ public class TransformContext {
 	public XPath getXPath(String expression) throws SAXPathException {
 		
 		XPath xpath = navigator.parseXPath(expression);
-		xpath.setFunctionContext( SDTFunctionContext.getInstance() );
-		xpath.addNamespace(SDT.FUNCTIONS_NS_PFX, SDT.FUNCTIONS_NS_URI);
-		xpath.addNamespace(SDT.W3CFUNCTIONS_NS_PFX, SDT.W3CFUNCTIONS_NS_URI);
+		xpath.setFunctionContext( funcontext );
+		xpath.setNamespaceContext( nspcontext );
 		return xpath;
 	}
 
