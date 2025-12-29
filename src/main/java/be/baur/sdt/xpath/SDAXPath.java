@@ -48,7 +48,7 @@ public class SDAXPath extends BaseXPath {
 	public static SDAXPath withSDTSupport(String expression) throws JaxenException {
 
 		SDAXPath xpath = new SDAXPath(expression);
-		xpath.setFunctionContext( SDTFunctionContext.getInstance() );
+		xpath.setFunctionContext( new SDTFunctionContext() );
 		xpath.setNamespaceContext( SDTNamespaceContext.getInstance() );
 		return xpath;
 	}

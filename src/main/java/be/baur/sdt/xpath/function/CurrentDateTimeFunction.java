@@ -6,6 +6,9 @@ import java.util.List;
 import org.jaxen.Context;
 import org.jaxen.Function;
 import org.jaxen.FunctionCallException;
+import org.jaxen.FunctionContext;
+
+import be.baur.sdt.xpath.SDTFunctionContext;
 
 /**
  * <code><i>date-time</i> sdt:current-dateTime()</code><br>
@@ -41,7 +44,7 @@ public class CurrentDateTimeFunction implements Function
 	public Object call(Context context, List args) throws FunctionCallException
 	{
 		if (args.size() == 0)
-			return evaluate();
+			return evaluate(context);
 
 		throw new FunctionCallException(NAME + "() requires no arguments.");
 	}
@@ -52,8 +55,13 @@ public class CurrentDateTimeFunction implements Function
 	 * 
 	 * @return a zoned date-time string
 	 */
-	public static String evaluate() {
-		return DateTimeFunction.format(ZonedDateTime.now());
+	public static String evaluate(Context context) {
+		
+		FunctionContext fc = context.getContextSupport().getFunctionContext();
+		if (fc instanceof SDTFunctionContext)
+			return DateTimeFunction.format(((SDTFunctionContext) fc).getCurrentDateTime());
+		else
+			return DateTimeFunction.format(ZonedDateTime.now());
 	}
 
 }

@@ -1,14 +1,14 @@
 package be.baur.sdt.xpath;
 
-import org.jaxen.FunctionContext;
+import org.jaxen.NamespaceContext;
 import org.jaxen.SimpleNamespaceContext;
 
 import be.baur.sdt.SDT;
 
 /**
- * A <code>NamespaceContext</code> pre-populated with SDT bindings.
+ * A <code>NamespaceContext</code> pre-populated with SDT specific bindings.
  * 
- * @see FunctionContext
+ * @see NamespaceContext
  */
 public class SDTNamespaceContext extends SimpleNamespaceContext
 {
@@ -16,10 +16,10 @@ public class SDTNamespaceContext extends SimpleNamespaceContext
 	private static final SDTNamespaceContext instance = new SDTNamespaceContext();
 
 	/**
-	 * Returns the default SDT namespace context. Do not extend this with your own
-	 * bindings, as it will affect all XPath instances that use this global
-	 * default. Instead, extend <code>SDTNamespaceContext</code> or create a new
-	 * instance to include your own functions.
+	 * Returns the default SDT namespace context. Be aware that adding bindings will
+	 * affect all XPath instances that use this default. Consider extending
+	 * <code>SDTNamespaceContext</code> or create a new instance to add your own
+	 * bindings to.
 	 *
 	 * @return a namespace context
 	 */
@@ -29,7 +29,7 @@ public class SDTNamespaceContext extends SimpleNamespaceContext
 
  
 	/**
-	 * Create a new XPath namespace context including the SDT extension bindings.
+	 * Create a new namespace context that includes the SDT extension bindings.
 	 */
 	public SDTNamespaceContext() {
 

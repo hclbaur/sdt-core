@@ -9,6 +9,7 @@ import org.jaxen.saxpath.SAXPathException;
 import be.baur.sda.DataNode;
 import be.baur.sda.Node;
 import be.baur.sdt.xpath.DocumentNavigator;
+import be.baur.sdt.xpath.SDAXPath;
 
 @SuppressWarnings("rawtypes")
 public class addressbook {
@@ -23,7 +24,7 @@ public class addressbook {
 		XPath x;
 		SimpleVariableContext v;
 		
-		x = nav.parseXPath("document('/temp/addressbook.sda')");
+		x = nav.parseXPath("document('" + file + "')");
 		System.out.println(x.evaluate(doc).toString()); // prints entire document
 		
 		x = nav.parseXPath("/addressbook/contact/phonenumber");
@@ -58,6 +59,10 @@ public class addressbook {
 
 		v.setVariableValue("_", "0");
 		x = nav.parseXPath("$_"); x.setVariableContext(v);
+		System.out.println(x.evaluate(doc).toString()); //0
+		
+		x = SDAXPath.withSDTSupport("sdt:current-dateTime()");
+		System.out.println(x.evaluate(doc).toString());
 		System.out.println(x.evaluate(doc).toString());
 	}
 

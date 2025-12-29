@@ -5,6 +5,9 @@
 This release is in development.
 
 - Added functions current-dateTime(), dateTime(), dateTime-to-local(), dateTime-to-millis(), dateTime-to-timezone(), format-dateTime(), millis-to-dateTime(), parse-dateTime(), timestamp().
+- Added SDTFunctionContext and SDTNamespaceContext
+- Added TransformContext.getXPath()
+- Added SDAXPath.withSDTSupport()
 
 ## Compatibility
 

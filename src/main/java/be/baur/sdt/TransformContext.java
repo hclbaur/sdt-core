@@ -35,7 +35,7 @@ public class TransformContext {
 	private final Writer writer;
 	private final Map<String, Object> parameters;
 	private final Navigator navigator = DocumentNavigator.getInstance();
-	private final FunctionContext funcontext = SDTFunctionContext.getInstance();
+	private final FunctionContext funcontext = new SDTFunctionContext();
 	private final NamespaceContext nspcontext = SDTNamespaceContext.getInstance();
 	
 	private TransformContext(Builder builder) {
@@ -79,13 +79,14 @@ public class TransformContext {
 
 	/**
 	 * Creates an XPath expression object suitable for this transform context. By
-	 * default, this also includes the <code>SDTFunctionContext</code>.
+	 * default, this also includes the SDT function and SDT namespace context.
 	 * 
 	 * @param expression an XPath expression
 	 * @return a new XPath expression object, not null
 	 * @throws SAXPathException if the XPath expression is invalid
 	 * 
 	 * @see SDTFunctionContext
+	 * @see SDTNamespaceContext
 	 */
 	public XPath getXPath(String expression) throws SAXPathException {
 		
