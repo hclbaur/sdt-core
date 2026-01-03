@@ -49,7 +49,7 @@ public class SDAXPath extends BaseXPath {
 
 		SDAXPath xpath = new SDAXPath(expression);
 		xpath.setFunctionContext( new SDTFunctionContext() );
-		xpath.setNamespaceContext( SDTNamespaceContext.getInstance() );
+		xpath.setNamespaceContext( new SDTNamespaceContext() );
 		return xpath;
 	}
 

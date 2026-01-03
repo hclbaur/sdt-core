@@ -35,8 +35,8 @@ public class TransformContext {
 	private final Writer writer;
 	private final Map<String, Object> parameters;
 	private final Navigator navigator = DocumentNavigator.getInstance();
-	private final FunctionContext funcontext = new SDTFunctionContext();
-	private final NamespaceContext nspcontext = SDTNamespaceContext.getInstance();
+	private final FunctionContext fncontext = new SDTFunctionContext();
+	private final NamespaceContext nscontext = new SDTNamespaceContext();
 	
 	private TransformContext(Builder builder) {
 
@@ -91,8 +91,8 @@ public class TransformContext {
 	public XPath getXPath(String expression) throws SAXPathException {
 		
 		XPath xpath = navigator.parseXPath(expression);
-		xpath.setFunctionContext( funcontext );
-		xpath.setNamespaceContext( nspcontext );
+		xpath.setFunctionContext( fncontext );
+		xpath.setNamespaceContext( nscontext );
 		return xpath;
 	}
 

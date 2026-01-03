@@ -42,14 +42,14 @@ public final class SDT {
 
 	
 	/** Namespace prefix of SDT specific XPath functions. */
-	public static final String FUNCTIONS_NS_PFX = "sdt";
+	@Deprecated public static final String FUNCTIONS_NS_PFX = "sdt";
 	/** Namespace URI for SDT specific XPath functions. */
-	public static final String FUNCTIONS_NS_URI = "be.baur.sdt.xpath.function";
+	@Deprecated public static final String FUNCTIONS_NS_URI = "be.baur.sdt.xpath.function";
 
 	/** Namespace prefix of W3C XPath functions. */
-	public static final String W3CFUNCTIONS_NS_PFX = "fn";
+	@Deprecated public static final String W3CFUNCTIONS_NS_PFX = "fn";
 	/** Namespace URI for W3C XPath functions. */
-	public static final String W3CFUNCTIONS_NS_URI = "http://www.w3.org/2005/xpath-functions";
+	@Deprecated public static final String W3CFUNCTIONS_NS_URI = "http://www.w3.org/2005/xpath-functions";
 
 
 	/** Singleton instance of SubstringFunction for use in other functions. */

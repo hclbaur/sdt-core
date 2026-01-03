@@ -1,5 +1,7 @@
 package be.baur.sdt.transform;
 
+import static be.baur.sdt.xpath.SDTFunctionContext.FUNCTIONS_NS_URI;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
@@ -11,7 +13,6 @@ import org.jaxen.XPath;
 
 import be.baur.sda.DataNode;
 import be.baur.sda.Node;
-import be.baur.sdt.SDT;
 import be.baur.sdt.StatementContext;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.TransformException;
@@ -131,11 +132,11 @@ public class ForEachStatement extends XPathStatement {
 			 */
 			int position = 0; 		
 			if (groups == null) {
-				coco.setVariableValue(SDT.FUNCTIONS_NS_URI, "last", new Double(setsize));
+				coco.setVariableValue(FUNCTIONS_NS_URI, "last", new Double(setsize));
 				for (Object node : nodeset) {
 					++position;	coco.setContextNode(node);
-					coco.setVariableValue(SDT.FUNCTIONS_NS_URI, "current", node);
-					coco.setVariableValue(SDT.FUNCTIONS_NS_URI, "position", new Double(position));
+					coco.setVariableValue(FUNCTIONS_NS_URI, "current", node);
+					coco.setVariableValue(FUNCTIONS_NS_URI, "position", new Double(position));
 
 					for (Node statement : statements)
 						((Statement) statement).execute(traco, coco);
@@ -147,13 +148,13 @@ public class ForEachStatement extends XPathStatement {
 			 * execution of the compound statement.
 			 */
 			else {
-				coco.setVariableValue(SDT.FUNCTIONS_NS_URI, "last", new Double(groups.size()));
+				coco.setVariableValue(FUNCTIONS_NS_URI, "last", new Double(groups.size()));
 				for (String key : groups.keySet()) {
 					List group = groups.get(key);
 					++position;	coco.setContextNode(group);
-					coco.setVariableValue(SDT.FUNCTIONS_NS_URI, "current-group", group);
-					coco.setVariableValue(SDT.FUNCTIONS_NS_URI, "current-grouping-key", key);
-					coco.setVariableValue(SDT.FUNCTIONS_NS_URI, "position", new Double(position));
+					coco.setVariableValue(FUNCTIONS_NS_URI, "current-group", group);
+					coco.setVariableValue(FUNCTIONS_NS_URI, "current-grouping-key", key);
+					coco.setVariableValue(FUNCTIONS_NS_URI, "position", new Double(position));
 
 					for (Node statement : statements)
 						((Statement) statement).execute(traco, coco);
