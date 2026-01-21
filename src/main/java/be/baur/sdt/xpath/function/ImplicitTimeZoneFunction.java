@@ -17,13 +17,13 @@ import be.baur.sdt.xpath.SDTFunctionContext;
  * the time zone to be used when a date-time value that does not have a time
  * zone component is used in a comparison or arithmetic operation.
  * <p>
- * <i>Note:</i> the result is deterministic and context-dependent; multiple
+ * <i>Note:</i> this function is deterministic and context-dependent; multiple
  * invocations within the same execution context will return the same result.
-  * <p>
+ * <p>
  * Example:
  * <p>
- * <code>sdt:implicit-timezone()</code>
- * returns <code>Europe/Amsterdam</code>.<br>
+ * <code>sdt:implicit-timezone()</code> returns
+ * <code>Europe/Amsterdam</code>.<br>
  * 
  * @see SDTFunctionContext
  * @see <a href=

@@ -5,7 +5,7 @@
 This release is in development.
 
 - `Deprecated` SDT namespace prefix and URI declarations in the SDT utility class.
-- Added functions current-dateTime(), dateTime(), dateTime-to-local(), dateTime-to-millis(), dateTime-to-timezone(), format-dateTime(), millis-to-dateTime(), parse-dateTime(), timestamp().
+- Added functions current-dateTime(), dateTime(), dateTime-to-local(), dateTime-to-millis(), dateTime-to-timezone(), format-dateTime(), implicit-timezone(), millis-to-dateTime(), parse-dateTime(), system-dateTime(), system-timezone(), timestamp().
 - Added SDTFunctionContext and SDTNamespaceContext
 - Added TransformContext.getXPath()
 - Added SDAXPath.withSDTSupport()

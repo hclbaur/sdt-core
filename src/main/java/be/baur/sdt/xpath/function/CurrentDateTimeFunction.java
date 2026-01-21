@@ -13,16 +13,17 @@ import be.baur.sdt.xpath.SDTFunctionContext;
 /**
  * <code><i>date-time</i> sdt:current-dateTime()</code><br>
  * <p>
- * Returns the current date and time (in extended ISO-8601 format) from the
- * SDT context in the implicit time zone.
+ * Returns the current date and time (in extended ISO-8601 format) from the SDT
+ * context in the implicit time zone.
  * <p>
- * <i>Note:</i> the result is deterministic and context-dependent; multiple
+ * <i>Note:</i> this function is deterministic and context-dependent; multiple
  * invocations within the same execution context will return the same result.
  * 
  * @see SDTFunctionContext
  * @see <a href=
  *      "https://www.w3.org/TR/xpath-functions/#func-current-dateTime">Section
  *      15.3 of the XPath Specification</a>
+ * @see SystemDateTimeFunction
  */
 public class CurrentDateTimeFunction implements Function
 {

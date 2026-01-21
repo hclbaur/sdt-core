@@ -29,7 +29,8 @@ transform {
 		}	
 	}
 
-	println "sdt:system-timezone()"
-	println "sdt:implicit-timezone()"
+	println "sdt:system-dateTime()"
+	println "sdt:current-dateTime()"
+	println "sdt:system-dateTime()"
 	println "sdt:current-dateTime()"
 }

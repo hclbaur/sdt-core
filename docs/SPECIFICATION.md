@@ -26,7 +26,7 @@
 	- [millis-to-dateTime](#millis-to-dateTime)
 	- [parse-dateTime](#parse-dateTime), [parse-sda](#parse-sda)
 	- [render-sda](#render-sda), [right](#right)
-	- [string-join](#string-join), [system-timezone](#system-timezone)
+	- [string-join](#string-join), [system-dateTime](#system-dateTime), [system-timezone](#system-timezone)
 	- [timestamp](#timestamp), [tokenize](#tokenize)
 
 
@@ -298,10 +298,11 @@ This function can be used as a comparator in a sort statement.
  
 Returns the current date and time (in extended ISO-8601 format) from the SDT context in the implicit time zone.
 
-<i>Note:</i> the result is deterministic and context-dependent; multiple invocations within the same execution context will return the same result.
+<i>Note:</i> this function is deterministic and context-dependent; multiple invocations within the same execution context will return the same result.
 
 See also [Section 15.3 of the XPath Specification](https://www.w3.org/TR/xpath-functions/#func-current-dateTime)
 
+See also [system-dateTime](#system-dateTime)
 
 #### dateTime
 
@@ -317,7 +318,7 @@ Examples:
 <code>sdt:dateTime('1968-02-28T12:00+01:00')</code> returns <code>1968-02-28T12:00:00+01:00</code>.
 
 
-### dateTime-to-local
+#### dateTime-to-local
 
 <code><i>date-time</i> dateTime-to-local( <i>date-time</i> )</code>
 
@@ -329,7 +330,7 @@ Examples:
 <code>1970-01-01T00:00:00</code>.<br>
 
 
-### dateTime-to-millis
+#### dateTime-to-millis
 
 <code><i>number</i> sdt:dateTime-to-millis( <i>date-time</i> )</code>
  
@@ -387,7 +388,7 @@ See also [Patterns for Formatting and Parsing](https://docs.oracle.com/javase/8/
 
 Returns the value of the implicit time zone ID from the SDT context. This is the time zone to be used when a date-time value that does not have a time zone component is used in a comparison or arithmetic operation.
 
-<i>Note:</i> the result is deterministic and context-dependent; multiple invocations within the same execution context will return the same result.
+<i>Note:</i> this function is deterministic and context-dependent; multiple invocations within the same execution context will return the same result.
 
 Example:
 
@@ -469,6 +470,17 @@ If the second argument is not a number or less than 1, an empty string is return
 Returns a string created by concatenating the items in a sequence, with an optional separator between adjacent items. If the sequence is empty, the function returns the zero-length string.
 
 See also [Section 5.4.2 of the XPath Specification](https://www.w3.org/TR/xpath-functions/#func-string-join)
+
+
+#### system-dateTime
+
+<code><i>date-time</i> sdt:system-dateTime()</code>
+ 
+Returns the current date and time (in extended ISO-8601) format from the system clock in the default time zone.
+
+<i>Note:</i> this function is non-deterministic and context-independent; multiple invocations within the same execution context may return a different result.
+
+See also [current-dateTime](#current-dateTime)
 
 
 #### system-timezone

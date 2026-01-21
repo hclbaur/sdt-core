@@ -27,6 +27,7 @@ import be.baur.sdt.xpath.function.ParseSDAFunction;
 import be.baur.sdt.xpath.function.RenderSDAFunction;
 import be.baur.sdt.xpath.function.RightFunction;
 import be.baur.sdt.xpath.function.StringJoinFunction;
+import be.baur.sdt.xpath.function.SystemDateTimeFunction;
 import be.baur.sdt.xpath.function.SystemTimeZoneFunction;
 import be.baur.sdt.xpath.function.TimestampFunction;
 import be.baur.sdt.xpath.function.TokenizeFunction;
@@ -74,6 +75,7 @@ public class SDTFunctionContext implements FunctionContext {
 		FC.registerFunction(FUNCTIONS_NS_URI, ParseSDAFunction.NAME, new ParseSDAFunction());
 		FC.registerFunction(FUNCTIONS_NS_URI, RenderSDAFunction.NAME, new RenderSDAFunction());
 		FC.registerFunction(FUNCTIONS_NS_URI, RightFunction.NAME, new RightFunction());
+		FC.registerFunction(FUNCTIONS_NS_URI, SystemDateTimeFunction.NAME, new SystemDateTimeFunction());
 		FC.registerFunction(FUNCTIONS_NS_URI, SystemTimeZoneFunction.NAME, new SystemTimeZoneFunction());
 		FC.registerFunction(FUNCTIONS_NS_URI, TimestampFunction.NAME, new TimestampFunction());
 		FC.registerFunction(FUNCTIONS_NS_URI, TokenizeFunction.NAME, new TokenizeFunction());
@@ -84,17 +86,13 @@ public class SDTFunctionContext implements FunctionContext {
 
 
 	private static ZoneId implicitTimeZone;	// static (!) context time zone id
-	private final ZonedDateTime currentDateTime; // this context date and time
+	private ZonedDateTime currentDateTime; // this context date and time
 
 
 	/**
 	 * Create a new SDT function context.
 	 */
-	public SDTFunctionContext() {
-
-		currentDateTime = Instant.from(ZonedDateTime.now())
-			.atZone(getImplicitTimeZone()); // current is final for this instance :)
-	}
+	public SDTFunctionContext() {}
 
 
 	@Override
@@ -107,7 +105,7 @@ public class SDTFunctionContext implements FunctionContext {
 
 
 	/**
-	 * Returns the current system's clock date and time (with time zone) for this
+	 * Returns the system's clock date and time (in the implicit time zone) for this
 	 * context.
 	 * <p>
 	 * <i>Note:</i> multiple invocations for this context instance will return the
@@ -117,6 +115,8 @@ public class SDTFunctionContext implements FunctionContext {
 	 */
 	public final ZonedDateTime getCurrentDateTime() {
 		
+		if (currentDateTime == null)
+			currentDateTime = Instant.from(ZonedDateTime.now()).atZone(getImplicitTimeZone());
 		return currentDateTime;
 	}
 
