@@ -120,9 +120,10 @@ public class TestSDTXPath {
 		t.so("F85", "sdt:dateTime-to-local()", doc, "dateTime-to-local() requires exactly one argument.");
 		t.so("F86", "sdt:dateTime-to-local('a')", doc, "dateTime-to-local() argument 'a' is invalid.");
 		
+		t.so("S87", "sdt:implicit-timezone()", doc, ZoneId.systemDefault().toString());
+		t.so("F88", "sdt:implicit-timezone('a')", doc, "implicit-timezone() requires no arguments.");
 		t.so("S87", "sdt:system-timezone()", doc, ZoneId.systemDefault().toString());
 		t.so("F88", "sdt:system-timezone('a')", doc, "system-timezone() requires no arguments.");
-
 	}
 
 }

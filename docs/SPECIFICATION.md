@@ -21,6 +21,7 @@
 	- [compare-number](#compare-number), [compare-string](#compare-string), [current-dateTime](#current-dateTime)
 	- [dateTime](#dateTime), [dateTime-to-local](#dateTime-to-local), [dateTime-to-millis](#dateTime-to-millis), [dateTime-to-timezone](#dateTime-to-timezone), [document-node](#document-node)
 	- [format-dateTime](#format-dateTime)
+	- [implicit-timezone](#implicit-timezone)
 	- [left](#left)
 	- [millis-to-dateTime](#millis-to-dateTime)
 	- [parse-dateTime](#parse-dateTime), [parse-sda](#parse-sda)
@@ -295,9 +296,9 @@ This function can be used as a comparator in a sort statement.
 
 <code><i>date-time</i> sdt:current-dateTime()</code>
  
-Returns the current date and time in extended ISO-8601 format from the system clock in the default time zone.
+Returns the current date and time (in extended ISO-8601 format) from the SDT context in the implicit time zone.
 
-Note: this implementation is non-deterministic.
+<i>Note:</i> the result is deterministic and context-dependent; multiple invocations within the same execution context will return the same result.
 
 See also [Section 15.3 of the XPath Specification](https://www.w3.org/TR/xpath-functions/#func-current-dateTime)
 
@@ -380,6 +381,21 @@ returns <code>19700101000000</code>.
 See also [Patterns for Formatting and Parsing](https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html#patterns)
 
 
+#### implicit-timezone
+
+<code><i>time-zone</i> sdt:implicit-timezone()</code><br>
+
+Returns the value of the implicit time zone ID from the SDT context. This is the time zone to be used when a date-time value that does not have a time zone component is used in a comparison or arithmetic operation.
+
+<i>Note:</i> the result is deterministic and context-dependent; multiple invocations within the same execution context will return the same result.
+
+Example:
+
+<code>sdt:implicit-timezone()</code> returns <code>Europe/Amsterdam</code>.
+ 
+See also [List of tz database time zones](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)
+
+
 #### left
 
 <code><i>string</i> sdt:left( <i>string</i>, <i>number</i> )</code>
@@ -459,7 +475,7 @@ See also [Section 5.4.2 of the XPath Specification](https://www.w3.org/TR/xpath-
 
 <code><i>time-zone</i> sdt:system-timezone()</code><br>
 
-Returns the system default time-zone ID.
+Returns the system default time zone ID or UTC if no zone id could be determined.
 
 See also [List of tz database time zones](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)
  

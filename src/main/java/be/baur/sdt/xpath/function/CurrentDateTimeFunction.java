@@ -1,6 +1,6 @@
 package be.baur.sdt.xpath.function;
 
-import java.time.ZonedDateTime;
+import java.time.temporal.TemporalAccessor;
 import java.util.List;
 
 import org.jaxen.Context;
@@ -13,11 +13,13 @@ import be.baur.sdt.xpath.SDTFunctionContext;
 /**
  * <code><i>date-time</i> sdt:current-dateTime()</code><br>
  * <p>
- * Returns the current date and time in extended ISO-8601 format from the system
- * clock in the default time zone.
+ * Returns the current date and time (in extended ISO-8601 format) from the
+ * SDT context in the implicit time zone.
  * <p>
- * Note: this implementation is non-deterministic.
+ * <i>Note:</i> the result is deterministic and context-dependent; multiple
+ * invocations within the same execution context will return the same result.
  * 
+ * @see SDTFunctionContext
  * @see <a href=
  *      "https://www.w3.org/TR/xpath-functions/#func-current-dateTime">Section
  *      15.3 of the XPath Specification</a>
@@ -32,7 +34,7 @@ public class CurrentDateTimeFunction implements Function
     public CurrentDateTimeFunction() {}
     
 	/**
-	 * Returns the current date and time in extended ISO-8601 format.
+	 * Returns the current date and time.
 	 *
 	 * @param context will be ignored
 	 * @param args    an empty list
@@ -44,24 +46,25 @@ public class CurrentDateTimeFunction implements Function
 	public Object call(Context context, List args) throws FunctionCallException
 	{
 		if (args.size() == 0)
-			return evaluate(context);
+			return DateTimeFunction.format(evaluate(context));
 
 		throw new FunctionCallException(NAME + "() requires no arguments.");
 	}
 
   
 	/**
-	 * Returns the current date and time in extended ISO-8601 format.
+	 * Returns the current date and time.
 	 * 
-	 * @return a zoned date-time string
+	 * @return a zoned date-time, not null
 	 */
-	public static String evaluate(Context context) {
+	public static TemporalAccessor evaluate(Context context) {
 		
 		FunctionContext fc = context.getContextSupport().getFunctionContext();
+		
 		if (fc instanceof SDTFunctionContext)
-			return DateTimeFunction.format(((SDTFunctionContext) fc).getCurrentDateTime());
-		else
-			return DateTimeFunction.format(ZonedDateTime.now());
+			return ((SDTFunctionContext) fc).getCurrentDateTime();
+
+		throw new AssertionError(NAME + "() not called from an SDT context.");
 	}
 
 }
