@@ -30,7 +30,7 @@ public final class SystemTimeZoneFunction implements Function
 	/**
 	 * Returns the system default time zone ID.
 	 *
-	 * @param context will be ignored
+	 * @param context the expression context
 	 * @param args    an empty list
 	 * @return a time zone
 	 * @throws FunctionCallException if <code>args</code> is not empty or an

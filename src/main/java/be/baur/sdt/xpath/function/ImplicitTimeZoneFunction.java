@@ -42,7 +42,7 @@ public final class ImplicitTimeZoneFunction implements Function
 	/**
 	 * Returns the implicit time zone.
 	 *
-	 * @param context will be ignored
+	 * @param context the expression context
 	 * @param args    an empty list
 	 * @return a time zone
 	 * @throws FunctionCallException if <code>args</code> is not empty or an
@@ -62,6 +62,7 @@ public final class ImplicitTimeZoneFunction implements Function
 	/**
 	 * Returns the ID of the implicit time zone.
 	 * 
+	 * @param context the expression context
 	 * @return a zone id, not null
 	 */
 	public static ZoneId evaluate(Context context) {

@@ -48,8 +48,7 @@ public class DateTimeFunction implements Function
 	/**
 	 * Returns a local or zoned date-time string in extended ISO-8601 format.
 	 *
-	 * @param context the context at the point in the expression when the function
-	 *                is called
+	 * @param context the expression context
 	 * @param args    an argument list that contains one item.
 	 * @return a date-time string
 	 * @throws FunctionCallException if <code>args</code> has more or less than one

@@ -37,7 +37,7 @@ public class CurrentDateTimeFunction implements Function
 	/**
 	 * Returns the current date and time.
 	 *
-	 * @param context will be ignored
+	 * @param context the expression context
 	 * @param args    an empty list
 	 * @return a zoned date-time string
 	 * @throws FunctionCallException if <code>args</code> is not empty
@@ -56,6 +56,7 @@ public class CurrentDateTimeFunction implements Function
 	/**
 	 * Returns the current date and time.
 	 * 
+	 * @param context the expression context
 	 * @return a zoned date-time, not null
 	 */
 	public static TemporalAccessor evaluate(Context context) {

@@ -33,8 +33,7 @@ public class DateTimeToLocalFunction implements Function
 	/**
 	 * Removes the time zone component from a date-time.
 	 * 
-	 * @param context the context at the point in the expression when the function
-	 *                is called
+	 * @param context the expression context
 	 * @param args    an argument list that contains one item.
 	 * @return a local date-time string
 	 * @throws FunctionCallException if <code>args</code> has more or less than one
