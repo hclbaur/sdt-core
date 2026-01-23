@@ -334,12 +334,15 @@ Examples:
 
 <code><i>number</i> sdt:dateTime-to-millis( <i>date-time</i> )</code>
  
-Converts a zoned date-time into the number of milliseconds elapsed since the epoch. A negative number is returned for a point in time prior to the epoch.
+Converts a date-time into a number of milliseconds elapsed since the epoch. A negative number is returned for a point in time prior to the epoch.
 
+<i>Note:</i> if a local date-time is supplied, the implicit time zone will be used to calculate the offset from UTC. 
+ 
 Examples:
 
 <code>sdt:dateTime-to-millis('1970-01-01T00:00:00Z')</code> returns <code>0</code>.
 
+See also [implicit-timezone](#implicit-timezone)
 
 #### dateTime-to-timezone
 
@@ -386,14 +389,15 @@ See also [Patterns for Formatting and Parsing](https://docs.oracle.com/javase/8/
 
 <code><i>time-zone</i> sdt:implicit-timezone()</code><br>
 
-Returns the value of the implicit time zone ID from the SDT context. This is the time zone to be used when a date-time value that does not have a time zone component is used in a comparison or arithmetic operation.
+Returns the value of the implicit time zone ID from the SDT context. This is the time zone to be used when a date-time value that does not have a time zone component is used in a comparison or arithmetic operation. This is not necessarily equal to the system clock default.
 
 <i>Note:</i> this function is deterministic and context-dependent; multiple invocations within the same execution context will return the same result.
 
 Example:
 
 <code>sdt:implicit-timezone()</code> returns <code>Europe/Amsterdam</code>.
- 
+
+See also [system-timezone](#system-timezone) 
 See also [List of tz database time zones](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)
 
 
@@ -489,6 +493,7 @@ See also [current-dateTime](#current-dateTime)
 
 Returns the system default time zone ID or UTC if no zone id could be determined.
 
+See also [implicit-timezone](#implicit-timezone)
 See also [List of tz database time zones](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)
  
 

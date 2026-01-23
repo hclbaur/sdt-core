@@ -33,8 +33,7 @@ public class DocumentNodeFunction implements Function
 	/**
 	 * Creates a document node.
 	 *
-	 * @param context the context at the point in the expression when the function
-	 *                is called
+	 * @param context the expression context
 	 * @param args    an argument list that contains one item.
 	 * 
 	 * @return a document node

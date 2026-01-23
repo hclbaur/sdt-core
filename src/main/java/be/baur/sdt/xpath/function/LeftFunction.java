@@ -34,8 +34,7 @@ public class LeftFunction implements Function
 	/**
 	 * Returns the left part of an XPath string-value by length.
 	 *
-	 * @param context the context at the point in the expression when the function
-	 *                is called.
+	 * @param context the expression context
 	 * @param args    an argument list that contains two items, a
 	 *                <code>String</code> and a length.
 	 * 

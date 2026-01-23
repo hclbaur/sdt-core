@@ -72,7 +72,7 @@ public class DateTimeFunction implements Function
 	 * @param obj a date-time string
 	 * @param nav the navigator used
 	 * @return a date-time object
-	 * @throws FunctionCallException if date-time construction failed
+	 * @throws FunctionCallException if evaluation failed
 	 */
 	public static TemporalAccessor evaluate(String fun, Object obj, Navigator nav) throws FunctionCallException {
 

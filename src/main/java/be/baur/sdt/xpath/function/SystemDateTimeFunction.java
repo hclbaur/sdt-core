@@ -31,7 +31,7 @@ public class SystemDateTimeFunction implements Function
 	/**
 	 * Returns the system date and time.
 	 *
-	 * @param context will be ignored
+	 * @param context the expression context
 	 * @param args    an empty list
 	 * @return a zoned date-time string
 	 * @throws FunctionCallException if <code>args</code> is not empty

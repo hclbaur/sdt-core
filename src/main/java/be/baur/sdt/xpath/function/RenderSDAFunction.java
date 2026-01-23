@@ -40,8 +40,7 @@ public class RenderSDAFunction implements Function
 	/**
 	 * Formats an SDA node as text.
 	 *
-	 * @param context the context at the point in the expression when the function
-	 *                is called
+	 * @param context the expression context
 	 * @param args    an argument list that contains one or two items.
 	 * 
 	 * @return a <code>String</code>

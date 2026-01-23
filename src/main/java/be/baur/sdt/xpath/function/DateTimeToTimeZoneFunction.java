@@ -52,12 +52,11 @@ public class DateTimeToTimeZoneFunction implements Function
 	/**
 	 * Creates a date-time from the given date-time and time zone or offset.
 	 *
-	 * @param context the context at the point in the expression when the function
-	 *                is called
+	 * @param context the expression context
 	 * @param args    an argument list that contains two items.
 	 * @return a zoned date-time string
 	 * @throws FunctionCallException if <code>args</code> has more or less than two
-	 *                               items or evaluation failed.
+	 *                               items or conversion failed.
 	 */
     @Override
 	@SuppressWarnings("rawtypes")

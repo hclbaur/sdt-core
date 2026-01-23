@@ -39,8 +39,7 @@ public class FormatDateTimeFunction implements Function
 	/**
 	 * Returns a formatted date-time string, using a pattern.
 	 *
-	 * @param context the context at the point in the expression when the function
-	 *                is called
+	 * @param context the expression context
 	 * @param args    an argument list that contains two items.
 	 * @return a formatted date-time string
 	 * @throws FunctionCallException if <code>args</code> has more or less than two

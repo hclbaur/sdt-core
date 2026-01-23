@@ -12,13 +12,18 @@ import org.jaxen.FunctionCallException;
 /**
  * <code><i>number</i> sdt:dateTime-to-millis( <i>date-time</i> )</code><br>
  * <p>
- * Converts a zoned date-time into the number of milliseconds elapsed since the
- * epoch. A negative number is returned for a point in time prior to the epoch.
+ * Converts a date-time into a number of milliseconds elapsed since the epoch. A
+ * negative number is returned for a point in time prior to the epoch.
+ * <p>
+ * <i>Note:</i> if a local date-time is supplied, the implicit time zone will be
+ * used to calculate the offset from UTC. 
  * <p>
  * Examples:
  * <p>
  * <code>sdt:dateTime-to-millis('1970-01-01T00:00:00Z')</code> returns
  * <code>0</code>.<br>
+ * 
+ * @see ImplicitTimeZoneFunction
  */
 public final class DateTimeToMillisFunction implements Function
 {
@@ -31,15 +36,13 @@ public final class DateTimeToMillisFunction implements Function
  
 
 	/**
-	 * Converts a zoned date-time string into the number of milliseconds elapsed
-	 * since the epoch.
+	 * Converts a date-time into the number of milliseconds elapsed since the epoch.
 	 *
 	 * @param context the expression context
 	 * @param args    an argument list that contains one item.
 	 * @return a number of milliseconds
-	 * @throws FunctionCallException if <code>args</code> has more than one item, no
-	 *                               zoned date-time was supplied or conversion
-	 *                               failed.
+	 * @throws FunctionCallException if <code>args</code> has more than one item or
+	 *                               date-time conversion failed.
 	 */
     @Override
 	@SuppressWarnings("rawtypes")
@@ -53,8 +56,7 @@ public final class DateTimeToMillisFunction implements Function
 
 
 	/**
-	 * Converts a zoned date-time string into the number of milliseconds elapsed
-	 * since the epoch.
+	 * Converts a date-time into the number of milliseconds elapsed since the epoch.
 	 * 
 	 * @param obj a date-time string
 	 * @param context the expression context

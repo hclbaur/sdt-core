@@ -15,7 +15,8 @@ import be.baur.sdt.xpath.SDTFunctionContext;
  * <p>
  * Returns the value of the implicit time zone ID from the SDT context. This is
  * the time zone to be used when a date-time value that does not have a time
- * zone component is used in a comparison or arithmetic operation.
+ * zone component is used in a comparison or arithmetic operation. This is not
+ * necessarily equal to the system clock default.
  * <p>
  * <i>Note:</i> this function is deterministic and context-dependent; multiple
  * invocations within the same execution context will return the same result.
@@ -25,7 +26,8 @@ import be.baur.sdt.xpath.SDTFunctionContext;
  * <code>sdt:implicit-timezone()</code> returns
  * <code>Europe/Amsterdam</code>.<br>
  * 
- * @see SDTFunctionContext
+ * @see SystemTimeZoneFunction
+ * @see SDTFunctionContext#getImplicitTimeZone
  * @see <a href=
  *      "https://en.wikipedia.org/wiki/List_of_tz_database_time_zones">List of
  *      tz database time zones</a>

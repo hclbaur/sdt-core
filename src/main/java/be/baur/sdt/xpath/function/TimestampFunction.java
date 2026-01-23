@@ -25,7 +25,7 @@ public class TimestampFunction implements Function
 	/**
 	 * Returns the current time in milliseconds elapsed since the epoch.
 	 *
-	 * @param context will be ignored
+	 * @param context the expression context
 	 * @param args    an empty list
 	 * @return a number of milliseconds
 	 * @throws FunctionCallException if <code>args</code> is not empty
