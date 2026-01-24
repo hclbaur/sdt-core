@@ -296,7 +296,7 @@ This function can be used as a comparator in a sort statement.
 
 <code><i>date-time</i> sdt:current-dateTime()</code>
  
-Returns the current date and time (in extended ISO-8601 format) from the SDT context in the implicit time zone.
+Returns the current date and time from the SDT context in the implicit time zone.
 
 <i>Note:</i> this function is deterministic and context-dependent; multiple invocations within the same execution context will return the same result.
 
@@ -336,7 +336,7 @@ Examples:
  
 Converts a date-time into a number of milliseconds elapsed since the epoch. A negative number is returned for a point in time prior to the epoch.
 
-<i>Note:</i> if a local date-time is supplied, the implicit time zone will be used to calculate the offset from UTC. 
+If a local date-time is supplied, the implicit time zone will be used to calculate the offset from UTC. 
  
 Examples:
 

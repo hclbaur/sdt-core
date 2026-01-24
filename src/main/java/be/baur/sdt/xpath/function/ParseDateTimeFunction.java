@@ -23,7 +23,7 @@ import org.jaxen.function.StringFunction;
  * 
  * @see DateTimeFormatter
  */
-public class ParseDateTimeFunction implements Function
+public final class ParseDateTimeFunction implements Function
 {
 	public static final String NAME = "parse-dateTime";
 	

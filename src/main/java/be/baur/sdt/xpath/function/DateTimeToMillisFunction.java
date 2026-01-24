@@ -15,8 +15,8 @@ import org.jaxen.FunctionCallException;
  * Converts a date-time into a number of milliseconds elapsed since the epoch. A
  * negative number is returned for a point in time prior to the epoch.
  * <p>
- * <i>Note:</i> if a local date-time is supplied, the implicit time zone will be
- * used to calculate the offset from UTC. 
+ * <i>If a local date-time is supplied, the implicit time zone will be used to
+ * calculate the offset from UTC.
  * <p>
  * Examples:
  * <p>
@@ -58,20 +58,20 @@ public final class DateTimeToMillisFunction implements Function
 	/**
 	 * Converts a date-time into the number of milliseconds elapsed since the epoch.
 	 * 
-	 * @param obj a date-time string
+	 * @param dtm a date-time string
 	 * @param context the expression context
 	 * @return a number of milliseconds
 	 * @throws FunctionCallException if date-time conversion failed.
 	 */
-	public static Double evaluate(Object obj, Context context) throws FunctionCallException {
+	public static Double evaluate(Object dtm, Context context) throws FunctionCallException {
 
-		TemporalAccessor dtm = DateTimeFunction.evaluate(NAME, obj, context.getNavigator());
+		TemporalAccessor tac = DateTimeFunction.evaluate(NAME, dtm, context.getNavigator());
 
-		if (dtm instanceof LocalDateTime)
-			dtm = ((LocalDateTime) dtm).atZone(ImplicitTimeZoneFunction.evaluate(context));
+		if (tac instanceof LocalDateTime)
+			tac = ((LocalDateTime) tac).atZone(ImplicitTimeZoneFunction.evaluate(context));
 
 		try {
-			return (double) Instant.from(dtm).toEpochMilli();
+			return (double) Instant.from(tac).toEpochMilli();
 		} catch (Exception e) {
 			throw new FunctionCallException(NAME + "() conversion of '" + dtm + "' failed.", e);
 		}

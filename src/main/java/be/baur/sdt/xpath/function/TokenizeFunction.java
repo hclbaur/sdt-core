@@ -33,7 +33,7 @@ import org.jaxen.function.StringFunction;
  * <code>sdt:tokenize('a; b; ; c; ', '; ', true())</code> returns
  * <code>("a","b","", "c", "")</code>.
  */
-public class TokenizeFunction implements Function
+public final class TokenizeFunction implements Function
 {
 	public static final String NAME = "tokenize";
 	

@@ -21,7 +21,7 @@ import org.jaxen.function.StringFunction;
  *      "https://www.w3.org/TR/xpath-functions/#func-string-join">Section 5.4.2
  *      of the XPath Specification</a>
  */
-public class StringJoinFunction implements Function
+public final class StringJoinFunction implements Function
 {
 	public static final String NAME = "string-join";
 	

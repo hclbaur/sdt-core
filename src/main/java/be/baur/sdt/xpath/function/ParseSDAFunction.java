@@ -20,7 +20,7 @@ import be.baur.sda.io.SDAParser;
  * 
  * @see SDAParser
  */
-public class ParseSDAFunction implements Function
+public final class ParseSDAFunction implements Function
 {
 	public static final String NAME = "parse-sda";
 	

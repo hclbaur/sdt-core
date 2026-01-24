@@ -32,7 +32,7 @@ import org.jaxen.function.NumberFunction;
  * <p>
  * This function can be used as a comparator in a sort statement.
  */
-public class CompareNumberFunction implements Function
+public final class CompareNumberFunction implements Function
 {
 	public static final String NAME = "compare-number";
 	

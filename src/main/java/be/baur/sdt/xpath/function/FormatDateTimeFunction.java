@@ -21,12 +21,12 @@ import org.jaxen.function.StringFunction;
  * <p>
  * <code>sdt:format-dateTime('1968-02-28T12:00','yyyy/MM/dd HH:mm')</code>
  * returns <code>1968/02/28 12:00</code>.<br>
- * <code>sdt:format-dateTime(sdt:millis-to-dateTime(0),'yyyyMMddHHmmss')</code> returns
- * <code>19700101000000</code>.
+ * <code>sdt:format-dateTime(sdt:millis-to-dateTime(0),'yyyyMMddHHmmss')</code>
+ * returns <code>19700101000000</code>.
  * 
  * @see DateTimeFormatter
  */
-public class FormatDateTimeFunction implements Function
+public final class FormatDateTimeFunction implements Function
 {
 	public static final String NAME = "format-dateTime";
 	
@@ -59,15 +59,15 @@ public class FormatDateTimeFunction implements Function
 	/**
 	 * Returns a formatted date-time string, using a pattern.
 	 * 
-	 * @param obj the date-time to be formatted, not null
+	 * @param dtm a date-time string
 	 * @param pat the pattern to be used, not null
 	 * @param nav the navigator used
 	 * @return a formatted date-time string
 	 * @throws FunctionCallException if formatting failed
 	 */
-	public static String evaluate(Object obj, Object pat, Navigator nav) throws FunctionCallException {
+	public static String evaluate(Object dtm, Object pat, Navigator nav) throws FunctionCallException {
 
-		TemporalAccessor dtm = DateTimeFunction.evaluate(NAME, obj, nav);
+		TemporalAccessor tac = DateTimeFunction.evaluate(NAME, dtm, nav);
 
 		String fmt = StringFunction.evaluate(pat, nav);
 		try {
@@ -78,11 +78,11 @@ public class FormatDateTimeFunction implements Function
 			} catch (Exception e) {
 				throw new FunctionCallException(NAME + "() pattern '" + fmt + "' is invalid.", e);
 			}
-			return DateTimeFunction.format(dtm, dtf);
+			return DateTimeFunction.format(tac, dtf);
 		
 		} catch (Exception e) {
 			throw new FunctionCallException(NAME + "() failed to format "
-					+ ((dtm instanceof LocalDateTime) ? "local" : "zoned") + " date-time.", e);
+					+ ((tac instanceof LocalDateTime) ? "local" : "zoned") + " date-time.", e);
 		}
 	}
 }

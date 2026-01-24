@@ -13,7 +13,7 @@ import org.jaxen.FunctionCallException;
  * <p>
  * Returns the current time in milliseconds elapsed since the epoch.
  */
-public class TimestampFunction implements Function
+public final class TimestampFunction implements Function
 {
 	public static final String NAME = "timestamp";
 	

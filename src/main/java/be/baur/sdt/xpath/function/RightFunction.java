@@ -24,7 +24,7 @@ import be.baur.sdt.SDT;
  * returned. If it exceeds the string length of the first argument, the entire
  * string is returned.
  */
-public class RightFunction implements Function
+public final class RightFunction implements Function
 {
 	public static final String NAME = "right";
 	

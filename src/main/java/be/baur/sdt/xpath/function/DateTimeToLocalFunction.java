@@ -20,7 +20,7 @@ import org.jaxen.Navigator;
  * <code>sdt:dateTime-to-local('1970-01-01T00:00:00Z')</code> returns
  * <code>1970-01-01T00:00:00</code>.<br>
  */
-public class DateTimeToLocalFunction implements Function
+public final class DateTimeToLocalFunction implements Function
 {
 	public static final String NAME = "dateTime-to-local";
 
@@ -53,7 +53,7 @@ public class DateTimeToLocalFunction implements Function
 	/**
 	 * Removes the time zone component from a date-time.
 	 * 
-	 * @param dtm a local or zoned date-time string
+	 * @param dtm a date-time string
 	 * @param nav the navigator used
 	 * @return a local date-time string
 	 * @throws FunctionCallException if no valid dateTime or time zone was supplied
@@ -61,11 +61,11 @@ public class DateTimeToLocalFunction implements Function
 	 */
 	public static String evaluate(Object dtm, Navigator nav) throws FunctionCallException {
 
-		TemporalAccessor temporal = DateTimeFunction.evaluate(NAME, dtm, nav);
+		TemporalAccessor tac = DateTimeFunction.evaluate(NAME, dtm, nav);
 
-		if (temporal instanceof ZonedDateTime)
-			temporal = ((ZonedDateTime) temporal).toLocalDateTime();
+		if (tac instanceof ZonedDateTime)
+			tac = ((ZonedDateTime) tac).toLocalDateTime();
 
-		return DateTimeFunction.format(temporal);
+		return DateTimeFunction.format(tac);
 	}
 }

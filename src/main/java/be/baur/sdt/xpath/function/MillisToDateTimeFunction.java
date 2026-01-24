@@ -22,7 +22,7 @@ import org.jaxen.function.NumberFunction;
  * <code>sdt:millis-to-dateTime(sdt:timestamp())</code> returns the current UTC
  * date and time.<br>
  */
-public class MillisToDateTimeFunction implements Function
+public final class MillisToDateTimeFunction implements Function
 {
 	public static final String NAME = "millis-to-dateTime";
 	
@@ -38,7 +38,7 @@ public class MillisToDateTimeFunction implements Function
 	 *
 	 * @param context the expression context
 	 * @param args    an argument list that contains one item.
-	 * @return a date-time string
+	 * @return a zoned date-time string
 	 * @throws FunctionCallException if <code>args</code> has more than one item or
 	 *                               no date-time could be constructed.
 	 */
@@ -59,7 +59,7 @@ public class MillisToDateTimeFunction implements Function
 	 * 
 	 * @param obj a number
 	 * @param nav the navigator used
-	 * @return a date-time string
+	 * @return a zoned date-time string
 	 * @throws FunctionCallException if no date-time could be constructed
 	 */
 	public static String evaluate(Object obj, Navigator nav) throws FunctionCallException {
