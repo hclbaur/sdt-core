@@ -1,5 +1,6 @@
 package be.baur.sdt.xpath.function;
 
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.TemporalAccessor;
 import java.util.List;
@@ -10,32 +11,31 @@ import org.jaxen.FunctionCallException;
 import org.jaxen.Navigator;
 
 /**
- * <code><i>date-time</i> dateTime-to-local( <i>date-time</i> )</code><br>
+ * <code><i>time-zone</i> timezone-from-dateTime( <i>date-time</i> )</code><br>
  * <p>
- * Removes the time zone component from a date-time and returns a local
- * date-time with the same year, month, day and time as the one supplied.
+ * Returns the time zone (or UTC offset) of a date-time.
  * <p>
  * Examples:
  * <p>
- * <code>sdt:dateTime-to-local('1970-01-01T00:00:00Z')</code> returns
- * <code>1970-01-01T00:00:00</code>.<br>
+ * <code>sdt:timezone-from-dateTime('1970-01-01T00:00:00Z')</code> returns
+ * <code>Z</code>.<br>
  */
-public final class DateTimeToLocalFunction implements Function
+public final class TimeZoneFromDateTime implements Function
 {
-	public static final String NAME = "dateTime-to-local";
+	public static final String NAME = "timezone-from-dateTime";
 
     /**
-     * Create a new <code>DateTimeToLocalFunction</code> object.
+     * Create a new <code>TimeZoneFromDateTime</code> object.
      */
-    public DateTimeToLocalFunction() {}
+    public TimeZoneFromDateTime() {}
  
 
 	/**
-	 * Removes the time zone component from a date-time.
+	 * Returns the time zone (or UTC offset) of a date-time.
 	 * 
 	 * @param context the expression context
 	 * @param args    an argument list that contains one item.
-	 * @return a local date-time string
+	 * @return a zone id, may be null
 	 * @throws FunctionCallException if <code>args</code> has more or less than one
 	 *                               item or evaluation failed.
 	 */
@@ -51,20 +51,20 @@ public final class DateTimeToLocalFunction implements Function
 
 
 	/**
-	 * Removes the time zone component from a date-time.
+	 * Returns the time zone (or UTC offset) of a date-time.
 	 * 
 	 * @param dtm a date-time string
 	 * @param nav the navigator used
-	 * @return a local date-time string
+	 * @return a zone id, may be null
 	 * @throws FunctionCallException if no valid date-time was supplied.
 	 */
-	public static String evaluate(Object dtm, Navigator nav) throws FunctionCallException {
+	public static ZoneId evaluate(Object dtm, Navigator nav) throws FunctionCallException {
 
 		TemporalAccessor tac = DateTimeFunction.evaluate(NAME, dtm, nav);
 
 		if (tac instanceof ZonedDateTime)
-			tac = ((ZonedDateTime) tac).toLocalDateTime();
+			return ((ZonedDateTime) tac).getZone();
 
-		return DateTimeFunction.format(tac);
+		return null;
 	}
 }
