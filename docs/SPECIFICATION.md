@@ -27,7 +27,7 @@
 	- [parse-dateTime](#parse-dateTime), [parse-sda](#parse-sda)
 	- [render-sda](#render-sda), [right](#right)
 	- [string-join](#string-join), [system-dateTime](#system-dateTime), [system-timezone](#system-timezone)
-	- [timestamp](#timestamp), [tokenize](#tokenize)
+	- [timestamp](#timestamp), [timezone-from-dateTime](#timezone-from-dateTime), [tokenize](#tokenize)
 
 
 ## Statements
@@ -348,7 +348,7 @@ See also [implicit-timezone](#implicit-timezone)
 
 <code><i>date-time</i> sdt:dateTime-to-timezone( <i>date-time</i>, <i>time-zone</i> )</code>
  
-Creates a date-time from the given date-time and time zone or offset. If a local date-time is supplied, the result will be a zoned date-time in the requested time zone. Otherwise, the supplied date-time will be translated to the given time zone (while the absolute time stays the same). If appropriate, daylight savings will be accounted for.
+Creates a date-time adjusted to the supplied time zone or offset. If a local date-time is supplied, the result will be a zoned date-time in the requested time zone. Otherwise, the supplied date-time will be translated to the given time zone (while the absolute time stays the same). If appropriate, daylight savings will be accounted for.
 
 Examples:
 
@@ -502,6 +502,19 @@ See also [List of tz database time zones](https://en.wikipedia.org/wiki/List_of_
 <code><i>number</i> sdt:timestamp()</code><br>
 
 Returns the current time in milliseconds elapsed since the epoch.
+
+
+#### timezone-from-dateTime
+
+<code><i>time-zone?</i> timezone-from-dateTime( <i>date-time</i> )</code><br>
+
+Returns the time zone or UTC offset of a date-time, or an empty string if a
+local date-time is supplied (this can be used to test for a local date-time).
+
+Examples:
+
+<code>sdt:timezone-from-dateTime('1970-01-01T00:00:00Z')</code> returns <code>Z</code>.<br>
+<code>not(sdt:timezone-from-dateTime('1970-01-01T00:00:00'))</code> returns <code>true</code>.<br>
 
 
 #### tokenize

@@ -11,14 +11,17 @@ import org.jaxen.FunctionCallException;
 import org.jaxen.Navigator;
 
 /**
- * <code><i>time-zone</i> timezone-from-dateTime( <i>date-time</i> )</code><br>
+ * <code><i>time-zone?</i> timezone-from-dateTime( <i>date-time</i> )</code><br>
  * <p>
- * Returns the time zone (or UTC offset) of a date-time.
+ * Returns the time zone or UTC offset of a date-time, or an empty string if a
+ * local date-time is supplied (this can be used to test for a local date-time).
  * <p>
  * Examples:
  * <p>
  * <code>sdt:timezone-from-dateTime('1970-01-01T00:00:00Z')</code> returns
  * <code>Z</code>.<br>
+ * <code>not(sdt:timezone-from-dateTime('1970-01-01T00:00:00'))</code> returns
+ * <code>true</code>.<br>
  */
 public final class TimeZoneFromDateTime implements Function
 {
@@ -31,11 +34,11 @@ public final class TimeZoneFromDateTime implements Function
  
 
 	/**
-	 * Returns the time zone (or UTC offset) of a date-time.
+	 * Returns the time zone or UTC offset of a date-time.
 	 * 
 	 * @param context the expression context
 	 * @param args    an argument list that contains one item.
-	 * @return a zone id, may be null
+	 * @return a time-zone or offset string, maybe empty
 	 * @throws FunctionCallException if <code>args</code> has more or less than one
 	 *                               item or evaluation failed.
 	 */
@@ -46,12 +49,14 @@ public final class TimeZoneFromDateTime implements Function
 		if (args.size() != 1)
 			throw new FunctionCallException(NAME + "() requires exactly one argument.");
 
-		return evaluate(args.get(0), context.getNavigator());
+		ZoneId zid = evaluate(args.get(0), context.getNavigator());
+		return zid == null ? "" : zid.toString();
 	}
 
 
 	/**
-	 * Returns the time zone (or UTC offset) of a date-time.
+	 * Returns the time zone or UTC offset of a date-time, or null if a local
+	 * date-time was supplied.
 	 * 
 	 * @param dtm a date-time string
 	 * @param nav the navigator used

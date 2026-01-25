@@ -16,11 +16,11 @@ import org.jaxen.function.StringFunction;
 /**
  * <code><i>date-time</i> dateTime-to-timezone( <i>date-time</i>, <i>time-zone</i> )</code><br>
  * <p>
- * Creates a date-time from the given date-time and time zone or offset. If a
- * local date-time is supplied, the result will be a zoned date-time in the
- * requested time zone. Otherwise, the supplied date-time will be translated to
- * the given time zone (while the absolute time stays the same). If appropriate,
- * daylight savings will be accounted for.
+ * Creates a date-time adjusted to the supplied time zone or offset. If a local
+ * date-time is supplied, the result will be a zoned date-time in the requested
+ * time zone. Otherwise, the supplied date-time will be translated to the given
+ * time zone (while the absolute time stays the same). If appropriate, daylight
+ * savings will be accounted for.
  * <p>
  * Examples:
  * <p>
@@ -50,7 +50,7 @@ public final class DateTimeToTimeZoneFunction implements Function
  
 
 	/**
-	 * Creates a date-time from the given date-time and time zone or offset.
+	 * Creates a date-time adjusted to the supplied time zone or offset.
 	 *
 	 * @param context the expression context
 	 * @param args    an argument list that contains two items.
@@ -70,7 +70,7 @@ public final class DateTimeToTimeZoneFunction implements Function
 
 
 	/**
-	 * Creates a date-time from the given date-time and time zone or offset.
+	 * Creates a date-time adjusted to the supplied time zone or offset. 
 	 * 
 	 * @param dtm a date-time string
 	 * @param tmz a time zone or time zone offset string
@@ -91,18 +91,31 @@ public final class DateTimeToTimeZoneFunction implements Function
 			throw new FunctionCallException(NAME + "() time zone '" + zone + "' is invalid.", e);
 		}
 
-		ZonedDateTime zdtm;
 		try {
-			
-			if (tac instanceof LocalDateTime)
-				zdtm = ((LocalDateTime) tac).atZone(zoneId);
-			else
-				zdtm = Instant.from(tac).atZone(zoneId);
-			
-			return DateTimeFunction.format(zdtm);
-			
+			return DateTimeFunction.format( evaluate(tac, zoneId) );
 		} catch (Exception e) {
 			throw new FunctionCallException(NAME + "() conversion of '" + dtm + "' failed.", e);
 		}
+	}
+	
+	
+	/**
+	 * Adjust (translate) a date-time to the supplied time zone.
+	 * 
+	 * @param tac a temporal
+	 * @param zid a zone id
+	 * @return a zoned date-time
+	 * @throws DateTimeException if conversion to the target zone failed.
+	 */
+	public static ZonedDateTime evaluate(TemporalAccessor tac, ZoneId zid) {
+
+		ZonedDateTime zdtm;
+
+		if (tac instanceof LocalDateTime)
+			zdtm = ((LocalDateTime) tac).atZone(zid);
+		else
+			zdtm = Instant.from(tac).atZone(zid);
+
+		return zdtm;
 	}
 }
