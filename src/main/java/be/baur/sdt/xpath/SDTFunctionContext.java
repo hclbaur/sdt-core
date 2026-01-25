@@ -29,6 +29,7 @@ import be.baur.sdt.xpath.function.RightFunction;
 import be.baur.sdt.xpath.function.StringJoinFunction;
 import be.baur.sdt.xpath.function.SystemDateTimeFunction;
 import be.baur.sdt.xpath.function.SystemTimeZoneFunction;
+import be.baur.sdt.xpath.function.TimeZoneFromDateTime;
 import be.baur.sdt.xpath.function.TimestampFunction;
 import be.baur.sdt.xpath.function.TokenizeFunction;
 
@@ -77,6 +78,7 @@ public class SDTFunctionContext implements FunctionContext {
 		FC.registerFunction(FUNCTIONS_NS_URI, RightFunction.NAME, new RightFunction());
 		FC.registerFunction(FUNCTIONS_NS_URI, SystemDateTimeFunction.NAME, new SystemDateTimeFunction());
 		FC.registerFunction(FUNCTIONS_NS_URI, SystemTimeZoneFunction.NAME, new SystemTimeZoneFunction());
+		FC.registerFunction(FUNCTIONS_NS_URI, TimeZoneFromDateTime.NAME, new TimeZoneFromDateTime());
 		FC.registerFunction(FUNCTIONS_NS_URI, TimestampFunction.NAME, new TimestampFunction());
 		FC.registerFunction(FUNCTIONS_NS_URI, TokenizeFunction.NAME, new TokenizeFunction());
 		// W3C like functions

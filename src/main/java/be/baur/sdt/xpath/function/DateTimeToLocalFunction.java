@@ -56,8 +56,7 @@ public final class DateTimeToLocalFunction implements Function
 	 * @param dtm a date-time string
 	 * @param nav the navigator used
 	 * @return a local date-time string
-	 * @throws FunctionCallException if no valid dateTime or time zone was supplied
-	 *                               or conversion to the target time zone failed.
+	 * @throws FunctionCallException if no valid date-time was supplied.
 	 */
 	public static String evaluate(Object dtm, Navigator nav) throws FunctionCallException {
 

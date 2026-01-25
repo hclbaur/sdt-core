@@ -124,6 +124,11 @@ public class TestSDTXPath {
 		t.so("F88", "sdt:implicit-timezone('a')", doc, "implicit-timezone() requires no arguments.");
 		t.so("S87", "sdt:system-timezone()", doc, ZoneId.systemDefault().toString());
 		t.so("F88", "sdt:system-timezone('a')", doc, "system-timezone() requires no arguments.");
+		
+		t.so("S89", "sdt:timezone-from-dateTime('1970-01-01T00:00:00')", doc, "");
+		t.so("S90", "sdt:timezone-from-dateTime('1970-01-01T00:00:00Z')", doc, "Z");
+		t.so("S91", "sdt:timezone-from-dateTime('1968-02-28T12:00+01:00')", doc, "+01:00");
+		t.so("F92", "sdt:timezone-from-dateTime()", doc, "timezone-from-dateTime() requires exactly one argument.");
 	}
 
 }

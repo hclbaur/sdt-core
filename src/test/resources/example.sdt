@@ -29,8 +29,7 @@ transform {
 		}	
 	}
 
-	println "sdt:system-dateTime()"
-	println "sdt:current-dateTime()"
-	println "sdt:system-dateTime()"
-	println "sdt:current-dateTime()"
+	println "sdt:dateTime-to-millis(sdt:system-dateTime())"
+	println "sdt:dateTime-to-millis(sdt:current-dateTime())"
+	println "sdt:timestamp()"
 }
