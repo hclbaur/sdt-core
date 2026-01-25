@@ -27,7 +27,7 @@
 	- [parse-dateTime](#parse-dateTime), [parse-sda](#parse-sda)
 	- [render-sda](#render-sda), [right](#right)
 	- [string-join](#string-join), [system-dateTime](#system-dateTime), [system-timezone](#system-timezone)
-	- [timestamp](#timestamp), [timezone-from-dateTime](#timezone-from-dateTime), [tokenize](#tokenize)
+	- [timezone-from-dateTime](#timezone-from-dateTime), [tokenize](#tokenize)
 
 
 ## Statements
@@ -422,7 +422,6 @@ negative number), and returns a UTC zoned date-time string.
 Examples:
 
 <code>sdt:millis-to-dateTime(0)</code> returns <code>1970-01-01T00:00:00Z</code>.<br>
-<code>sdt:millis-to-dateTime(sdt:timestamp())</code> returns the current UTC date and time.<br>
 
 
 #### parse-dateTime
@@ -495,13 +494,6 @@ Returns the system default time zone ID or UTC if no zone id could be determined
 
 See also [implicit-timezone](#implicit-timezone)
 See also [List of tz database time zones](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)
- 
-
-#### timestamp
-
-<code><i>number</i> sdt:timestamp()</code><br>
-
-Returns the current time in milliseconds elapsed since the epoch.
 
 
 #### timezone-from-dateTime

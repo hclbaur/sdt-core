@@ -19,8 +19,6 @@ import org.jaxen.function.NumberFunction;
  * <p>
  * <code>sdt:millis-to-dateTime(0)</code> returns
  * <code>1970-01-01T00:00:00Z</code>.<br>
- * <code>sdt:millis-to-dateTime(sdt:timestamp())</code> returns the current UTC
- * date and time.<br>
  */
 public final class MillisToDateTimeFunction implements Function
 {

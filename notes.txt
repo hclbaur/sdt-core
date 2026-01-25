@@ -1,6 +1,3 @@
-Extend XPATH:
-https://coderanch.com/t/128762/languages/XPath-XML
-
 Jaxen:
 https://javadoc.io/doc/jaxen/jaxen/latest/index.html
 http://www.cafeconleche.org/jaxen/faq.html
