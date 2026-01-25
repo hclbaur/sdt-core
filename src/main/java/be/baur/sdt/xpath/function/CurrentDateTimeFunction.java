@@ -1,6 +1,6 @@
 package be.baur.sdt.xpath.function;
 
-import java.time.temporal.TemporalAccessor;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 import org.jaxen.Context;
@@ -13,8 +13,8 @@ import be.baur.sdt.xpath.SDTFunctionContext;
 /**
  * <code><i>date-time</i> sdt:current-dateTime()</code><br>
  * <p>
- * Returns the current date and time (in extended ISO-8601 format) from the SDT
- * context in the implicit time zone.
+ * Returns the current date and time from the SDT context in the implicit time
+ * zone.
  * <p>
  * <i>Note:</i> this function is deterministic and context-dependent; multiple
  * invocations within the same execution context will return the same result.
@@ -25,7 +25,7 @@ import be.baur.sdt.xpath.SDTFunctionContext;
  *      15.3 of the XPath Specification</a>
  * @see SystemDateTimeFunction
  */
-public class CurrentDateTimeFunction implements Function
+public final class CurrentDateTimeFunction implements Function
 {
 	public static final String NAME = "current-dateTime";
 	
@@ -37,7 +37,7 @@ public class CurrentDateTimeFunction implements Function
 	/**
 	 * Returns the current date and time.
 	 *
-	 * @param context will be ignored
+	 * @param context the expression context
 	 * @param args    an empty list
 	 * @return a zoned date-time string
 	 * @throws FunctionCallException if <code>args</code> is not empty
@@ -56,9 +56,10 @@ public class CurrentDateTimeFunction implements Function
 	/**
 	 * Returns the current date and time.
 	 * 
+	 * @param context the expression context
 	 * @return a zoned date-time, not null
 	 */
-	public static TemporalAccessor evaluate(Context context) {
+	public static ZonedDateTime evaluate(Context context) {
 		
 		FunctionContext fc = context.getContextSupport().getFunctionContext();
 		

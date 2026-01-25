@@ -20,7 +20,7 @@ import be.baur.sdt.xpath.DocumentNavigator;
  * 
  * @see DocumentNavigator#newDocumentNode
  */
-public class DocumentNodeFunction implements Function
+public final class DocumentNodeFunction implements Function
 {
 	public static final String NAME = "document-node";
 			
@@ -33,8 +33,7 @@ public class DocumentNodeFunction implements Function
 	/**
 	 * Creates a document node.
 	 *
-	 * @param context the context at the point in the expression when the function
-	 *                is called
+	 * @param context the expression context
 	 * @param args    an argument list that contains one item.
 	 * 
 	 * @return a document node
@@ -47,7 +46,7 @@ public class DocumentNodeFunction implements Function
 	public Object call(Context context, List args) throws FunctionCallException {
 
 		if (args.size() != 1)
-			throw new FunctionCallException("document-node() expects exactly one argument.");
+			throw new FunctionCallException("document-node() requires exactly one argument.");
 
 		return evaluate(args, context.getNavigator());
 	}
@@ -56,8 +55,8 @@ public class DocumentNodeFunction implements Function
 	/**
 	 * Constructs a new document node from the first SDA node in the list.
 	 *
-	 * @param list   a list of nodes
-	 * @param nav    the navigator used
+	 * @param list a list of nodes
+	 * @param nav  the navigator used
 	 * 
 	 * @return a document node
 	 * @throws FunctionCallException if an exception occurs.

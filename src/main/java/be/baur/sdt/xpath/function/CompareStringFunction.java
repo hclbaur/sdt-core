@@ -30,7 +30,7 @@ import org.jaxen.function.StringFunction;
  * <p>
  * This function can be used as a comparator in a sort statement.
  */
-public class CompareStringFunction implements Function
+public final class CompareStringFunction implements Function
 {
 	public static final String NAME = "compare-string";
 	

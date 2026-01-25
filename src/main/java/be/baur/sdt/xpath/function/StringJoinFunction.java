@@ -21,7 +21,7 @@ import org.jaxen.function.StringFunction;
  *      "https://www.w3.org/TR/xpath-functions/#func-string-join">Section 5.4.2
  *      of the XPath Specification</a>
  */
-public class StringJoinFunction implements Function
+public final class StringJoinFunction implements Function
 {
 	public static final String NAME = "string-join";
 	
@@ -33,8 +33,7 @@ public class StringJoinFunction implements Function
 	/**
 	 * Returns a concatenation of all items in a list, with or without separator.
 	 *
-	 * @param context the context at the point in the expression when the function
-	 *                is called
+	 * @param context the expression context
 	 * @param args    a list that contains one or two items, a <code>List</code> and
 	 *                an optional separator <code>String</code>
 	 * 

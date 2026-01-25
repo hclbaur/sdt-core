@@ -33,7 +33,7 @@ import org.jaxen.function.StringFunction;
  * <code>sdt:tokenize('a; b; ; c; ', '; ', true())</code> returns
  * <code>("a","b","", "c", "")</code>.
  */
-public class TokenizeFunction implements Function
+public final class TokenizeFunction implements Function
 {
 	public static final String NAME = "tokenize";
 	
@@ -46,8 +46,7 @@ public class TokenizeFunction implements Function
 	/**
 	 * Breaks the supplied string into tokens and returns a sequence of strings.
 	 *
-	 * @param context the context at the point in the expression when the function
-	 *                is called.
+	 * @param context the expression context
 	 * @param args    an argument list that contains one, two or three items.
 	 * 
 	 * @return a list of strings

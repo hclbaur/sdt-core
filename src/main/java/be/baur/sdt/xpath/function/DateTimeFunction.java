@@ -35,7 +35,7 @@ import org.jaxen.function.StringFunction;
  * <code>sdt:dateTime('1968-02-28T12:00+01:00')</code> returns
  * <code>1968-02-28T12:00:00+01:00</code>.<br>
  */
-public class DateTimeFunction implements Function
+public final class DateTimeFunction implements Function
 {
 	public static final String NAME = "dateTime";
 	
@@ -48,8 +48,7 @@ public class DateTimeFunction implements Function
 	/**
 	 * Returns a local or zoned date-time string in extended ISO-8601 format.
 	 *
-	 * @param context the context at the point in the expression when the function
-	 *                is called
+	 * @param context the expression context
 	 * @param args    an argument list that contains one item.
 	 * @return a date-time string
 	 * @throws FunctionCallException if <code>args</code> has more or less than one
@@ -70,18 +69,18 @@ public class DateTimeFunction implements Function
 	 * Returns a local or zoned date-time object.
 	 * 
 	 * @param fun name of the calling function
-	 * @param obj a date-time string
+	 * @param dtm a date-time string
 	 * @param nav the navigator used
-	 * @return a date-time object
-	 * @throws FunctionCallException if date-time construction failed
+	 * @return a temporal object, not null
+	 * @throws FunctionCallException if evaluation failed
 	 */
-	public static TemporalAccessor evaluate(String fun, Object obj, Navigator nav) throws FunctionCallException {
+	public static TemporalAccessor evaluate(String fun, Object dtm, Navigator nav) throws FunctionCallException {
 
 		try {
-			return parse( StringFunction.evaluate(obj, nav) );
+			return parse( StringFunction.evaluate(dtm, nav) );
 		}
 		catch (Exception e) {
-			throw new FunctionCallException(fun + "() argument '" + obj + "' is invalid.", e);
+			throw new FunctionCallException(fun + "() argument '" + dtm + "' is invalid.", e);
 		}
 	}
 
@@ -90,7 +89,7 @@ public class DateTimeFunction implements Function
 	 * Returns a local or zoned date-time object parsed from a string.
 	 * 
 	 * @param dtms a string in extended ISO-8601 format
-	 * @return a Local- or ZonedDateTime
+	 * @return a temporal object, not null
 	 * @throws DateTimeParseException if no date-time could be constructed
 	 */
 	public static TemporalAccessor parse(String dtms) {
@@ -103,9 +102,9 @@ public class DateTimeFunction implements Function
 	 * Returns a local or zoned date-time object parsed from a string, using a
 	 * formatter.
 	 * 
-	 * @param dtms a representing a date-time in a custom format, not null
+	 * @param dtms a formatted date-time string
 	 * @param fmt  a formatter, not null
-	 * @return a Local- or ZonedDateTime
+	 * @return a temporal object, not null
 	 * @throws DateTimeParseException if no date-time could be constructed
 	 */
 	public static TemporalAccessor parse(String dtms, DateTimeFormatter fmt) {
@@ -120,7 +119,7 @@ public class DateTimeFunction implements Function
 	 * format.
 	 * 
 	 * @param dtm a temporal object, not null
-	 * @return a date-time string
+	 * @return a formatted date-time string
 	 * @throws DateTimeException if formatting failed
 	 */
 	public static String format(TemporalAccessor dtm) {		
@@ -134,7 +133,7 @@ public class DateTimeFunction implements Function
 	 * 
 	 * @param dtm a temporal object, not null
 	 * @param fmt a formatter, not null
-	 * @return a date-time string
+	 * @return a formatted date-time string
 	 * @throws DateTimeException if formatting failed
 	 */
 	public static String format(TemporalAccessor dtm, DateTimeFormatter fmt) {
@@ -149,16 +148,16 @@ public class DateTimeFunction implements Function
 	 * Supported objects are Instant, LocalDateTime and ZonedDateTime. Will throw a
 	 * DateTimeException if formatting failed.
 	 */
-	private static String formatTemporal(TemporalAccessor dtm, DateTimeFormatter fmt) {
+	private static String formatTemporal(TemporalAccessor tac, DateTimeFormatter fmt) {
 		
-		if (dtm instanceof Instant)
-			return ((Instant) dtm).toString();
-		if (dtm instanceof LocalDateTime)
-			return ((LocalDateTime) dtm).format(fmt == null ? DateTimeFormatter.ISO_LOCAL_DATE_TIME : fmt);
-		if (dtm instanceof ZonedDateTime)
-			return ((ZonedDateTime) dtm).format(fmt == null ? DateTimeFormatter.ISO_OFFSET_DATE_TIME : fmt);
+		if (tac instanceof Instant)
+			return ((Instant) tac).toString();
+		if (tac instanceof LocalDateTime)
+			return ((LocalDateTime) tac).format(fmt == null ? DateTimeFormatter.ISO_LOCAL_DATE_TIME : fmt);
+		if (tac instanceof ZonedDateTime)
+			return ((ZonedDateTime) tac).format(fmt == null ? DateTimeFormatter.ISO_OFFSET_DATE_TIME : fmt);
 		
-		throw new IllegalArgumentException("unsupported class " + dtm.getClass().getName());
+		throw new IllegalArgumentException("unsupported class " + tac.getClass().getName());
 	}
 
 }

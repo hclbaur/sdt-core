@@ -39,7 +39,7 @@ import org.jaxen.function.StringFunction;
  * 
  * @see ZoneId
  */
-public class DateTimeToTimeZoneFunction implements Function
+public final class DateTimeToTimeZoneFunction implements Function
 {
 	public static final String NAME = "dateTime-to-timezone";
 
@@ -52,12 +52,11 @@ public class DateTimeToTimeZoneFunction implements Function
 	/**
 	 * Creates a date-time from the given date-time and time zone or offset.
 	 *
-	 * @param context the context at the point in the expression when the function
-	 *                is called
+	 * @param context the expression context
 	 * @param args    an argument list that contains two items.
 	 * @return a zoned date-time string
 	 * @throws FunctionCallException if <code>args</code> has more or less than two
-	 *                               items or evaluation failed.
+	 *                               items or conversion failed.
 	 */
     @Override
 	@SuppressWarnings("rawtypes")
@@ -73,7 +72,7 @@ public class DateTimeToTimeZoneFunction implements Function
 	/**
 	 * Creates a date-time from the given date-time and time zone or offset.
 	 * 
-	 * @param dtm a local or zoned date-time string
+	 * @param dtm a date-time string
 	 * @param tmz a time zone or time zone offset string
 	 * @param nav the navigator used
 	 * @return a zoned date-time string
@@ -82,7 +81,7 @@ public class DateTimeToTimeZoneFunction implements Function
 	 */
 	public static String evaluate(Object dtm, Object tmz, Navigator nav) throws FunctionCallException {
 
-		TemporalAccessor temporal = DateTimeFunction.evaluate(NAME, dtm, nav);
+		TemporalAccessor tac = DateTimeFunction.evaluate(NAME, dtm, nav);
 		
 		String zone = StringFunction.evaluate(tmz, nav);
 		ZoneId zoneId;
@@ -95,10 +94,10 @@ public class DateTimeToTimeZoneFunction implements Function
 		ZonedDateTime zdtm;
 		try {
 			
-			if (temporal instanceof LocalDateTime)
-				zdtm = ((LocalDateTime) temporal).atZone(zoneId);
+			if (tac instanceof LocalDateTime)
+				zdtm = ((LocalDateTime) tac).atZone(zoneId);
 			else
-				zdtm = Instant.from(temporal).atZone(zoneId);
+				zdtm = Instant.from(tac).atZone(zoneId);
 			
 			return DateTimeFunction.format(zdtm);
 			

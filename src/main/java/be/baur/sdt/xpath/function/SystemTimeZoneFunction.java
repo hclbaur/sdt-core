@@ -10,10 +10,10 @@ import org.jaxen.FunctionCallException;
 /**
  * <code><i>time-zone</i> sdt:system-timezone()</code><br>
  * <p>
- * Returns the system default time zone ID or UTC if no zone id could be
+ * Returns the system clock default time zone ID or UTC if no zone id could be
  * determined.
  * 
- * @see ZoneId
+ * @see ImplicitTimeZoneFunction
  * @see <a href=
  *      "https://en.wikipedia.org/wiki/List_of_tz_database_time_zones">List of
  *      tz database time zones</a>
@@ -30,7 +30,7 @@ public final class SystemTimeZoneFunction implements Function
 	/**
 	 * Returns the system default time zone ID.
 	 *
-	 * @param context will be ignored
+	 * @param context the expression context
 	 * @param args    an empty list
 	 * @return a time zone
 	 * @throws FunctionCallException if <code>args</code> is not empty or an
@@ -48,8 +48,7 @@ public final class SystemTimeZoneFunction implements Function
 
   
 	/**
-	 * Returns the system default time zone ID, or UTC if no zone id could be
-	 * determined.
+	 * Returns the system default time zone ID.
 	 * 
 	 * @return a zone id, not null
 	 */

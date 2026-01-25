@@ -21,7 +21,7 @@ import be.baur.sdt.SDT;
  * returned. If it exceeds the string length of the first argument, the entire
  * string is returned.
  */
-public class LeftFunction implements Function
+public final class LeftFunction implements Function
 {
 	public static final String NAME = "left";
 	
@@ -34,8 +34,7 @@ public class LeftFunction implements Function
 	/**
 	 * Returns the left part of an XPath string-value by length.
 	 *
-	 * @param context the context at the point in the expression when the function
-	 *                is called.
+	 * @param context the expression context
 	 * @param args    an argument list that contains two items, a
 	 *                <code>String</code> and a length.
 	 * 

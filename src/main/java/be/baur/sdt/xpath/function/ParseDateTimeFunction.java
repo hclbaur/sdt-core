@@ -23,7 +23,7 @@ import org.jaxen.function.StringFunction;
  * 
  * @see DateTimeFormatter
  */
-public class ParseDateTimeFunction implements Function
+public final class ParseDateTimeFunction implements Function
 {
 	public static final String NAME = "parse-dateTime";
 	
@@ -36,8 +36,7 @@ public class ParseDateTimeFunction implements Function
 	/**
 	 * Parses a string into a date-time, using a pattern.
 	 *
-	 * @param context the context at the point in the expression when the function
-	 *                is called
+	 * @param context the expression context
 	 * @param args    an argument list that contains two items.
 	 * @return a date-time string
 	 * @throws FunctionCallException if <code>args</code> has more or less than two
