@@ -14,9 +14,9 @@ import org.jaxen.function.StringFunction;
  * <code><i>double</i> sdt:compare-string( <i>string</i>, <i>string</i> )</code><br>
  * <code><i>double</i> sdt:compare-string( <i>string</i>, <i>string</i>, <i>string language</i> )</code>
  * <p>
- * Compares two strings locale-sensitive. This function returns -1 if the second
- * string precedes the first, 1 if it exceeds it, and 0 if they are considered
- * equal in the default locale:
+ * Compares two strings locale-sensitive. This function returns -1, 0 or 1,
+ * depending on whether the first argument collates before, equal to, or after
+ * the second in the default locale:
  * <p>
  * <code>sdt:compare-string('a', 'A')</code> returns <code>-1.0</code>.<br>
  * <code>sdt:compare-string(3, '3')</code> returns <code>0.0</code>.<br>
@@ -44,8 +44,7 @@ public final class CompareStringFunction implements Function
 	 * Compares two arguments, returning -1, 0 or 1. An optional third argument
 	 * specifies a language tag to obtain a collator (other than the default).
 	 *
-	 * @param context the context at the point in the expression when the function
-	 *                is called
+	 * @param context the expression context
 	 * @param args    an argument list that contains two or three items.
 	 * 
 	 * @return a <code>Double</code>

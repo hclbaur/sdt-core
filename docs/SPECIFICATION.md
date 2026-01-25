@@ -18,7 +18,7 @@
 	- [Number functions](#number-functions)
 	- [Other functions](#other-functions)
 - [SDT Extensions](#sdt-extensions)
-	- [compare-number](#compare-number), [compare-string](#compare-string), [current-dateTime](#current-dateTime)
+	- [compare-dateTime](#compare-dateTime), [compare-number](#compare-number), [compare-string](#compare-string), [current-dateTime](#current-dateTime)
 	- [dateTime](#dateTime), [dateTime-to-local](#dateTime-to-local), [dateTime-to-millis](#dateTime-to-millis), [dateTime-to-timezone](#dateTime-to-timezone), [document-node](#document-node)
 	- [format-dateTime](#format-dateTime)
 	- [implicit-timezone](#implicit-timezone)
@@ -253,12 +253,31 @@ Functions without namespace-prefix are native Jaxen implementations of the XPath
 Functions with a namespace-prefix are extensions supplied by the SDT library, and are either SDT specific, or implementations of XPath (3.0) functions that are not (yet) provided by Jaxen.
 
 
+#### compare-dateTime
+
+<code><i>double</i> sdt:compare-dateTime( <i>date-time</i>, <i>date-time</i> )</code><br>
+
+Compares two instances in time. This function converts its arguments to date-time and returns -1, 0 or 1, depending on whether the first argument precedes, equals or 1 exceeds the second in time:
+
+<code>sdt:compare-dateTime('1970-01-01T00:00:00+01:00', '1970-01-01T00:00:00Z')</code>
+returns <code>-1.0</code>.<br>
+<code>sdt:compare-dateTime(sdt:current-dateTime(),sdt:current-dateTime())</code>
+returns <code>0.0</code>.<br>
+<code>sdt:compare-dateTime('1970-01-01T00:00:00Z', '1970-01-01T00:00:00+01:00')</code>
+returns <code>1.0</code>.<br>
+
+If either argument is a local date-time, the implicit time zone will be used
+to compare it against the other.
+
+This function can be used as a comparator in a sort statement.
+
+
 #### compare-number
 
 <code><i>double</i> sdt:compare-number( <i>number</i>, <i>number</i> )</code><br>
 <code><i>double</i> sdt:compare-number( <i>number</i>, <i>number</i>, <i>boolean nanFirst</i> )</code>
 
-Compares two numbers. This function converts its arguments to numbers and returns -1 if the second argument precedes the first, 1 if it exceeds it, and 0 if the arguments are numerically equal:
+Compares two numbers. This function converts its arguments to numbers and returns -1, 0 or 1, depending on whether the first argument is numerically smaller, equal to or larger than the second:
 
 <code>sdt:compare-number(1, 3)</code> returns <code>-1.0</code>.<br>
 <code>sdt:compare-number(3, '3')</code> returns <code>0.0</code>.<br>
@@ -279,7 +298,7 @@ This function can be used as a comparator in a sort statement.
 <code><i>double</i> sdt:compare-string( <i>string</i>, <i>string</i> )</code><br>
 <code><i>double</i> sdt:compare-string( <i>string</i>, <i>string</i>, <i>string language</i> )</code>
 
-Compares two strings locale-sensitive. This function returns -1 if the second string precedes the first, 1 if it exceeds it, and 0 if they are considered equal in the default locale:
+Compares two strings locale-sensitive. This function returns -1, 0 or 1, depending on whether the first argument collates before, equal to, or after the second in the default locale:
 
 <code>sdt:compare-string('a', 'A')</code> returns <code>-1.0</code>.<br>
 <code>sdt:compare-string(3, '3')</code> returns <code>0.0</code>.<br>

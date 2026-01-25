@@ -14,8 +14,8 @@ import org.jaxen.function.NumberFunction;
  * <code><i>double</i> sdt:compare-number( <i>number</i>, <i>number</i>, <i>boolean nanFirst</i> )</code>
  * <p>
  * Compares two numbers. This function converts its arguments to numbers and
- * returns -1 if the second argument precedes the first, 1 if it exceeds it, and
- * 0 if the arguments are numerically equal:
+ * returns -1, 0 or 1, depending on whether the first argument is numerically
+ * smaller, equal to or larger than the second:
  * <p>
  * <code>sdt:compare-number(1, 3)</code> returns <code>-1.0</code>.<br>
  * <code>sdt:compare-number(3, '3')</code> returns <code>0.0</code>.<br>
@@ -47,8 +47,7 @@ public final class CompareNumberFunction implements Function
 	 * argument - after boolean evaluation - determines whether NaN is considered
 	 * smaller (if true) or greater (the default) than all other numbers.
 	 *
-	 * @param context the context at the point in the expression when the function
-	 *                is called
+	 * @param context the expression context
 	 * @param args    an argument list that contains two or three items.
 	 * 
 	 * @return a <code>Double</code>

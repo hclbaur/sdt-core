@@ -52,11 +52,12 @@ public class TestSDTXPath {
 		t.so("S18", "sdt:compare-number('a','b',true())", doc, "0.0");
 		t.so("S19", "sdt:compare-number('a','b',false())", doc, "0.0");
 		
-		t.so("S21", "sdt:compare-string('a','A')", doc, "-1.0");
-		t.so("S22", "sdt:compare-string(3,'3')", doc, "0.0");
-		t.so("S23", "sdt:compare-string('b','A')", doc, "1.0");
-		t.so("S24", "sdt:compare-string('Ångström','Zulu','en')", doc, "-1.0");
-		t.so("S25", "sdt:compare-string('Ångström','Zulu','sv')", doc, "1.0");
+		t.so("S21", "sdt:compare-string('a','b')", doc, "-1.0");
+		t.so("S22", "sdt:compare-string('a','A')", doc, "-1.0");
+		t.so("S23", "sdt:compare-string(3,'3')", doc, "0.0");
+		t.so("S24", "sdt:compare-string('b','A')", doc, "1.0");
+		t.so("S25", "sdt:compare-string('Ångström','Zulu','en')", doc, "-1.0");
+		t.so("S26", "sdt:compare-string('Ångström','Zulu','sv')", doc, "1.0");
 
 		t.so("S31", "sdt:tokenize('')", doc, "[]");
 		t.so("S32", "sdt:tokenize('abc')", doc, "abc");
@@ -122,13 +123,19 @@ public class TestSDTXPath {
 		
 		t.so("S87", "sdt:implicit-timezone()", doc, ZoneId.systemDefault().toString());
 		t.so("F88", "sdt:implicit-timezone('a')", doc, "implicit-timezone() requires no arguments.");
-		t.so("S87", "sdt:system-timezone()", doc, ZoneId.systemDefault().toString());
-		t.so("F88", "sdt:system-timezone('a')", doc, "system-timezone() requires no arguments.");
+		t.so("S88", "sdt:system-timezone()", doc, ZoneId.systemDefault().toString());
+		t.so("F89", "sdt:system-timezone('a')", doc, "system-timezone() requires no arguments.");
 		
-		t.so("S89", "sdt:timezone-from-dateTime('1970-01-01T00:00:00')", doc, "");
-		t.so("S90", "sdt:timezone-from-dateTime('1970-01-01T00:00:00Z')", doc, "Z");
-		t.so("S91", "sdt:timezone-from-dateTime('1968-02-28T12:00+01:00')", doc, "+01:00");
-		t.so("F92", "sdt:timezone-from-dateTime()", doc, "timezone-from-dateTime() requires exactly one argument.");
+		t.so("S90", "sdt:timezone-from-dateTime('1970-01-01T00:00:00')", doc, "");
+		t.so("S91", "sdt:timezone-from-dateTime('1970-01-01T00:00:00Z')", doc, "Z");
+		t.so("S92", "sdt:timezone-from-dateTime('1968-02-28T12:00+01:00')", doc, "+01:00");
+		t.so("F93", "sdt:timezone-from-dateTime()", doc, "timezone-from-dateTime() requires exactly one argument.");
+		
+		t.so("S94", "sdt:compare-dateTime(sdt:current-dateTime(),sdt:current-dateTime())", doc, "0.0");
+		t.so("S95", "sdt:compare-dateTime(sdt:dateTime-to-local(sdt:current-dateTime()),sdt:current-dateTime())", doc, "0.0");
+		t.so("S96", "sdt:compare-dateTime('1970-01-01T00:00:00+01:00','1970-01-01T00:00:00Z')", doc, "-1.0");
+		t.so("S97", "sdt:compare-dateTime('1970-01-01T00:00:00Z','1970-01-01T00:00:00+01:00')", doc, "1.0");
+		t.so("F98", "sdt:compare-dateTime('1970-01-01T00:00:00Z')", doc, "compare-dateTime() requires two arguments.");
 	}
 
 }

@@ -10,6 +10,7 @@ import org.jaxen.SimpleFunctionContext;
 import org.jaxen.UnresolvableException;
 import org.jaxen.XPathFunctionContext;
 
+import be.baur.sdt.xpath.function.CompareDateTimeFunction;
 import be.baur.sdt.xpath.function.CompareNumberFunction;
 import be.baur.sdt.xpath.function.CompareStringFunction;
 import be.baur.sdt.xpath.function.CurrentDateTimeFunction;
@@ -59,6 +60,7 @@ public class SDTFunctionContext implements FunctionContext {
 	static {
 
 		// Add SDT extensions to the core Xpath functions and Jaxen extensions
+		FC.registerFunction(FUNCTIONS_NS_URI, CompareDateTimeFunction.NAME, new CompareDateTimeFunction());
 		FC.registerFunction(FUNCTIONS_NS_URI, CompareNumberFunction.NAME, new CompareNumberFunction());
 		FC.registerFunction(FUNCTIONS_NS_URI, CompareStringFunction.NAME, new CompareStringFunction());
 		FC.registerFunction(FUNCTIONS_NS_URI, CurrentDateTimeFunction.NAME, new CurrentDateTimeFunction());
