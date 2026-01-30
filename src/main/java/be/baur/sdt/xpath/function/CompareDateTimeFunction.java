@@ -94,7 +94,8 @@ public final class CompareDateTimeFunction implements Function
 
 		/*
 		 * ZonedDateTime.compareTo() treats equal instances in time in different time
-		 * zones as not equal, so I am using Instant.compareTo instead.
+		 * zones as not equal, so I am using Instant.compareTo instead. Also note that
+		 * at this point both date-times will be zoned, not local.
 		 */
 		return (double) Math.signum((Instant.from(dtm1)).compareTo(Instant.from(dtm2)));
 	}

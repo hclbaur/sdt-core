@@ -80,13 +80,15 @@ public class TestSDTXPath {
 		
 		t.so("S51", "sdt:dateTime('1968-02-28T12:00')", doc, "1968-02-28T12:00:00");
 		t.so("S52", "sdt:dateTime('1968-02-28T12:00+01:00')", doc, "1968-02-28T12:00:00+01:00");
-		t.so("S53", "sdt:dateTime('1968-02-28T12:00:00.000Z')", doc, "1968-02-28T12:00:00Z");
-		t.so("F54", "sdt:dateTime('a')", doc, "dateTime() argument 'a' is invalid.");
-		t.so("F55", "sdt:dateTime()", doc, "dateTime() requires exactly one argument.");
-		t.so("S56", "sdt:format-dateTime('1968-02-28T12:00','yyyy/MM/dd HH:mm')", doc, "1968/02/28 12:00");
-		t.so("S57", "sdt:format-dateTime(sdt:millis-to-dateTime(0),'yyyyMMddHHmmss')", doc, "19700101000000");
-		t.so("F58", "sdt:format-dateTime('a','yyyyMMddHHmmss')", doc, "format-dateTime() argument 'a' is invalid.");
-		t.so("F59", "sdt:format-dateTime()", doc, "format-dateTime() requires two arguments.");
+		t.so("S53", "sdt:dateTime('1968-02-28T12:00+01:00[Europe/Amsterdam]')", doc, "1968-02-28T12:00:00+01:00");
+		t.so("S54", "sdt:dateTime('1968-02-28T12:00:00.000Z')", doc, "1968-02-28T12:00:00Z");
+		t.so("F55", "sdt:dateTime('a')", doc, "dateTime() argument 'a' is invalid.");
+		t.so("F56", "sdt:dateTime()", doc, "dateTime() requires exactly one argument.");
+		
+		t.so("S57", "sdt:format-dateTime('1968-02-28T12:00','yyyy/MM/dd HH:mm')", doc, "1968/02/28 12:00");
+		t.so("S58", "sdt:format-dateTime(sdt:millis-to-dateTime(0),'yyyyMMddHHmmss')", doc, "19700101000000");
+		t.so("F59", "sdt:format-dateTime('a','yyyyMMddHHmmss')", doc, "format-dateTime() argument 'a' is invalid.");
+		t.so("F60", "sdt:format-dateTime()", doc, "format-dateTime() requires two arguments.");
 		
 		t.so("S61", "sdt:millis-to-dateTime(0)", doc, "1970-01-01T00:00:00Z");
 		t.so("S62", "sdt:millis-to-dateTime(-3600000)", doc, "1969-12-31T23:00:00Z");
@@ -136,6 +138,13 @@ public class TestSDTXPath {
 		t.so("S96", "sdt:compare-dateTime('1970-01-01T00:00:00+01:00','1970-01-01T00:00:00Z')", doc, "-1.0");
 		t.so("S97", "sdt:compare-dateTime('1970-01-01T00:00:00Z','1970-01-01T00:00:00+01:00')", doc, "1.0");
 		t.so("F98", "sdt:compare-dateTime('1970-01-01T00:00:00Z')", doc, "compare-dateTime() requires two arguments.");
+		
+		t.so("S100", "sdt:add-to-dateTime('1968-02-28T23:00:00',0,0,0,0)", doc, "1968-02-28T23:00:00");
+		t.so("S101", "sdt:add-to-dateTime('1968-02-28T23:00:00',1,2,3,4)", doc, "1968-03-01T01:03:04");
+		t.so("S102", "sdt:add-to-dateTime('1968-03-01T01:03:04',-1,-2,-3,-4)", doc, "1968-02-28T23:00:00");
+		t.so("S103", "sdt:add-to-dateTime('2025-03-30T01:00:00+01:00[Europe/Amsterdam]',0,1,0,0)", doc, "2025-03-30T03:00:00+02:00");
+		t.so("S104", "sdt:add-to-dateTime('2025-10-26T02:00:00+02:00[Europe/Amsterdam]',0,1,0,0)", doc, "2025-10-26T02:00:00+01:00");
+		t.so("S105", "sdt:add-to-dateTime('2025-10-26T03:00:00+01:00[Europe/Amsterdam]',0,-1,0,0)", doc, "2025-10-26T02:00:00+01:00");	
 	}
 
 }

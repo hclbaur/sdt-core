@@ -18,6 +18,7 @@
 	- [Number functions](#number-functions)
 	- [Other functions](#other-functions)
 - [SDT Extensions](#sdt-extensions)
+	- [add-to-dateTime](#add-to-dateTime)
 	- [compare-dateTime](#compare-dateTime), [compare-number](#compare-number), [compare-string](#compare-string), [current-dateTime](#current-dateTime)
 	- [dateTime](#dateTime), [dateTime-to-local](#dateTime-to-local), [dateTime-to-millis](#dateTime-to-millis), [dateTime-to-timezone](#dateTime-to-timezone), [document-node](#document-node)
 	- [format-dateTime](#format-dateTime)
@@ -251,6 +252,19 @@ Functions without namespace-prefix are native Jaxen implementations of the XPath
 ## SDT Extensions
 
 Functions with a namespace-prefix are extensions supplied by the SDT library, and are either SDT specific, or implementations of XPath (3.0) functions that are not (yet) provided by Jaxen.
+
+
+#### compare-dateTime
+
+<code><i>date-time</i> add-to-dateTime( <i>date-time</i>, <i>days</i>, <i>hours</i>, <i>minutes</i>, <i>seconds</i> )</code><br>
+
+Returns the result of adding a number of days, hours, minutes and/or seconds to the supplied date-time, where negative values can be used to subtract time. If a time zone ID is provided, daylight savings will be accounted for.
+
+Examples:
+
+<code>sdt:add-to-dateTime('1968-02-28T23:00:00',0,1,0,0)</code> returns <code>1968-02-29T00:00:00</code>.<br>
+<code>sdt:add-to-dateTime('2025-03-30T01:00:00+01:00[Europe/Amsterdam]',0,1,0,0)</code> returns <code>2025-03-30T03:00:00+02:00</code>.<br>
+<code>sdt:add-to-dateTime('2025-10-26T03:00:00+02:00[Europe/Amsterdam]',0,-1,0,0)</code> returns <code>2025-10-26T02:00:00+01:00</code>.<br>
 
 
 #### compare-dateTime
