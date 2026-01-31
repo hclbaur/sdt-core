@@ -11,6 +11,7 @@ import org.jaxen.UnresolvableException;
 import org.jaxen.XPathFunctionContext;
 
 import be.baur.sdt.xpath.function.AddToDateTimeFunction;
+import be.baur.sdt.xpath.function.AddYearMonthToDateTimeFunction;
 import be.baur.sdt.xpath.function.CompareDateTimeFunction;
 import be.baur.sdt.xpath.function.CompareNumberFunction;
 import be.baur.sdt.xpath.function.CompareStringFunction;
@@ -62,6 +63,7 @@ public class SDTFunctionContext implements FunctionContext {
 
 		// Add SDT extensions to the core Xpath functions and Jaxen extensions
 		FC.registerFunction(FUNCTIONS_NS_URI, AddToDateTimeFunction.NAME, new AddToDateTimeFunction());
+		FC.registerFunction(FUNCTIONS_NS_URI, AddYearMonthToDateTimeFunction.NAME, new AddYearMonthToDateTimeFunction());
 		FC.registerFunction(FUNCTIONS_NS_URI, CompareDateTimeFunction.NAME, new CompareDateTimeFunction());
 		FC.registerFunction(FUNCTIONS_NS_URI, CompareNumberFunction.NAME, new CompareNumberFunction());
 		FC.registerFunction(FUNCTIONS_NS_URI, CompareStringFunction.NAME, new CompareStringFunction());

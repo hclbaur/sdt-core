@@ -25,9 +25,8 @@ import org.jaxen.function.NumberFunction;
  * <code>1968-02-29T00:00:00</code>.<br>
  * <code>sdt:add-to-dateTime('2025-03-30T01:00:00+01:00[Europe/Amsterdam]',0,1,0,0)</code>
  * returns <code>2025-03-30T03:00:00+02:00</code>.<br>
- * <code>sdt:add-to-dateTime('2025-10-26T03:00:00+02:00[Europe/Amsterdam]',0,-1,0,0)</code>
+ * <code>sdt:add-to-dateTime('2025-10-26T03:00:00+01:00[Europe/Amsterdam]',0,-1,0,0)</code>
  * returns <code>2025-10-26T02:00:00+01:00</code>.<br>
- * 
  */
 public final class AddToDateTimeFunction implements Function
 {
@@ -43,10 +42,10 @@ public final class AddToDateTimeFunction implements Function
 	 * Adds a number of days, hours, minutes and/or seconds to a date-time.
 	 *
 	 * @param context the expression context
-	 * @param args    an argument list that contains five items.
+	 * @param args    an argument list that contains five items
 	 * @return a date-time string
 	 * @throws FunctionCallException if <code>args</code> has more or less than five
-	 *                               items or evaluation failed.
+	 *                               items or evaluation failed
 	 */
 	@Override
 	@SuppressWarnings("rawtypes")
@@ -64,19 +63,19 @@ public final class AddToDateTimeFunction implements Function
 	/**
 	 * Adds a number of days, hours, minutes and/or seconds to a date-time.
 	 * 
-	 * @param dtms    a date-time string
+	 * @param dtm     a date-time
 	 * @param days    a number of days
 	 * @param hours   a number of hours
 	 * @param minutes a number of minutes
 	 * @param seconds a number of seconds
 	 * @param nav     the navigator used
-	 * @return a date-time string
+	 * @return a date-time
 	 * @throws FunctionCallException if no valid date-time was supplied or the
-	 *                               addition failed.
+	 *                               addition (subtraction) failed
 	 */
-    public static TemporalAccessor evaluate(Object dtms, Object days, Object hours, Object minutes, Object seconds, Navigator nav) throws FunctionCallException {
+    public static TemporalAccessor evaluate(Object dtm, Object days, Object hours, Object minutes, Object seconds, Navigator nav) throws FunctionCallException {
 
-		final TemporalAccessor tac = DateTimeFunction.evaluate(NAME, dtms, nav);
+		final TemporalAccessor tac = DateTimeFunction.evaluate(NAME, dtm, nav);
 		
 		Double d = NumberFunction.evaluate(days, nav);
 		if (d.isNaN())
