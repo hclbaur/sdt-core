@@ -25,8 +25,8 @@ import org.jaxen.Navigator;
  * <code>sdt:compare-dateTime('1970-01-01T00:00:00Z', '1970-01-01T00:00:00+01:00')</code>
  * returns <code>1.0</code>.<br>
  * <p>
- * If either argument is a local date-time, the implicit time zone will be used
- * to compare it against the other.
+ * <i>Note:</i> if either argument is a local date-time, the implicit time zone
+ * will be used to compare it against the other.
  * <p>
  * This function can be used as a comparator in a sort statement.
  */
@@ -41,16 +41,13 @@ public final class CompareDateTimeFunction implements Function
 
     
 	/**
-	 * Compares two date-time values, returning -1, 0 or 1. The implicit time zone
-	 * is assumed for a local date-time.
+	 * Compares two date-time values, returning -1, 0 or 1.
 	 *
 	 * @param context the expression context
-	 * @param args    an argument list that contains two or three items.
-	 * 
-	 * @return a <code>Double</code>
-	 * 
-	 * @throws FunctionCallException if <code>args</code> has more or less than two
-	 *                               items.
+	 * @param args    an argument list that contains two items
+	 * @return a signum value
+	 * @throws FunctionCallException if an inappropriate number of arguments is
+	 *                               supplied, or if evaluation failed
 	 */
 	@Override
 	@SuppressWarnings("rawtypes")
@@ -66,30 +63,29 @@ public final class CompareDateTimeFunction implements Function
 	/**
 	 * Compares two instances in time, returning -1, 0 or 1.
 	 *
-	 * @param obj1     the first object to be compared
-	 * @param obj2     the second object to be compared
-	 * @param nav      the navigator used
-	 * 
-	 * @return a <code>Double</code>
-	 * @throws FunctionCallException 
+	 * @param dtm1 the first date-time
+	 * @param dtm2 the second date-time
+	 * @param nav  the navigator used
+	 * @return a signum value
+	 * @throws FunctionCallException if evaluation failed
 	 */
-	public static Double evaluate(Object obj1, Object obj2, Context context) throws FunctionCallException {
+	static Double evaluate(Object dtm1, Object dtm2, Context context) throws FunctionCallException {
 
 		final Navigator nav = context.getNavigator();
 
-		TemporalAccessor dtm1 = DateTimeFunction.evaluate(NAME, obj1, nav);
-		TemporalAccessor dtm2 = DateTimeFunction.evaluate(NAME, obj2, nav);
+		TemporalAccessor tac1 = DateTimeFunction.evaluate(NAME, dtm1, nav);
+		TemporalAccessor tac2 = DateTimeFunction.evaluate(NAME, dtm2, nav);
 
-		final boolean local1 = (dtm1 instanceof LocalDateTime);
-		final boolean local2 = (dtm2 instanceof LocalDateTime);
+		final boolean local1 = (tac1 instanceof LocalDateTime);
+		final boolean local2 = (tac2 instanceof LocalDateTime);
 
 		/* If either date-time is local, adjust it to the implicit time zone */
 		if (local1 || local2) {
 			final ZoneId zid = ImplicitTimeZoneFunction.evaluate(context);
 			if (local1)
-				dtm1 = DateTimeToTimeZoneFunction.evaluate(dtm1, zid);
+				tac1 = DateTimeToTimeZoneFunction.evaluate(tac1, zid);
 			if (local2)
-				dtm2 = DateTimeToTimeZoneFunction.evaluate(dtm2, zid);
+				tac2 = DateTimeToTimeZoneFunction.evaluate(tac2, zid);
 		}
 
 		/*
@@ -97,7 +93,7 @@ public final class CompareDateTimeFunction implements Function
 		 * zones as not equal, so I am using Instant.compareTo instead. Also note that
 		 * at this point both date-times will be zoned, not local.
 		 */
-		return (double) Math.signum((Instant.from(dtm1)).compareTo(Instant.from(dtm2)));
+		return (double) Math.signum((Instant.from(tac1)).compareTo(Instant.from(tac2)));
 	}
 
 }

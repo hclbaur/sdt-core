@@ -53,10 +53,10 @@ public final class DateTimeToTimeZoneFunction implements Function
 	 * Creates a date-time adjusted to the supplied time zone or offset.
 	 *
 	 * @param context the expression context
-	 * @param args    an argument list that contains two items.
-	 * @return a zoned date-time string
-	 * @throws FunctionCallException if <code>args</code> has more or less than two
-	 *                               items or conversion failed.
+	 * @param args    an argument list that contains two items
+	 * @return a zoned date-time
+	 * @throws FunctionCallException if an inappropriate number of arguments is
+	 *                               supplied, or if evaluation failed
 	 */
     @Override
 	@SuppressWarnings("rawtypes")
@@ -72,14 +72,13 @@ public final class DateTimeToTimeZoneFunction implements Function
 	/**
 	 * Creates a date-time adjusted to the supplied time zone or offset.
 	 * 
-	 * @param dtm a date-time string
-	 * @param tmz a time zone or time zone offset string
+	 * @param dtm a date-time 
+	 * @param tmz a time zone or time zone offset
 	 * @param nav the navigator used
-	 * @return a zoned date-time string
-	 * @throws FunctionCallException if no valid date-time or time zone was supplied
-	 *                               or conversion to the target time zone failed.
+	 * @return a zoned date-time 
+	 * @throws FunctionCallException if evaluation failed
 	 */
-	public static String evaluate(Object dtm, Object tmz, Navigator nav) throws FunctionCallException {
+	static String evaluate(Object dtm, Object tmz, Navigator nav) throws FunctionCallException {
 
 		TemporalAccessor tac = DateTimeFunction.evaluate(NAME, dtm, nav);
 		
@@ -102,19 +101,19 @@ public final class DateTimeToTimeZoneFunction implements Function
 	/**
 	 * Adjust (translate) a date-time to the supplied time zone.
 	 * 
-	 * @param tac a temporal
+	 * @param dtm a date-time
 	 * @param zid a zone id
 	 * @return a zoned date-time
-	 * @throws DateTimeException if conversion to the target zone failed.
+	 * @throws DateTimeException if conversion to the target zone failed
 	 */
-	public static ZonedDateTime evaluate(TemporalAccessor tac, ZoneId zid) {
+	public static ZonedDateTime evaluate(TemporalAccessor dtm, ZoneId zid) {
 
 		ZonedDateTime zdtm;
 
-		if (tac instanceof LocalDateTime)
-			zdtm = ((LocalDateTime) tac).atZone(zid);
+		if (dtm instanceof LocalDateTime)
+			zdtm = ((LocalDateTime) dtm).atZone(zid);
 		else
-			zdtm = Instant.from(tac).atZone(zid);
+			zdtm = Instant.from(dtm).atZone(zid);
 
 		return zdtm;
 	}

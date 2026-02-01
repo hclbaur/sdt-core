@@ -47,8 +47,8 @@ public final class ImplicitTimeZoneFunction implements Function
 	 * @param context the expression context
 	 * @param args    an empty list
 	 * @return a time zone
-	 * @throws FunctionCallException if <code>args</code> is not empty or an
-	 *                               exception occurred during evaluation.
+	 * @throws FunctionCallException if an inappropriate number of arguments is
+	 *                               supplied, or if evaluation failed
 	 */
 	@Override
 	@SuppressWarnings("rawtypes")
@@ -66,8 +66,9 @@ public final class ImplicitTimeZoneFunction implements Function
 	 * 
 	 * @param context the expression context
 	 * @return a zone id, not null
+	 * @throws FunctionCallException if not called from an SDT context
 	 */
-	public static ZoneId evaluate(Context context) {
+	static ZoneId evaluate(Context context) {
 
 		FunctionContext fc = context.getContextSupport().getFunctionContext();
 

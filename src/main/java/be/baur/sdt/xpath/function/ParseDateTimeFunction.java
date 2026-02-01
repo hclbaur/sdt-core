@@ -37,10 +37,10 @@ public final class ParseDateTimeFunction implements Function
 	 * Parses a string into a date-time, using a pattern.
 	 *
 	 * @param context the expression context
-	 * @param args    an argument list that contains two items.
-	 * @return a date-time string
-	 * @throws FunctionCallException if <code>args</code> has more or less than two
-	 *                               items, or if parsing failed.
+	 * @param args    an argument list that contains two items
+	 * @return a date-time
+	 * @throws FunctionCallException if an inappropriate number of arguments is
+	 *                               supplied, or if evaluation failed
 	 */
     @Override
 	@SuppressWarnings("rawtypes")
@@ -59,10 +59,10 @@ public final class ParseDateTimeFunction implements Function
 	 * @param string  the string to be parsed, not null
 	 * @param pattern the pattern to be used, not null
 	 * @param nav     the navigator used
-	 * @return a date-time string
-	 * @throws FunctionCallException if formatting failed
+	 * @return a date-time
+	 * @throws FunctionCallException if evaluation failed
 	 */
-	public static String evaluate(Object string, Object pattern, Navigator nav) throws FunctionCallException {
+	static String evaluate(Object string, Object pattern, Navigator nav) throws FunctionCallException {
 
 		String dtms = StringFunction.evaluate(string, nav);
 		String fmts = StringFunction.evaluate(pattern, nav);

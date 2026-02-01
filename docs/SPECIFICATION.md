@@ -355,9 +355,9 @@ See also [system-dateTime](#system-dateTime)
 
 <code><i>date-time</i> sdt:dateTime( <i>string</i> )</code>
 
-A constructor function that returns a date-time as a <i>string</i> in extended ISO-8601 format. Real date-time objects are currently not supported, so all date and time functions operate on strings instead.
+A constructor that returns a date-time in extended ISO-8601 format. Real date-time objects are currently not supported, so all date and time functions operate on strings instead.
 
-If the argument is a string compliant with extended ISO-8601 format, this function returns a local or zoned date-time string in ISO_LOCAL_DATE_TIME or ISO_OFFSET_DATE_TIME format, or it will throw an exception if no date-time string can be constructed.
+If the argument is a string compliant with extended ISO-8601 format, this function returns a local or zoned date-time string in ISO_(LOCAL_)DATE_TIME format, or it will throw an exception if no date-time string can be constructed.
 
 Examples:
 
