@@ -395,7 +395,7 @@ See also [implicit-timezone](#implicit-timezone)
 
 <code><i>date-time</i> sdt:dateTime-to-timezone( <i>date-time</i>, <i>time-zone</i> )</code>
  
-Creates a date-time adjusted to the supplied time zone or offset. If a local date-time is supplied, the result will be a zoned date-time in the requested time zone. Otherwise, the supplied date-time will be translated to the given time zone (while the absolute time stays the same). If appropriate, daylight savings will be accounted for.
+Create a date-time adjusted to the supplied time zone or offset. If a local date-time is supplied, the result will be a zoned date-time in the requested time zone. Otherwise, the supplied date-time will be translated to the given time zone (while the absolute time stays the same). If appropriate, daylight savings will be accounted for.
 
 Examples:
 

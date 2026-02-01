@@ -1,7 +1,7 @@
 package be.baur.sdt.xpath.function;
 
 import java.time.Instant;
-import java.time.ZoneId;
+import java.time.LocalDateTime;
 import java.time.temporal.TemporalAccessor;
 import java.util.List;
 
@@ -65,12 +65,14 @@ public final class DateTimeToMillisFunction implements Function {
 	 */
 	static Double evaluate(Object dtm, Context context) throws FunctionCallException {
 
-		final TemporalAccessor tac = DateTimeFunction.evaluate(NAME, dtm, context.getNavigator());
+		TemporalAccessor tac = DateTimeFunction.evaluate(NAME, dtm, context.getNavigator());
 
 		try {
-			
-			final ZoneId zid = ImplicitTimeZoneFunction.evaluate(context);
-			return (double) Instant.from( DateTimeToTimeZoneFunction.evaluate(tac, zid) ).toEpochMilli();
+
+			if (tac instanceof LocalDateTime)
+				tac = DateTimeToTimeZoneFunction.evaluate(tac, ImplicitTimeZoneFunction.evaluate(context));
+
+			return (double) Instant.from(tac).toEpochMilli();
 
 		} catch (Exception e) {
 			throw new FunctionCallException(NAME + "() conversion of '" + dtm + "' failed.", e);
