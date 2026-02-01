@@ -34,12 +34,10 @@ public final class ParseSDAFunction implements Function
 	 * Parses a string in SDA format and returns a data node.
 	 *
 	 * @param context the expression context
-	 * @param args    an argument list that contains one item.
-	 * 
-	 * @return a <code>DataNode</code>
-	 * 
-	 * @throws FunctionCallException if <code>args</code> has more or less than one
-	 *                               item.
+	 * @param args    an argument list that contains one item
+	 * @return a data node
+	 * @throws FunctionCallException if an inappropriate number of arguments is
+	 *                               supplied, or if evaluation failed
 	 */
 	@Override
 	@SuppressWarnings("rawtypes")
@@ -47,7 +45,7 @@ public final class ParseSDAFunction implements Function
 
 		final int argc = args.size();
 		if (argc != 1)
-			throw new FunctionCallException("parse-sda() requires exactly one argument.");
+			throw new FunctionCallException(NAME + "() requires one argument.");
 
 		return evaluate(StringFunction.evaluate(args.get(0), context.getNavigator()));
 	}
@@ -57,12 +55,10 @@ public final class ParseSDAFunction implements Function
 	 * Parses a string in SDA format and returns a data node.
 	 *
 	 * @param str a string in SDA format
-	 * 
 	 * @return a data node
-	 * 
-	 * @throws FunctionCallException if an exception occurs.
+	 * @throws FunctionCallException if evaluation failed
 	 */
-	public static DataNode evaluate(String str) throws FunctionCallException {
+	private static DataNode evaluate(String str) throws FunctionCallException {
 
 		try {
 			return SDA.parse(str);

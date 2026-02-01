@@ -33,8 +33,8 @@ public final class SystemTimeZoneFunction implements Function
 	 * @param context the expression context
 	 * @param args    an empty list
 	 * @return a time zone
-	 * @throws FunctionCallException if <code>args</code> is not empty or an
-	 *                               exception occurred during evaluation.
+	 * @throws FunctionCallException if an inappropriate number of arguments is
+	 *                               supplied, or if evaluation failed
 	 */
 	@Override
 	@SuppressWarnings("rawtypes")
@@ -52,7 +52,7 @@ public final class SystemTimeZoneFunction implements Function
 	 * 
 	 * @return a zone id, not null
 	 */
-	public static ZoneId evaluate() {
+	private static ZoneId evaluate() {
 
 		try {
 			return ZoneId.systemDefault();

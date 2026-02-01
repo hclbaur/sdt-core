@@ -43,17 +43,15 @@ public final class CompareNumberFunction implements Function
 
     
 	/**
-	 * Numerically compares two arguments, returning -1, 0 or 1. An optional third
-	 * argument - after boolean evaluation - determines whether NaN is considered
-	 * smaller (if true) or greater (the default) than all other numbers.
+	 * Compares two arguments, returning -1, 0 or 1. An optional third argument -
+	 * after boolean evaluation - determines whether NaN is considered smaller (if
+	 * true) or greater (the default) than all other numbers.
 	 *
 	 * @param context the expression context
-	 * @param args    an argument list that contains two or three items.
-	 * 
-	 * @return a <code>Double</code>
-	 * 
-	 * @throws FunctionCallException if <code>args</code> has more than three or
-	 *                               less than two items.
+	 * @param args    an argument list that contains two or three items
+	 * @return a signum value
+	 * @throws FunctionCallException if an inappropriate number of arguments is
+	 *                               supplied, or if evaluation failed
 	 */
 	@Override
 	@SuppressWarnings("rawtypes")
@@ -71,19 +69,18 @@ public final class CompareNumberFunction implements Function
     
 
 	/**
-	 * Numerically compares two objects, returning -1, 0 or 1.
+	 * Compares two numbers, returning -1, 0 or 1.
 	 *
-	 * @param obj1     the first object to be compared
-	 * @param obj2     the second object to be compared
-	 * @param nanFirst whether NaN is considered smaller than all other numbers.
+	 * @param num1     the first number
+	 * @param num2     the second number
+	 * @param nanFirst whether NaN is considered smaller than all other numbers
 	 * @param nav      the navigator used
-	 * 
-	 * @return a <code>Double</code>
+	 * @return a signum value
 	 */
-	public static Double evaluate(Object obj1, Object obj2, boolean nanFirst, Navigator nav) {
+	private static Double evaluate(Object num1, Object num2, boolean nanFirst, Navigator nav) {
 
-		final Double d1 = NumberFunction.evaluate(obj1, nav);
-		final Double d2 = NumberFunction.evaluate(obj2, nav);
+		final Double d1 = NumberFunction.evaluate(num1, nav);
+		final Double d2 = NumberFunction.evaluate(num2, nav);
 
 		/*
 		 * The standard Double.comparedTo() considers NaN greater than all other

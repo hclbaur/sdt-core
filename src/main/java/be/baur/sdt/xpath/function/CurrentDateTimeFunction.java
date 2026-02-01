@@ -39,8 +39,9 @@ public final class CurrentDateTimeFunction implements Function
 	 *
 	 * @param context the expression context
 	 * @param args    an empty list
-	 * @return a zoned date-time string
-	 * @throws FunctionCallException if <code>args</code> is not empty
+	 * @return a zoned date-time
+	 * @throws FunctionCallException if an inappropriate number of arguments is
+	 *                               supplied, or if evaluation failed
 	 */
     @Override
 	@SuppressWarnings("rawtypes")
@@ -57,9 +58,10 @@ public final class CurrentDateTimeFunction implements Function
 	 * Returns the current date and time.
 	 * 
 	 * @param context the expression context
-	 * @return a zoned date-time, not null
+	 * @return a zoned date-time
+	 * @throws FunctionCallException if not called from an SDT context
 	 */
-	public static ZonedDateTime evaluate(Context context) {
+	private static ZonedDateTime evaluate(Context context) {
 		
 		FunctionContext fc = context.getContextSupport().getFunctionContext();
 		

@@ -16,7 +16,7 @@ import org.jaxen.function.StringFunction;
 /**
  * <code><i>date-time</i> dateTime-to-timezone( <i>date-time</i>, <i>time-zone</i> )</code><br>
  * <p>
- * Creates a date-time adjusted to the supplied time zone or offset. If a local
+ * Create a date-time adjusted to the supplied time zone or offset. If a local
  * date-time is supplied, the result will be a zoned date-time in the requested
  * time zone. Otherwise, the supplied date-time will be translated to the given
  * time zone (while the absolute time stays the same). If appropriate, daylight
@@ -50,36 +50,35 @@ public final class DateTimeToTimeZoneFunction implements Function
  
 
 	/**
-	 * Creates a date-time adjusted to the supplied time zone or offset.
+	 * Create a date-time adjusted to the supplied time zone or offset.
 	 *
 	 * @param context the expression context
-	 * @param args    an argument list that contains two items.
-	 * @return a zoned date-time string
-	 * @throws FunctionCallException if <code>args</code> has more or less than two
-	 *                               items or conversion failed.
+	 * @param args    an argument list that contains two items
+	 * @return a zoned date-time
+	 * @throws FunctionCallException if an inappropriate number of arguments is
+	 *                               supplied, or if evaluation failed
 	 */
     @Override
 	@SuppressWarnings("rawtypes")
 	public Object call(Context context, List args) throws FunctionCallException {
 
-		if (args.size() == 2)
-			return evaluate(args.get(0), args.get(1), context.getNavigator());
+		if (args.size() != 2)
+			throw new FunctionCallException(NAME + "() requires two arguments.");
 
-		throw new FunctionCallException(NAME + "() requires two arguments.");
+		return DateTimeFunction.format(evaluate(args.get(0), args.get(1), context.getNavigator()));
 	}
 
 
 	/**
-	 * Creates a date-time adjusted to the supplied time zone or offset.
+	 * Create a date-time adjusted to the supplied time zone or offset.
 	 * 
-	 * @param dtm a date-time string
-	 * @param tmz a time zone or time zone offset string
+	 * @param dtm a date-time 
+	 * @param tmz a time zone or time zone offset
 	 * @param nav the navigator used
-	 * @return a zoned date-time string
-	 * @throws FunctionCallException if no valid date-time or time zone was supplied
-	 *                               or conversion to the target time zone failed.
+	 * @return a zoned date-time 
+	 * @throws FunctionCallException if evaluation failed
 	 */
-	public static String evaluate(Object dtm, Object tmz, Navigator nav) throws FunctionCallException {
+    private static ZonedDateTime evaluate(Object dtm, Object tmz, Navigator nav) throws FunctionCallException {
 
 		TemporalAccessor tac = DateTimeFunction.evaluate(NAME, dtm, nav);
 		
@@ -92,7 +91,7 @@ public final class DateTimeToTimeZoneFunction implements Function
 		}
 
 		try {
-			return DateTimeFunction.format( evaluate(tac, zoneId) );
+			return evaluate(tac, zoneId);
 		} catch (Exception e) {
 			throw new FunctionCallException(NAME + "() conversion of '" + dtm + "' failed.", e);
 		}
@@ -100,22 +99,36 @@ public final class DateTimeToTimeZoneFunction implements Function
 	
 	
 	/**
-	 * Adjust (translate) a date-time to the supplied time zone.
+	 * Create a date-time adjusted to the supplied time zone or offset.
 	 * 
-	 * @param tac a temporal
+	 * @param dtm a date-time
 	 * @param zid a zone id
 	 * @return a zoned date-time
-	 * @throws DateTimeException if conversion to the target zone failed.
+	 * @throws DateTimeException if conversion to the target zone failed
 	 */
-	public static ZonedDateTime evaluate(TemporalAccessor tac, ZoneId zid) {
+    static ZonedDateTime evaluate(TemporalAccessor dtm, ZoneId zid) {
 
-		ZonedDateTime zdtm;
-
-		if (tac instanceof LocalDateTime)
-			zdtm = ((LocalDateTime) tac).atZone(zid);
+		if (dtm instanceof LocalDateTime)
+			return ((LocalDateTime) dtm).atZone(zid);
 		else
-			zdtm = Instant.from(tac).atZone(zid);
-
-		return zdtm;
+			return Instant.from(dtm).atZone(zid);
 	}
+	
+	
+	/**
+	 * Create a date-time adjusted to the supplied time zone or offset, if a local
+	 * date-time is supplied. Otherwise return the supplied (zoned) date-time.
+	 * 
+	 * @param dtm a date-time
+	 * @param zid a zone id
+	 * @return a zoned date-time
+	 */
+	static ZonedDateTime ifLocal(TemporalAccessor dtm, ZoneId zid) {
+
+		if (dtm instanceof LocalDateTime)
+			return ((LocalDateTime) dtm).atZone(zid);
+		else
+			return (ZonedDateTime) dtm;
+	}
+
 }

@@ -14,7 +14,7 @@ import org.jaxen.function.NumberFunction;
 /**
  * <code><i>date-time</i> add-yearMonth-to-dateTime( <i>date-time</i>, <i>years</i>, <i>months</i> )</code><br>
  * <p>
- * Returns the result of adding a period of years and/or months to the supplied
+ * Returns the result of adding a number of years and/or months to the supplied
  * date-time, where negative values can be used to subtract time. If a time zone
  * ID is provided, daylight savings will be accounted for.
  * <p>
@@ -38,13 +38,13 @@ public final class AddYearMonthToDateTimeFunction implements Function
  
 
 	/**
-	 * Adds a period of years and/or months to a date-time.
+	 * Adds a number of years and/or months to a date-time.
 	 *
 	 * @param context the expression context
-	 * @param args    an argument list that contains three items.
+	 * @param args    an argument list that contains three items
 	 * @return a date-time
-	 * @throws FunctionCallException if <code>args</code> has more or less than
-	 *                               three items or evaluation failed
+	 * @throws FunctionCallException if an inappropriate number of arguments is
+	 *                               supplied, or if evaluation failed
 	 */
 	@Override
 	@SuppressWarnings("rawtypes")
@@ -60,17 +60,16 @@ public final class AddYearMonthToDateTimeFunction implements Function
 
 
 	/**
-	 * Adds a period of years and/or months to a date-time.
+	 * Adds a number of years and/or months to a date-time.
 	 * 
 	 * @param dtm    a date-time
 	 * @param years  a number of years
 	 * @param months a number of months
 	 * @param nav    the navigator used
 	 * @return a date-time
-	 * @throws FunctionCallException if no valid date-time was supplied or the
-	 *                               addition (subtraction) failed
+	 * @throws FunctionCallException if evaluation failed
 	 */
-    public static TemporalAccessor evaluate(Object dtm, Object years, Object months, Navigator nav) throws FunctionCallException {
+    private static TemporalAccessor evaluate(Object dtm, Object years, Object months, Navigator nav) throws FunctionCallException {
 
 		final TemporalAccessor tac = DateTimeFunction.evaluate(NAME, dtm, nav);
 		
@@ -88,7 +87,6 @@ public final class AddYearMonthToDateTimeFunction implements Function
 			return ((LocalDateTime) tac).plusYears(lyears).plusMonths(lmonths);
 		else
 			return ((ZonedDateTime) tac).plusYears(lyears).plusMonths(lmonths);
-
 	}
 
 }

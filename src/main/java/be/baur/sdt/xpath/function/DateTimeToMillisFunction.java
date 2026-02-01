@@ -1,7 +1,7 @@
 package be.baur.sdt.xpath.function;
 
 import java.time.Instant;
-import java.time.ZoneId;
+import java.time.LocalDateTime;
 import java.time.temporal.TemporalAccessor;
 import java.util.List;
 
@@ -32,18 +32,17 @@ public final class DateTimeToMillisFunction implements Function {
 	/**
 	 * Create a new <code>DateTimeToMillisFunction</code> object.
 	 */
-	public DateTimeToMillisFunction() {
-	}
+	public DateTimeToMillisFunction() {}
 
 
 	/**
 	 * Converts a date-time into the number of milliseconds elapsed since the epoch.
 	 *
 	 * @param context the expression context
-	 * @param args    an argument list that contains one item.
+	 * @param args    an argument list that contains one item
 	 * @return a number of milliseconds
-	 * @throws FunctionCallException if <code>args</code> has more than one item or
-	 *                               date-time conversion failed.
+	 * @throws FunctionCallException if an inappropriate number of arguments is
+	 *                               supplied, or if evaluation failed
 	 */
 	@Override
 	@SuppressWarnings("rawtypes")
@@ -52,26 +51,28 @@ public final class DateTimeToMillisFunction implements Function {
 		if (args.size() == 1)
 			return evaluate(args.get(0), context);
 
-		throw new FunctionCallException(NAME + "() requires exactly one argument.");
+		throw new FunctionCallException(NAME + "() requires one argument.");
 	}
 
 
 	/**
 	 * Converts a date-time into the number of milliseconds elapsed since the epoch.
 	 * 
-	 * @param dtm     a date-time string
+	 * @param dtm     a date-time
 	 * @param context the expression context
 	 * @return a number of milliseconds
-	 * @throws FunctionCallException if date-time conversion failed.
+	 * @throws FunctionCallException if evaluation failed
 	 */
-	public static Double evaluate(Object dtm, Context context) throws FunctionCallException {
+	private static Double evaluate(Object dtm, Context context) throws FunctionCallException {
 
-		final TemporalAccessor tac = DateTimeFunction.evaluate(NAME, dtm, context.getNavigator());
+		TemporalAccessor tac = DateTimeFunction.evaluate(NAME, dtm, context.getNavigator());
 
 		try {
-			
-			final ZoneId zid = ImplicitTimeZoneFunction.evaluate(context);
-			return (double) Instant.from( DateTimeToTimeZoneFunction.evaluate(tac, zid) ).toEpochMilli();
+
+			if (tac instanceof LocalDateTime)
+				tac = DateTimeToTimeZoneFunction.evaluate(tac, ImplicitTimeZoneFunction.evaluate(NAME, context));
+
+			return (double) Instant.from(tac).toEpochMilli();
 
 		} catch (Exception e) {
 			throw new FunctionCallException(NAME + "() conversion of '" + dtm + "' failed.", e);

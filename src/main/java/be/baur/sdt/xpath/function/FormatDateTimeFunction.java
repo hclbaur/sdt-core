@@ -40,10 +40,10 @@ public final class FormatDateTimeFunction implements Function
 	 * Returns a formatted date-time string, using a pattern.
 	 *
 	 * @param context the expression context
-	 * @param args    an argument list that contains two items.
-	 * @return a formatted date-time string
-	 * @throws FunctionCallException if <code>args</code> has more or less than two
-	 *                               items, or if formatting failed.
+	 * @param args    an argument list that contains two items
+	 * @return a formatted date-time
+	 * @throws FunctionCallException if an inappropriate number of arguments is
+	 *                               supplied, or if evaluation failed
 	 */
     @Override
 	@SuppressWarnings("rawtypes")
@@ -63,9 +63,9 @@ public final class FormatDateTimeFunction implements Function
 	 * @param pat the pattern to be used, not null
 	 * @param nav the navigator used
 	 * @return a formatted date-time string
-	 * @throws FunctionCallException if formatting failed
+	 * @throws FunctionCallException if evaluation failed
 	 */
-	public static String evaluate(Object dtm, Object pat, Navigator nav) throws FunctionCallException {
+    private static String evaluate(Object dtm, Object pat, Navigator nav) throws FunctionCallException {
 
 		TemporalAccessor tac = DateTimeFunction.evaluate(NAME, dtm, nav);
 

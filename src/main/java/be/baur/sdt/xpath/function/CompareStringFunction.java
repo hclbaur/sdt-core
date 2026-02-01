@@ -45,12 +45,10 @@ public final class CompareStringFunction implements Function
 	 * specifies a language tag to obtain a collator (other than the default).
 	 *
 	 * @param context the expression context
-	 * @param args    an argument list that contains two or three items.
-	 * 
-	 * @return a <code>Double</code>
-	 * 
-	 * @throws FunctionCallException if <code>args</code> has more than three or
-	 *                               less than two items.
+	 * @param args    an argument list that contains two or three items
+	 * @return a signum value
+	 * @throws FunctionCallException if an inappropriate number of arguments is
+	 *                               supplied, or if evaluation failed
 	 */
 	@Override
 	@SuppressWarnings("rawtypes")
@@ -68,19 +66,18 @@ public final class CompareStringFunction implements Function
     
 
 	/**
-	 * Compares two objects using a default or language dependent collator,
+	 * Compares two strings using a default or language dependent collator,
 	 * returning -1, 0 or 1.
 	 *
-	 * @param obj1 the first object to be compared
-	 * @param obj2 the second object to be compared
+	 * @param str1 the first string
+	 * @param obj2 the second string
 	 * @param lang a language tag, not null
 	 * @param nav  the navigator used
-	 * 
-	 * @return a <code>Double</code>
+	 * @return a signum value
 	 */
-	public static Double evaluate(Object obj1, Object obj2, String lang, Navigator nav) {
+	private static Double evaluate(Object str1, Object obj2, String lang, Navigator nav) {
 
-		final String s1 = StringFunction.evaluate(obj1, nav);
+		final String s1 = StringFunction.evaluate(str1, nav);
 		final String s2 = StringFunction.evaluate(obj2, nav);
 
 		Collator c;

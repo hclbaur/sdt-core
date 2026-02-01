@@ -43,9 +43,9 @@ public final class AddToDateTimeFunction implements Function
 	 *
 	 * @param context the expression context
 	 * @param args    an argument list that contains five items
-	 * @return a date-time string
-	 * @throws FunctionCallException if <code>args</code> has more or less than five
-	 *                               items or evaluation failed
+	 * @return a date-time
+	 * @throws FunctionCallException if an inappropriate number of arguments is
+	 *                               supplied, or if evaluation failed
 	 */
 	@Override
 	@SuppressWarnings("rawtypes")
@@ -70,10 +70,9 @@ public final class AddToDateTimeFunction implements Function
 	 * @param seconds a number of seconds
 	 * @param nav     the navigator used
 	 * @return a date-time
-	 * @throws FunctionCallException if no valid date-time was supplied or the
-	 *                               addition (subtraction) failed
+	 * @throws FunctionCallException if evaluation failed
 	 */
-    public static TemporalAccessor evaluate(Object dtm, Object days, Object hours, Object minutes, Object seconds, Navigator nav) throws FunctionCallException {
+    private static TemporalAccessor evaluate(Object dtm, Object days, Object hours, Object minutes, Object seconds, Navigator nav) throws FunctionCallException {
 
 		final TemporalAccessor tac = DateTimeFunction.evaluate(NAME, dtm, nav);
 		
@@ -101,7 +100,6 @@ public final class AddToDateTimeFunction implements Function
 			return ((LocalDateTime) tac).plus(totalsec, ChronoUnit.SECONDS);
 		else
 			return ((ZonedDateTime) tac).plus(totalsec, ChronoUnit.SECONDS);
-
 	}
 
 }

@@ -17,16 +17,15 @@ import org.jaxen.Navigator;
 import org.jaxen.function.StringFunction;
 
 /**
- * <code><i>date-time</i> sdt:dateTime( <i>string</i> )</code><br>
+ * <code><i>date-time</i> sdt:dateTime( <i>object</i> )</code><br>
  * <p>
- * A constructor function that returns a date-time as a <i>string</i> in
- * extended ISO-8601 format. Real date-time objects are currently not supported,
- * so all date and time functions operate on strings instead.
+ * A constructor that returns a date-time in extended ISO-8601 format. Real
+ * date-time objects are currently not supported, so all date and time functions
+ * operate on strings instead.
  * <p>
  * If the argument is a string compliant with extended ISO-8601 format, this
- * function returns a local or zoned date-time string in ISO_LOCAL_DATE_TIME or
- * ISO_OFFSET_DATE_TIME format, or it will throw an exception if no date-time
- * string can be constructed.
+ * function returns a local or zoned date-time string in ISO_(LOCAL_)DATE_TIME,
+ * or it will throw an exception if no date-time string can be constructed.
  * <p>
  * Examples:
  * <p>
@@ -49,19 +48,21 @@ public final class DateTimeFunction implements Function
 	 * Returns a local or zoned date-time string in extended ISO-8601 format.
 	 *
 	 * @param context the expression context
-	 * @param args    an argument list that contains one item.
-	 * @return a date-time string
-	 * @throws FunctionCallException if <code>args</code> has more or less than one
-	 *                               item or evaluation failed.
+	 * @param args    an argument list that contains one item
+	 * @return a date-time
+	 * @throws FunctionCallException if an inappropriate number of arguments is
+	 *                               supplied, or if evaluation failed
 	 */
     @Override
 	@SuppressWarnings("rawtypes")
 	public Object call(Context context, List args) throws FunctionCallException {
 
 		if (args.size() != 1)
-			throw new FunctionCallException(NAME + "() requires exactly one argument.");
+			throw new FunctionCallException(NAME + "() requires one argument.");
 		
-		return format(evaluate(NAME, args.get(0), context.getNavigator()));
+		return format(
+			evaluate(NAME, args.get(0), context.getNavigator())
+		);
 	}
 
 
@@ -69,12 +70,12 @@ public final class DateTimeFunction implements Function
 	 * Returns a local or zoned date-time object.
 	 * 
 	 * @param fun name of the calling function
-	 * @param dtm a date-time string
+	 * @param dtm a date-time
 	 * @param nav the navigator used
-	 * @return a temporal object, not null
+	 * @return a date-time
 	 * @throws FunctionCallException if evaluation failed
 	 */
-	public static TemporalAccessor evaluate(String fun, Object dtm, Navigator nav) throws FunctionCallException {
+    static TemporalAccessor evaluate(String fun, Object dtm, Navigator nav) throws FunctionCallException {
 
 		try {
 			return parse( StringFunction.evaluate(dtm, nav) );

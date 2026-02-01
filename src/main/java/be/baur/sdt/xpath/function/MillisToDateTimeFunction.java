@@ -35,19 +35,19 @@ public final class MillisToDateTimeFunction implements Function
 	 * date-time string.
 	 *
 	 * @param context the expression context
-	 * @param args    an argument list that contains one item.
-	 * @return a zoned date-time string
-	 * @throws FunctionCallException if <code>args</code> has more than one item or
-	 *                               no date-time could be constructed.
+	 * @param args    an argument list that contains one item
+	 * @return a zoned date-time
+	 * @throws FunctionCallException if an inappropriate number of arguments is
+	 *                               supplied, or if evaluation failed
 	 */
     @Override
 	@SuppressWarnings("rawtypes")
 	public Object call(Context context, List args) throws FunctionCallException {
 
-		if (args.size() == 1)
-			return evaluate(args.get(0), context.getNavigator());
-
-		throw new FunctionCallException(NAME + "() requires exactly one argument.");
+		if (args.size() != 1)
+			throw new FunctionCallException(NAME + "() requires one argument.");
+		
+		return DateTimeFunction.format(evaluate(args.get(0), context.getNavigator()));
 	}
 
 
@@ -57,10 +57,10 @@ public final class MillisToDateTimeFunction implements Function
 	 * 
 	 * @param obj a number
 	 * @param nav the navigator used
-	 * @return a zoned date-time string
-	 * @throws FunctionCallException if no date-time could be constructed
+	 * @return a zoned date-time
+	 * @throws FunctionCallException if evaluation failed
 	 */
-	public static String evaluate(Object obj, Navigator nav) throws FunctionCallException {
+    private static Instant evaluate(Object obj, Navigator nav) throws FunctionCallException {
 
 		double msecs = NumberFunction.evaluate(obj, nav);
 
@@ -68,7 +68,7 @@ public final class MillisToDateTimeFunction implements Function
 			throw new FunctionCallException(NAME + "() requires a number.");
 
 		try {
-			return DateTimeFunction.format(Instant.ofEpochMilli((long) msecs));
+			return Instant.ofEpochMilli((long) msecs);
 		} catch (Exception e) {
 			throw new FunctionCallException(NAME + "() evaluation of '" + msecs + "' failed.", e);
 		}

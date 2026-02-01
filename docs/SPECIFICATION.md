@@ -28,7 +28,7 @@
 	- [millis-to-dateTime](#millis-to-dateTime)
 	- [parse-dateTime](#parse-dateTime), [parse-sda](#parse-sda)
 	- [render-sda](#render-sda), [right](#right)
-	- [string-join](#string-join), [system-dateTime](#system-dateTime), [system-timezone](#system-timezone)
+	- [string-join](#string-join), [subtract-dateTimes](#subtract-dateTimes), [system-dateTime](#system-dateTime), [system-timezone](#system-timezone)
 	- [timezone-from-dateTime](#timezone-from-dateTime), [tokenize](#tokenize)
 
 
@@ -285,7 +285,7 @@ Examples:
 
 <code><i>double</i> sdt:compare-dateTime( <i>date-time</i>, <i>date-time</i> )</code><br>
 
-Compares two instances in time. This function converts its arguments to date-time and returns -1, 0 or 1, depending on whether the first argument precedes, equals or 1 exceeds the second in time:
+Compares two date-time values. This function returns returns -1, 0 or 1, depending on whether the first argument precedes, equals or 1 exceeds the second in time:
 
 <code>sdt:compare-dateTime('1970-01-01T00:00:00+01:00', '1970-01-01T00:00:00Z')</code>
 returns <code>-1.0</code>.<br>
@@ -294,7 +294,7 @@ returns <code>0.0</code>.<br>
 <code>sdt:compare-dateTime('1970-01-01T00:00:00Z', '1970-01-01T00:00:00+01:00')</code>
 returns <code>1.0</code>.<br>
 
-If either argument is a local date-time, the implicit time zone will be used
+Note: if either argument is a local date-time, the implicit time zone will be used
 to compare it against the other.
 
 This function can be used as a comparator in a sort statement.
@@ -345,7 +345,7 @@ This function can be used as a comparator in a sort statement.
  
 Returns the current date and time from the SDT context in the implicit time zone.
 
-<i>Note:</i> this function is deterministic and context-dependent; multiple invocations within the same execution context will return the same result.
+Note: this function is deterministic and context-dependent; multiple invocations within the same execution context will return the same result.
 
 See also [Section 15.3 of the XPath Specification](https://www.w3.org/TR/xpath-functions/#func-current-dateTime)
 
@@ -355,9 +355,9 @@ See also [system-dateTime](#system-dateTime)
 
 <code><i>date-time</i> sdt:dateTime( <i>string</i> )</code>
 
-A constructor function that returns a date-time as a <i>string</i> in extended ISO-8601 format. Real date-time objects are currently not supported, so all date and time functions operate on strings instead.
+A constructor that returns a date-time in extended ISO-8601 format. Real date-time objects are currently not supported, so all date and time functions operate on strings instead.
 
-If the argument is a string compliant with extended ISO-8601 format, this function returns a local or zoned date-time string in ISO_LOCAL_DATE_TIME or ISO_OFFSET_DATE_TIME format, or it will throw an exception if no date-time string can be constructed.
+If the argument is a string compliant with extended ISO-8601 format, this function returns a local or zoned date-time string in ISO_(LOCAL_)DATE_TIME format, or it will throw an exception if no date-time string can be constructed.
 
 Examples:
 
@@ -395,7 +395,7 @@ See also [implicit-timezone](#implicit-timezone)
 
 <code><i>date-time</i> sdt:dateTime-to-timezone( <i>date-time</i>, <i>time-zone</i> )</code>
  
-Creates a date-time adjusted to the supplied time zone or offset. If a local date-time is supplied, the result will be a zoned date-time in the requested time zone. Otherwise, the supplied date-time will be translated to the given time zone (while the absolute time stays the same). If appropriate, daylight savings will be accounted for.
+Create a date-time adjusted to the supplied time zone or offset. If a local date-time is supplied, the result will be a zoned date-time in the requested time zone. Otherwise, the supplied date-time will be translated to the given time zone (while the absolute time stays the same). If appropriate, daylight savings will be accounted for.
 
 Examples:
 
@@ -438,7 +438,7 @@ See also [Patterns for Formatting and Parsing](https://docs.oracle.com/javase/8/
 
 Returns the value of the implicit time zone ID from the SDT context. This is the time zone to be used when a date-time value that does not have a time zone component is used in a comparison or arithmetic operation. This is not necessarily equal to the system clock default.
 
-<i>Note:</i> this function is deterministic and context-dependent; multiple invocations within the same execution context will return the same result.
+Note: this function is deterministic and context-dependent; multiple invocations within the same execution context will return the same result.
 
 Example:
 
@@ -522,13 +522,26 @@ Returns a string created by concatenating the items in a sequence, with an optio
 See also [Section 5.4.2 of the XPath Specification](https://www.w3.org/TR/xpath-functions/#func-string-join)
 
 
+#### subtract-dateTimes
+
+<code><i>double</i> sdt:subtract-dateTimes( <i>date-time</i>, <i>date-time</i> )</code><br>
+
+This function returns the number of seconds elapsed between two date-times, with millisecond precision. This will be a <i>negative</i> number if the first argument precedes the second in time:
+
+<code>sdt:subtract-dateTimes('1970-01-01T00:00:00+01:00', '1970-01-01T00:00:00Z')</code> returns <code>-3600.0</code>.<br>
+<code>sdt:subtract-dateTimes(sdt:current-dateTime(),sdt:current-dateTime())</code> returns <code>0.0</code>.<br>
+<code>sdt:subtract-dateTimes('1970-01-01T00:00:00Z', '1970-01-01T00:00:00+01:00')</code> returns <code>3600.0</code>.
+
+Note: if either argument is a local date-time, the implicit time zone will be used to calculate the offset from UTC.
+
+ 
 #### system-dateTime
 
 <code><i>date-time</i> sdt:system-dateTime()</code>
  
 Returns the current date and time (in extended ISO-8601) format from the system clock in the default time zone.
 
-<i>Note:</i> this function is non-deterministic and context-independent; multiple invocations within the same execution context may return a different result.
+Note: this function is non-deterministic and context-independent; multiple invocations within the same execution context may return a different result.
 
 See also [current-dateTime](#current-dateTime)
 
@@ -553,7 +566,7 @@ local date-time is supplied (this can be used to test for a local date-time).
 Examples:
 
 <code>sdt:timezone-from-dateTime('1970-01-01T00:00:00Z')</code> returns <code>Z</code>.<br>
-<code>not(sdt:timezone-from-dateTime('1970-01-01T00:00:00'))</code> returns <code>true</code>.<br>
+<code>not(sdt:timezone-from-dateTime('1970-01-01T00:00:00'))</code> returns <code>true</code>.
 
 
 #### tokenize

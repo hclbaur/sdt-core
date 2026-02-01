@@ -26,14 +26,15 @@ public final class SystemDateTimeFunction implements Function
      * Create a new <code>SystemDateTimeFunction</code> object.
      */
     public SystemDateTimeFunction() {}
-    
+
 	/**
 	 * Returns the system date and time.
 	 *
 	 * @param context the expression context
 	 * @param args    an empty list
-	 * @return a zoned date-time string
-	 * @throws FunctionCallException if <code>args</code> is not empty
+	 * @return a zoned date-time
+	 * @throws FunctionCallException if an inappropriate number of arguments is
+	 *                               supplied, or if evaluation failed
 	 */
     @Override
 	@SuppressWarnings("rawtypes")
@@ -52,7 +53,7 @@ public final class SystemDateTimeFunction implements Function
 	 * @param context the expression context
 	 * @return a zoned date-time, not null
 	 */
-	public static ZonedDateTime evaluate(Context context) {
+	private static ZonedDateTime evaluate(Context context) {
 		
 		return ZonedDateTime.now();
 	}

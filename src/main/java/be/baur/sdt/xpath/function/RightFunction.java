@@ -35,23 +35,20 @@ public final class RightFunction implements Function
 
     
 	/**
-	 * Returns the right part of an XPath string-value by length.
+	 * Returns the right part of a string.
 	 *
 	 * @param context the expression context
-	 * @param args    an argument list that contains two items,a <code>String</code>
-	 *                and a length.
-	 * 
-	 * @return a <code>String</code>
-	 * 
-	 * @throws FunctionCallException if <code>args</code> has more or less than two
-	 *                               items.
+	 * @param args    an argument list that contains two items
+	 * @return a string
+	 * @throws FunctionCallException if an inappropriate number of arguments is
+	 *                               supplied, or if evaluation failed
 	 */
     @Override
 	@SuppressWarnings("rawtypes")
 	public Object call(Context context, List args) throws FunctionCallException
     {
         if (args.size() != 2)
-            throw new FunctionCallException( "right() requires two arguments." );
+            throw new FunctionCallException(NAME + "() requires two arguments." );
 
         final Navigator nav = context.getNavigator();
 

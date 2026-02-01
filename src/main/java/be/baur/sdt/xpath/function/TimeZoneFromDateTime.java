@@ -37,17 +37,17 @@ public final class TimeZoneFromDateTime implements Function
 	 * Returns the time zone or UTC offset of a date-time.
 	 * 
 	 * @param context the expression context
-	 * @param args    an argument list that contains one item.
+	 * @param args    an argument list that contains one item
 	 * @return a time-zone or offset string, maybe empty
-	 * @throws FunctionCallException if <code>args</code> has more or less than one
-	 *                               item or evaluation failed.
+	 * @throws FunctionCallException if an inappropriate number of arguments is
+	 *                               supplied, or if evaluation failed
 	 */
     @Override
 	@SuppressWarnings("rawtypes")
 	public Object call(Context context, List args) throws FunctionCallException {
 
 		if (args.size() != 1)
-			throw new FunctionCallException(NAME + "() requires exactly one argument.");
+			throw new FunctionCallException(NAME + "() requires one argument.");
 
 		ZoneId zid = evaluate(args.get(0), context.getNavigator());
 		return zid == null ? "" : zid.toString();
@@ -58,12 +58,12 @@ public final class TimeZoneFromDateTime implements Function
 	 * Returns the time zone or UTC offset of a date-time, or null if a local
 	 * date-time was supplied.
 	 * 
-	 * @param dtm a date-time string
+	 * @param dtm a date-time
 	 * @param nav the navigator used
 	 * @return a zone id, may be null
-	 * @throws FunctionCallException if no valid date-time was supplied.
+	 * @throws FunctionCallException if evaluation failed
 	 */
-	public static ZoneId evaluate(Object dtm, Navigator nav) throws FunctionCallException {
+	private static ZoneId evaluate(Object dtm, Navigator nav) throws FunctionCallException {
 
 		TemporalAccessor tac = DateTimeFunction.evaluate(NAME, dtm, nav);
 
