@@ -53,7 +53,7 @@ public final class SystemDateTimeFunction implements Function
 	 * @param context the expression context
 	 * @return a zoned date-time, not null
 	 */
-	static ZonedDateTime evaluate(Context context) {
+	private static ZonedDateTime evaluate(Context context) {
 		
 		return ZonedDateTime.now();
 	}

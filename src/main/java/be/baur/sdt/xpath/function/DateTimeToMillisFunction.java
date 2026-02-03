@@ -63,7 +63,7 @@ public final class DateTimeToMillisFunction implements Function {
 	 * @return a number of milliseconds
 	 * @throws FunctionCallException if evaluation failed
 	 */
-	static Double evaluate(Object dtm, Context context) throws FunctionCallException {
+	private static Double evaluate(Object dtm, Context context) throws FunctionCallException {
 
 		TemporalAccessor tac = DateTimeFunction.evaluate(NAME, dtm, context.getNavigator());
 

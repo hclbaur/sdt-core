@@ -1,6 +1,7 @@
 package be.baur.sdt.xpath.function;
 
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAccessor;
 import java.util.List;
 
 import org.jaxen.Context;
@@ -46,10 +47,10 @@ public final class ParseDateTimeFunction implements Function
 	@SuppressWarnings("rawtypes")
 	public Object call(Context context, List args) throws FunctionCallException {
 		
-		if (args.size() == 2) 
-			return evaluate(args.get(0), args.get(1), context.getNavigator());
+		if (args.size() != 2) 
+			throw new FunctionCallException(NAME + "() requires two arguments.");
 		
-		throw new FunctionCallException(NAME + "() requires two arguments.");
+		return DateTimeFunction.format(evaluate(args.get(0), args.get(1), context.getNavigator()));
 	}
 
 
@@ -62,7 +63,7 @@ public final class ParseDateTimeFunction implements Function
 	 * @return a date-time
 	 * @throws FunctionCallException if evaluation failed
 	 */
-	static String evaluate(Object string, Object pattern, Navigator nav) throws FunctionCallException {
+	private static TemporalAccessor evaluate(Object string, Object pattern, Navigator nav) throws FunctionCallException {
 
 		String dtms = StringFunction.evaluate(string, nav);
 		String fmts = StringFunction.evaluate(pattern, nav);
@@ -75,7 +76,7 @@ public final class ParseDateTimeFunction implements Function
 			catch (Exception e) {
 				throw new FunctionCallException(NAME + "() pattern is invalid.", e);
 			}
-			return DateTimeFunction.format(DateTimeFunction.parse(dtms, dtf));
+			return DateTimeFunction.parse(dtms, dtf);
 		}
 		catch (Exception e) {
 			throw new FunctionCallException(NAME + "() failed to parse '" + dtms + "'.", e);

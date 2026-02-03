@@ -65,7 +65,7 @@ public final class SubtractDateTimesFunction implements Function
 	 * @return a number of milliseconds
 	 * @throws FunctionCallException if evaluation failed
 	 */
-	static Double evaluate(Object dtm1, Object dtm2, Context context) throws FunctionCallException {
+	private static Double evaluate(Object dtm1, Object dtm2, Context context) throws FunctionCallException {
 
 		final Navigator nav = context.getNavigator();
 		final ZoneId zid = ImplicitTimeZoneFunction.evaluate(context);

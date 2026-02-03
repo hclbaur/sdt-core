@@ -69,7 +69,7 @@ public final class AddYearMonthToDateTimeFunction implements Function
 	 * @return a date-time
 	 * @throws FunctionCallException if evaluation failed
 	 */
-    static TemporalAccessor evaluate(Object dtm, Object years, Object months, Navigator nav) throws FunctionCallException {
+    private static TemporalAccessor evaluate(Object dtm, Object years, Object months, Navigator nav) throws FunctionCallException {
 
 		final TemporalAccessor tac = DateTimeFunction.evaluate(NAME, dtm, nav);
 		

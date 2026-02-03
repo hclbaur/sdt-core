@@ -65,7 +65,7 @@ public final class FormatDateTimeFunction implements Function
 	 * @return a formatted date-time string
 	 * @throws FunctionCallException if evaluation failed
 	 */
-	static String evaluate(Object dtm, Object pat, Navigator nav) throws FunctionCallException {
+    private static String evaluate(Object dtm, Object pat, Navigator nav) throws FunctionCallException {
 
 		TemporalAccessor tac = DateTimeFunction.evaluate(NAME, dtm, nav);
 

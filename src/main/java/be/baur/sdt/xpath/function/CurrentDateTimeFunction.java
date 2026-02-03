@@ -61,7 +61,7 @@ public final class CurrentDateTimeFunction implements Function
 	 * @return a zoned date-time
 	 * @throws FunctionCallException if not called from an SDT context
 	 */
-	static ZonedDateTime evaluate(Context context) {
+	private static ZonedDateTime evaluate(Context context) {
 		
 		FunctionContext fc = context.getContextSupport().getFunctionContext();
 		

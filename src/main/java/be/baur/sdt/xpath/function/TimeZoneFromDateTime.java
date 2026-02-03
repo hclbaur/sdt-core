@@ -63,7 +63,7 @@ public final class TimeZoneFromDateTime implements Function
 	 * @return a zone id, may be null
 	 * @throws FunctionCallException if evaluation failed
 	 */
-	static ZoneId evaluate(Object dtm, Navigator nav) throws FunctionCallException {
+	private static ZoneId evaluate(Object dtm, Navigator nav) throws FunctionCallException {
 
 		TemporalAccessor tac = DateTimeFunction.evaluate(NAME, dtm, nav);
 

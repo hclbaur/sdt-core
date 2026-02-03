@@ -52,7 +52,7 @@ public final class SystemTimeZoneFunction implements Function
 	 * 
 	 * @return a zone id, not null
 	 */
-	static ZoneId evaluate() {
+	private static ZoneId evaluate() {
 
 		try {
 			return ZoneId.systemDefault();

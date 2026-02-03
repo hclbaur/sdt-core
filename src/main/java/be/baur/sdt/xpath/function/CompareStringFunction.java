@@ -75,7 +75,7 @@ public final class CompareStringFunction implements Function
 	 * @param nav  the navigator used
 	 * @return a signum value
 	 */
-	public static Double evaluate(Object str1, Object obj2, String lang, Navigator nav) {
+	private static Double evaluate(Object str1, Object obj2, String lang, Navigator nav) {
 
 		final String s1 = StringFunction.evaluate(str1, nav);
 		final String s2 = StringFunction.evaluate(obj2, nav);

@@ -60,7 +60,7 @@ public final class DateTimeToLocalFunction implements Function
 	 * @return a local date-time
 	 * @throws FunctionCallException if evaluation failed
 	 */
-	static TemporalAccessor evaluate(Object dtm, Navigator nav) throws FunctionCallException {
+    private static TemporalAccessor evaluate(Object dtm, Navigator nav) throws FunctionCallException {
 
 		TemporalAccessor tac = DateTimeFunction.evaluate(NAME, dtm, nav);
 

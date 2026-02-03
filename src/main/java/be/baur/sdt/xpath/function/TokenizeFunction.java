@@ -82,7 +82,7 @@ public final class TokenizeFunction implements Function
 	 * @param allowEmpty whether to retain empty strings in the result
 	 * @return a list of strings
 	 */
-	public static List<String> evaluate(String str, String rex, boolean allowEmpty) {
+	private static List<String> evaluate(String str, String rex, boolean allowEmpty) {
 
 		List<String> tokens = Arrays.asList(str.split(rex, allowEmpty ? -1 : 0));
 

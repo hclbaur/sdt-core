@@ -58,7 +58,7 @@ public final class ParseSDAFunction implements Function
 	 * @return a data node
 	 * @throws FunctionCallException if evaluation failed
 	 */
-	static DataNode evaluate(String str) throws FunctionCallException {
+	private static DataNode evaluate(String str) throws FunctionCallException {
 
 		try {
 			return SDA.parse(str);

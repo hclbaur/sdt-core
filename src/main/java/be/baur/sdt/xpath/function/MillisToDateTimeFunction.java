@@ -44,10 +44,10 @@ public final class MillisToDateTimeFunction implements Function
 	@SuppressWarnings("rawtypes")
 	public Object call(Context context, List args) throws FunctionCallException {
 
-		if (args.size() == 1)
-			return evaluate(args.get(0), context.getNavigator());
-
-		throw new FunctionCallException(NAME + "() requires one argument.");
+		if (args.size() != 1)
+			throw new FunctionCallException(NAME + "() requires one argument.");
+		
+		return DateTimeFunction.format(evaluate(args.get(0), context.getNavigator()));
 	}
 
 
@@ -60,7 +60,7 @@ public final class MillisToDateTimeFunction implements Function
 	 * @return a zoned date-time
 	 * @throws FunctionCallException if evaluation failed
 	 */
-	static String evaluate(Object obj, Navigator nav) throws FunctionCallException {
+    private static Instant evaluate(Object obj, Navigator nav) throws FunctionCallException {
 
 		double msecs = NumberFunction.evaluate(obj, nav);
 
@@ -68,7 +68,7 @@ public final class MillisToDateTimeFunction implements Function
 			throw new FunctionCallException(NAME + "() requires a number.");
 
 		try {
-			return DateTimeFunction.format(Instant.ofEpochMilli((long) msecs));
+			return Instant.ofEpochMilli((long) msecs);
 		} catch (Exception e) {
 			throw new FunctionCallException(NAME + "() evaluation of '" + msecs + "' failed.", e);
 		}

@@ -75,7 +75,7 @@ public final class DateTimeFunction implements Function
 	 * @return a date-time
 	 * @throws FunctionCallException if evaluation failed
 	 */
-	public static TemporalAccessor evaluate(String fun, Object dtm, Navigator nav) throws FunctionCallException {
+    static TemporalAccessor evaluate(String fun, Object dtm, Navigator nav) throws FunctionCallException {
 
 		try {
 			return parse( StringFunction.evaluate(dtm, nav) );

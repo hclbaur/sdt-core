@@ -78,7 +78,7 @@ public final class DateTimeToTimeZoneFunction implements Function
 	 * @return a zoned date-time 
 	 * @throws FunctionCallException if evaluation failed
 	 */
-	static ZonedDateTime evaluate(Object dtm, Object tmz, Navigator nav) throws FunctionCallException {
+    private static ZonedDateTime evaluate(Object dtm, Object tmz, Navigator nav) throws FunctionCallException {
 
 		TemporalAccessor tac = DateTimeFunction.evaluate(NAME, dtm, nav);
 		
@@ -106,7 +106,7 @@ public final class DateTimeToTimeZoneFunction implements Function
 	 * @return a zoned date-time
 	 * @throws DateTimeException if conversion to the target zone failed
 	 */
-	static ZonedDateTime evaluate(TemporalAccessor dtm, ZoneId zid) {
+    static ZonedDateTime evaluate(TemporalAccessor dtm, ZoneId zid) {
 
 		if (dtm instanceof LocalDateTime)
 			return ((LocalDateTime) dtm).atZone(zid);

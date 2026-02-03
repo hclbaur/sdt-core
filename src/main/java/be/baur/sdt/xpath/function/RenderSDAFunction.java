@@ -69,7 +69,7 @@ public final class RenderSDAFunction implements Function
 	 * @throws FunctionCallException if evaluation failed
 	 */
 	@SuppressWarnings("rawtypes")
-	static String evaluate(List list, boolean pretty, Navigator nav) throws FunctionCallException {
+	private static String evaluate(List list, boolean pretty, Navigator nav) throws FunctionCallException {
 
 		if (! list.isEmpty()) {
 

@@ -77,7 +77,7 @@ public final class CompareNumberFunction implements Function
 	 * @param nav      the navigator used
 	 * @return a signum value
 	 */
-	public static Double evaluate(Object num1, Object num2, boolean nanFirst, Navigator nav) {
+	private static Double evaluate(Object num1, Object num2, boolean nanFirst, Navigator nav) {
 
 		final Double d1 = NumberFunction.evaluate(num1, nav);
 		final Double d2 = NumberFunction.evaluate(num2, nav);

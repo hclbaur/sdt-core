@@ -59,7 +59,7 @@ public final class DocumentNodeFunction implements Function
 	 * @throws FunctionCallException if evaluation failed
 	 */
 	@SuppressWarnings("rawtypes")
-	static Node evaluate(List list, Navigator nav) throws FunctionCallException {
+	private static Node evaluate(List list, Navigator nav) throws FunctionCallException {
 
 		if (! list.isEmpty()) {
 
