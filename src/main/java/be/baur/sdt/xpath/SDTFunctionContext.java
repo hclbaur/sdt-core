@@ -30,6 +30,7 @@ import be.baur.sdt.xpath.function.ParseSDAFunction;
 import be.baur.sdt.xpath.function.RenderSDAFunction;
 import be.baur.sdt.xpath.function.RightFunction;
 import be.baur.sdt.xpath.function.StringJoinFunction;
+import be.baur.sdt.xpath.function.SubtractDateTimesFunction;
 import be.baur.sdt.xpath.function.SystemDateTimeFunction;
 import be.baur.sdt.xpath.function.SystemTimeZoneFunction;
 import be.baur.sdt.xpath.function.TimeZoneFromDateTime;
@@ -81,6 +82,7 @@ public class SDTFunctionContext implements FunctionContext {
 		FC.registerFunction(FUNCTIONS_NS_URI, ParseSDAFunction.NAME, new ParseSDAFunction());
 		FC.registerFunction(FUNCTIONS_NS_URI, RenderSDAFunction.NAME, new RenderSDAFunction());
 		FC.registerFunction(FUNCTIONS_NS_URI, RightFunction.NAME, new RightFunction());
+		FC.registerFunction(FUNCTIONS_NS_URI, SubtractDateTimesFunction.NAME, new SubtractDateTimesFunction());
 		FC.registerFunction(FUNCTIONS_NS_URI, SystemDateTimeFunction.NAME, new SystemDateTimeFunction());
 		FC.registerFunction(FUNCTIONS_NS_URI, SystemTimeZoneFunction.NAME, new SystemTimeZoneFunction());
 		FC.registerFunction(FUNCTIONS_NS_URI, TimeZoneFromDateTime.NAME, new TimeZoneFromDateTime());

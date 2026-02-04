@@ -113,12 +113,12 @@ public class TestSDTXPath {
 		t.so("S80", "sdt:dateTime-to-timezone('2025-10-26T03:00:00', 'Europe/Amsterdam')", doc, "2025-10-26T03:00:00+01:00");
 		t.so("F81", "sdt:dateTime-to-timezone('2025-03-30T01:00:00Z', 'a')", doc, "dateTime-to-timezone() time zone 'a' is invalid.");
 		t.so("F82", "sdt:dateTime-to-timezone()", doc, "dateTime-to-timezone() requires two arguments.");
-		
-		System.out.print("\n	    ");
 				
 		t.so("S83", "sdt:dateTime-to-local('1970-01-01T00:00:00')", doc, "1970-01-01T00:00:00");
 		t.so("S84", "sdt:dateTime-to-local('1970-01-01T00:00:00Z')", doc, "1970-01-01T00:00:00");
 		t.so("F85", "sdt:dateTime-to-local()", doc, "dateTime-to-local() requires one argument.");
+
+		System.out.print("\n	    ");
 		
 		t.so("S86", "sdt:implicit-timezone()", doc, ZoneId.systemDefault().toString());
 		t.so("F87", "sdt:implicit-timezone('a')", doc, "implicit-timezone() requires no arguments.");
@@ -155,6 +155,14 @@ public class TestSDTXPath {
 		t.so("S116", "sdt:add-yearMonth-to-dateTime('2025-10-26T02:00:00+02:00[Europe/Amsterdam]',0,1)", doc, "2025-11-26T02:00:00+01:00");
 		t.so("S117", "sdt:add-yearMonth-to-dateTime('2025-11-26T02:00:00+01:00[Europe/Amsterdam]',0,-1)", doc, "2025-10-26T02:00:00+01:00");
 		t.so("F118", "sdt:add-yearMonth-to-dateTime()", doc, "add-yearMonth-to-dateTime() requires three arguments.");
+
+		System.out.print("\n	    ");
+	
+		t.so("S120", "sdt:subtract-dateTimes(sdt:current-dateTime(),sdt:current-dateTime())", doc, "0.0");
+		t.so("S121", "sdt:subtract-dateTimes('1968-03-01T12:00','1968-02-28T12:00') div 3600000", doc, "48.0");
+		t.so("S122", "sdt:subtract-dateTimes('1968-02-28T12:00-05:00[America/New_York]','1968-02-28T12:00+01:00[Europe/Amsterdam]') div 3600000", doc, "6.0");
+		t.so("S123", "sdt:subtract-dateTimes('2025-03-30T01:00:00+01:00[Europe/Amsterdam]','2025-03-30T03:00:00+02:00[Europe/Amsterdam]') div 3600000", doc, "-1.0");
+		t.so("S124", "sdt:subtract-dateTimes('2025-10-26T02:00:00+02:00[Europe/Amsterdam]','2025-10-26T03:00:00+01:00[Europe/Amsterdam]') div 3600000", doc, "-2.0");
 	}
 
 }
