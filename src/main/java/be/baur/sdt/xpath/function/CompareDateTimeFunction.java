@@ -1,15 +1,10 @@
 package be.baur.sdt.xpath.function;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.temporal.TemporalAccessor;
 import java.util.List;
 
 import org.jaxen.Context;
 import org.jaxen.Function;
 import org.jaxen.FunctionCallException;
-import org.jaxen.Navigator;
 
 /**
  * <code><i>double</i> sdt:compare-dateTime( <i>date-time</i>, <i>date-time</i> )</code><br>
@@ -63,42 +58,15 @@ public final class CompareDateTimeFunction implements Function
 	/**
 	 * Compares two instances in time, returning -1, 0 or 1.
 	 *
-	 * @param dtm1 the first date-time
-	 * @param dtm2 the second date-time
-	 * @param nav  the navigator used
+	 * @param dtm1    the first date-time
+	 * @param dtm2    the second date-time
+	 * @param context the expression context
 	 * @return a signum value
 	 * @throws FunctionCallException if evaluation failed
 	 */
 	private static Double evaluate(Object dtm1, Object dtm2, Context context) throws FunctionCallException {
 
-		final Navigator nav = context.getNavigator();
-//		final ZoneId zid = ImplicitTimeZoneFunction.evaluate(context);
-//		
-//		ZonedDateTime zdtm1 = DateTimeToTimeZoneFunction.ifLocal(DateTimeFunction.evaluate(NAME, dtm1, nav), zid);
-//		ZonedDateTime zdtm2 = DateTimeToTimeZoneFunction.ifLocal(DateTimeFunction.evaluate(NAME, dtm2, nav), zid);
-		
-		TemporalAccessor tac1 = DateTimeFunction.evaluate(NAME, dtm1, nav);
-		TemporalAccessor tac2 = DateTimeFunction.evaluate(NAME, dtm2, nav);
-
-		final boolean local1 = (tac1 instanceof LocalDateTime);
-		final boolean local2 = (tac2 instanceof LocalDateTime);
-
-		/* If either date-time is local, adjust it to the implicit time zone */
-		if (local1 || local2) {
-			final ZoneId zid = ImplicitTimeZoneFunction.evaluate(context);
-			if (local1)
-				tac1 = DateTimeToTimeZoneFunction.evaluate(tac1, zid);
-			if (local2)
-				tac2 = DateTimeToTimeZoneFunction.evaluate(tac2, zid);
-		}
-
-		/*
-		 * ZonedDateTime.compareTo() treats equal instances in time in different time
-		 * zones as not equal, so I am using Instant.compareTo instead. Also note that
-		 * at this point both date-times will be zoned, not local.
-		 */
-		return (double) Math.signum((Instant.from(tac1)).compareTo(Instant.from(tac2)));
-		// COMPARE THIS TO SUBTRACT !
+		return Math.signum(SubtractDateTimesFunction.evaluate(dtm1, dtm2, context));
 	}
 
 }

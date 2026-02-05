@@ -159,10 +159,14 @@ public class TestSDTXPath {
 		System.out.print("\n	    ");
 	
 		t.so("S120", "sdt:subtract-dateTimes(sdt:current-dateTime(),sdt:current-dateTime())", doc, "0.0");
-		t.so("S121", "sdt:subtract-dateTimes('1968-03-01T12:00','1968-02-28T12:00') div 3600000", doc, "48.0");
-		t.so("S122", "sdt:subtract-dateTimes('1968-02-28T12:00-05:00[America/New_York]','1968-02-28T12:00+01:00[Europe/Amsterdam]') div 3600000", doc, "6.0");
-		t.so("S123", "sdt:subtract-dateTimes('2025-03-30T01:00:00+01:00[Europe/Amsterdam]','2025-03-30T03:00:00+02:00[Europe/Amsterdam]') div 3600000", doc, "-1.0");
-		t.so("S124", "sdt:subtract-dateTimes('2025-10-26T02:00:00+02:00[Europe/Amsterdam]','2025-10-26T03:00:00+01:00[Europe/Amsterdam]') div 3600000", doc, "-2.0");
+		t.so("S121", "sdt:subtract-dateTimes(sdt:dateTime-to-local(sdt:current-dateTime()),sdt:current-dateTime())", doc, "0.0");
+		t.so("S122", "sdt:subtract-dateTimes('1968-02-28T12:00+01:00[Europe/Amsterdam]','1968-02-28T12:00+01:00[Europe/Berlin]')", doc, "0.0");
+		t.so("S123", "sdt:subtract-dateTimes('1968-03-01T12:00','1968-02-28T12:00') div 3600000", doc, "48.0");
+		t.so("S124", "sdt:subtract-dateTimes('1968-02-28T12:00-05:00','1968-02-28T12:00+01:00') div 3600000", doc, "6.0");
+		t.so("S125", "sdt:subtract-dateTimes('1968-02-28T12:00+01:00[America/New_York]','1968-02-28T12:00+01:00[Europe/Amsterdam]') div 3600000", doc, "6.0");
+		t.so("S126", "sdt:subtract-dateTimes('2025-03-30T01:00:00','2025-03-30T03:00:00') div 3600000", doc, "-1.0");
+		t.so("S127", "sdt:subtract-dateTimes('2025-10-26T02:00:00+02:00','2025-10-26T03:00:00') div 3600000", doc, "-2.0");
+		t.so("S128", "sdt:subtract-dateTimes() div 3600000", doc, "subtract-dateTimes() requires two arguments.");
 	}
 
 }
