@@ -81,7 +81,7 @@ public class TestSDTXPath {
 		t.so("S51", "sdt:dateTime('1968-02-28T12:00')", doc, "1968-02-28T12:00:00");
 		t.so("S52", "sdt:dateTime('1968-02-28T12:00+01:00')", doc, "1968-02-28T12:00:00+01:00");
 		t.so("S53", "sdt:dateTime('1968-02-28T12:00+01:00[Europe/Amsterdam]')", doc, "1968-02-28T12:00:00+01:00");
-		t.so("S54", "sdt:dateTime('1968-02-28T12:00:00.000Z')", doc, "1968-02-28T12:00:00Z");
+		t.so("S54", "sdt:dateTime('1968-02-28T12:00:00.000000000Z')", doc, "1968-02-28T12:00:00Z");
 		t.so("F55", "sdt:dateTime('a')", doc, "dateTime() argument 'a' is invalid.");
 		t.so("F56", "sdt:dateTime()", doc, "dateTime() requires one argument.");
 		
