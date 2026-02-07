@@ -19,13 +19,12 @@ import org.jaxen.function.StringFunction;
 /**
  * <code><i>date-time</i> sdt:dateTime( <i>object</i> )</code><br>
  * <p>
- * A constructor that returns a date-time in extended ISO-8601 format. Real
- * date-time objects are currently not supported, so all date and time functions
- * operate on strings instead.
+ * A constructor that returns a local or zoned date-time. Real date-time objects
+ * are not supported, so all date and time functions operate on strings instead.
  * <p>
- * If the argument is a string compliant with extended ISO-8601 format, this
- * function returns a local or zoned date-time string in ISO_(LOCAL_)DATE_TIME,
- * or it will throw an exception if no date-time string can be constructed.
+ * The argument must be a temporal object or a string in ISO-like format as
+ * specified by {@link DateTimeFormatter#ISO_DATE_TIME}, or an exception will be
+ * thrown.
  * <p>
  * Examples:
  * <p>
@@ -33,6 +32,8 @@ import org.jaxen.function.StringFunction;
  * <code>1968-02-28T12:00:00</code>.<br>
  * <code>sdt:dateTime('1968-02-28T12:00+01:00')</code> returns
  * <code>1968-02-28T12:00:00+01:00</code>.<br>
+ * <code>sdt:dateTime('1968-02-28T12:00:00.500+01:00[Europe/Amsterdam]')</code> returns
+ * <code>1968-02-28T12:00:00:00.5+01:00[Europe/Amsterdam]</code>.<br>
  */
 public final class DateTimeFunction implements Function
 {
@@ -45,7 +46,7 @@ public final class DateTimeFunction implements Function
  
 
 	/**
-	 * Returns a local or zoned date-time string in extended ISO-8601 format.
+	 * Returns a local or zoned date-time.
 	 *
 	 * @param context the expression context
 	 * @param args    an argument list that contains one item
@@ -70,28 +71,36 @@ public final class DateTimeFunction implements Function
 	 * Returns a local or zoned date-time object.
 	 * 
 	 * @param fun name of the calling function
-	 * @param dtm a date-time
+	 * @param obj the object to be converted to a date-time
 	 * @param nav the navigator used
-	 * @return a date-time
+	 * @return a local or zoned date-time, not null
 	 * @throws FunctionCallException if evaluation failed
 	 */
-    static TemporalAccessor evaluate(String fun, Object dtm, Navigator nav) throws FunctionCallException {
+	static TemporalAccessor evaluate(String fun, Object obj, Navigator nav) throws FunctionCallException {
 
+		if (obj instanceof ZonedDateTime || obj instanceof LocalDateTime)
+			return (TemporalAccessor) obj;
+
+		if (obj instanceof Instant)
+			return ZonedDateTime.from((Instant) obj);
+		
 		try {
-			return parse( StringFunction.evaluate(dtm, nav) );
-		}
-		catch (Exception e) {
-			throw new FunctionCallException(fun + "() argument '" + dtm + "' is invalid.", e);
+			return parse(StringFunction.evaluate(obj, nav));
+		} catch (Exception e) {
+			throw new FunctionCallException(fun + "() argument '" + obj + "' is not a valid date-time.", e);
 		}
 	}
 
 
 	/**
-	 * Returns a local or zoned date-time object parsed from a string.
+	 * Returns a local or zoned date-time object parsed from a string in ISO-like
+	 * format, optionally including a time zone id.
 	 * 
-	 * @param dtms a string in extended ISO-8601 format
+	 * @param dtms a string representing a date-time
 	 * @return a temporal object, not null
 	 * @throws DateTimeParseException if no date-time could be constructed
+	 * 
+	 * @see DateTimeFormatter#ISO_DATE_TIME
 	 */
 	public static TemporalAccessor parse(String dtms) {
 
@@ -103,7 +112,7 @@ public final class DateTimeFunction implements Function
 	 * Returns a local or zoned date-time object parsed from a string, using a
 	 * formatter.
 	 * 
-	 * @param dtms a formatted date-time string
+	 * @param dtms a string representing a date-time
 	 * @param fmt  a formatter, not null
 	 * @return a temporal object, not null
 	 * @throws DateTimeParseException if no date-time could be constructed
@@ -116,20 +125,24 @@ public final class DateTimeFunction implements Function
 
 
 	/**
-	 * Renders a local or zoned date-time object as a string in extended ISO-8601
-	 * format.
+	 * Returns a string representation of a temporal object in ISO-like format
+	 * including the time zone id (if present).
 	 * 
 	 * @param dtm a temporal object, not null
 	 * @return a formatted date-time string
 	 * @throws DateTimeException if formatting failed
+	 * 
+	 * @see DateTimeFormatter#ISO_DATE_TIME
 	 */
-	public static String format(TemporalAccessor dtm) {		
-		return formatTemporal(dtm, null);
+	public static String format(TemporalAccessor dtm) {
+
+		Objects.requireNonNull(dtm, "date-time must not be null");
+		return formatTemporal(dtm, DateTimeFormatter.ISO_DATE_TIME);
 	}
 
 
 	/**
-	 * Renders a local or zoned date-time object as a string, using a formatter.
+	 * Returns a string representation of a temporal object, using a formatter.
 	 * Supported objects are LocalDateTime and ZonedDateTime.
 	 * 
 	 * @param dtm a temporal object, not null

@@ -351,18 +351,20 @@ See also [Section 15.3 of the XPath Specification](https://www.w3.org/TR/xpath-f
 
 See also [system-dateTime](#system-dateTime)
 
+
 #### dateTime
 
 <code><i>date-time</i> sdt:dateTime( <i>string</i> )</code>
 
-A constructor that returns a date-time in extended ISO-8601 format. Real date-time objects are currently not supported, so all date and time functions operate on strings instead.
+A constructor that returns a local or zoned date-time. Real date-time objects are not supported, so all date and time functions operate on strings instead.
 
-If the argument is a string compliant with extended ISO-8601 format, this function returns a local or zoned date-time string in ISO_(LOCAL_)DATE_TIME format, or it will throw an exception if no date-time string can be constructed.
+The argument must be a temporal object or a string in ISO-like format as specified by [DateTimeFormatter#ISO_DATE_TIME](https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html#ISO_DATE_TIME), or an exception will be thrown.
 
 Examples:
 
 <code>sdt:dateTime('1968-02-28T12:00')</code> returns <code>1968-02-28T12:00:00</code>.<br>
-<code>sdt:dateTime('1968-02-28T12:00+01:00')</code> returns <code>1968-02-28T12:00:00+01:00</code>.
+<code>sdt:dateTime('1968-02-28T12:00+01:00')</code> returns <code>1968-02-28T12:00:00+01:00</code>.<br>
+<code>sdt:dateTime('1968-02-28T12:00:00.500+01:00[Europe/Amsterdam]')</code> returns <code>1968-02-28T12:00:00.5+01:00[Europe/Amsterdam]</code>.
 
 
 #### dateTime-to-local

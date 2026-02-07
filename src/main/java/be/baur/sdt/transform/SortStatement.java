@@ -98,6 +98,7 @@ public class SortStatement extends XPathStatement {
 	 * Returns a comparator appropriate for this sort statement. If no specific
 	 * comparator expression has been set, a lexicographical compare is implied.
 	 * 
+	 * @param traco the transform context
 	 * @param staco the current statement context
 	 * @return a comparator, not null
 	 * @throws SAXPathException if an XPath evaluation error occurs

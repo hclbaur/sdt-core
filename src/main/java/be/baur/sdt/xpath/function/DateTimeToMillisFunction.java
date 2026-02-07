@@ -15,7 +15,7 @@ import org.jaxen.FunctionCallException;
  * Converts a date-time into a number of milliseconds elapsed since the epoch. A
  * negative number is returned for a point in time prior to the epoch.
  * <p>
- * <i>If a local date-time is supplied, the implicit time zone will be used to
+ * <i>Note:</i> if a local date-time is supplied, the implicit time zone will be used to
  * calculate the offset from UTC.
  * <p>
  * Examples:

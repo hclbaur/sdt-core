@@ -29,4 +29,7 @@ transform {
 		}	
 	}
 
+	println "sdt:system-dateTime()"
+	println "sdt:timezone-from-dateTime(sdt:system-dateTime())"
+	
 }

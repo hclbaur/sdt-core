@@ -80,9 +80,9 @@ public class TestSDTXPath {
 		
 		t.so("S51", "sdt:dateTime('1968-02-28T12:00')", doc, "1968-02-28T12:00:00");
 		t.so("S52", "sdt:dateTime('1968-02-28T12:00+01:00')", doc, "1968-02-28T12:00:00+01:00");
-		t.so("S53", "sdt:dateTime('1968-02-28T12:00+01:00[Europe/Amsterdam]')", doc, "1968-02-28T12:00:00+01:00");
-		t.so("S54", "sdt:dateTime('1968-02-28T12:00:00.000000000Z')", doc, "1968-02-28T12:00:00Z");
-		t.so("F55", "sdt:dateTime('a')", doc, "dateTime() argument 'a' is invalid.");
+		t.so("S53", "sdt:dateTime('1968-02-28T12:00:00.500+01:00[Europe/Amsterdam]')", doc, "1968-02-28T12:00:00.5+01:00[Europe/Amsterdam]");
+		t.so("S54", "sdt:dateTime('1968-02-28T12:00:00.000000001Z')", doc, "1968-02-28T12:00:00.000000001Z");
+		t.so("F55", "sdt:dateTime('a')", doc, "dateTime() argument 'a' is not a valid date-time.");
 		t.so("F56", "sdt:dateTime()", doc, "dateTime() requires one argument.");
 		
 		t.so("S57", "sdt:format-dateTime('1968-02-28T12:00','yyyy/MM/dd HH:mm')", doc, "1968/02/28 12:00");
@@ -105,12 +105,12 @@ public class TestSDTXPath {
 		t.so("F73", "sdt:parse-dateTime('a','yyyyMMddHHmmss')", doc, "parse-dateTime() failed to parse 'a'.");
 		t.so("F74", "sdt:parse-dateTime()", doc, "parse-dateTime() requires two arguments.");
 		
-		t.so("S75", "sdt:dateTime-to-timezone('2025-03-30T01:00:00Z', 'Europe/Amsterdam')", doc, "2025-03-30T03:00:00+02:00");
-		t.so("S76", "sdt:dateTime-to-timezone('2025-10-26T00:00:00Z', 'Europe/Amsterdam')", doc, "2025-10-26T02:00:00+02:00");
-		t.so("S77", "sdt:dateTime-to-timezone('2025-10-26T01:00:00Z', 'Europe/Amsterdam')", doc, "2025-10-26T02:00:00+01:00");
-		t.so("S78", "sdt:dateTime-to-timezone('2025-03-30T02:00:00', 'Europe/Amsterdam')", doc, "2025-03-30T03:00:00+02:00");
-		t.so("S79", "sdt:dateTime-to-timezone('2025-10-26T02:00:00', 'Europe/Amsterdam')", doc, "2025-10-26T02:00:00+02:00");
-		t.so("S80", "sdt:dateTime-to-timezone('2025-10-26T03:00:00', 'Europe/Amsterdam')", doc, "2025-10-26T03:00:00+01:00");
+		t.so("S75", "sdt:dateTime-to-timezone('2025-03-30T01:00:00Z', 'Europe/Amsterdam')", doc, "2025-03-30T03:00:00+02:00[Europe/Amsterdam]");
+		t.so("S76", "sdt:dateTime-to-timezone('2025-10-26T00:00:00Z', 'Europe/Amsterdam')", doc, "2025-10-26T02:00:00+02:00[Europe/Amsterdam]");
+		t.so("S77", "sdt:dateTime-to-timezone('2025-10-26T01:00:00Z', 'Europe/Amsterdam')", doc, "2025-10-26T02:00:00+01:00[Europe/Amsterdam]");
+		t.so("S78", "sdt:dateTime-to-timezone('2025-03-30T02:00:00', 'Europe/Amsterdam')", doc, "2025-03-30T03:00:00+02:00[Europe/Amsterdam]");
+		t.so("S79", "sdt:dateTime-to-timezone('2025-10-26T02:00:00', 'Europe/Amsterdam')", doc, "2025-10-26T02:00:00+02:00[Europe/Amsterdam]");
+		t.so("S80", "sdt:dateTime-to-timezone('2025-10-26T03:00:00', 'Europe/Amsterdam')", doc, "2025-10-26T03:00:00+01:00[Europe/Amsterdam]");
 		t.so("F81", "sdt:dateTime-to-timezone('2025-03-30T01:00:00Z', 'a')", doc, "dateTime-to-timezone() time zone 'a' is invalid.");
 		t.so("F82", "sdt:dateTime-to-timezone()", doc, "dateTime-to-timezone() requires two arguments.");
 				
@@ -139,21 +139,21 @@ public class TestSDTXPath {
 		t.so("S100", "sdt:add-to-dateTime('1968-02-28T23:00:00',0,0,0,0)", doc, "1968-02-28T23:00:00");
 		t.so("S101", "sdt:add-to-dateTime('1968-02-28T23:00:00',1,2,3,4)", doc, "1968-03-01T01:03:04");
 		t.so("S102", "sdt:add-to-dateTime('1968-03-01T01:03:04',-1,-2,-3,-4)", doc, "1968-02-28T23:00:00");
-		t.so("S104", "sdt:add-to-dateTime('2025-03-29T03:00:00+01:00[Europe/Amsterdam]',1,0,0,0)", doc, "2025-03-30T04:00:00+02:00");
-		t.so("S105", "sdt:add-to-dateTime('2025-03-30T01:00:00+01:00[Europe/Amsterdam]',0,1,0,0)", doc, "2025-03-30T03:00:00+02:00");
-		t.so("S106", "sdt:add-to-dateTime('2025-10-26T02:00:00+02:00[Europe/Amsterdam]',0,1,0,0)", doc, "2025-10-26T02:00:00+01:00");
-		t.so("S107", "sdt:add-to-dateTime('2025-10-26T03:00:00+01:00[Europe/Amsterdam]',0,-1,0,0)", doc, "2025-10-26T02:00:00+01:00");	
-		t.so("S108", "sdt:add-to-dateTime('2025-10-27T01:00:00+01:00[Europe/Amsterdam]',-1,0,0,0)", doc, "2025-10-26T02:00:00+02:00");
+		t.so("S104", "sdt:add-to-dateTime('2025-03-29T03:00:00+01:00[Europe/Amsterdam]',1,0,0,0)", doc, "2025-03-30T04:00:00+02:00[Europe/Amsterdam]");
+		t.so("S105", "sdt:add-to-dateTime('2025-03-30T01:00:00+01:00[Europe/Amsterdam]',0,1,0,0)", doc, "2025-03-30T03:00:00+02:00[Europe/Amsterdam]");
+		t.so("S106", "sdt:add-to-dateTime('2025-10-26T02:00:00+02:00[Europe/Amsterdam]',0,1,0,0)", doc, "2025-10-26T02:00:00+01:00[Europe/Amsterdam]");
+		t.so("S107", "sdt:add-to-dateTime('2025-10-26T03:00:00+01:00[Europe/Amsterdam]',0,-1,0,0)", doc, "2025-10-26T02:00:00+01:00[Europe/Amsterdam]");	
+		t.so("S108", "sdt:add-to-dateTime('2025-10-27T01:00:00+01:00[Europe/Amsterdam]',-1,0,0,0)", doc, "2025-10-26T02:00:00+02:00[Europe/Amsterdam]");
 		t.so("F109", "sdt:add-to-dateTime()", doc, "add-to-dateTime() requires five arguments.");
 		
 		t.so("S110", "sdt:add-yearMonth-to-dateTime('1968-02-29T00:00:00',0,0)", doc, "1968-02-29T00:00:00");
 		t.so("S111", "sdt:add-yearMonth-to-dateTime('1968-02-29T00:00:00',1,0)", doc, "1969-02-28T00:00:00");
 		t.so("S112", "sdt:add-yearMonth-to-dateTime('1968-03-31T00:00:00',0,-1)", doc, "1968-02-29T00:00:00");
-		t.so("S113", "sdt:add-yearMonth-to-dateTime('2025-03-30T02:00:00+01:00[Europe/Amsterdam]',0,1)", doc, "2025-04-30T03:00:00+02:00");
-		t.so("S114", "sdt:add-yearMonth-to-dateTime('2025-04-30T02:00:00+02:00[Europe/Amsterdam]',0,-1)", doc, "2025-03-30T03:00:00+02:00");
-		t.so("S115", "sdt:add-yearMonth-to-dateTime('2025-09-26T02:00:00+01:00[Europe/Amsterdam]',0,1)", doc, "2025-10-26T02:00:00+02:00");
-		t.so("S116", "sdt:add-yearMonth-to-dateTime('2025-10-26T02:00:00+02:00[Europe/Amsterdam]',0,1)", doc, "2025-11-26T02:00:00+01:00");
-		t.so("S117", "sdt:add-yearMonth-to-dateTime('2025-11-26T02:00:00+01:00[Europe/Amsterdam]',0,-1)", doc, "2025-10-26T02:00:00+01:00");
+		t.so("S113", "sdt:add-yearMonth-to-dateTime('2025-03-30T02:00:00+01:00[Europe/Amsterdam]',0,1)", doc, "2025-04-30T03:00:00+02:00[Europe/Amsterdam]");
+		t.so("S114", "sdt:add-yearMonth-to-dateTime('2025-04-30T02:00:00+02:00[Europe/Amsterdam]',0,-1)", doc, "2025-03-30T03:00:00+02:00[Europe/Amsterdam]");
+		t.so("S115", "sdt:add-yearMonth-to-dateTime('2025-09-26T02:00:00+01:00[Europe/Amsterdam]',0,1)", doc, "2025-10-26T02:00:00+02:00[Europe/Amsterdam]");
+		t.so("S116", "sdt:add-yearMonth-to-dateTime('2025-10-26T02:00:00+02:00[Europe/Amsterdam]',0,1)", doc, "2025-11-26T02:00:00+01:00[Europe/Amsterdam]");
+		t.so("S117", "sdt:add-yearMonth-to-dateTime('2025-11-26T02:00:00+01:00[Europe/Amsterdam]',0,-1)", doc, "2025-10-26T02:00:00+01:00[Europe/Amsterdam]");
 		t.so("F118", "sdt:add-yearMonth-to-dateTime()", doc, "add-yearMonth-to-dateTime() requires three arguments.");
 
 		System.out.print("\n	    ");

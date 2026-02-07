@@ -5,7 +5,7 @@
 This release is in development.
 
 - `Deprecated` SDT namespace prefix and URI declarations in the SDT utility class.
-- Added several date-time related SDT functions.
+- Added several date and time related SDT functions.
 - Added SDTFunctionContext and SDTNamespaceContext.
 - Added TransformContext.getXPath().
 - Added SDAXPath.withSDTSupport().
