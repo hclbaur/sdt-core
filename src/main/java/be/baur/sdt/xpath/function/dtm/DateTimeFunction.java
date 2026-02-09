@@ -1,7 +1,6 @@
-package be.baur.sdt.xpath.function;
+package be.baur.sdt.xpath.function.dtm;
 
 import java.time.DateTimeException;
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -50,7 +49,7 @@ public final class DateTimeFunction implements Function
 	 *
 	 * @param context the expression context
 	 * @param args    an argument list that contains one item
-	 * @return a date-time
+	 * @return a local or zoned date-time
 	 * @throws FunctionCallException if an inappropriate number of arguments is
 	 *                               supplied, or if evaluation failed
 	 */
@@ -76,13 +75,13 @@ public final class DateTimeFunction implements Function
 	 * @return a local or zoned date-time, not null
 	 * @throws FunctionCallException if evaluation failed
 	 */
-	static TemporalAccessor evaluate(String fun, Object obj, Navigator nav) throws FunctionCallException {
+	public static TemporalAccessor evaluate(String fun, Object obj, Navigator nav) throws FunctionCallException {
 
-		if (obj instanceof ZonedDateTime || obj instanceof LocalDateTime)
-			return (TemporalAccessor) obj;
-
-		if (obj instanceof Instant)
-			return ZonedDateTime.from((Instant) obj);
+//		if (obj instanceof ZonedDateTime || obj instanceof LocalDateTime)
+//			return (TemporalAccessor) obj;
+//
+//		if (obj instanceof Instant)
+//			return ZonedDateTime.from((Instant) obj);
 		
 		try {
 			return parse(StringFunction.evaluate(obj, nav));
@@ -97,7 +96,7 @@ public final class DateTimeFunction implements Function
 	 * format, optionally including a time zone id.
 	 * 
 	 * @param dtms a string representing a date-time
-	 * @return a temporal object, not null
+	 * @return a local or zoned date-time, not null
 	 * @throws DateTimeParseException if no date-time could be constructed
 	 * 
 	 * @see DateTimeFormatter#ISO_DATE_TIME
@@ -114,7 +113,7 @@ public final class DateTimeFunction implements Function
 	 * 
 	 * @param dtms a string representing a date-time
 	 * @param fmt  a formatter, not null
-	 * @return a temporal object, not null
+	 * @return a local or zoned date-time, not null
 	 * @throws DateTimeParseException if no date-time could be constructed
 	 */
 	public static TemporalAccessor parse(String dtms, DateTimeFormatter fmt) {
@@ -128,7 +127,7 @@ public final class DateTimeFunction implements Function
 	 * Returns a string representation of a temporal object in ISO-like format
 	 * including the time zone id (if present).
 	 * 
-	 * @param dtm a temporal object, not null
+	 * @param dtm a local or zoned date-time, not null
 	 * @return a formatted date-time string
 	 * @throws DateTimeException if formatting failed
 	 * 
@@ -145,7 +144,7 @@ public final class DateTimeFunction implements Function
 	 * Returns a string representation of a temporal object, using a formatter.
 	 * Supported objects are LocalDateTime and ZonedDateTime.
 	 * 
-	 * @param dtm a temporal object, not null
+	 * @param dtm a local or zoned date-time, not null
 	 * @param fmt a formatter, not null
 	 * @return a formatted date-time string
 	 * @throws DateTimeException if formatting failed
@@ -159,13 +158,13 @@ public final class DateTimeFunction implements Function
 	
 	/*
 	 * Private helper that renders a temporal object as a string, using a formatter.
-	 * Supported objects are Instant, LocalDateTime and ZonedDateTime. Will throw a
+	 * Supported objects are LocalDateTime and ZonedDateTime. Will throw a
 	 * DateTimeException if formatting failed.
 	 */
 	private static String formatTemporal(TemporalAccessor tac, DateTimeFormatter fmt) {
 		
-		if (tac instanceof Instant)
-			return ((Instant) tac).toString();
+//		if (tac instanceof Instant)
+//			return ((Instant) tac).toString();
 		if (tac instanceof LocalDateTime)
 			return ((LocalDateTime) tac).format(fmt == null ? DateTimeFormatter.ISO_LOCAL_DATE_TIME : fmt);
 		if (tac instanceof ZonedDateTime)

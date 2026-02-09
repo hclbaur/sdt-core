@@ -12,17 +12,11 @@ import org.jaxen.XPathFunctionContext;
 
 import be.baur.sdt.xpath.function.AddToDateTimeFunction;
 import be.baur.sdt.xpath.function.AddYearMonthToDateTimeFunction;
-import be.baur.sdt.xpath.function.CompareDateTimeFunction;
 import be.baur.sdt.xpath.function.CompareNumberFunction;
 import be.baur.sdt.xpath.function.CompareStringFunction;
-import be.baur.sdt.xpath.function.CurrentDateTimeFunction;
-import be.baur.sdt.xpath.function.DateTimeFunction;
 import be.baur.sdt.xpath.function.DateTimeToLocalFunction;
-import be.baur.sdt.xpath.function.DateTimeToMillisFunction;
-import be.baur.sdt.xpath.function.DateTimeToTimeZoneFunction;
 import be.baur.sdt.xpath.function.DocumentNodeFunction;
 import be.baur.sdt.xpath.function.FormatDateTimeFunction;
-import be.baur.sdt.xpath.function.ImplicitTimeZoneFunction;
 import be.baur.sdt.xpath.function.LeftFunction;
 import be.baur.sdt.xpath.function.MillisToDateTimeFunction;
 import be.baur.sdt.xpath.function.ParseDateTimeFunction;
@@ -30,11 +24,17 @@ import be.baur.sdt.xpath.function.ParseSDAFunction;
 import be.baur.sdt.xpath.function.RenderSDAFunction;
 import be.baur.sdt.xpath.function.RightFunction;
 import be.baur.sdt.xpath.function.StringJoinFunction;
-import be.baur.sdt.xpath.function.SubtractDateTimesFunction;
-import be.baur.sdt.xpath.function.SystemDateTimeFunction;
-import be.baur.sdt.xpath.function.SystemTimeZoneFunction;
 import be.baur.sdt.xpath.function.TimeZoneFromDateTime;
 import be.baur.sdt.xpath.function.TokenizeFunction;
+import be.baur.sdt.xpath.function.dtm.CompareDateTimeFunction;
+import be.baur.sdt.xpath.function.dtm.CurrentDateTimeFunction;
+import be.baur.sdt.xpath.function.dtm.DateTimeFunction;
+import be.baur.sdt.xpath.function.dtm.DateTimeToMillisFunction;
+import be.baur.sdt.xpath.function.dtm.DateTimeToTimeZoneFunction;
+import be.baur.sdt.xpath.function.dtm.ImplicitTimeZoneFunction;
+import be.baur.sdt.xpath.function.dtm.SubtractDateTimesFunction;
+import be.baur.sdt.xpath.function.dtm.SystemDateTimeFunction;
+import be.baur.sdt.xpath.function.dtm.SystemTimeZoneFunction;
 
 /**
  * A <code>FunctionContext</code> providing the core XPath functions plus

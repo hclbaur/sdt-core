@@ -9,6 +9,8 @@ import org.jaxen.Function;
 import org.jaxen.FunctionCallException;
 import org.jaxen.Navigator;
 
+import be.baur.sdt.xpath.function.dtm.DateTimeFunction;
+
 /**
  * <code><i>date-time</i> dateTime-to-local( <i>date-time</i> )</code><br>
  * <p>

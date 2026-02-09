@@ -11,6 +11,8 @@ import org.jaxen.FunctionCallException;
 import org.jaxen.Navigator;
 import org.jaxen.function.StringFunction;
 
+import be.baur.sdt.xpath.function.dtm.DateTimeFunction;
+
 /**
  * <code><i>string</i> sdt:format-dateTime( <i>date-time</i>, <i>pattern</i> )</code><br>
  * <p>

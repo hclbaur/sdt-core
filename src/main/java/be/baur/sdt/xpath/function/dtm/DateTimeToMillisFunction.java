@@ -1,4 +1,4 @@
-package be.baur.sdt.xpath.function;
+package be.baur.sdt.xpath.function.dtm;
 
 import java.time.Instant;
 import java.time.LocalDateTime;

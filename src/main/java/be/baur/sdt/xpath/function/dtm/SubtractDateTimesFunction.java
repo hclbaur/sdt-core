@@ -1,4 +1,4 @@
-package be.baur.sdt.xpath.function;
+package be.baur.sdt.xpath.function.dtm;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -86,7 +86,8 @@ public final class SubtractDateTimesFunction implements Function
 		try {
 			/* If either date-time is local, adjust it to the implicit time zone */
 			if (local1 || local2) {
-				final ZoneId zid = ImplicitTimeZoneFunction.evaluate(NAME, context);
+
+				ZoneId zid = ImplicitTimeZoneFunction.evaluate(NAME, context);
 				if (local1)
 					tac1 = DateTimeToTimeZoneFunction.evaluate(tac1, zid);
 				if (local2)

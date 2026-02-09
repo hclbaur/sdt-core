@@ -12,6 +12,8 @@ import org.jaxen.FunctionCallException;
 import org.jaxen.Navigator;
 import org.jaxen.function.NumberFunction;
 
+import be.baur.sdt.xpath.function.dtm.DateTimeFunction;
+
 /**
  * <code><i>date-time</i> add-to-dateTime( <i>date-time</i>, <i>days</i>, <i>hours</i>, <i>minutes</i>, <i>seconds</i> )</code><br>
  * <p>

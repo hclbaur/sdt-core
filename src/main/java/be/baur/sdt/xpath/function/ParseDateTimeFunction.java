@@ -10,6 +10,8 @@ import org.jaxen.FunctionCallException;
 import org.jaxen.Navigator;
 import org.jaxen.function.StringFunction;
 
+import be.baur.sdt.xpath.function.dtm.DateTimeFunction;
+
 /**
  * <code><i>date-time</i> sdt:parse-dateTime( <i>string</i>, <i>string</i> )</code><br>
  * <p>

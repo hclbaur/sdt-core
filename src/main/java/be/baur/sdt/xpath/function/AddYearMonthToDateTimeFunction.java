@@ -11,6 +11,8 @@ import org.jaxen.FunctionCallException;
 import org.jaxen.Navigator;
 import org.jaxen.function.NumberFunction;
 
+import be.baur.sdt.xpath.function.dtm.DateTimeFunction;
+
 /**
  * <code><i>date-time</i> add-yearMonth-to-dateTime( <i>date-time</i>, <i>years</i>, <i>months</i> )</code><br>
  * <p>

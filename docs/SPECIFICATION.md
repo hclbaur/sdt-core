@@ -541,7 +541,7 @@ Note: if either argument is a local date-time, the implicit time zone will be us
 
 <code><i>date-time</i> sdt:system-dateTime()</code>
  
-Returns the current date and time (in extended ISO-8601) format from the system clock in the default time zone.
+Returns the current date and time from the system clock in the default time zone.
 
 Note: this function is non-deterministic and context-independent; multiple invocations within the same execution context may return a different result.
 

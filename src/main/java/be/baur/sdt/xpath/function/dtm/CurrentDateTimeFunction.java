@@ -1,4 +1,4 @@
-package be.baur.sdt.xpath.function;
+package be.baur.sdt.xpath.function.dtm;
 
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -58,10 +58,10 @@ public final class CurrentDateTimeFunction implements Function
 	 * Returns the current date and time.
 	 * 
 	 * @param context the expression context
-	 * @return a zoned date-time
+	 * @return a zoned date-time, not null
 	 * @throws FunctionCallException if not called from an SDT context
 	 */
-	private static ZonedDateTime evaluate(Context context) {
+    private  static ZonedDateTime evaluate(Context context) {
 		
 		FunctionContext fc = context.getContextSupport().getFunctionContext();
 		

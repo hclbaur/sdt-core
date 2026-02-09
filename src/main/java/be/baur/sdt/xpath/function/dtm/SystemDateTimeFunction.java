@@ -1,4 +1,4 @@
-package be.baur.sdt.xpath.function;
+package be.baur.sdt.xpath.function.dtm;
 
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -10,11 +10,12 @@ import org.jaxen.FunctionCallException;
 /**
  * <code><i>date-time</i> sdt:system-dateTime()</code><br>
  * <p>
- * Returns the current date and time (in extended ISO-8601) format from the
- * system clock in the default time zone.
+ * Returns the current date and time from the system clock in the default time
+ * zone.
  * <p>
- * <i>Note</i>: this function is non-deterministic and context-independent; multiple
- * invocations within the same execution context may return a different result.
+ * <i>Note</i>: this function is non-deterministic and context-independent;
+ * multiple invocations within the same execution context may return a different
+ * result.
  * 
  * @see CurrentDateTimeFunction
  */
@@ -26,6 +27,7 @@ public final class SystemDateTimeFunction implements Function
      * Create a new <code>SystemDateTimeFunction</code> object.
      */
     public SystemDateTimeFunction() {}
+
 
 	/**
 	 * Returns the system date and time.
@@ -41,7 +43,7 @@ public final class SystemDateTimeFunction implements Function
 	public Object call(Context context, List args) throws FunctionCallException
 	{
 		if (args.size() == 0)
-			return DateTimeFunction.format( evaluate(context) );
+			return DateTimeFunction.format( evaluate() );
 
 		throw new FunctionCallException(NAME + "() requires no arguments.");
 	}
@@ -50,10 +52,9 @@ public final class SystemDateTimeFunction implements Function
 	/**
 	 * Returns the system date and time.
 	 * 
-	 * @param context the expression context
 	 * @return a zoned date-time, not null
 	 */
-	private static ZonedDateTime evaluate(Context context) {
+	private static ZonedDateTime evaluate() {
 		
 		return ZonedDateTime.now();
 	}
