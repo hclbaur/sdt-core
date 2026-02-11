@@ -70,14 +70,14 @@ public final class ImplicitTimeZoneFunction implements Function
 	 * @return a time zone id, not null
 	 * @throws FunctionCallException if not called from an SDT context
 	 */
-	public static ZoneId evaluate(String fun, Context context) {
+	public static ZoneId evaluate(String fun, Context context) throws FunctionCallException {
 
 		FunctionContext fc = context.getContextSupport().getFunctionContext();
 
 		if (fc instanceof SDTFunctionContext)
 			return ((SDTFunctionContext) fc).getImplicitTimeZone();
 		
-		throw new AssertionError(fun + "() not called from an SDT context.");
+		throw new FunctionCallException(fun + "() not called from an SDT context.");
 	}
 
 }

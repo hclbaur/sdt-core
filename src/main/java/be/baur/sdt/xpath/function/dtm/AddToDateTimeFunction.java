@@ -1,4 +1,4 @@
-package be.baur.sdt.xpath.function;
+package be.baur.sdt.xpath.function.dtm;
 
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
@@ -11,8 +11,6 @@ import org.jaxen.Function;
 import org.jaxen.FunctionCallException;
 import org.jaxen.Navigator;
 import org.jaxen.function.NumberFunction;
-
-import be.baur.sdt.xpath.function.dtm.DateTimeFunction;
 
 /**
  * <code><i>date-time</i> add-to-dateTime( <i>date-time</i>, <i>days</i>, <i>hours</i>, <i>minutes</i>, <i>seconds</i> )</code><br>
@@ -98,10 +96,14 @@ public final class AddToDateTimeFunction implements Function
 			throw new FunctionCallException(NAME + "() seconds must be numeric.");
 		totalsec += d.longValue();
 
-		if (tac instanceof LocalDateTime)
-			return ((LocalDateTime) tac).plus(totalsec, ChronoUnit.SECONDS);
-		else
-			return ((ZonedDateTime) tac).plus(totalsec, ChronoUnit.SECONDS);
+		try {
+			if (tac instanceof LocalDateTime)
+				return ((LocalDateTime) tac).plus(totalsec, ChronoUnit.SECONDS);
+			else
+				return ((ZonedDateTime) tac).plus(totalsec, ChronoUnit.SECONDS);
+		} catch (Exception e) {
+			throw new FunctionCallException(NAME + "() failed to add " + totalsec + " seconds.", e);
+		}
 	}
 
 }

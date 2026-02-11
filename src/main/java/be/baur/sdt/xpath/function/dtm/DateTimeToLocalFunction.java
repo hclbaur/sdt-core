@@ -1,5 +1,6 @@
-package be.baur.sdt.xpath.function;
+package be.baur.sdt.xpath.function.dtm;
 
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.time.temporal.TemporalAccessor;
 import java.util.List;
@@ -8,8 +9,6 @@ import org.jaxen.Context;
 import org.jaxen.Function;
 import org.jaxen.FunctionCallException;
 import org.jaxen.Navigator;
-
-import be.baur.sdt.xpath.function.dtm.DateTimeFunction;
 
 /**
  * <code><i>date-time</i> dateTime-to-local( <i>date-time</i> )</code><br>
@@ -59,16 +58,16 @@ public final class DateTimeToLocalFunction implements Function
 	 * 
 	 * @param dtm a date-time
 	 * @param nav the navigator used
-	 * @return a local date-time
+	 * @return a local date-time, not null
 	 * @throws FunctionCallException if evaluation failed
 	 */
-    private static TemporalAccessor evaluate(Object dtm, Navigator nav) throws FunctionCallException {
+    private static LocalDateTime evaluate(Object dtm, Navigator nav) throws FunctionCallException {
 
 		TemporalAccessor tac = DateTimeFunction.evaluate(NAME, dtm, nav);
 
 		if (tac instanceof ZonedDateTime)
 			tac = ((ZonedDateTime) tac).toLocalDateTime();
 
-		return tac;
+		return (LocalDateTime) tac;
 	}
 }

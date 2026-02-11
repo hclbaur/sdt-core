@@ -1,4 +1,4 @@
-package be.baur.sdt.xpath.function;
+package be.baur.sdt.xpath.function.dtm;
 
 import java.time.Instant;
 import java.time.ZoneOffset;
@@ -10,8 +10,6 @@ import org.jaxen.Function;
 import org.jaxen.FunctionCallException;
 import org.jaxen.Navigator;
 import org.jaxen.function.NumberFunction;
-
-import be.baur.sdt.xpath.function.dtm.DateTimeFunction;
 
 /**
  * <code><i>date-time</i> sdt:millis-to-dateTime( <i>number</i> )</code><br>
@@ -63,7 +61,7 @@ public final class MillisToDateTimeFunction implements Function
 	 * 
 	 * @param obj a number
 	 * @param nav the navigator used
-	 * @return a zoned date-time
+	 * @return a zoned date-time, not null
 	 * @throws FunctionCallException if evaluation failed
 	 */
     private static ZonedDateTime evaluate(Object obj, Navigator nav) throws FunctionCallException {

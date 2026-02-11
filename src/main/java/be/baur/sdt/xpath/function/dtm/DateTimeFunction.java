@@ -170,7 +170,7 @@ public final class DateTimeFunction implements Function
 		if (tac instanceof ZonedDateTime)
 			return ((ZonedDateTime) tac).format(fmt == null ? DateTimeFormatter.ISO_OFFSET_DATE_TIME : fmt);
 		
-		throw new IllegalArgumentException("unsupported class " + tac.getClass().getName());
+		throw new AssertionError("unsupported class " + tac.getClass().getName());
 	}
 
 }
