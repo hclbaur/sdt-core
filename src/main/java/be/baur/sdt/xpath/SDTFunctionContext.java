@@ -19,8 +19,8 @@ import be.baur.sdt.xpath.function.RenderSDAFunction;
 import be.baur.sdt.xpath.function.RightFunction;
 import be.baur.sdt.xpath.function.StringJoinFunction;
 import be.baur.sdt.xpath.function.TokenizeFunction;
+import be.baur.sdt.xpath.function.dtm.AddPeriodToDateTimeFunction;
 import be.baur.sdt.xpath.function.dtm.AddToDateTimeFunction;
-import be.baur.sdt.xpath.function.dtm.AddYearMonthToDateTimeFunction;
 import be.baur.sdt.xpath.function.dtm.CompareDateTimeFunction;
 import be.baur.sdt.xpath.function.dtm.CurrentDateTimeFunction;
 import be.baur.sdt.xpath.function.dtm.DateTimeFunction;
@@ -64,7 +64,7 @@ public class SDTFunctionContext implements FunctionContext {
 
 		// Add SDT extensions to the core Xpath functions and Jaxen extensions
 		FC.registerFunction(FUNCTIONS_NS_URI, AddToDateTimeFunction.NAME, new AddToDateTimeFunction());
-		FC.registerFunction(FUNCTIONS_NS_URI, AddYearMonthToDateTimeFunction.NAME, new AddYearMonthToDateTimeFunction());
+		FC.registerFunction(FUNCTIONS_NS_URI, AddPeriodToDateTimeFunction.NAME, new AddPeriodToDateTimeFunction());
 		FC.registerFunction(FUNCTIONS_NS_URI, CompareDateTimeFunction.NAME, new CompareDateTimeFunction());
 		FC.registerFunction(FUNCTIONS_NS_URI, CompareNumberFunction.NAME, new CompareNumberFunction());
 		FC.registerFunction(FUNCTIONS_NS_URI, CompareStringFunction.NAME, new CompareStringFunction());
