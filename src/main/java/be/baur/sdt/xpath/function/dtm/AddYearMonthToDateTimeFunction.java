@@ -1,4 +1,4 @@
-package be.baur.sdt.xpath.function;
+package be.baur.sdt.xpath.function.dtm;
 
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
@@ -82,11 +82,15 @@ public final class AddYearMonthToDateTimeFunction implements Function
 		if (d.isNaN())
 			throw new FunctionCallException(NAME + "() months must be numeric.");
 		long lmonths = d.longValue();
-
-		if (tac instanceof LocalDateTime)
-			return ((LocalDateTime) tac).plusYears(lyears).plusMonths(lmonths);
-		else
-			return ((ZonedDateTime) tac).plusYears(lyears).plusMonths(lmonths);
+		
+		try {
+			if (tac instanceof LocalDateTime)
+				return ((LocalDateTime) tac).plusYears(lyears).plusMonths(lmonths);
+			else
+				return ((ZonedDateTime) tac).plusYears(lyears).plusMonths(lmonths);
+		} catch (Exception e) {
+			throw new FunctionCallException(NAME + "() failed to add " + lyears + " years and " + lmonths + " months.", e);
+		}
 	}
 
 }

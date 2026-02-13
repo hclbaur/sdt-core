@@ -1,4 +1,4 @@
-package be.baur.sdt.xpath.function;
+package be.baur.sdt.xpath.function.dtm;
 
 import java.time.ZoneId;
 import java.util.List;
@@ -40,13 +40,14 @@ public final class ImplicitTimeZoneFunction implements Function
      * Create a new <code>ImplicitTimeZoneFunction</code> object.
      */
     public ImplicitTimeZoneFunction() {}
-    
+
+
 	/**
 	 * Returns the implicit time zone.
 	 *
 	 * @param context the expression context
 	 * @param args    an empty list
-	 * @return a time zone
+	 * @return a time zone id
 	 * @throws FunctionCallException if an inappropriate number of arguments is
 	 *                               supplied, or if evaluation failed
 	 */
@@ -66,17 +67,17 @@ public final class ImplicitTimeZoneFunction implements Function
 	 * 
 	 * @param fun name of the calling function
 	 * @param context the expression context
-	 * @return a zone id, not null
+	 * @return a time zone id, not null
 	 * @throws FunctionCallException if not called from an SDT context
 	 */
-	static ZoneId evaluate(String fun, Context context) {
+	public static ZoneId evaluate(String fun, Context context) throws FunctionCallException {
 
 		FunctionContext fc = context.getContextSupport().getFunctionContext();
 
 		if (fc instanceof SDTFunctionContext)
 			return ((SDTFunctionContext) fc).getImplicitTimeZone();
 		
-		throw new AssertionError(fun + "() not called from an SDT context.");
+		throw new FunctionCallException(fun + "() not called from an SDT context.");
 	}
 
 }

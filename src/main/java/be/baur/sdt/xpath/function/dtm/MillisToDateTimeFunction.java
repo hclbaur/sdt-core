@@ -1,6 +1,8 @@
-package be.baur.sdt.xpath.function;
+package be.baur.sdt.xpath.function.dtm;
 
 import java.time.Instant;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 import org.jaxen.Context;
@@ -47,7 +49,9 @@ public final class MillisToDateTimeFunction implements Function
 		if (args.size() != 1)
 			throw new FunctionCallException(NAME + "() requires one argument.");
 		
-		return DateTimeFunction.format(evaluate(args.get(0), context.getNavigator()));
+		return DateTimeFunction.format(
+			evaluate(args.get(0), context.getNavigator())
+		);
 	}
 
 
@@ -57,10 +61,10 @@ public final class MillisToDateTimeFunction implements Function
 	 * 
 	 * @param obj a number
 	 * @param nav the navigator used
-	 * @return a zoned date-time
+	 * @return a zoned date-time, not null
 	 * @throws FunctionCallException if evaluation failed
 	 */
-    private static Instant evaluate(Object obj, Navigator nav) throws FunctionCallException {
+    private static ZonedDateTime evaluate(Object obj, Navigator nav) throws FunctionCallException {
 
 		double msecs = NumberFunction.evaluate(obj, nav);
 
@@ -68,7 +72,7 @@ public final class MillisToDateTimeFunction implements Function
 			throw new FunctionCallException(NAME + "() requires a number.");
 
 		try {
-			return Instant.ofEpochMilli((long) msecs);
+			return Instant.ofEpochMilli((long) msecs).atZone(ZoneOffset.UTC);
 		} catch (Exception e) {
 			throw new FunctionCallException(NAME + "() evaluation of '" + msecs + "' failed.", e);
 		}

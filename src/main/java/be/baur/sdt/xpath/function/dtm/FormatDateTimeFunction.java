@@ -1,9 +1,12 @@
-package be.baur.sdt.xpath.function;
+package be.baur.sdt.xpath.function.dtm;
 
+import java.time.DateTimeException;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAccessor;
 import java.util.List;
+import java.util.Objects;
 
 import org.jaxen.Context;
 import org.jaxen.Function;
@@ -78,11 +81,46 @@ public final class FormatDateTimeFunction implements Function
 			} catch (Exception e) {
 				throw new FunctionCallException(NAME + "() pattern '" + fmt + "' is invalid.", e);
 			}
-			return DateTimeFunction.format(tac, dtf);
+			return format(tac, dtf);
 		
 		} catch (Exception e) {
 			throw new FunctionCallException(NAME + "() failed to format "
 					+ ((tac instanceof LocalDateTime) ? "local" : "zoned") + " date-time.", e);
 		}
+	}
+
+ 
+	/**
+	 * Returns a string representation of a temporal object, using a formatter.
+	 * Supported objects are LocalDateTime and ZonedDateTime.
+	 * 
+	 * @param dtm a local or zoned date-time, not null
+	 * @param fmt a formatter, not null
+	 * @return a formatted date-time string
+	 * @throws DateTimeException if formatting failed
+	 */
+	static String format(TemporalAccessor dtm, DateTimeFormatter fmt) {
+		
+		Objects.requireNonNull(fmt, "formatter must not be null");
+		return formatTemporal(dtm, fmt);
+	}
+
+	
+	/*
+	 * Private helper that renders a temporal object as a string, using a formatter,
+	 * or in ISO-8601 format if null is supplied. Supported objects are
+	 * LocalDateTime and ZonedDateTime. Throws a DateTimeException if formatting
+	 * failed.
+	 */
+	private static String formatTemporal(TemporalAccessor tac, DateTimeFormatter fmt) {
+		
+//		if (tac instanceof Instant)
+//			return ((Instant) tac).toString();
+		if (tac instanceof LocalDateTime)
+			return ((LocalDateTime) tac).format(fmt == null ? DateTimeFormatter.ISO_LOCAL_DATE_TIME : fmt);
+		if (tac instanceof ZonedDateTime)
+			return ((ZonedDateTime) tac).format(fmt == null ? DateTimeFormatter.ISO_OFFSET_DATE_TIME : fmt);
+		
+		throw new AssertionError("unsupported class " + tac.getClass().getName());
 	}
 }

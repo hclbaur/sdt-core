@@ -1,4 +1,4 @@
-package be.baur.sdt.xpath.function;
+package be.baur.sdt.xpath.function.dtm;
 
 import java.time.ZoneId;
 import java.util.List;
@@ -26,13 +26,14 @@ public final class SystemTimeZoneFunction implements Function
      * Create a new <code>SystemTimeZoneFunction</code> object.
      */
     public SystemTimeZoneFunction() {}
-    
+
+
 	/**
 	 * Returns the system default time zone ID.
 	 *
 	 * @param context the expression context
 	 * @param args    an empty list
-	 * @return a time zone
+	 * @return a time zone id
 	 * @throws FunctionCallException if an inappropriate number of arguments is
 	 *                               supplied, or if evaluation failed
 	 */

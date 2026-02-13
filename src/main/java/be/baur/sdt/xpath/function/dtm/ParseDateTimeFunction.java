@@ -1,8 +1,12 @@
-package be.baur.sdt.xpath.function;
+package be.baur.sdt.xpath.function.dtm;
 
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.time.temporal.TemporalAccessor;
 import java.util.List;
+import java.util.Objects;
 
 import org.jaxen.Context;
 import org.jaxen.Function;
@@ -76,11 +80,26 @@ public final class ParseDateTimeFunction implements Function
 			catch (Exception e) {
 				throw new FunctionCallException(NAME + "() pattern is invalid.", e);
 			}
-			return DateTimeFunction.parse(dtms, dtf);
+			return parse(dtms, dtf);
 		}
 		catch (Exception e) {
 			throw new FunctionCallException(NAME + "() failed to parse '" + dtms + "'.", e);
 		}
 	}
 
+	
+	/**
+	 * Returns a local or zoned date-time object parsed from a string, using a
+	 * formatter.
+	 * 
+	 * @param dtms a string representing a date-time
+	 * @param fmt  a formatter, not null
+	 * @return a local or zoned date-time, not null
+	 * @throws DateTimeParseException if no date-time could be constructed
+	 */
+	static TemporalAccessor parse(String dtms, DateTimeFormatter fmt) {
+
+		Objects.requireNonNull(fmt, "formatter must not be null");
+		return fmt.parseBest(dtms, ZonedDateTime::from, LocalDateTime::from);
+	}
 }

@@ -1,4 +1,4 @@
-package be.baur.sdt.xpath.function;
+package be.baur.sdt.xpath.function.dtm;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -72,10 +72,10 @@ public final class DateTimeToTimeZoneFunction implements Function
 	/**
 	 * Create a date-time adjusted to the supplied time zone or offset.
 	 * 
-	 * @param dtm a date-time 
+	 * @param dtm a date-time
 	 * @param tmz a time zone or time zone offset
 	 * @param nav the navigator used
-	 * @return a zoned date-time 
+	 * @return a zoned date-time, not null
 	 * @throws FunctionCallException if evaluation failed
 	 */
     private static ZonedDateTime evaluate(Object dtm, Object tmz, Navigator nav) throws FunctionCallException {
@@ -112,23 +112,6 @@ public final class DateTimeToTimeZoneFunction implements Function
 			return ((LocalDateTime) dtm).atZone(zid);
 		else
 			return Instant.from(dtm).atZone(zid);
-	}
-	
-	
-	/**
-	 * Create a date-time adjusted to the supplied time zone or offset, if a local
-	 * date-time is supplied. Otherwise return the supplied (zoned) date-time.
-	 * 
-	 * @param dtm a date-time
-	 * @param zid a zone id
-	 * @return a zoned date-time
-	 */
-	static ZonedDateTime ifLocal(TemporalAccessor dtm, ZoneId zid) {
-
-		if (dtm instanceof LocalDateTime)
-			return ((LocalDateTime) dtm).atZone(zid);
-		else
-			return (ZonedDateTime) dtm;
 	}
 
 }
