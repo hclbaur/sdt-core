@@ -28,6 +28,8 @@ import org.jaxen.function.NumberFunction;
  * returns <code>2025-03-30T03:00:00+02:00</code>.<br>
  * <code>sdt:add-to-dateTime('2025-10-26T03:00:00+02:00[Europe/Amsterdam]',-1,0,0)</code>
  * returns <code>2025-10-26T02:00:00+01:00</code>.<br>
+ * 
+ * @see AddPeriodToDateTimeFunction
  */
 public final class AddToDateTimeFunction implements Function
 {

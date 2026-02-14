@@ -179,7 +179,7 @@ The `variable` statement evaluates an expression and assigns the result to a nam
 
 ## XPath Functions
 
-Functions without namespace-prefix are native Jaxen implementations of the XPath (1.0) specification. Obviously, SDA is not XML and functions that assume an XML context may not work as expected on SDA nodes. This will be indicated.
+Functions without namespace-prefix are Jaxen implementations of the XPath (1.0) specification or extension functions. Obviously, SDA is not XML and functions that assume an XML context may not work as expected on SDA nodes. This is indicated.
 
 
 #### Node-set functions
@@ -204,9 +204,7 @@ Functions without namespace-prefix are native Jaxen implementations of the XPath
 |---------------------------------------|--------------------------------------------|
 | concat ( string, string+ )			| Returns the concatenation of its arguments.| 
 | contains ( string, string )			| Returns true if the first argument string contains the second argument string.| 
-| ends-with ( string, string )			| Returns true if the first argument string ends with the second argument string.|
 | lower-case ( string )					| Returns the lower case representation of the argument string.|
-| lower-case ( string, string )			| Returns the lower case representation of the argument, in the locale specified by the second argument.|
 | normalize-space ( string )			| Returns a white-space normalized string specified by the argument.|
 | normalize-space ( )					| Returns a white-space normalized string specified by the context-node.|
 | starts-with ( string, string )		| Returns true if the first argument string starts with the second argument string.|
@@ -219,7 +217,6 @@ Functions without namespace-prefix are native Jaxen implementations of the XPath
 | substring-after ( string, string )	| Returns the substring of the first argument string that comes after the first occurrence of the second argument.| 
 | substring-before ( string, string )	| Returns the substring of the first argument string that comes before the first occurrence of the second argument.|
 | upper-case ( string )					| Returns the upper case representation of the argument string.|
-| upper-case ( string, string )			| Returns the upper case representation of the argument, in the locale specified by the second argument.|
 | translate ( string, string, string )	| Replaces characters in the string specified by the second argument with characters specified by the third argument.|
 
 
@@ -250,8 +247,11 @@ Functions without namespace-prefix are native Jaxen implementations of the XPath
 
 | 						| 												|
 |-----------------------|-----------------------------------------------|
-| document ( URI )		| Loads a document from the given URI.			|
-| evaluate ( string )	| Evaluates the argument as an XPath expression.|
+| document ( URI )		| Loads a document from the given URI (XSLT function).			|
+| ends-with ( string, string )			| Returns true if the first argument string ends with the second argument string (Jaxen extension).|
+| evaluate ( string )	| Evaluates the argument as an XPath expression. (Jaxen extension).|
+| lower-case ( string, string )			| Returns the lower case representation of the argument, in the locale specified by the second argument. (Jaxen extension).|
+| upper-case ( string, string )			| Returns the upper case representation of the argument, in the locale specified by the second argument. (Jaxen extension).|
 
 
 ## SDT Extensions
@@ -404,6 +404,8 @@ Examples:
 <code>sdt:add-to-dateTime('2025-03-30T01:00:00+01:00[Europe/Amsterdam]',1,0,0)</code> returns <code>2025-03-30T03:00:00+02:00</code>.<br>
 <code>sdt:add-to-dateTime('2025-10-26T03:00:00+02:00[Europe/Amsterdam]',-1,0,0)</code> returns <code>2025-10-26T02:00:00+01:00</code>.<br>
 
+See also [add-period-to-dateTime](#add-period-to-dateTime)
+
 
 #### compare-dateTime
 
@@ -525,7 +527,6 @@ Example:
 
 <code>sdt:implicit-timezone()</code> returns <code>Europe/Amsterdam</code>.
 
-See also [system-timezone](#system-timezone) 
 See also [List of tz database time zones](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)
 
 

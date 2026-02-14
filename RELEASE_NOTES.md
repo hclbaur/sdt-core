@@ -1,8 +1,8 @@
 # Release Notes
 
-## [1.4.1] - 2026-??-??
+## [1.4.1] - 2026-02-15
 
-This release is in development.
+This release adds date and time related SDT extension functions.
 
 - `Deprecated` SDT namespace prefix and URI declarations in the SDT utility class.
 - Added several date and time related SDT functions.
