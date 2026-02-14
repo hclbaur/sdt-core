@@ -122,19 +122,17 @@ public class TestSDTXPath {
 		
 		t.so("S86", "sdt:implicit-timezone()", doc, ZoneId.systemDefault().toString());
 		t.so("F87", "sdt:implicit-timezone('a')", doc, "implicit-timezone() requires no arguments.");
-		t.so("S88", "sdt:system-timezone()", doc, ZoneId.systemDefault().toString());
-		t.so("F89", "sdt:system-timezone('a')", doc, "system-timezone() requires no arguments.");
 		
-		t.so("S90", "sdt:timezone-from-dateTime('1970-01-01T00:00:00')", doc, "");
-		t.so("S91", "sdt:timezone-from-dateTime('1970-01-01T00:00:00Z')", doc, "Z");
-		t.so("S92", "sdt:timezone-from-dateTime('1968-02-28T12:00+01:00')", doc, "+01:00");
-		t.so("F93", "sdt:timezone-from-dateTime()", doc, "timezone-from-dateTime() requires one argument.");
+		t.so("S88", "sdt:timezone-from-dateTime('1970-01-01T00:00:00')", doc, "");
+		t.so("S89", "sdt:timezone-from-dateTime('1970-01-01T00:00:00Z')", doc, "Z");
+		t.so("S90", "sdt:timezone-from-dateTime('1968-02-28T12:00+01:00')", doc, "+01:00");
+		t.so("F91", "sdt:timezone-from-dateTime()", doc, "timezone-from-dateTime() requires one argument.");
 		
-		t.so("S94", "sdt:compare-dateTime(sdt:current-dateTime(),sdt:current-dateTime())", doc, "0.0");
-		t.so("S95", "sdt:compare-dateTime(sdt:dateTime-to-local(sdt:current-dateTime()),sdt:current-dateTime())", doc, "0.0");
-		t.so("S96", "sdt:compare-dateTime('1970-01-01T00:00:00+01:00','1970-01-01T00:00:00Z')", doc, "-1.0");
-		t.so("S97", "sdt:compare-dateTime('1970-01-01T00:00:00Z','1970-01-01T00:00:00+01:00')", doc, "1.0");
-		t.so("F98", "sdt:compare-dateTime('1970-01-01T00:00:00Z')", doc, "compare-dateTime() requires two arguments.");
+		t.so("S92", "sdt:compare-dateTime(sdt:current-dateTime(),sdt:current-dateTime())", doc, "0.0");
+		t.so("S93", "sdt:compare-dateTime(sdt:dateTime-to-local(sdt:current-dateTime()),sdt:current-dateTime())", doc, "0.0");
+		t.so("S94", "sdt:compare-dateTime('1970-01-01T00:00:00+01:00','1970-01-01T00:00:00Z')", doc, "-1.0");
+		t.so("S95", "sdt:compare-dateTime('1970-01-01T00:00:00Z','1970-01-01T00:00:00+01:00')", doc, "1.0");
+		t.so("F96", "sdt:compare-dateTime('1970-01-01T00:00:00Z')", doc, "compare-dateTime() requires two arguments.");
 		
 		t.so("S100", "sdt:add-to-dateTime('1968-02-28T12:00:00',0,0,0)", doc, "1968-02-28T12:00:00");
 		t.so("S101", "sdt:add-to-dateTime('1968-02-28T12:00:00',11,59,60)", doc, "1968-02-29T00:00:00");

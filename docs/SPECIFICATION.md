@@ -33,7 +33,7 @@
 	- [implicit-timezone](#implicit-timezone)
 	- [millis-to-dateTime](#millis-to-dateTime)
 	- [parse-dateTime](#parse-dateTime)
-	- [subtract-dateTimes](#subtract-dateTimes), [system-dateTime](#system-dateTime), [system-timezone](#system-timezone)
+	- [subtract-dateTimes](#subtract-dateTimes), [system-dateTime](#system-dateTime)
 	- [timezone-from-dateTime](#timezone-from-dateTime)
 
 ## Statements
@@ -576,16 +576,6 @@ Returns the current date and time from the system clock in the default time zone
 Note: this function is non-deterministic and context-independent; multiple invocations within the same execution context may return a different result.
 
 See also [current-dateTime](#current-dateTime)
-
-
-#### system-timezone
-
-<code><i>time-zone</i> sdt:system-timezone()</code><br>
-
-Returns the system default time zone ID or UTC if no zone id could be determined.
-
-See also [implicit-timezone](#implicit-timezone)
-See also [List of tz database time zones](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)
 
 
 #### timezone-from-dateTime

@@ -33,7 +33,6 @@ import be.baur.sdt.xpath.function.dtm.MillisToDateTimeFunction;
 import be.baur.sdt.xpath.function.dtm.ParseDateTimeFunction;
 import be.baur.sdt.xpath.function.dtm.SubtractDateTimesFunction;
 import be.baur.sdt.xpath.function.dtm.SystemDateTimeFunction;
-import be.baur.sdt.xpath.function.dtm.SystemTimeZoneFunction;
 import be.baur.sdt.xpath.function.dtm.TimeZoneFromDateTime;
 
 /**
@@ -84,7 +83,6 @@ public class SDTFunctionContext implements FunctionContext {
 		FC.registerFunction(FUNCTIONS_NS_URI, RightFunction.NAME, new RightFunction());
 		FC.registerFunction(FUNCTIONS_NS_URI, SubtractDateTimesFunction.NAME, new SubtractDateTimesFunction());
 		FC.registerFunction(FUNCTIONS_NS_URI, SystemDateTimeFunction.NAME, new SystemDateTimeFunction());
-		FC.registerFunction(FUNCTIONS_NS_URI, SystemTimeZoneFunction.NAME, new SystemTimeZoneFunction());
 		FC.registerFunction(FUNCTIONS_NS_URI, TimeZoneFromDateTime.NAME, new TimeZoneFromDateTime());
 		FC.registerFunction(FUNCTIONS_NS_URI, TokenizeFunction.NAME, new TokenizeFunction());
 		// W3C like functions
