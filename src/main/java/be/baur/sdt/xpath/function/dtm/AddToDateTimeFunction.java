@@ -1,8 +1,6 @@
 package be.baur.sdt.xpath.function.dtm;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.Period;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAccessor;
@@ -17,9 +15,10 @@ import org.jaxen.function.NumberFunction;
 /**
  * <code><i>date-time</i> add-to-dateTime( <i>date-time</i>, <i>hours</i>, <i>minutes</i>, <i>seconds</i> )</code><br>
  * <p>
- * Returns the result of adding a number of hours, minutes and/or seconds
- * to the supplied date-time, where negative values can be used to subtract
- * time. If a time zone ID is provided, daylight savings will be accounted for.
+ * Returns the result of adding a duration in hours, minutes and/or seconds to
+ * the supplied date-time, where negative values can be used to subtract time.
+ * When adding a duration (in contrast to adding a period) daylight savings will
+ * be accounted for if a time zone ID is provided.
  * <p>
  * Examples:
  * <p>
@@ -27,7 +26,7 @@ import org.jaxen.function.NumberFunction;
  * <code>1968-02-29T00:00:00</code>.<br>
  * <code>sdt:add-to-dateTime('2025-03-30T01:00:00+01:00[Europe/Amsterdam]',1,0,0)</code>
  * returns <code>2025-03-30T03:00:00+02:00</code>.<br>
- * <code>sdt:add-to-dateTime('2025-10-26T03:00:00+01:00[Europe/Amsterdam]',-1,0,0)</code>
+ * <code>sdt:add-to-dateTime('2025-10-26T03:00:00+02:00[Europe/Amsterdam]',-1,0,0)</code>
  * returns <code>2025-10-26T02:00:00+01:00</code>.<br>
  */
 public final class AddToDateTimeFunction implements Function
