@@ -136,25 +136,25 @@ public class TestSDTXPath {
 		t.so("S97", "sdt:compare-dateTime('1970-01-01T00:00:00Z','1970-01-01T00:00:00+01:00')", doc, "1.0");
 		t.so("F98", "sdt:compare-dateTime('1970-01-01T00:00:00Z')", doc, "compare-dateTime() requires two arguments.");
 		
-		t.so("S100", "sdt:add-to-dateTime('1968-02-28T23:00:00',0,0,0,0)", doc, "1968-02-28T23:00:00");
-		t.so("S101", "sdt:add-to-dateTime('1968-02-28T23:00:00',1,2,3,4)", doc, "1968-03-01T01:03:04");
-		t.so("S102", "sdt:add-to-dateTime('1968-03-01T01:03:04',-1,-2,-3,-4)", doc, "1968-02-28T23:00:00");
-		t.so("S104", "sdt:add-to-dateTime('2025-03-29T03:00:00+01:00[Europe/Amsterdam]',1,0,0,0)", doc, "2025-03-30T04:00:00+02:00[Europe/Amsterdam]");
-		t.so("S105", "sdt:add-to-dateTime('2025-03-30T01:00:00+01:00[Europe/Amsterdam]',0,1,0,0)", doc, "2025-03-30T03:00:00+02:00[Europe/Amsterdam]");
-		t.so("S106", "sdt:add-to-dateTime('2025-10-26T02:00:00+02:00[Europe/Amsterdam]',0,1,0,0)", doc, "2025-10-26T02:00:00+01:00[Europe/Amsterdam]");
-		t.so("S107", "sdt:add-to-dateTime('2025-10-26T03:00:00+01:00[Europe/Amsterdam]',0,-1,0,0)", doc, "2025-10-26T02:00:00+01:00[Europe/Amsterdam]");	
-		t.so("S108", "sdt:add-to-dateTime('2025-10-27T01:00:00+01:00[Europe/Amsterdam]',-1,0,0,0)", doc, "2025-10-26T02:00:00+02:00[Europe/Amsterdam]");
-		t.so("F109", "sdt:add-to-dateTime()", doc, "add-to-dateTime() requires five arguments.");
+		t.so("S100", "sdt:add-to-dateTime('1968-02-28T12:00:00',0,0,0)", doc, "1968-02-28T12:00:00");
+		t.so("S101", "sdt:add-to-dateTime('1968-02-28T12:00:00',11,59,60)", doc, "1968-02-29T00:00:00");
+		t.so("S102", "sdt:add-to-dateTime('1968-03-01T12:00:00',-35,-59,-60)", doc, "1968-02-29T00:00:00");
+		t.so("S104", "sdt:add-to-dateTime('2025-03-29T03:00:00+01:00[Europe/Amsterdam]',24,0,0)", doc, "2025-03-30T04:00:00+02:00[Europe/Amsterdam]");
+		t.so("S105", "sdt:add-to-dateTime('2025-03-30T01:00:00+01:00[Europe/Amsterdam]',1,0,0)", doc, "2025-03-30T03:00:00+02:00[Europe/Amsterdam]");
+		t.so("S106", "sdt:add-to-dateTime('2025-10-26T02:00:00+02:00[Europe/Amsterdam]',1,0,0)", doc, "2025-10-26T02:00:00+01:00[Europe/Amsterdam]");
+		t.so("S107", "sdt:add-to-dateTime('2025-10-26T03:00:00+02:00[Europe/Amsterdam]',-1,0,0)", doc, "2025-10-26T02:00:00+01:00[Europe/Amsterdam]");	
+		t.so("S108", "sdt:add-to-dateTime('2025-10-27T01:00:00+01:00[Europe/Amsterdam]',-24,0,0)", doc, "2025-10-26T02:00:00+02:00[Europe/Amsterdam]");
+		t.so("F109", "sdt:add-to-dateTime()", doc, "add-to-dateTime() requires four arguments.");
 		
-		t.so("S110", "sdt:add-yearMonth-to-dateTime('1968-02-29T00:00:00',0,0)", doc, "1968-02-29T00:00:00");
-		t.so("S111", "sdt:add-yearMonth-to-dateTime('1968-02-29T00:00:00',1,0)", doc, "1969-02-28T00:00:00");
-		t.so("S112", "sdt:add-yearMonth-to-dateTime('1968-03-31T00:00:00',0,-1)", doc, "1968-02-29T00:00:00");
-		t.so("S113", "sdt:add-yearMonth-to-dateTime('2025-03-30T02:00:00+01:00[Europe/Amsterdam]',0,1)", doc, "2025-04-30T03:00:00+02:00[Europe/Amsterdam]");
-		t.so("S114", "sdt:add-yearMonth-to-dateTime('2025-04-30T02:00:00+02:00[Europe/Amsterdam]',0,-1)", doc, "2025-03-30T03:00:00+02:00[Europe/Amsterdam]");
-		t.so("S115", "sdt:add-yearMonth-to-dateTime('2025-09-26T02:00:00+01:00[Europe/Amsterdam]',0,1)", doc, "2025-10-26T02:00:00+02:00[Europe/Amsterdam]");
-		t.so("S116", "sdt:add-yearMonth-to-dateTime('2025-10-26T02:00:00+02:00[Europe/Amsterdam]',0,1)", doc, "2025-11-26T02:00:00+01:00[Europe/Amsterdam]");
-		t.so("S117", "sdt:add-yearMonth-to-dateTime('2025-11-26T02:00:00+01:00[Europe/Amsterdam]',0,-1)", doc, "2025-10-26T02:00:00+01:00[Europe/Amsterdam]");
-		t.so("F118", "sdt:add-yearMonth-to-dateTime()", doc, "add-yearMonth-to-dateTime() requires three arguments.");
+		t.so("S110", "sdt:add-period-to-dateTime('1968-02-29T12:00:00',0,0,0)", doc, "1968-02-29T12:00:00");
+		t.so("S111", "sdt:add-period-to-dateTime('1968-02-28T12:00:00',0,0,1)", doc, "1968-02-29T12:00:00");
+		t.so("S112", "sdt:add-period-to-dateTime('1968-03-31T12:00:00',0,-1,0)", doc, "1968-02-29T12:00:00");
+		t.so("S113", "sdt:add-period-to-dateTime('1968-02-29T12:00:00',1,0,0)", doc, "1969-02-28T12:00:00");
+		t.so("S114", "sdt:add-period-to-dateTime('2025-03-29T12:00:00+01:00[Europe/Amsterdam]',0,0,1)", doc, "2025-03-30T12:00:00+02:00[Europe/Amsterdam]");
+		t.so("S115", "sdt:add-period-to-dateTime('2025-04-29T12:00:00+02:00[Europe/Amsterdam]',0,-1,0)", doc, "2025-03-29T12:00:00+01:00[Europe/Amsterdam]");
+		t.so("S116", "sdt:add-period-to-dateTime('2025-09-26T12:00:00+02:00[Europe/Amsterdam]',0,1,0)", doc, "2025-10-26T12:00:00+01:00[Europe/Amsterdam]");
+		t.so("S117", "sdt:add-period-to-dateTime('2025-10-26T12:00:00+01:00[Europe/Amsterdam]',0,0,-1)", doc, "2025-10-25T12:00:00+02:00[Europe/Amsterdam]");
+		t.so("F118", "sdt:add-period-to-dateTime()", doc, "add-period-to-dateTime() requires four arguments.");
 
 		System.out.print("\n	    ");
 	

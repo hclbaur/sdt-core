@@ -18,19 +18,23 @@
 	- [Number functions](#number-functions)
 	- [Other functions](#other-functions)
 - [SDT Extensions](#sdt-extensions)
-	- [add-to-dateTime](#add-to-dateTime)
-	- [add-yearMonth-to-dateTime](#add-yearMonth-to-dateTime)
-	- [compare-dateTime](#compare-dateTime), [compare-number](#compare-number), [compare-string](#compare-string), [current-dateTime](#current-dateTime)
-	- [dateTime](#dateTime), [dateTime-to-local](#dateTime-to-local), [dateTime-to-millis](#dateTime-to-millis), [dateTime-to-timezone](#dateTime-to-timezone), [document-node](#document-node)
+	- [compare-number](#compare-number), [compare-string](#compare-string)
+	- [document-node](#document-node)
+	- [left](#left)
+	- [parse-sda](#parse-sda)
+	- [render-sda](#render-sda), [right](#right)
+	- [string-join](#string-join)
+	- [tokenize](#tokenize)
+- [DateTime functions](#datetime-functions)
+	- [add-period-to-dateTime](#add-period-to-dateTime), [add-to-dateTime](#add-to-dateTime)
+	- [compare-dateTime](#compare-dateTime), [current-dateTime](#current-dateTime)
+	- [dateTime](#dateTime), [dateTime-to-local](#dateTime-to-local), [dateTime-to-millis](#dateTime-to-millis), [dateTime-to-timezone](#dateTime-to-timezone)
 	- [format-dateTime](#format-dateTime)
 	- [implicit-timezone](#implicit-timezone)
-	- [left](#left)
 	- [millis-to-dateTime](#millis-to-dateTime)
-	- [parse-dateTime](#parse-dateTime), [parse-sda](#parse-sda)
-	- [render-sda](#render-sda), [right](#right)
-	- [string-join](#string-join), [subtract-dateTimes](#subtract-dateTimes), [system-dateTime](#system-dateTime), [system-timezone](#system-timezone)
-	- [timezone-from-dateTime](#timezone-from-dateTime), [tokenize](#tokenize)
-
+	- [parse-dateTime](#parse-dateTime)
+	- [subtract-dateTimes](#subtract-dateTimes), [system-dateTime](#system-dateTime), [system-timezone](#system-timezone)
+	- [timezone-from-dateTime](#timezone-from-dateTime)
 
 ## Statements
 
@@ -255,51 +259,6 @@ Functions without namespace-prefix are native Jaxen implementations of the XPath
 Functions with a namespace-prefix are extensions supplied by the SDT library, and are either SDT specific, or implementations of XPath (3.0) functions that are not (yet) provided by Jaxen.
 
 
-#### add-yearMonth-to-dateTime
-
-<code><i>date-time</i> add-yearMonth-to-dateTime( <i>date-time</i>, <i>years</i>, <i>months</i> )</code><br>
-
-Returns the result of adding a period of years and/or months to the supplied date-time, where negative values can be used to subtract time. If a time zone ID is provided, daylight savings will be accounted for.
-
-Examples:
-
-<code>sdt:add-yearMonth-to-dateTime('1968-02-29T00:00:00',1,0)</code> returns <code>1969-02-28T00:00:00</code>.<br>
-<code>sdt:add-yearMonth-to-dateTime('2025-03-30T02:00:00+01:00[Europe/Amsterdam]',0,1)</code> returns <code>2025-04-30T03:00:00+02:00</code>.<br> 
-<code>sdt:add-yearMonth-to-dateTime('2025-11-26T02:00:00+01:00[Europe/Amsterdam]',0,-1)</code> returns <code>2025-10-26T02:00:00+01:00</code>.<br>
-
-
-#### add-to-dateTime
-
-<code><i>date-time</i> add-to-dateTime( <i>date-time</i>, <i>days</i>, <i>hours</i>, <i>minutes</i>, <i>seconds</i> )</code><br>
-
-Returns the result of adding a number of days, hours, minutes and/or seconds to the supplied date-time, where negative values can be used to subtract time. If a time zone ID is provided, daylight savings will be accounted for.
-
-Examples:
-
-<code>sdt:add-to-dateTime('1968-02-28T23:00:00',0,1,0,0)</code> returns <code>1968-02-29T00:00:00</code>.<br>
-<code>sdt:add-to-dateTime('2025-03-30T01:00:00+01:00[Europe/Amsterdam]',0,1,0,0)</code> returns <code>2025-03-30T03:00:00+02:00</code>.<br>
-<code>sdt:add-to-dateTime('2025-10-26T03:00:00+01:00[Europe/Amsterdam]',0,-1,0,0)</code> returns <code>2025-10-26T02:00:00+01:00</code>.<br>
-
-
-#### compare-dateTime
-
-<code><i>double</i> sdt:compare-dateTime( <i>date-time</i>, <i>date-time</i> )</code><br>
-
-Compares two date-time values. This function returns returns -1, 0 or 1, depending on whether the first argument precedes, equals or 1 exceeds the second in time:
-
-<code>sdt:compare-dateTime('1970-01-01T00:00:00+01:00', '1970-01-01T00:00:00Z')</code>
-returns <code>-1.0</code>.<br>
-<code>sdt:compare-dateTime(sdt:current-dateTime(),sdt:current-dateTime())</code>
-returns <code>0.0</code>.<br>
-<code>sdt:compare-dateTime('1970-01-01T00:00:00Z', '1970-01-01T00:00:00+01:00')</code>
-returns <code>1.0</code>.<br>
-
-Note: if either argument is a local date-time, the implicit time zone will be used
-to compare it against the other.
-
-This function can be used as a comparator in a sort statement.
-
-
 #### compare-number
 
 <code><i>double</i> sdt:compare-number( <i>number</i>, <i>number</i> )</code><br>
@@ -335,6 +294,132 @@ Compares two strings locale-sensitive. This function returns -1, 0 or 1, dependi
 An optional third argument specifies the language tag (IETF BCP 47) to obtain a collation strategy that best fits the tag:
 
 <code>sdt:compare-string('Ångström', 'Zulu', 'sv')</code> returns <code>1.0</code> in accordance with Swedish collation rules.
+
+This function can be used as a comparator in a sort statement.
+
+
+#### document-node
+
+<code><i>node</i> sdt:document-node( <i>node(set)</i> )</code>
+
+Constructs a new document node from the first SDA node in the set. This function is supplied mainly for backwards compatibility reasons.
+
+
+#### left
+
+<code><i>string</i> sdt:left( <i>string</i>, <i>number</i> )</code>
+
+Returns the specified number of characters from the start of the argument string. For example,
+
+<code>sdt:left('12345', 3)</code> returns <code>123</code>.
+
+If the second argument is not a number or less than 1, an empty string is returned. If it exceeds the string length of the first argument, the entire string is returned.
+
+
+#### parse-sda
+
+<code><i>node</i> sdt:parse-sda( <i>string</i> )</code><br>
+
+Parses a string in SDA format and returns a data node.
+
+
+#### render-sda
+
+<code><i>string</i> sdt:render-sda( <i>node(set)</i> )</code><br>
+<code><i>string</i> sdt:render-sda( <i>node(set)</i>, <i>boolean pretty</i> )</code>
+
+Renders the first SDA node in the set as an SDA string in "canonical" format. If the optional second argument evaluates to true, the default SDA formatter is used to produce a reader friendly representation.
+ 
+This functions returns an empty string if the node set is empty or contains something that is not an SDA node.
+
+
+#### right
+
+<code><i>string</i> sdt:right( <i>string</i>, <i>number</i> )</code>
+
+Returns the specified number of characters from the end of the argument string. For example,
+
+<code>sdt:right('12345', 3)</code> returns <code>345</code>.
+
+If the second argument is not a number or less than 1, an empty string is returned. If it exceeds the string length of the first argument, the entire string is returned.
+
+
+#### string-join
+
+<code><i>string</i> fn:string-join( <i>node-set</i> )</code><br>
+<code><i>string</i> fn:string-join( <i>node-set</i>, <i>string separator</i> )</code>
+
+Returns a string created by concatenating the items in a sequence, with an optional separator between adjacent items. If the sequence is empty, the function returns the zero-length string.
+
+See also [Section 5.4.2 of the XPath Specification](https://www.w3.org/TR/xpath-functions/#func-string-join)
+
+
+#### tokenize
+
+<code><i>string*</i> sdt:tokenize( <i>string</i> )</code><br>
+<code><i>string*</i> sdt:tokenize( <i>string</i>, <i>string pattern</i> )</code><br>
+<code><i>string*</i> sdt:tokenize( <i>string</i>, <i>string pattern</i>, <i>boolean allowEmpty</i> )</code>
+
+Breaks the supplied string into tokens and returns a sequence of strings. The optional second argument is a regular expression that specifies the delimiter(s). If absent, tokens are assumed to be whitespace delimited, and the result is equivalent to <code>sdt:tokenize(normalize-space(<i>string</i>),' ')</code>.
+
+The optional third argument is a boolean indicating whether zero length (empty) tokens are retained, the default being false. For example:
+
+<code>sdt:tokenize(' a&nbsp;&nbsp;b&nbsp;&nbsp;&nbsp;c&nbsp;&nbsp;&nbsp;&nbsp;')</code> returns <code>("a","b","c")</code>.<br>
+<code>sdt:tokenize('127.0.0.1:80', '[\\.:]')</code> returns <code>(127, 0, 0, 1, 80)</code>.<br>
+<code>sdt:tokenize('a; b; ; c; ', '; ', true())</code> returns <code>("a","b","", "c", "")</code>.
+
+
+### DateTime functions
+
+
+#### add-period-to-dateTime
+
+<code><i>date-time</i> add-period-to-dateTime( <i>date-time</i>, <i>years</i>, <i>months</i>, <i>days</i> )</code><br>
+
+Returns the result of adding a period of years, months and/or days to the supplied date-time, where negative values can be used to subtract time. Adding a period (in contrast to adding a duration) will never account for daylight savings time, but maintain local time instead.
+
+Examples:
+
+<code>sdt:add-period-to-dateTime('1968-03-31T12:00:00',0,-1,0)</code> returns
+<code>1968-02-29T12:00:00</code>.<br>
+<code>sdt:add-period-to-dateTime('1968-02-29T12:00:00',1,0,0)</code> returns
+<code>1969-02-28T12:00:00</code>.<br>
+<code>sdt:add-period-to-dateTime('2025-03-29T12:00:00+01:00[Europe/Amsterdam]',0,0,1)</code>
+returns <code>2025-03-30T12:00:00+02:00[Europe/Amsterdam]</code>.<br>
+<code>sdt:add-period-to-dateTime('2025-10-26T12:00:00+01:00[Europe/Amsterdam]',0,0,-1)</code>
+returns <code>2025-10-25T12:00:00+02:00[Europe/Amsterdam]</code>.<br>
+ 
+See also [add-to-dateTime](#add-to-dateTime)
+
+
+#### add-to-dateTime
+
+<code><i>date-time</i> add-to-dateTime( <i>date-time</i>, <i>days</i>, <i>hours</i>, <i>minutes</i>, <i>seconds</i> )</code><br>
+
+Returns the result of adding a duration in hours, minutes and/or seconds to the supplied date-time, where negative values can be used to subtract time. When adding a duration (in contrast to adding a period) daylight savings will be accounted for if a time zone ID is provided.
+
+Examples:
+
+<code>sdt:add-to-dateTime('1968-02-28T23:00:00',1,0,0)</code> returns <code>1968-02-29T00:00:00</code>.<br>
+<code>sdt:add-to-dateTime('2025-03-30T01:00:00+01:00[Europe/Amsterdam]',1,0,0)</code> returns <code>2025-03-30T03:00:00+02:00</code>.<br>
+<code>sdt:add-to-dateTime('2025-10-26T03:00:00+02:00[Europe/Amsterdam]',-1,0,0)</code> returns <code>2025-10-26T02:00:00+01:00</code>.<br>
+
+
+#### compare-dateTime
+
+<code><i>double</i> sdt:compare-dateTime( <i>date-time</i>, <i>date-time</i> )</code><br>
+
+Compares two date-time values. This function returns returns -1, 0 or 1, depending on whether the first argument precedes, equals or 1 exceeds the second in time:
+
+<code>sdt:compare-dateTime('1970-01-01T00:00:00+01:00', '1970-01-01T00:00:00Z')</code>
+returns <code>-1.0</code>.<br>
+<code>sdt:compare-dateTime(sdt:current-dateTime(),sdt:current-dateTime())</code>
+returns <code>0.0</code>.<br>
+<code>sdt:compare-dateTime('1970-01-01T00:00:00Z', '1970-01-01T00:00:00+01:00')</code>
+returns <code>1.0</code>.<br>
+
+Note: if either argument is a local date-time, the implicit time zone will be used
+to compare it against the other.
 
 This function can be used as a comparator in a sort statement.
 
@@ -393,6 +478,7 @@ Examples:
 
 See also [implicit-timezone](#implicit-timezone)
 
+
 #### dateTime-to-timezone
 
 <code><i>date-time</i> sdt:dateTime-to-timezone( <i>date-time</i>, <i>time-zone</i> )</code>
@@ -409,13 +495,6 @@ Examples:
 <code>sdt:dateTime-to-timezone('2025-10-26T03:00:00', 'Europe/Amsterdam')</code> returns <code>2025-10-26T03:00:00+01:00</code>.<br>
 
 See also the [List of tz database time zones](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) 
-
-
-#### document-node
-
-<code><i>node</i> sdt:document-node( <i>node(set)</i> )</code>
-
-Constructs a new document node from the first SDA node in the set. This function is supplied mainly for backwards compatibility reasons.
 
 
 #### format-dateTime
@@ -450,17 +529,6 @@ See also [system-timezone](#system-timezone)
 See also [List of tz database time zones](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)
 
 
-#### left
-
-<code><i>string</i> sdt:left( <i>string</i>, <i>number</i> )</code>
-
-Returns the specified number of characters from the start of the argument string. For example,
-
-<code>sdt:left('12345', 3)</code> returns <code>123</code>.
-
-If the second argument is not a number or less than 1, an empty string is returned. If it exceeds the string length of the first argument, the entire string is returned.
-
-
 #### millis-to-dateTime
 
 <code><i>date-time</i> sdt:millis-to-dateTime( <i>number</i> )</code>
@@ -484,44 +552,6 @@ Example:
 <code>sdt:parse-dateTime('1968/02/28 12:00','yyyy/MM/dd HH:mm')</code> returns <code>1968-02-28T12:00:00</code>.
 
 See also [Patterns for Formatting and Parsing](https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html#patterns)
-
-
-#### parse-sda
-
-<code><i>node</i> sdt:parse-sda( <i>string</i> )</code><br>
-
-Parses a string in SDA format and returns a data node.
-
-
-#### render-sda
-
-<code><i>string</i> sdt:render-sda( <i>node(set)</i> )</code><br>
-<code><i>string</i> sdt:render-sda( <i>node(set)</i>, <i>boolean pretty</i> )</code>
-
-Renders the first SDA node in the set as an SDA string in "canonical" format. If the optional second argument evaluates to true, the default SDA formatter is used to produce a reader friendly representation.
- 
-This functions returns an empty string if the node set is empty or contains something that is not an SDA node.
-
-
-#### right
-
-<code><i>string</i> sdt:right( <i>string</i>, <i>number</i> )</code>
-
-Returns the specified number of characters from the end of the argument string. For example,
-
-<code>sdt:right('12345', 3)</code> returns <code>345</code>.
-
-If the second argument is not a number or less than 1, an empty string is returned. If it exceeds the string length of the first argument, the entire string is returned.
-
-
-#### string-join
-
-<code><i>string</i> fn:string-join( <i>node-set</i> )</code><br>
-<code><i>string</i> fn:string-join( <i>node-set</i>, <i>string separator</i> )</code>
-
-Returns a string created by concatenating the items in a sequence, with an optional separator between adjacent items. If the sequence is empty, the function returns the zero-length string.
-
-See also [Section 5.4.2 of the XPath Specification](https://www.w3.org/TR/xpath-functions/#func-string-join)
 
 
 #### subtract-dateTimes
@@ -569,20 +599,4 @@ Examples:
 
 <code>sdt:timezone-from-dateTime('1970-01-01T00:00:00Z')</code> returns <code>Z</code>.<br>
 <code>not(sdt:timezone-from-dateTime('1970-01-01T00:00:00'))</code> returns <code>true</code>.
-
-
-#### tokenize
-
-<code><i>string*</i> sdt:tokenize( <i>string</i> )</code><br>
-<code><i>string*</i> sdt:tokenize( <i>string</i>, <i>string pattern</i> )</code><br>
-<code><i>string*</i> sdt:tokenize( <i>string</i>, <i>string pattern</i>, <i>boolean allowEmpty</i> )</code>
-
-Breaks the supplied string into tokens and returns a sequence of strings. The optional second argument is a regular expression that specifies the delimiter(s). If absent, tokens are assumed to be whitespace delimited, and the result is equivalent to <code>sdt:tokenize(normalize-space(<i>string</i>),' ')</code>.
-
-The optional third argument is a boolean indicating whether zero length (empty) tokens are retained, the default being false. For example:
-
-<code>sdt:tokenize(' a&nbsp;&nbsp;b&nbsp;&nbsp;&nbsp;c&nbsp;&nbsp;&nbsp;&nbsp;')</code> returns <code>("a","b","c")</code>.<br>
-<code>sdt:tokenize('127.0.0.1:80', '[\\.:]')</code> returns <code>(127, 0, 0, 1, 80)</code>.<br>
-<code>sdt:tokenize('a; b; ; c; ', '; ', true())</code> returns <code>("a","b","", "c", "")</code>.
-
 
