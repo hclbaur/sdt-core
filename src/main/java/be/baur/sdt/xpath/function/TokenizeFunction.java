@@ -33,9 +33,10 @@ import org.jaxen.function.StringFunction;
  * <code>sdt:tokenize('a; b; ; c; ', '; ', true())</code> returns
  * <code>("a","b","", "c", "")</code>.
  */
-public class TokenizeFunction implements Function
+public final class TokenizeFunction implements Function
 {
-
+	public static final String NAME = "tokenize";
+	
     /**
      * Create a new <code>TokenizeFunction</code> object.
      */
@@ -45,14 +46,11 @@ public class TokenizeFunction implements Function
 	/**
 	 * Breaks the supplied string into tokens and returns a sequence of strings.
 	 *
-	 * @param context the context at the point in the expression when the function
-	 *                is called.
-	 * @param args    an argument list that contains one, two or three items.
-	 * 
+	 * @param context the expression context
+	 * @param args    an argument list that contains one to three items
 	 * @return a list of strings
-	 * 
-	 * @throws FunctionCallException if <code>args</code> has no or more than three
-	 *                               items.
+	 * @throws FunctionCallException if an inappropriate number of arguments is
+	 *                               supplied, or if evaluation failed
 	 */
 	@Override
 	@SuppressWarnings("rawtypes")
@@ -60,7 +58,7 @@ public class TokenizeFunction implements Function
 	{
 		final int argc = args.size();
 		if (argc < 1 || argc > 3)
-			throw new FunctionCallException("tokenize() requires one, two or three arguments.");
+			throw new FunctionCallException(NAME + "() requires one to three arguments.");
 
 		final Navigator nav = context.getNavigator();
 
@@ -82,10 +80,9 @@ public class TokenizeFunction implements Function
 	 * @param str        the string to be tokenized
 	 * @param rex        the delimiter regular expression
 	 * @param allowEmpty whether to retain empty strings in the result
-	 * 
 	 * @return a list of strings
 	 */
-	public static List<String> evaluate(String str, String rex, boolean allowEmpty) {
+	private static List<String> evaluate(String str, String rex, boolean allowEmpty) {
 
 		List<String> tokens = Arrays.asList(str.split(rex, allowEmpty ? -1 : 0));
 

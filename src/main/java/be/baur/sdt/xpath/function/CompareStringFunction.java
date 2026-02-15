@@ -14,9 +14,9 @@ import org.jaxen.function.StringFunction;
  * <code><i>double</i> sdt:compare-string( <i>string</i>, <i>string</i> )</code><br>
  * <code><i>double</i> sdt:compare-string( <i>string</i>, <i>string</i>, <i>string language</i> )</code>
  * <p>
- * Compares two strings locale-sensitive. This function returns -1 if the second
- * string precedes the first, 1 if it exceeds it, and 0 if they are considered
- * equal in the default locale:
+ * Compares two strings locale-sensitive. This function returns -1, 0 or 1,
+ * depending on whether the first argument collates before, equal to, or after
+ * the second in the default locale:
  * <p>
  * <code>sdt:compare-string('a', 'A')</code> returns <code>-1.0</code>.<br>
  * <code>sdt:compare-string(3, '3')</code> returns <code>0.0</code>.<br>
@@ -30,9 +30,10 @@ import org.jaxen.function.StringFunction;
  * <p>
  * This function can be used as a comparator in a sort statement.
  */
-public class CompareStringFunction implements Function
+public final class CompareStringFunction implements Function
 {
-
+	public static final String NAME = "compare-string";
+	
     /**
      * Create a new <code>CompareStringFunction</code> object.
      */
@@ -43,14 +44,11 @@ public class CompareStringFunction implements Function
 	 * Compares two arguments, returning -1, 0 or 1. An optional third argument
 	 * specifies a language tag to obtain a collator (other than the default).
 	 *
-	 * @param context the context at the point in the expression when the function
-	 *                is called
-	 * @param args    an argument list that contains two or three items.
-	 * 
-	 * @return a <code>Double</code>
-	 * 
-	 * @throws FunctionCallException if <code>args</code> has more than three or
-	 *                               less than two items.
+	 * @param context the expression context
+	 * @param args    an argument list that contains two or three items
+	 * @return a signum value
+	 * @throws FunctionCallException if an inappropriate number of arguments is
+	 *                               supplied, or if evaluation failed
 	 */
 	@Override
 	@SuppressWarnings("rawtypes")
@@ -58,7 +56,7 @@ public class CompareStringFunction implements Function
 
 		final int argc = args.size();
 		if (argc < 2 || argc > 3)
-			throw new FunctionCallException("compare-string() requires two or three arguments.");
+			throw new FunctionCallException(NAME + "() requires two or three arguments.");
 
 		final Navigator nav = context.getNavigator();
 		
@@ -68,19 +66,18 @@ public class CompareStringFunction implements Function
     
 
 	/**
-	 * Compares two objects using a default or language dependent collator,
+	 * Compares two strings using a default or language dependent collator,
 	 * returning -1, 0 or 1.
 	 *
-	 * @param obj1 the first object to be compared
-	 * @param obj2 the second object to be compared
+	 * @param str1 the first string
+	 * @param obj2 the second string
 	 * @param lang a language tag, not null
 	 * @param nav  the navigator used
-	 * 
-	 * @return a <code>Double</code>
+	 * @return a signum value
 	 */
-	public static Double evaluate(Object obj1, Object obj2, String lang, Navigator nav) {
+	private static Double evaluate(Object str1, Object obj2, String lang, Navigator nav) {
 
-		final String s1 = StringFunction.evaluate(obj1, nav);
+		final String s1 = StringFunction.evaluate(str1, nav);
 		final String s2 = StringFunction.evaluate(obj2, nav);
 
 		Collator c;

@@ -12,7 +12,6 @@ import be.baur.sdt.StatementContext;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.TransformException;
 import be.baur.sdt.parser.Keyword;
-import be.baur.sdt.xpath.SDAXPath;
 
 /**
  * The {@code NodeStatement} creates a new node with the specified name and an
@@ -94,7 +93,7 @@ public class NodeStatement extends Statement {
 			String value = null;
 			
 			if (valueExpression != null) {
-				XPath xpath = new SDAXPath(valueExpression);
+				XPath xpath = traco.getXPath(valueExpression);
 				xpath.setVariableContext(staco);
 				value = xpath.stringValueOf(staco.getXPathContext());
 			}

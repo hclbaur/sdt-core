@@ -75,6 +75,8 @@ public class StatementContext implements VariableContext {
 	/**
 	 * Sets the current XPath context. A null value is not allowed.
 	 * 
+	 * <p>TODO: rename to setXPathContext
+	 * 
 	 * @param xpathContext a context node, not null
 	 */
 	public void setContextNode(Object xpathContext) {

@@ -1,8 +1,8 @@
 transform {
-
+	
 	param "filename" { select "'addressbook.sda'" }
 	variable "doc" { select "sdt:document-node(document($filename))" }
-
+	
 	foreach "$doc/addressbook/contact/phonenumber" {
 		println "concat('Number ', $sdt:position, ' of ', $sdt:last, ': ', ., ' (', ../firstname, ')')"
 	}
@@ -28,21 +28,5 @@ transform {
 			}
 		}	
 	}
-	
-	variable "V" { select "0" }
-	foreach "sdt:tokenize('a b c')" {
-		variable "V" { select "$V + 1" }
-		println "concat('V = ', $V)"
-	}
-	if "true()" {
-		variable "V" { select "9" }
-	}
-	println "concat('Final V = ', $V)"
-	
-	foreach "sdt:tokenize('a b c')" {
-		variable "position" { select "$sdt:position" }
-		foreach "sdt:tokenize('d e')" {
-			println "concat('outer ', $position, ' inner ', $sdt:position)"
-		}
-	}
+
 }

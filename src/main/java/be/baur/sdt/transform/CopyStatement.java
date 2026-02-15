@@ -9,7 +9,6 @@ import be.baur.sdt.StatementContext;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.TransformException;
 import be.baur.sdt.parser.Keyword;
-import be.baur.sdt.xpath.SDAXPath;
 
 /**
  * The <code>CopyStatement</code> evaluates an XPath expression and creates a
@@ -35,7 +34,7 @@ public class CopyStatement extends XPathStatement {
 		 * to the current output node. Otherwise, do nothing.
 		 */
 		try {
-			XPath xpath = new SDAXPath(getExpression());
+			XPath xpath = traco.getXPath( getExpression() );
 			xpath.setVariableContext(staco);
 			Object value = xpath.evaluate(staco.getXPathContext());
 
