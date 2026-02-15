@@ -26,7 +26,6 @@ import be.baur.sdt.xpath.SDTFunctionContext;
  * <code>sdt:implicit-timezone()</code> returns
  * <code>Europe/Amsterdam</code>.<br>
  * 
- * @see SystemTimeZoneFunction
  * @see SDTFunctionContext#getImplicitTimeZone
  * @see <a href=
  *      "https://en.wikipedia.org/wiki/List_of_tz_database_time_zones">List of
