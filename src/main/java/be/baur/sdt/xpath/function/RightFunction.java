@@ -24,9 +24,10 @@ import be.baur.sdt.SDT;
  * returned. If it exceeds the string length of the first argument, the entire
  * string is returned.
  */
-public class RightFunction implements Function
+public final class RightFunction implements Function
 {
-
+	public static final String NAME = "right";
+	
     /**
      * Create a new <code>RightFunction</code> object.
      */
@@ -34,24 +35,20 @@ public class RightFunction implements Function
 
     
 	/**
-	 * Returns the right part of an XPath string-value by length.
+	 * Returns the right part of a string.
 	 *
-	 * @param context the context at the point in the expression when the function
-	 *                is called
-	 * @param args    an argument list that contains two items,a <code>String</code>
-	 *                and a length.
-	 * 
-	 * @return a <code>String</code>
-	 * 
-	 * @throws FunctionCallException if <code>args</code> has more or less than two
-	 *                               items.
+	 * @param context the expression context
+	 * @param args    an argument list that contains two items
+	 * @return a string
+	 * @throws FunctionCallException if an inappropriate number of arguments is
+	 *                               supplied, or if evaluation failed
 	 */
     @Override
 	@SuppressWarnings("rawtypes")
 	public Object call(Context context, List args) throws FunctionCallException
     {
         if (args.size() != 2)
-            throw new FunctionCallException( "right() requires two arguments." );
+            throw new FunctionCallException(NAME + "() requires two arguments." );
 
         final Navigator nav = context.getNavigator();
 

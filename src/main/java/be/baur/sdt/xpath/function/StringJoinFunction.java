@@ -21,9 +21,10 @@ import org.jaxen.function.StringFunction;
  *      "https://www.w3.org/TR/xpath-functions/#func-string-join">Section 5.4.2
  *      of the XPath Specification</a>
  */
-public class StringJoinFunction implements Function
+public final class StringJoinFunction implements Function
 {
-
+	public static final String NAME = "string-join";
+	
     /**
      * Create a new <code>StringJoinFunction</code> object.
      */
@@ -32,16 +33,11 @@ public class StringJoinFunction implements Function
 	/**
 	 * Returns a concatenation of all items in a list, with or without separator.
 	 *
-	 * @param context the context at the point in the expression when the function
-	 *                is called
-	 * @param args    a list that contains one or two items, a <code>List</code> and
-	 *                an optional separator <code>String</code>
-	 * 
-	 * @return a <code>String</code>
-	 * 
-	 * @throws FunctionCallException if <code>args</code> has more than two or less
-	 *                               than one item, or if the first argument is not
-	 *                               a <code>List</code>
+	 * @param context the expression context
+	 * @param args    a list that contains one or two items
+	 * @return a string
+	 * @throws FunctionCallException if an inappropriate number of arguments is
+	 *                               supplied, or if evaluation failed
 	 */
     @Override
 	@SuppressWarnings("rawtypes")
@@ -49,10 +45,10 @@ public class StringJoinFunction implements Function
     {
     	final int argc = args.size();
         if (argc < 1 || argc > 2)
-        	throw new FunctionCallException( "string-join() requires one or two arguments." );
+        	throw new FunctionCallException(NAME + "() requires one or two arguments." );
 
         if (! (args.get(0) instanceof List) )
-        	throw new FunctionCallException("string-join() expects a node-set.");
+        	throw new FunctionCallException(NAME + "() expects a node-set.");
         
         List list = (List) args.get(0);
         if (list.isEmpty()) return "";

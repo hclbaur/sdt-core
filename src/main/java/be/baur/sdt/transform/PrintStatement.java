@@ -9,7 +9,6 @@ import be.baur.sdt.StatementContext;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.TransformException;
 import be.baur.sdt.parser.Keyword;
-import be.baur.sdt.xpath.SDAXPath;
 
 /**
  * The {@code PrintStatement} evaluates an XPath expression and writes the
@@ -47,7 +46,7 @@ public class PrintStatement extends XPathStatement {
 		 * separator) is written to the output and flushed.
 		 */
 		try {
-			XPath xpath = new SDAXPath(getExpression()); 
+			XPath xpath = traco.getXPath( getExpression() ); 
 			xpath.setVariableContext(staco);
 			String value = xpath.stringValueOf(staco.getXPathContext());
 			

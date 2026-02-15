@@ -20,9 +20,10 @@ import be.baur.sdt.xpath.DocumentNavigator;
  * 
  * @see DocumentNavigator#newDocumentNode
  */
-public class DocumentNodeFunction implements Function
+public final class DocumentNodeFunction implements Function
 {
-
+	public static final String NAME = "document-node";
+			
 	/**
      * Create a new <code>DocumentNodeFunction</code> object.
      */
@@ -32,21 +33,18 @@ public class DocumentNodeFunction implements Function
 	/**
 	 * Creates a document node.
 	 *
-	 * @param context the context at the point in the expression when the function
-	 *                is called
-	 * @param args    an argument list that contains one item.
-	 * 
+	 * @param context the expression context
+	 * @param args    an argument list that contains one item
 	 * @return a document node
-	 * 
-	 * @throws FunctionCallException if <code>args</code> has more or less than one
-	 *                               item.
+	 * @throws FunctionCallException if an inappropriate number of arguments is
+	 *                               supplied, or if evaluation failed
 	 */
 	@Override
 	@SuppressWarnings("rawtypes")
 	public Object call(Context context, List args) throws FunctionCallException {
 
 		if (args.size() != 1)
-			throw new FunctionCallException("document-node() expects exactly one argument.");
+			throw new FunctionCallException(NAME + "() requires one argument.");
 
 		return evaluate(args, context.getNavigator());
 	}
@@ -55,14 +53,13 @@ public class DocumentNodeFunction implements Function
 	/**
 	 * Constructs a new document node from the first SDA node in the list.
 	 *
-	 * @param list   a list of nodes
-	 * @param nav    the navigator used
-	 * 
+	 * @param list a list of nodes
+	 * @param nav  the navigator used
 	 * @return a document node
-	 * @throws FunctionCallException if an exception occurs.
+	 * @throws FunctionCallException if evaluation failed
 	 */
 	@SuppressWarnings("rawtypes")
-	public static Node evaluate(List list, Navigator nav) throws FunctionCallException {
+	private static Node evaluate(List list, Navigator nav) throws FunctionCallException {
 
 		if (! list.isEmpty()) {
 
@@ -74,6 +71,6 @@ public class DocumentNodeFunction implements Function
 				return DocumentNavigator.newDocumentNode(((DataNode) first).copy());
 		}
 		// else
-		throw new FunctionCallException("document-node() expects a data node.");
+		throw new FunctionCallException(NAME + "() expects a data node.");
 	}
 }

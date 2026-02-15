@@ -20,10 +20,21 @@
 - [SDT Extensions](#sdt-extensions)
 	- [compare-number](#compare-number), [compare-string](#compare-string)
 	- [document-node](#document-node)
-	- [left](#left), [right](#right)
-	- [parse-sda](#parse-sda), [render-sda](#render-sda)
-	- [string-join](#string-join), [tokenize](#tokenize)
-
+	- [left](#left)
+	- [parse-sda](#parse-sda)
+	- [render-sda](#render-sda), [right](#right)
+	- [string-join](#string-join)
+	- [tokenize](#tokenize)
+- [DateTime functions](#datetime-functions)
+	- [add-period-to-dateTime](#add-period-to-dateTime), [add-to-dateTime](#add-to-dateTime)
+	- [compare-dateTime](#compare-dateTime), [current-dateTime](#current-dateTime)
+	- [dateTime](#dateTime), [dateTime-to-local](#dateTime-to-local), [dateTime-to-millis](#dateTime-to-millis), [dateTime-to-timezone](#dateTime-to-timezone)
+	- [format-dateTime](#format-dateTime)
+	- [implicit-timezone](#implicit-timezone)
+	- [millis-to-dateTime](#millis-to-dateTime)
+	- [parse-dateTime](#parse-dateTime)
+	- [subtract-dateTimes](#subtract-dateTimes), [system-dateTime](#system-dateTime)
+	- [timezone-from-dateTime](#timezone-from-dateTime)
 
 ## Statements
 
@@ -168,7 +179,7 @@ The `variable` statement evaluates an expression and assigns the result to a nam
 
 ## XPath Functions
 
-Functions without namespace-prefix are native Jaxen implementations of the XPath (1.0) specification. Obviously, SDA is not XML and functions that assume an XML context may not work as expected on SDA nodes. This will be indicated.
+Functions without namespace-prefix are Jaxen implementations of the XPath (1.0) specification or extension functions. Obviously, SDA is not XML and functions that assume an XML context may not work as expected on SDA nodes. This is indicated.
 
 
 #### Node-set functions
@@ -193,9 +204,7 @@ Functions without namespace-prefix are native Jaxen implementations of the XPath
 |---------------------------------------|--------------------------------------------|
 | concat ( string, string+ )			| Returns the concatenation of its arguments.| 
 | contains ( string, string )			| Returns true if the first argument string contains the second argument string.| 
-| ends-with ( string, string )			| Returns true if the first argument string ends with the second argument string.|
 | lower-case ( string )					| Returns the lower case representation of the argument string.|
-| lower-case ( string, string )			| Returns the lower case representation of the argument, in the locale specified by the second argument.|
 | normalize-space ( string )			| Returns a white-space normalized string specified by the argument.|
 | normalize-space ( )					| Returns a white-space normalized string specified by the context-node.|
 | starts-with ( string, string )		| Returns true if the first argument string starts with the second argument string.|
@@ -208,7 +217,6 @@ Functions without namespace-prefix are native Jaxen implementations of the XPath
 | substring-after ( string, string )	| Returns the substring of the first argument string that comes after the first occurrence of the second argument.| 
 | substring-before ( string, string )	| Returns the substring of the first argument string that comes before the first occurrence of the second argument.|
 | upper-case ( string )					| Returns the upper case representation of the argument string.|
-| upper-case ( string, string )			| Returns the upper case representation of the argument, in the locale specified by the second argument.|
 | translate ( string, string, string )	| Replaces characters in the string specified by the second argument with characters specified by the third argument.|
 
 
@@ -239,13 +247,16 @@ Functions without namespace-prefix are native Jaxen implementations of the XPath
 
 | 						| 												|
 |-----------------------|-----------------------------------------------|
-| document ( URI )		| Loads a document from the given URI.			|
-| evaluate ( string )	| Evaluates the argument as an XPath expression.|
+| document ( URI )		| Loads a document from the given URI (XSLT function).			|
+| ends-with ( string, string )			| Returns true if the first argument string ends with the second argument string (Jaxen extension).|
+| evaluate ( string )	| Evaluates the argument as an XPath expression. (Jaxen extension).|
+| lower-case ( string, string )			| Returns the lower case representation of the argument, in the locale specified by the second argument. (Jaxen extension).|
+| upper-case ( string, string )			| Returns the upper case representation of the argument, in the locale specified by the second argument. (Jaxen extension).|
 
 
 ## SDT Extensions
 
-Functions with a namespace-prefix are extensions supplied by the SDT library, and are either SDT specific, or implementations of XPath functions that are not (yet) provided by Jaxen.
+Functions with a namespace-prefix are extensions supplied by the SDT library, and are either SDT specific, or implementations of XPath (3.0) functions that are not (yet) provided by Jaxen.
 
 
 #### compare-number
@@ -253,7 +264,7 @@ Functions with a namespace-prefix are extensions supplied by the SDT library, an
 <code><i>double</i> sdt:compare-number( <i>number</i>, <i>number</i> )</code><br>
 <code><i>double</i> sdt:compare-number( <i>number</i>, <i>number</i>, <i>boolean nanFirst</i> )</code>
 
-Compares two numbers. This function converts its arguments to numbers and returns -1 if the second argument precedes the first, 1 if it exceeds it, and 0 if the arguments are numerically equal:
+Compares two numbers. This function converts its arguments to numbers and returns -1, 0 or 1, depending on whether the first argument is numerically smaller, equal to or larger than the second:
 
 <code>sdt:compare-number(1, 3)</code> returns <code>-1.0</code>.<br>
 <code>sdt:compare-number(3, '3')</code> returns <code>0.0</code>.<br>
@@ -274,7 +285,7 @@ This function can be used as a comparator in a sort statement.
 <code><i>double</i> sdt:compare-string( <i>string</i>, <i>string</i> )</code><br>
 <code><i>double</i> sdt:compare-string( <i>string</i>, <i>string</i>, <i>string language</i> )</code>
 
-Compares two strings locale-sensitive. This function returns -1 if the second string precedes the first, 1 if it exceeds it, and 0 if they are considered equal in the default locale:
+Compares two strings locale-sensitive. This function returns -1, 0 or 1, depending on whether the first argument collates before, equal to, or after the second in the default locale:
 
 <code>sdt:compare-string('a', 'A')</code> returns <code>-1.0</code>.<br>
 <code>sdt:compare-string(3, '3')</code> returns <code>0.0</code>.<br>
@@ -300,7 +311,7 @@ Constructs a new document node from the first SDA node in the set. This function
 
 Returns the specified number of characters from the start of the argument string. For example,
 
-<code>sdt:left('12345', 3)</code> returns <code>"123"</code>.
+<code>sdt:left('12345', 3)</code> returns <code>123</code>.
 
 If the second argument is not a number or less than 1, an empty string is returned. If it exceeds the string length of the first argument, the entire string is returned.
 
@@ -328,7 +339,7 @@ This functions returns an empty string if the node set is empty or contains some
 
 Returns the specified number of characters from the end of the argument string. For example,
 
-<code>sdt:right('12345', 3)</code> returns <code>"345"</code>.
+<code>sdt:right('12345', 3)</code> returns <code>345</code>.
 
 If the second argument is not a number or less than 1, an empty string is returned. If it exceeds the string length of the first argument, the entire string is returned.
 
@@ -357,4 +368,226 @@ The optional third argument is a boolean indicating whether zero length (empty) 
 <code>sdt:tokenize('127.0.0.1:80', '[\\.:]')</code> returns <code>(127, 0, 0, 1, 80)</code>.<br>
 <code>sdt:tokenize('a; b; ; c; ', '; ', true())</code> returns <code>("a","b","", "c", "")</code>.
 
+
+### DateTime functions
+
+
+#### add-period-to-dateTime
+
+<code><i>date-time</i> add-period-to-dateTime( <i>date-time</i>, <i>years</i>, <i>months</i>, <i>days</i> )</code><br>
+
+Returns the result of adding a period of years, months and/or days to the supplied date-time, where negative values can be used to subtract time. Adding a period (in contrast to adding a duration) will never account for daylight savings time, but maintain local time instead.
+
+Examples:
+
+<code>sdt:add-period-to-dateTime('1968-03-31T12:00:00',0,-1,0)</code> returns
+<code>1968-02-29T12:00:00</code>.<br>
+<code>sdt:add-period-to-dateTime('1968-02-29T12:00:00',1,0,0)</code> returns
+<code>1969-02-28T12:00:00</code>.<br>
+<code>sdt:add-period-to-dateTime('2025-03-29T12:00:00+01:00[Europe/Amsterdam]',0,0,1)</code>
+returns <code>2025-03-30T12:00:00+02:00[Europe/Amsterdam]</code>.<br>
+<code>sdt:add-period-to-dateTime('2025-10-26T12:00:00+01:00[Europe/Amsterdam]',0,0,-1)</code>
+returns <code>2025-10-25T12:00:00+02:00[Europe/Amsterdam]</code>.<br>
+ 
+See also [add-to-dateTime](#add-to-dateTime)
+
+
+#### add-to-dateTime
+
+<code><i>date-time</i> add-to-dateTime( <i>date-time</i>, <i>days</i>, <i>hours</i>, <i>minutes</i>, <i>seconds</i> )</code><br>
+
+Returns the result of adding a duration in hours, minutes and/or seconds to the supplied date-time, where negative values can be used to subtract time. When adding a duration (in contrast to adding a period) daylight savings will be accounted for if a time zone ID is provided.
+
+Examples:
+
+<code>sdt:add-to-dateTime('1968-02-28T23:00:00',1,0,0)</code> returns <code>1968-02-29T00:00:00</code>.<br>
+<code>sdt:add-to-dateTime('2025-03-30T01:00:00+01:00[Europe/Amsterdam]',1,0,0)</code> returns <code>2025-03-30T03:00:00+02:00</code>.<br>
+<code>sdt:add-to-dateTime('2025-10-26T03:00:00+02:00[Europe/Amsterdam]',-1,0,0)</code> returns <code>2025-10-26T02:00:00+01:00</code>.<br>
+
+See also [add-period-to-dateTime](#add-period-to-dateTime)
+
+
+#### compare-dateTime
+
+<code><i>double</i> sdt:compare-dateTime( <i>date-time</i>, <i>date-time</i> )</code><br>
+
+Compares two date-time values. This function returns returns -1, 0 or 1, depending on whether the first argument precedes, equals or 1 exceeds the second in time:
+
+<code>sdt:compare-dateTime('1970-01-01T00:00:00+01:00', '1970-01-01T00:00:00Z')</code>
+returns <code>-1.0</code>.<br>
+<code>sdt:compare-dateTime(sdt:current-dateTime(),sdt:current-dateTime())</code>
+returns <code>0.0</code>.<br>
+<code>sdt:compare-dateTime('1970-01-01T00:00:00Z', '1970-01-01T00:00:00+01:00')</code>
+returns <code>1.0</code>.<br>
+
+Note: if either argument is a local date-time, the implicit time zone will be used
+to compare it against the other.
+
+This function can be used as a comparator in a sort statement.
+
+
+#### current-dateTime
+
+<code><i>date-time</i> sdt:current-dateTime()</code>
+ 
+Returns the current date and time from the SDT context in the implicit time zone.
+
+Note: this function is deterministic and context-dependent; multiple invocations within the same execution context will return the same result.
+
+See also [Section 15.3 of the XPath Specification](https://www.w3.org/TR/xpath-functions/#func-current-dateTime)
+
+See also [system-dateTime](#system-dateTime)
+
+
+#### dateTime
+
+<code><i>date-time</i> sdt:dateTime( <i>string</i> )</code>
+
+A constructor that returns a local or zoned date-time. Real date-time objects are not supported, so all date and time functions operate on strings instead.
+
+The argument must be a temporal object or a string in ISO-like format as specified by [DateTimeFormatter#ISO_DATE_TIME](https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html#ISO_DATE_TIME), or an exception will be thrown.
+
+Examples:
+
+<code>sdt:dateTime('1968-02-28T12:00')</code> returns <code>1968-02-28T12:00:00</code>.<br>
+<code>sdt:dateTime('1968-02-28T12:00+01:00')</code> returns <code>1968-02-28T12:00:00+01:00</code>.<br>
+<code>sdt:dateTime('1968-02-28T12:00:00.500+01:00[Europe/Amsterdam]')</code> returns <code>1968-02-28T12:00:00.5+01:00[Europe/Amsterdam]</code>.
+
+
+#### dateTime-to-local
+
+<code><i>date-time</i> dateTime-to-local( <i>date-time</i> )</code>
+
+Removes the time zone component from a date-time and returns a local date-time with the same year, month, day and time as the one supplied.
+
+Examples:
+
+<code>sdt:dateTime-to-local('1970-01-01T00:00:00Z')</code> returns
+<code>1970-01-01T00:00:00</code>.<br>
+
+
+#### dateTime-to-millis
+
+<code><i>number</i> sdt:dateTime-to-millis( <i>date-time</i> )</code>
+ 
+Converts a date-time into a number of milliseconds elapsed since the epoch. A negative number is returned for a point in time prior to the epoch.
+
+If a local date-time is supplied, the implicit time zone will be used to calculate the offset from UTC. 
+ 
+Examples:
+
+<code>sdt:dateTime-to-millis('1970-01-01T00:00:00Z')</code> returns <code>0</code>.
+
+See also [implicit-timezone](#implicit-timezone)
+
+
+#### dateTime-to-timezone
+
+<code><i>date-time</i> sdt:dateTime-to-timezone( <i>date-time</i>, <i>time-zone</i> )</code>
+ 
+Create a date-time adjusted to the supplied time zone or offset. If a local date-time is supplied, the result will be a zoned date-time in the requested time zone. Otherwise, the supplied date-time will be translated to the given time zone (while the absolute time stays the same). If appropriate, daylight savings will be accounted for.
+
+Examples:
+
+<code>sdt:dateTime-to-timezone('2025-03-30T01:00:00Z', 'Europe/Amsterdam')</code> returns <code>2025-03-30T03:00:00+02:00</code>.<br>
+<code>sdt:dateTime-to-timezone('2025-10-26T00:00:00Z', 'Europe/Amsterdam')</code> returns <code>2025-10-26T02:00:00+02:00</code>.<br>
+<code>sdt:dateTime-to-timezone('2025-10-26T01:00:00Z', 'Europe/Amsterdam')</code> returns <code>2025-10-26T02:00:00+01:00</code>.<br>
+<code>sdt:dateTime-to-timezone('2025-03-30T02:00:00', 'Europe/Amsterdam')</code> returns <code>2025-03-30T03:00:00+02:00</code>.<br>
+<code>sdt:dateTime-to-timezone('2025-10-26T02:00:00', 'Europe/Amsterdam')</code> returns <code>2025-10-26T02:00:00+02:00</code>.<br>
+<code>sdt:dateTime-to-timezone('2025-10-26T03:00:00', 'Europe/Amsterdam')</code> returns <code>2025-10-26T03:00:00+01:00</code>.<br>
+
+See also the [List of tz database time zones](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) 
+
+
+#### format-dateTime
+
+<code><i>string</i> sdt:format-dateTime( <i>date-time</i>, <i>pattern</i> )</code>
+
+Returns a formatted date-time string, using a formatting pattern. The pattern must be valid and appropriate for the supplied date-time.
+
+Examples:
+
+<code>sdt:format-dateTime('1968-02-28T12:00','yyyy/MM/dd HH:mm')</code> 
+returns <code>1968/02/28 12:00</code>.<br>
+<code>sdt:format-dateTime(sdt:millis-to-dateTime(0),'yyyyMMddHHmmss')</code> 
+returns <code>19700101000000</code>.
+
+See also [Patterns for Formatting and Parsing](https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html#patterns)
+
+
+#### implicit-timezone
+
+<code><i>time-zone</i> sdt:implicit-timezone()</code><br>
+
+Returns the value of the implicit time zone ID from the SDT context. This is the time zone to be used when a date-time value that does not have a time zone component is used in a comparison or arithmetic operation. This is not necessarily equal to the system clock default.
+
+Note: this function is deterministic and context-dependent; multiple invocations within the same execution context will return the same result.
+
+Example:
+
+<code>sdt:implicit-timezone()</code> returns <code>Europe/Amsterdam</code>.
+
+See also [List of tz database time zones](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)
+
+
+#### millis-to-dateTime
+
+<code><i>date-time</i> sdt:millis-to-dateTime( <i>number</i> )</code>
+
+Accepts the number of milliseconds after the epoch (or before in case of a
+negative number), and returns a UTC zoned date-time string.
+
+Examples:
+
+<code>sdt:millis-to-dateTime(0)</code> returns <code>1970-01-01T00:00:00Z</code>.<br>
+
+
+#### parse-dateTime
+
+<code><i>date-time</i> sdt:parse-dateTime( <i>string</i>, <i>string</i> )</code>
+
+Parses the supplied string into a date-time, using the second argument as a formatting pattern. The pattern must be valid and appropriate for the input string.
+
+Example:
+
+<code>sdt:parse-dateTime('1968/02/28 12:00','yyyy/MM/dd HH:mm')</code> returns <code>1968-02-28T12:00:00</code>.
+
+See also [Patterns for Formatting and Parsing](https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html#patterns)
+
+
+#### subtract-dateTimes
+
+<code><i>double</i> sdt:subtract-dateTimes( <i>date-time</i>, <i>date-time</i> )</code><br>
+
+This function returns the number of seconds elapsed between two date-times, with millisecond precision. This will be a <i>negative</i> number if the first argument precedes the second in time:
+
+<code>sdt:subtract-dateTimes('1970-01-01T00:00:00+01:00', '1970-01-01T00:00:00Z')</code> returns <code>-3600.0</code>.<br>
+<code>sdt:subtract-dateTimes(sdt:current-dateTime(),sdt:current-dateTime())</code> returns <code>0.0</code>.<br>
+<code>sdt:subtract-dateTimes('1970-01-01T00:00:00Z', '1970-01-01T00:00:00+01:00')</code> returns <code>3600.0</code>.
+
+Note: if either argument is a local date-time, the implicit time zone will be used to calculate the offset from UTC.
+
+ 
+#### system-dateTime
+
+<code><i>date-time</i> sdt:system-dateTime()</code>
+ 
+Returns the current date and time from the system clock in the default time zone.
+
+Note: this function is non-deterministic and context-independent; multiple invocations within the same execution context may return a different result.
+
+See also [current-dateTime](#current-dateTime)
+
+
+#### timezone-from-dateTime
+
+<code><i>time-zone?</i> timezone-from-dateTime( <i>date-time</i> )</code><br>
+
+Returns the time zone or UTC offset of a date-time, or an empty string if a
+local date-time is supplied (this can be used to test for a local date-time).
+
+Examples:
+
+<code>sdt:timezone-from-dateTime('1970-01-01T00:00:00Z')</code> returns <code>Z</code>.<br>
+<code>not(sdt:timezone-from-dateTime('1970-01-01T00:00:00'))</code> returns <code>true</code>.
 

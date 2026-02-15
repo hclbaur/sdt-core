@@ -7,7 +7,16 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import org.jaxen.FunctionContext;
+import org.jaxen.NamespaceContext;
+import org.jaxen.Navigator;
+import org.jaxen.XPath;
+import org.jaxen.saxpath.SAXPathException;
+
 import be.baur.sdt.transform.Transform;
+import be.baur.sdt.xpath.DocumentNavigator;
+import be.baur.sdt.xpath.SDTFunctionContext;
+import be.baur.sdt.xpath.SDTNamespaceContext;
 
 /**
  * A {@code TransformContext} is created prior to, and used during execution of
@@ -17,7 +26,7 @@ import be.baur.sdt.transform.Transform;
  * to, and (optionally prepared) parameters to overwrite the default value of a
  * {@code ParamStatement}.
  * <p>
- * A context cannot be instantiated, but must be built using a {@link Builder}.
+ * The context cannot be instantiated, but must be built using a {@link Builder}.
  * 
  * @see Transform
  */
@@ -25,12 +34,68 @@ public class TransformContext {
 
 	private final Writer writer;
 	private final Map<String, Object> parameters;
-
+	private final Navigator navigator = DocumentNavigator.getInstance();
+	private final FunctionContext fncontext = new SDTFunctionContext();
+	private final NamespaceContext nscontext = new SDTNamespaceContext();
+	
 	private TransformContext(Builder builder) {
 
 		this.writer = builder.writer;
 		this.parameters = builder.parameters;
 	}
+
+
+	/**
+	 * Returns the {@code Writer} provided by this context. If no writer was set
+	 * explicitly, this will be a writer to standard output.
+	 * 
+	 * @return a writer, not null
+	 */
+	public Writer getWriter() {
+		return writer;
+	}
+
+	
+	/**
+	 * Returns an unmodifiable view of the parameters provided by this transform
+	 * context.
+	 * 
+	 * @return a map, not null, may be empty
+	 */
+	public  Map<String, Object> getParameters() {
+		return Collections.unmodifiableMap(parameters);
+	}
+	
+	
+//	/**
+//	 * Returns the navigator for this transform context.
+//	 * 
+//	 * @return a navigator, not null
+//	 */
+//	public Navigator getNavigator() {
+//		return navigator;
+//	}
+
+
+	/**
+	 * Creates an XPath expression object suitable for this transform context. By
+	 * default, this also includes the SDT function and SDT namespace context.
+	 * 
+	 * @param expression an XPath expression
+	 * @return a new XPath expression object, not null
+	 * @throws SAXPathException if the XPath expression is invalid
+	 * 
+	 * @see SDTFunctionContext
+	 * @see SDTNamespaceContext
+	 */
+	public XPath getXPath(String expression) throws SAXPathException {
+		
+		XPath xpath = navigator.parseXPath(expression);
+		xpath.setFunctionContext( fncontext );
+		xpath.setNamespaceContext( nscontext );
+		return xpath;
+	}
+
 
 
 	/**
@@ -115,27 +180,6 @@ public class TransformContext {
 		public TransformContext build() {
 			return new TransformContext(this);
 		}
-	}
-
-
-	/**
-	 * Returns the {@code Writer} defined in this context. If no writer was set
-	 * explicitly, this will be a writer to standard output.
-	 * 
-	 * @return a writer, not null
-	 */
-	public Writer getWriter() {
-		return writer;
-	}
-
-	
-	/**
-	 * Returns an unmodifiable view of the parameters defined in this context.
-	 * 
-	 * @return a map, not null, may be empty
-	 */
-	public  Map<String, Object> getParameters() {
-		return Collections.unmodifiableMap(parameters);
 	}
 
 }

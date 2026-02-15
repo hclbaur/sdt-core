@@ -1,10 +1,24 @@
 # Release Notes
 
-## [1.4.0] - 2025-02-12
+## [1.4.1] - 2026-02-15
 
-This release impacts the way XPath expressions are written (without referencing the root node) 
-and how variables are (re)assigned with regards to scope. As a result, existing transformations 
-will need to be rewritten. Also, a transform no longer adds a default 'output' node.
+This release adds date and time related SDT extension functions.
+
+- `Deprecated` SDT namespace prefix and URI declarations in the SDT utility class.
+- Added several date and time related SDT functions.
+- Added SDTFunctionContext and SDTNamespaceContext.
+- Added TransformContext.getXPath().
+- Added SDAXPath.withSDTSupport().
+
+## Compatibility
+
+- Requires Java 8, sda-core 2.3.0 and Jaxen 2.0.0.
+
+## Previous releases
+
+### [1.4.0] - 2025-02-12
+
+This release impacts the way XPath expressions are written (without referencing the root node) and how variables are (re)assigned with regards to scope. As a result, existing transformations will need to be rewritten. Also, a transform no longer adds a default 'output' node.
 
 - `Removed` StatementContext.hasVariable().
 - `Changed` VariableStatement.isVarName() to SDT.isVariableName().
@@ -16,12 +30,6 @@ will need to be rewritten. Also, a transform no longer adds a default 'output' n
 - Closed issue #18 (update Javadoc of Navigator).
 - Closed issue #19 (review scoping of variables).
 - Closed issue #20 (remove default output node).
-
-## Compatibility
-
-- Requires Java 8, sda-core 2.3.0 and Jaxen 2.0.0.
-
-## Previous releases
 
 ### [1.3.1] - 2024-08-11 (requires SDA v2.2.1)
 
@@ -36,9 +44,7 @@ This release fixes several issues and adds grouping functionality.
 
 ### [1.3.0] - 2024-06-26 (requires SDA v2.2.0)
 
-This release has a few changes with respect to the syntax of some SDT statements,
-and the parser internals and validation error messages have been improved. This 
-release also introduces the sort statement and updates the documentation.
+This release has a few changes with respect to the syntax of some SDT statements, and the parser internals and validation error messages have been improved. This release also introduces the sort statement and updates the documentation.
 
 - `Removed` the sdt.serialization.Attribute class.
 - `Renamed` sdt.statements package to sdt.transform.
@@ -56,8 +62,7 @@ release also introduces the sort statement and updates the documentation.
 
 ### [1.2.0] - 2024-05-12 (requires SDA v2.2.0)
 
-This is a compatibility release for sda-core 2.2.x but has quite a few 
-changes with regards to naming and packaging.
+This is a compatibility release for sda-core 2.2.x but has quite a few changes with regards to naming and packaging.
 
 - `Removed` NodeValueStatement class.
 - `Removed` SDTException and Parser interface.

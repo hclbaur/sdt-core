@@ -27,9 +27,10 @@ import be.baur.sda.io.SDAFormatter;
  * @see DataNode#toString
  * @see SDAFormatter
  */
-public class RenderSDAFunction implements Function
+public final class RenderSDAFunction implements Function
 {
-
+	public static final String NAME = "render-sda";
+	
 	/**
      * Create a new <code>RenderSDAFunction</code> object.
      */
@@ -39,14 +40,11 @@ public class RenderSDAFunction implements Function
 	/**
 	 * Formats an SDA node as text.
 	 *
-	 * @param context the context at the point in the expression when the function
-	 *                is called
-	 * @param args    an argument list that contains one or two items.
-	 * 
-	 * @return a <code>String</code>
-	 * 
-	 * @throws FunctionCallException if <code>args</code> has more than two or less
-	 *                               than one item.
+	 * @param context the expression context
+	 * @param args    an argument list that contains one or two items
+	 * @return a string
+	 * @throws FunctionCallException if an inappropriate number of arguments is
+	 *                               supplied, or if evaluation failed
 	 */
 	@Override
 	@SuppressWarnings("rawtypes")
@@ -54,7 +52,7 @@ public class RenderSDAFunction implements Function
 
 		final int argc = args.size();
 		if (argc < 1 || argc > 2)
-			throw new FunctionCallException("render-sda() requires one or two arguments.");
+			throw new FunctionCallException(NAME + "() requires one or two arguments.");
 
 		Navigator nav = context.getNavigator();
 		return evaluate(args, argc == 2 && BooleanFunction.evaluate(args.get(1), nav), nav);
@@ -67,12 +65,11 @@ public class RenderSDAFunction implements Function
 	 * @param list   a list of nodes
 	 * @param pretty whether to format reader friendly
 	 * @param nav    the navigator used
-	 * 
-	 * @return a <code>String</code>
-	 * @throws FunctionCallException if an exception occurs.
+	 * @return a string
+	 * @throws FunctionCallException if evaluation failed
 	 */
 	@SuppressWarnings("rawtypes")
-	public static String evaluate(List list, boolean pretty, Navigator nav) throws FunctionCallException {
+	private static String evaluate(List list, boolean pretty, Navigator nav) throws FunctionCallException {
 
 		if (! list.isEmpty()) {
 

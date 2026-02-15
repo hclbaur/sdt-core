@@ -7,7 +7,7 @@ import org.jaxen.Context;
 import org.jaxen.Function;
 import org.jaxen.FunctionCallException;
 
-public class TestFunction implements Function
+public final class TestFunction implements Function
 {
 
     public TestFunction() {}

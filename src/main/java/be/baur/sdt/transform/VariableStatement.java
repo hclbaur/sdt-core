@@ -11,7 +11,6 @@ import be.baur.sdt.StatementContext;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.TransformException;
 import be.baur.sdt.parser.Keyword;
-import be.baur.sdt.xpath.SDAXPath;
 
 /**
  * The {@code VariableStatement} evaluates an XPath expression and assigns the
@@ -69,7 +68,7 @@ public class VariableStatement extends XPathStatement {
 		 * the statement context or overwrite an existing variable with the same name.
 		 */
 		try {
-			XPath xpath = new SDAXPath(getExpression());
+			XPath xpath = traco.getXPath( getExpression() );
 			xpath.setVariableContext(staco);
 			Object value = xpath.evaluate(staco.getXPathContext());
 

@@ -2,18 +2,7 @@ package be.baur.sdt.xpath;
 
 import org.jaxen.BaseXPath;
 import org.jaxen.JaxenException;
-import org.jaxen.XPathFunctionContext;
 
-import be.baur.sdt.SDT;
-import be.baur.sdt.xpath.function.CompareNumberFunction;
-import be.baur.sdt.xpath.function.CompareStringFunction;
-import be.baur.sdt.xpath.function.DocumentNodeFunction;
-import be.baur.sdt.xpath.function.LeftFunction;
-import be.baur.sdt.xpath.function.ParseSDAFunction;
-import be.baur.sdt.xpath.function.RenderSDAFunction;
-import be.baur.sdt.xpath.function.RightFunction;
-import be.baur.sdt.xpath.function.StringJoinFunction;
-import be.baur.sdt.xpath.function.TokenizeFunction;
 
 /**
  * An XPath implementation for the SDA object model.
@@ -34,32 +23,34 @@ public class SDAXPath extends BaseXPath {
 
 	private static final long serialVersionUID = 368489177460992020L;
 	
-	static {	
-		// add all SDT specific functions to the default context
-		XPathFunctionContext ctx = (XPathFunctionContext) XPathFunctionContext.getInstance();
-		ctx.registerFunction(SDT.FUNCTIONS_NS_URI, "compare-number", new CompareNumberFunction());
-		ctx.registerFunction(SDT.FUNCTIONS_NS_URI, "compare-string", new CompareStringFunction());
-		ctx.registerFunction(SDT.FUNCTIONS_NS_URI, "document-node", new DocumentNodeFunction());
-		ctx.registerFunction(SDT.FUNCTIONS_NS_URI, "left", new LeftFunction());
-		ctx.registerFunction(SDT.FUNCTIONS_NS_URI, "parse-sda", new ParseSDAFunction());
-		ctx.registerFunction(SDT.FUNCTIONS_NS_URI, "right", new RightFunction());
-		ctx.registerFunction(SDT.FUNCTIONS_NS_URI, "render-sda", new RenderSDAFunction());
-		ctx.registerFunction(SDT.FUNCTIONS_NS_URI, "tokenize", new TokenizeFunction());
-		ctx.registerFunction(SDT.W3CFUNCTIONS_NS_URI, "string-join", new StringJoinFunction());
-	}
-	
 	/**
-	 * Create a new <code>SDAXPath</code> from an XPath expression.
+	 * Create a new <code>SDAXPath</code> from an XPath expression. Note that
+	 * support for SDT extensions is <i>not</i> included by default.
 	 *
-	 * @param expression the XPath expression
-	 * 
+	 * @param expression an XPath expression
 	 * @throws JaxenException if there is a syntax error in the expression
+	 * @see #withSDTSupport
 	 */
 	public SDAXPath(String expression) throws JaxenException {
 		
 		super(expression, DocumentNavigator.getInstance());
-		this.addNamespace(SDT.FUNCTIONS_NS_PFX, SDT.FUNCTIONS_NS_URI);
-		this.addNamespace(SDT.W3CFUNCTIONS_NS_PFX, SDT.W3CFUNCTIONS_NS_URI);
+	}
+	
+	
+	/**
+	 * Creates an XPath expression object that includes support for all SDT
+	 * extensions.
+	 * 
+	 * @param expression an XPath expression
+	 * @return a new XPath expression object, not null
+	 * @throws JaxenException if the XPath expression is invalid
+	 */
+	public static SDAXPath withSDTSupport(String expression) throws JaxenException {
+
+		SDAXPath xpath = new SDAXPath(expression);
+		xpath.setFunctionContext( new SDTFunctionContext() );
+		xpath.setNamespaceContext( new SDTNamespaceContext() );
+		return xpath;
 	}
 
 }

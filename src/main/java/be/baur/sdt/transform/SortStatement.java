@@ -3,16 +3,15 @@ package be.baur.sdt.transform;
 import java.util.Comparator;
 import java.util.Objects;
 
-import org.jaxen.JaxenException;
 import org.jaxen.JaxenRuntimeException;
 import org.jaxen.XPath;
+import org.jaxen.saxpath.SAXPathException;
 
 import be.baur.sda.DataNode;
 import be.baur.sdt.StatementContext;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.TransformException;
 import be.baur.sdt.parser.Keyword;
-import be.baur.sdt.xpath.SDAXPath;
 
 /**
  * The <code>SortStatement</code> can only occur in the context of a for-each
@@ -99,14 +98,16 @@ public class SortStatement extends XPathStatement {
 	 * Returns a comparator appropriate for this sort statement. If no specific
 	 * comparator expression has been set, a lexicographical compare is implied.
 	 * 
-	 * @param context the current statement context
+	 * @param traco the transform context
+	 * @param staco the current statement context
 	 * @return a comparator, not null
-	 * @throws JaxenException if an XPath evaluation error occurs
+	 * @throws SAXPathException if an XPath evaluation error occurs
 	 */
-	public Comparator<Object> getComparator(StatementContext context) throws JaxenException {
+	public Comparator<Object> getComparator(TransformContext traco, StatementContext staco) throws SAXPathException  {
 
-		XPath xpath = new SDAXPath(getExpression());
-		xpath.setVariableContext(context);
+		//Navigator navigator = traco.getNavigator();
+		XPath xpath = traco.getXPath( getExpression() );
+		xpath.setVariableContext(staco);
 
 		Comparator<Object> comparator = new Comparator<Object>() {
 			@Override
@@ -117,11 +118,11 @@ public class SortStatement extends XPathStatement {
 					s2 = xpath.stringValueOf(o2);
 					if (comparatorExpression != null) {
 						String comexpr = comparatorExpression.replaceFirst("\\?", "'"+s1+"'");
-						XPath comxp = new SDAXPath(comexpr.replaceFirst("\\?", "'"+s2+"'"));
-						comxp.setVariableContext(context);
-						return (int) Math.signum((double) comxp.numberValueOf(context.getXPathContext()));
+						XPath comxp = traco.getXPath(comexpr.replaceFirst("\\?", "'"+s2+"'"));
+						comxp.setVariableContext(staco);
+						return (int) Math.signum((double) comxp.numberValueOf(staco.getXPathContext()));
 					}
-				} catch (JaxenException e) {
+				} catch (SAXPathException e) {
 					throw new JaxenRuntimeException(e);
 				}
 				return s1.compareTo(s2);
@@ -129,9 +130,9 @@ public class SortStatement extends XPathStatement {
 		};
 
 		if (reverseExpression != null) {
-			XPath revxp = new SDAXPath(reverseExpression);
-			revxp.setVariableContext(context);
-			if (revxp.booleanValueOf(context.getXPathContext()))
+			XPath revxp = traco.getXPath(reverseExpression);
+			revxp.setVariableContext(staco);
+			if (revxp.booleanValueOf(staco.getXPathContext()))
 				return comparator.reversed();
 		}
 

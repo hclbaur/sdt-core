@@ -4,13 +4,12 @@ import java.util.Objects;
 
 import org.jaxen.XPath;
 
-import be.baur.sda.Node;
 import be.baur.sda.DataNode;
+import be.baur.sda.Node;
 import be.baur.sdt.StatementContext;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.TransformException;
 import be.baur.sdt.parser.Keyword;
-import be.baur.sdt.xpath.SDAXPath;
 
 /**
  * The <code>ChooseStatement</code> conditionally executes a compound statement,
@@ -50,9 +49,8 @@ public class ChooseStatement extends Statement {
 				Boolean test = false;
 				if (statement instanceof WhenStatement) {
 					
-					XPath xpath = new SDAXPath( ((WhenStatement) statement).getExpression() );
-					xpath.setVariableContext(staco);
-					test = xpath.booleanValueOf(staco.getXPathContext());
+					XPath xpath = traco.getXPath( ((WhenStatement) statement).getExpression() );
+					xpath.setVariableContext(staco); test = xpath.booleanValueOf(staco.getXPathContext());
 					if (! test) continue; // test next when clause
 				}
 				
