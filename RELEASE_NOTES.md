@@ -1,20 +1,26 @@
 # Release Notes
 
-## [1.4.1] - 2026-02-15
+## [1.5.0] - in development
 
-This release adds date and time related SDT extension functions.
-
-- `Deprecated` SDT namespace prefix and URI declarations in the SDT utility class.
-- Added several date and time related SDT functions.
-- Added SDTFunctionContext and SDTNamespaceContext.
-- Added TransformContext.getXPath().
-- Added SDAXPath.withSDTSupport().
+- `Removed` SDT namespace prefix and URI declarations from the SDT class.
+- `Renamed` sdt.xpath.functions package to sdt.functions.
+- `Renamed` StatementContext.setContextNode() to setXPathContext().
 
 ## Compatibility
 
 - Requires Java 8, sda-core 2.3.0 and Jaxen 2.0.0.
 
 ## Previous releases
+
+### [1.4.1] - 2026-02-15
+
+This release adds date and time related SDT extension functions.
+
+- `Deprecated` SDT namespace prefix and URI declarations in the SDT class.
+- Added several date and time related SDT extension functions.
+- Added SDTFunctionContext and SDTNamespaceContext.
+- Added TransformContext.getXPath().
+- Added SDAXPath.withSDTSupport().
 
 ### [1.4.0] - 2025-02-12
 

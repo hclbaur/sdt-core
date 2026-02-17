@@ -1,4 +1,4 @@
-package be.baur.sdt.xpath.function;
+package be.baur.sdt.function;
 
 import java.io.IOException;
 import java.util.List;

@@ -10,30 +10,30 @@ import org.jaxen.SimpleFunctionContext;
 import org.jaxen.UnresolvableException;
 import org.jaxen.XPathFunctionContext;
 
-import be.baur.sdt.xpath.function.CompareNumberFunction;
-import be.baur.sdt.xpath.function.CompareStringFunction;
-import be.baur.sdt.xpath.function.DocumentNodeFunction;
-import be.baur.sdt.xpath.function.LeftFunction;
-import be.baur.sdt.xpath.function.ParseSDAFunction;
-import be.baur.sdt.xpath.function.RenderSDAFunction;
-import be.baur.sdt.xpath.function.RightFunction;
-import be.baur.sdt.xpath.function.StringJoinFunction;
-import be.baur.sdt.xpath.function.TokenizeFunction;
-import be.baur.sdt.xpath.function.dtm.AddPeriodToDateTimeFunction;
-import be.baur.sdt.xpath.function.dtm.AddToDateTimeFunction;
-import be.baur.sdt.xpath.function.dtm.CompareDateTimeFunction;
-import be.baur.sdt.xpath.function.dtm.CurrentDateTimeFunction;
-import be.baur.sdt.xpath.function.dtm.DateTimeFunction;
-import be.baur.sdt.xpath.function.dtm.DateTimeToLocalFunction;
-import be.baur.sdt.xpath.function.dtm.DateTimeToMillisFunction;
-import be.baur.sdt.xpath.function.dtm.DateTimeToTimeZoneFunction;
-import be.baur.sdt.xpath.function.dtm.FormatDateTimeFunction;
-import be.baur.sdt.xpath.function.dtm.ImplicitTimeZoneFunction;
-import be.baur.sdt.xpath.function.dtm.MillisToDateTimeFunction;
-import be.baur.sdt.xpath.function.dtm.ParseDateTimeFunction;
-import be.baur.sdt.xpath.function.dtm.SubtractDateTimesFunction;
-import be.baur.sdt.xpath.function.dtm.SystemDateTimeFunction;
-import be.baur.sdt.xpath.function.dtm.TimeZoneFromDateTime;
+import be.baur.sdt.function.CompareNumberFunction;
+import be.baur.sdt.function.CompareStringFunction;
+import be.baur.sdt.function.DocumentNodeFunction;
+import be.baur.sdt.function.LeftFunction;
+import be.baur.sdt.function.ParseSDAFunction;
+import be.baur.sdt.function.RenderSDAFunction;
+import be.baur.sdt.function.RightFunction;
+import be.baur.sdt.function.StringJoinFunction;
+import be.baur.sdt.function.TokenizeFunction;
+import be.baur.sdt.function.dtm.AddPeriodToDateTimeFunction;
+import be.baur.sdt.function.dtm.AddToDateTimeFunction;
+import be.baur.sdt.function.dtm.CompareDateTimeFunction;
+import be.baur.sdt.function.dtm.CurrentDateTimeFunction;
+import be.baur.sdt.function.dtm.DateTimeFunction;
+import be.baur.sdt.function.dtm.DateTimeToLocalFunction;
+import be.baur.sdt.function.dtm.DateTimeToMillisFunction;
+import be.baur.sdt.function.dtm.DateTimeToTimeZoneFunction;
+import be.baur.sdt.function.dtm.FormatDateTimeFunction;
+import be.baur.sdt.function.dtm.ImplicitTimeZoneFunction;
+import be.baur.sdt.function.dtm.MillisToDateTimeFunction;
+import be.baur.sdt.function.dtm.ParseDateTimeFunction;
+import be.baur.sdt.function.dtm.SubtractDateTimesFunction;
+import be.baur.sdt.function.dtm.SystemDateTimeFunction;
+import be.baur.sdt.function.dtm.TimeZoneFromDateTime;
 
 /**
  * A <code>FunctionContext</code> providing the core XPath functions plus
@@ -46,7 +46,7 @@ public class SDTFunctionContext implements FunctionContext {
 	
 	// Namespace prefix and URI of SDT provided functions
 	public static final String FUNCTIONS_NS_PFX = "sdt";
-	public static final String FUNCTIONS_NS_URI = "be.baur.sdt.xpath.function";
+	public static final String FUNCTIONS_NS_URI = "be.baur.sdt.function";
 
 	// Namespace prefix and URI of W3C like XPath functions
 	public static final String W3C_FUNCTIONS_NS_PFX = "fn";
@@ -91,7 +91,7 @@ public class SDTFunctionContext implements FunctionContext {
 	}
 
 
-	private static ZoneId implicitTimeZone;	// static (!) context time zone id
+	private static ZoneId implicitTimeZone;	// this context time zone id
 	private ZonedDateTime currentDateTime; // this context date and time
 
 

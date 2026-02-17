@@ -1,4 +1,4 @@
-package be.baur.sdt.xpath.function;
+package be.baur.sdt.function;
 
 import java.util.ArrayList;
 import java.util.Arrays;

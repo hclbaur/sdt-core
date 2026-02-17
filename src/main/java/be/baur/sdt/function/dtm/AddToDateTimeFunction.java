@@ -1,4 +1,4 @@
-package be.baur.sdt.xpath.function.dtm;
+package be.baur.sdt.function.dtm;
 
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;

@@ -134,7 +134,7 @@ public class ForEachStatement extends XPathStatement {
 			if (groups == null) {
 				coco.setVariableValue(FUNCTIONS_NS_URI, "last", new Double(setsize));
 				for (Object node : nodeset) {
-					++position;	coco.setContextNode(node);
+					++position;	coco.setXPathContext(node);
 					coco.setVariableValue(FUNCTIONS_NS_URI, "current", node);
 					coco.setVariableValue(FUNCTIONS_NS_URI, "position", new Double(position));
 
@@ -151,7 +151,7 @@ public class ForEachStatement extends XPathStatement {
 				coco.setVariableValue(FUNCTIONS_NS_URI, "last", new Double(groups.size()));
 				for (String key : groups.keySet()) {
 					List group = groups.get(key);
-					++position;	coco.setContextNode(group);
+					++position;	coco.setXPathContext(group);
 					coco.setVariableValue(FUNCTIONS_NS_URI, "current-group", group);
 					coco.setVariableValue(FUNCTIONS_NS_URI, "current-grouping-key", key);
 					coco.setVariableValue(FUNCTIONS_NS_URI, "position", new Double(position));
