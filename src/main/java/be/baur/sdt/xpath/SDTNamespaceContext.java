@@ -6,6 +6,7 @@ import static be.baur.sdt.xpath.SDTFunctionContext.W3C_FUNCTIONS_NS_PFX;
 import static be.baur.sdt.xpath.SDTFunctionContext.W3C_FUNCTIONS_NS_URI;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import org.jaxen.NamespaceContext;
 import org.jaxen.SimpleNamespaceContext;
@@ -41,26 +42,24 @@ public final class SDTNamespaceContext implements NamespaceContext, Serializable
 	}
 
 
-// Needed later?
-//	/**
-//	 * Binds a prefix to a URI in this namespace context. Note that this method will
-//	 * not overwrite existing bindings, the invariant being that after completion
-//	 * this context has a valid binding for the supplied prefix.
-//	 * 
-//	 * @param prefix a namespace prefix, not null
-//	 * @param URI    a namespace URI, not null
-//	 * @returns true if the context was changes as a result of this call
-//	 */
-//	public boolean addNamespace(String prefix, String URI) {
-//
-//		Objects.requireNonNull(URI, "URI must not be null");
-//		Objects.requireNonNull(prefix, "prefix must not be null");
-//
-//		if (NC.translateNamespacePrefixToUri(prefix) == null) {
-//			NC.addNamespace(prefix, URI);
-//			return true;
-//		}
-//		return false;
-//	}
+	/**
+	 * Binds a prefix to a namespace URI in this context. This method will not
+	 * overwrite existing bindings (including those pre-registered for SDT).
+	 * 
+	 * @param prefix a namespace prefix, not null
+	 * @param URI    a namespace URI, not null
+	 * @returns true if the context was changes as a result of this call
+	 */
+	public boolean addNamespace(String prefix, String URI) {
+
+		Objects.requireNonNull(prefix, "prefix must not be null");
+		Objects.requireNonNull(URI, "URI must not be null");
+
+		if (NC.translateNamespacePrefixToUri(prefix) == null) {
+			NC.addNamespace(prefix, URI);
+			return true;
+		}
+		return false;
+	}
 
 }

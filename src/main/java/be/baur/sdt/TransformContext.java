@@ -22,11 +22,12 @@ import be.baur.sdt.xpath.SDTNamespaceContext;
  * A {@code TransformContext} is created prior to, and used during execution of
  * a {@code Transform}.
  * <p>
- * This context provides a writer for the {@code PrintStatement} to write output
- * to, and (optionally prepared) parameters to overwrite the default value of a
- * {@code ParamStatement}.
+ * It provides a navigator, a writer for the {@code PrintStatement} to write
+ * output to, and (optionally prepared) parameters to overwrite the default
+ * value of a {@code ParamStatement}.
  * <p>
- * The context cannot be instantiated, but must be built using a {@link Builder}.
+ * The context cannot be instantiated, but must be built using a
+ * {@link Builder}.
  * 
  * @see Transform
  */
@@ -34,14 +35,16 @@ public class TransformContext {
 
 	private final Writer writer;
 	private final Map<String, Object> parameters;
-	private final Navigator navigator = DocumentNavigator.getInstance();
+	private final Navigator navigator;
 	private final FunctionContext fncontext = new SDTFunctionContext();
-	private final NamespaceContext nscontext = new SDTNamespaceContext();
+	private final NamespaceContext nscontext;
 	
 	private TransformContext(Builder builder) {
 
 		this.writer = builder.writer;
 		this.parameters = builder.parameters;
+		this.navigator = builder.navigator;
+		this.nscontext = builder.nscontext;
 	}
 
 
@@ -78,8 +81,8 @@ public class TransformContext {
 
 
 	/**
-	 * Creates an XPath expression object suitable for this transform context. By
-	 * default, this also includes the SDT function and SDT namespace context.
+	 * Creates an XPath expression object for this transform context. By default,
+	 * this also includes the SDT function and namespace context.
 	 * 
 	 * @param expression an XPath expression
 	 * @return a new XPath expression object, not null
@@ -106,6 +109,8 @@ public class TransformContext {
 		
 		private Writer writer = new PrintWriter(System.out);
 		private final Map<String, Object> parameters = new HashMap<String, Object>();
+		private Navigator navigator = DocumentNavigator.getInstance();
+		private final SDTNamespaceContext nscontext = new SDTNamespaceContext();
 		
 		/**
 		 * Creates an {@code Builder} that builds a {@code TransformContext} with a
@@ -172,6 +177,31 @@ public class TransformContext {
 			return setParameter(name, value);
 		}
 		
+		/**
+		 * Sets the {@code Navigator} for the context to be built.
+		 * 
+		 * @param navigator a navigator, not null
+		 * @return the builder
+		 */
+		public Builder setNavigator(Navigator navigator) {
+			this.navigator  = Objects.requireNonNull(navigator, "navigator must not be null");
+			return this;
+		}
+
+		/**
+		 * Binds a prefix to a namespace URI in this context.
+		 * 
+		 * @param prefix a namespace prefix, not null
+		 * @param URI    a namespace URI, not null
+		 * @return the builder
+		 * 
+		 * @see SDTNamespaceContext#addNamespace
+		 */
+		public Builder addNamespace(String prefix, String URI) {
+			nscontext.addNamespace(prefix, URI);
+			return this;
+		}
+
 		/**
 		 * Builds and returns a new {@code TransformContext}.
 		 * 

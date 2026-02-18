@@ -1,0 +1,9 @@
+transform {
+
+	param "filename" { select "'fibonacci.xml'" }
+	variable "doc" { select "document($filename)" }
+
+	foreach "$doc/SOAP:Envelope/SOAP:Body/f:Fibonacci_Numbers/f:fibonacci" {
+		println "concat(@index, ': ', .)"
+	}
+}

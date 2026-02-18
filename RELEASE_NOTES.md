@@ -2,9 +2,14 @@
 
 ## [1.5.0] - in development
 
+As of this release it is possible to query XML documents using SDT.
+
 - `Removed` SDT namespace prefix and URI declarations from the SDT class.
 - `Renamed` sdt.xpath.functions package to sdt.functions.
 - `Renamed` StatementContext.setContextNode() to setXPathContext().
+- Added TransformContext.Builder.setNavigator() and .addNamespace().
+- Added SDTNamespaceContext.addNamespace().
+
 
 ## Compatibility
 

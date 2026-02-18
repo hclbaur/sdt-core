@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<addressbook>
+	<contact id="1">
+		<firstname>Alice</firstname>
+		<phonenumber>06-11111111</phonenumber>
+	</contact>
+	<contact id="2">
+		<firstname>Bob</firstname>
+		<phonenumber>06-22222222</phonenumber>
+		<phonenumber>06-33333333</phonenumber>
+	</contact>
+	<contact id="3">
+		<firstname>Chris</firstname>
+		<phonenumber>06-44444444</phonenumber>
+	</contact>
+</addressbook>
