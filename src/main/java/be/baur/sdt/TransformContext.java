@@ -37,13 +37,14 @@ public class TransformContext {
 	private final Map<String, Object> parameters;
 	private final Navigator navigator;
 	private final FunctionContext fncontext = new SDTFunctionContext();
-	private final NamespaceContext nscontext = new SDTNamespaceContext();
+	private final NamespaceContext nscontext;
 	
 	private TransformContext(Builder builder) {
 
 		this.writer = builder.writer;
 		this.parameters = builder.parameters;
 		this.navigator = builder.navigator;
+		this.nscontext = builder.nscontext;
 	}
 
 
@@ -108,7 +109,8 @@ public class TransformContext {
 		
 		private Writer writer = new PrintWriter(System.out);
 		private final Map<String, Object> parameters = new HashMap<String, Object>();
-		private Navigator navigator = DocumentNavigator.getInstance();;
+		private Navigator navigator = DocumentNavigator.getInstance();
+		private final SDTNamespaceContext nscontext = new SDTNamespaceContext();
 		
 		/**
 		 * Creates an {@code Builder} that builds a {@code TransformContext} with a
@@ -185,7 +187,20 @@ public class TransformContext {
 			this.navigator  = Objects.requireNonNull(navigator, "navigator must not be null");
 			return this;
 		}
-		
+
+		/**
+		 * Binds a prefix to a namespace URI in this context. This method will not
+		 * overwrite existing (or pre-registered) bindings.
+		 * 
+		 * @param prefix a namespace prefix, not null
+		 * @param URI    a namespace URI, not null
+		 * @return the builder
+		 */
+		public Builder addNamespace(String prefix, String URI) {
+			nscontext.addNamespace(prefix, URI);
+			return this;
+		}
+
 		/**
 		 * Builds and returns a new {@code TransformContext}.
 		 * 
