@@ -1,4 +1,4 @@
-package test;
+
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -12,14 +12,14 @@ import be.baur.sdt.SDT;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.transform.Transform;
 
-public final class TestTransformXml {
+public final class transformxml {
 	
 	public static void main(String[] args) throws Exception {
 		
-		InputStream in = TestTransformXml.class.getResourceAsStream("/example-xml.sdt");
+		InputStream in = transformxml.class.getResourceAsStream("/example-xml.sdt");
 		Transform tran = SDT.parse(new InputStreamReader(in, "UTF-8"));
 		
-		String file = TestTransformXml.class.getResource("/example.xml").getFile();
+		String file = transformxml.class.getResource("/example.xml").getFile();
 		TransformContext c = new TransformContext.Builder() //.setWriter(SDT.nullWriter())
 			.setNavigator(DocumentNavigator.getInstance())
 			.setStringParameter("filename", file).build();
