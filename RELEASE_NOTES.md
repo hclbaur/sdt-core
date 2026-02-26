@@ -9,7 +9,7 @@ As of this release it is possible to query XML documents using SDT.
 - `Renamed` StatementContext.setContextNode() to setXPathContext().
 - Added TransformContext.Builder.setNavigator() and .addNamespace().
 - Added SDTNamespaceContext.addNamespace().
-
+- Added SDT.parse(File) convenience method.
 
 ## Compatibility
 

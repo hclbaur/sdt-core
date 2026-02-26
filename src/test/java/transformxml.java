@@ -1,7 +1,6 @@
 
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.File;
 import java.io.Writer;
 
 import org.jaxen.dom.DocumentNavigator;
@@ -16,13 +15,13 @@ public final class transformxml {
 	
 	public static void main(String[] args) throws Exception {
 		
-		InputStream in = transformxml.class.getResourceAsStream("/example-xml.sdt");
-		Transform tran = SDT.parse(new InputStreamReader(in, "UTF-8"));
+		String sdtfile = transform.class.getResource("/example-xml.sdt").getFile();
+		Transform tran = SDT.parse(new File(sdtfile));
 		
-		String file = transformxml.class.getResource("/example.xml").getFile();
+		String sdafile = transformxml.class.getResource("/example.xml").getFile();
 		TransformContext c = new TransformContext.Builder() //.setWriter(SDT.nullWriter())
 			.setNavigator(DocumentNavigator.getInstance())
-			.setStringParameter("filename", file).build();
+			.setStringParameter("filename", sdafile).build();
 		Writer w = c.getWriter();
 		
 		w.write("<<\n");

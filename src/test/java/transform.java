@@ -1,7 +1,6 @@
 
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.File;
 import java.io.Writer;
 
 import be.baur.sda.DataNode;
@@ -14,12 +13,12 @@ public final class transform {
 	
 	public static void main(String[] args) throws Exception {
 		
-		InputStream in = transform.class.getResourceAsStream("/example.sdt");
-		Transform tran = SDT.parse(new InputStreamReader(in, "UTF-8"));
+		String sdtfile = transform.class.getResource("/example.sdt").getFile();
+		Transform tran = SDT.parse(new File(sdtfile));
 		
-		String file = transform.class.getResource("/example.sda").getFile();
+		String sdafile = transform.class.getResource("/example.sda").getFile();
 		TransformContext c = new TransformContext.Builder() //.setWriter(SDT.nullWriter())
-			.setStringParameter("filename", file).build();
+			.setStringParameter("filename", sdafile).build();
 		Writer w = c.getWriter();
 		
 		w.write("<<\n");

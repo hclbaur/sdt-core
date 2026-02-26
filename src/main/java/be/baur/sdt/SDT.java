@@ -1,5 +1,6 @@
 package be.baur.sdt;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
@@ -8,6 +9,7 @@ import java.util.regex.Pattern;
 import org.jaxen.Function;
 import org.jaxen.function.SubstringFunction;
 
+import be.baur.sda.io.FileParseException;
 import be.baur.sdt.parser.SDTParseException;
 import be.baur.sdt.parser.SDTParser;
 import be.baur.sdt.transform.Transform;
@@ -61,6 +63,20 @@ public final class SDT {
 		return PARSER.parse(input);
 	}
 
+
+	/**
+	 * Creates a transform from an input file in SDT format (assuming UTF-8
+	 * encoding), using the default SDT parser.
+	 * 
+	 * @param file an input file
+	 * @return a transform
+	 * @throws IOException        if an I/O operation failed
+	 * @throws FileParseException if an SDT parsing error occurs
+	 */
+	public static Transform parse(File file) throws IOException, FileParseException {
+		return PARSER.parse(file);
+	}
+	
 	
 	private static final Pattern VARNAME = Pattern.compile("_*[A-Za-z][A-Za-z0-9_.-]*");
 	/**

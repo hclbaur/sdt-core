@@ -1,4 +1,4 @@
-import java.io.FileReader;
+import java.io.File;
 
 import be.baur.sda.DataNode;
 import be.baur.sda.SDA;
@@ -10,8 +10,7 @@ public class demo {
 
 	public static void main(String[] args) throws Exception {
 		
-		FileReader sdt = new FileReader(args[0]);
-		Transform transform = SDT.parse(sdt);
+		Transform transform = SDT.parse(new File(args[0]));
 
 		TransformContext c = new TransformContext.Builder()
 			.setStringParameter("filename", args[1])
