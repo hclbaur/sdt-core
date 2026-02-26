@@ -44,8 +44,7 @@ public final class SDTNamespaceContext implements NamespaceContext, Serializable
 
 	/**
 	 * Binds a prefix to a namespace URI in this context. This method will not
-	 * overwrite existing (or pre-registered) bindings. It returns true if the
-	 * context was changed as a result of this call, and false otherwise.
+	 * overwrite existing bindings (including those pre-registered for SDT).
 	 * 
 	 * @param prefix a namespace prefix, not null
 	 * @param URI    a namespace URI, not null

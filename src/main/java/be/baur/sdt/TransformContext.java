@@ -189,12 +189,13 @@ public class TransformContext {
 		}
 
 		/**
-		 * Binds a prefix to a namespace URI in this context. This method will not
-		 * overwrite existing (or pre-registered) bindings.
+		 * Binds a prefix to a namespace URI in this context.
 		 * 
 		 * @param prefix a namespace prefix, not null
 		 * @param URI    a namespace URI, not null
 		 * @return the builder
+		 * 
+		 * @see SDTNamespaceContext#addNamespace
 		 */
 		public Builder addNamespace(String prefix, String URI) {
 			nscontext.addNamespace(prefix, URI);
