@@ -1,7 +1,5 @@
 package be.baur.sdt.transform;
 
-import java.io.Writer;
-
 import org.jaxen.XPath;
 
 import be.baur.sda.DataNode;
@@ -49,12 +47,11 @@ public class PrintStatement extends XPathStatement {
 			XPath xpath = traco.getXPath( getExpression() ); 
 			xpath.setVariableContext(staco);
 			String value = xpath.stringValueOf(staco.getXPathContext());
-			
-			Writer writer = traco.getWriter();
-			writer.write(value); 
-			if (terminate) 
-				writer.write(System.lineSeparator());
-			writer.flush();
+			 
+			if (terminate)
+				traco.write(value.concat(System.lineSeparator()));
+			else
+				traco.write(value);
 			
 		} catch (Exception e) {
 			throw new TransformException(this, e);

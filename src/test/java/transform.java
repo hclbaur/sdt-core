@@ -1,7 +1,6 @@
 
 
 import java.io.File;
-import java.io.Writer;
 
 import be.baur.sda.DataNode;
 import be.baur.sda.SDA;
@@ -19,12 +18,10 @@ public final class transform {
 		String sdafile = transform.class.getResource("/example.sda").getFile();
 		TransformContext c = new TransformContext.Builder() //.setWriter(SDT.nullWriter())
 			.setStringParameter("filename", sdafile).build();
-		Writer w = c.getWriter();
 		
-		w.write("<<\n");
+		c.write("<<\n");
 		DataNode node = tran.execute(c); 
-		SDA.format(w, node);
-		w.write(">>\n");
-		w.flush();
+		c.write(SDA.format(node));
+		c.write(">>\n");
 	}
 }

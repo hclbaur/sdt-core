@@ -1,5 +1,6 @@
 package be.baur.sdt;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Writer;
 import java.util.Collections;
@@ -22,11 +23,11 @@ import be.baur.sdt.xpath.SDTNamespaceContext;
  * A {@code TransformContext} is created prior to, and used during execution of
  * a {@code Transform}.
  * <p>
- * It provides a navigator, a writer for the {@code PrintStatement} to write
- * output to, and (optionally prepared) parameters to overwrite the default
- * value of a {@code ParamStatement}.
+ * It provides the transform with a navigator, a writer for the
+ * {@code print(ln)} statement to write output to, and (optionally prepared)
+ * parameters to overwrite the default value of a declared {@code param}.
  * <p>
- * The context cannot be instantiated, but must be built using a
+ * The transform context cannot be instantiated, but must be built using a
  * {@link Builder}.
  * 
  * @see Transform
@@ -36,26 +37,38 @@ public class TransformContext {
 	private final Writer writer;
 	private final Map<String, Object> parameters;
 	private final Navigator navigator;
-	private final FunctionContext fncontext = new SDTFunctionContext();
+	private final FunctionContext fncontext;
 	private final NamespaceContext nscontext;
 	
 	private TransformContext(Builder builder) {
 
-		this.writer = builder.writer;
-		this.parameters = builder.parameters;
-		this.navigator = builder.navigator;
-		this.nscontext = builder.nscontext;
+		if (builder.writer == null)
+			writer = new PrintWriter(System.out);
+		else
+			writer = builder.writer;
+		
+		parameters = builder.parameters;
+		
+		if (builder.navigator == null)
+			navigator = DocumentNavigator.getInstance();
+		else
+			navigator = builder.navigator;
+
+		fncontext = new SDTFunctionContext();
+		nscontext = builder.nscontext;
 	}
 
 
 	/**
-	 * Returns the {@code Writer} provided by this context. If no writer was set
-	 * explicitly, this will be a writer to standard output.
+	 * Writes a string to the output stream provided by this context. If no writer
+	 * was set explicitly, this will be the standard output stream.
 	 * 
-	 * @return a writer, not null
+	 * @param str a string to be written
+	 * @throws IOException if an I/O error occurs
 	 */
-	public Writer getWriter() {
-		return writer;
+	public void write(String str) throws IOException {
+		writer.write(str);
+		writer.flush();
 	}
 
 	
@@ -99,7 +112,7 @@ public class TransformContext {
 		return xpath;
 	}
 
-
+	// Builder below
 
 	/**
 	 * A builder class to build a {@code TransformContext}. The builder has methods
@@ -107,22 +120,21 @@ public class TransformContext {
 	 */
 	 public static class Builder {
 		
-		private Writer writer = new PrintWriter(System.out);
+		private Writer writer;
+		private Navigator navigator;
 		private final Map<String, Object> parameters = new HashMap<String, Object>();
-		private Navigator navigator = DocumentNavigator.getInstance();
 		private final SDTNamespaceContext nscontext = new SDTNamespaceContext();
 		
 		/**
-		 * Creates an {@code Builder} that builds a {@code TransformContext} with a
-		 * <i>standard output writer</i> and no parameters. To set a different writer
-		 * and/or add parameters, use the provided setter methods.
+		 * Creates an {@code Builder} that builds an SDA {@code TransformContext} with
+		 * SDT support and a standard output writer.
 		 */
 		public Builder() {
 		}
 		
 		/**
-		 * Sets the {@code Writer} for the context to be built. The writer cannot be
-		 * null, but a {@link SDT#nullWriter} can be used to suppress output.
+		 * Sets a writer for the context to be built. The writer cannot be null, but a
+		 * {@link SDT#nullWriter} can be used to suppress output.
 		 * 
 		 * @param writer a writer, not null
 		 * @return the builder
@@ -178,18 +190,20 @@ public class TransformContext {
 		}
 		
 		/**
-		 * Sets the {@code Navigator} for the context to be built.
+		 * Sets a different navigator for the context to be built. This allows for
+		 * transformation of non-SDA content, like XML.
 		 * 
 		 * @param navigator a navigator, not null
 		 * @return the builder
 		 */
 		public Builder setNavigator(Navigator navigator) {
-			this.navigator  = Objects.requireNonNull(navigator, "navigator must not be null");
+			this.navigator = Objects.requireNonNull(navigator, "navigator must not be null");
 			return this;
 		}
 
 		/**
-		 * Binds a prefix to a namespace URI in this context.
+		 * Binds a prefix to an additional namespace URI in this context, for example if
+		 * XML is transformed.
 		 * 
 		 * @param prefix a namespace prefix, not null
 		 * @param URI    a namespace URI, not null
