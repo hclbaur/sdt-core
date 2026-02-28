@@ -132,6 +132,9 @@ public class TransformContext {
 		/**
 		 * Sets a writer for the context to be built. The writer cannot be null, but a
 		 * {@link SDT#nullWriter} can be used to suppress output.
+		 * <p>
+		 * <i>Note</i>: the caller owns the writer; the context will never flush or
+		 * close it.
 		 * 
 		 * @param writer a writer, not null
 		 * @return the builder
