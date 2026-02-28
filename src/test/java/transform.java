@@ -16,12 +16,11 @@ public final class transform {
 		Transform tran = SDT.parse(new File(sdtfile));
 		
 		String sdafile = transform.class.getResource("/example.sda").getFile();
-		TransformContext c = new TransformContext.Builder() //.setWriter(SDT.nullWriter())
-			.setStringParameter("filename", sdafile).build();
+		TransformContext c = new TransformContext.Builder()
+			.setStringParameter("filename", sdafile)
+			.build();
 		
-		c.write("<<\n");
-		DataNode node = tran.execute(c); 
+		DataNode node = tran.execute(c);
 		c.write(SDA.format(node));
-		c.write(">>\n");
 	}
 }

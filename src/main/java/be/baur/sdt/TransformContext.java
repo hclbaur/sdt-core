@@ -1,7 +1,6 @@
 package be.baur.sdt;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.io.Writer;
 import java.util.Collections;
 import java.util.HashMap;
@@ -23,12 +22,12 @@ import be.baur.sdt.xpath.SDTNamespaceContext;
  * A {@code TransformContext} is created prior to, and used during execution of
  * a {@code Transform}.
  * <p>
- * It provides the transform with a navigator, a writer for the
- * {@code print(ln)} statement to write output to, and (optionally prepared)
+ * It provides the transform with function and namespace context, a navigator, a
+ * writer for the {@code print(ln)} statement to write output to, and optional
  * parameters to overwrite the default value of a declared {@code param}.
  * <p>
- * The transform context cannot be instantiated, but must be built using a
- * {@link Builder}.
+ * The transform context cannot be instantiated, but must be built using the
+ * provided {@link Builder}.
  * 
  * @see Transform
  */
@@ -42,11 +41,7 @@ public class TransformContext {
 	
 	private TransformContext(Builder builder) {
 
-		if (builder.writer == null)
-			writer = new PrintWriter(System.out);
-		else
-			writer = builder.writer;
-		
+		writer = builder.writer;
 		parameters = builder.parameters;
 		
 		if (builder.navigator == null)
@@ -60,15 +55,17 @@ public class TransformContext {
 
 
 	/**
-	 * Writes a string to the output stream provided by this context. If no writer
+	 * Writes a string to the writer provided by this context. If no writer
 	 * was set explicitly, this will be the standard output stream.
 	 * 
 	 * @param str a string to be written
 	 * @throws IOException if an I/O error occurs
 	 */
 	public void write(String str) throws IOException {
-		writer.write(str);
-		writer.flush();
+		if (writer == null)
+			System.out.print(str);
+		else
+			writer.write(str);
 	}
 
 	

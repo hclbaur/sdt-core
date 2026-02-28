@@ -17,12 +17,12 @@ public final class transformxml {
 		Transform tran = SDT.parse(new File(sdtfile));
 
 		String sdafile = transformxml.class.getResource("/example.xml").getFile();
-		TransformContext c = new TransformContext.Builder() // .setWriter(SDT.nullWriter())
-				.setNavigator(DocumentNavigator.getInstance()).setStringParameter("filename", sdafile).build();
+		TransformContext c = new TransformContext.Builder()
+			.setNavigator(DocumentNavigator.getInstance())
+			.setStringParameter("filename", sdafile)
+			.build();
 
-		c.write("<<\n");
 		DataNode node = tran.execute(c);
 		c.write(SDA.format(node));
-		c.write(">>\n");
 	}
 }
