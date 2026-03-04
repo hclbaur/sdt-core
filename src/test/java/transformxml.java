@@ -1,7 +1,5 @@
 
-
 import java.io.File;
-import java.io.Writer;
 
 import org.jaxen.dom.DocumentNavigator;
 
@@ -12,22 +10,19 @@ import be.baur.sdt.TransformContext;
 import be.baur.sdt.transform.Transform;
 
 public final class transformxml {
-	
+
 	public static void main(String[] args) throws Exception {
-		
+
 		String sdtfile = transform.class.getResource("/example-xml.sdt").getFile();
 		Transform tran = SDT.parse(new File(sdtfile));
-		
-		String sdafile = transformxml.class.getResource("/example.xml").getFile();
-		TransformContext c = new TransformContext.Builder() //.setWriter(SDT.nullWriter())
+
+		String xmlfile = transformxml.class.getResource("/example.xml").getFile();
+		TransformContext c = new TransformContext.Builder()
 			.setNavigator(DocumentNavigator.getInstance())
-			.setStringParameter("filename", sdafile).build();
-		Writer w = c.getWriter();
-		
-		w.write("<<\n");
-		DataNode node = tran.execute(c); 
-		SDA.format(w, node);
-		w.write(">>\n");
-		w.flush();
+			.setStringParameter("filename", xmlfile)
+			.build();
+
+		DataNode node = tran.execute(c);
+		c.write(SDA.format(node));
 	}
 }

@@ -43,12 +43,13 @@ public class fibonacci {
 		String sdtfile = transform.class.getResource("/fibonacci.sdt").getFile();
 		Transform tran = SDT.parse(new File(sdtfile));
 		
-		String sdafile = transform.class.getResource("/fibonacci.xml").getFile();
+		String xmlfile = transform.class.getResource("/fibonacci.xml").getFile();
 		TransformContext context = new TransformContext.Builder()
 			.addNamespace("f", "http://namespaces.cafeconleche.org/xmljava/ch3/")
 			.addNamespace("SOAP", "http://schemas.xmlsoap.org/soap/envelope/")
 			.setNavigator(DocumentNavigator.getInstance())
-			.setStringParameter("filename", sdafile).build();
+			.setStringParameter("filename", xmlfile)
+			.build();
 		tran.execute(context); 
 		
 	}
