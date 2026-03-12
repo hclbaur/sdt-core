@@ -62,7 +62,7 @@ public final class RightFunction implements Function
         int num = (int) Math.round(arg2); 
         if (num <= 0) return "";
 
-        final Object[] subargs = { args.get(0), new Double(len - num + 1),  arg2 };
+        final Object[] subargs = { args.get(0), Double.valueOf(len - num + 1),  arg2 };
         return SDT.SUBSTRING.call(context, Arrays.asList( subargs ));    
     }
 

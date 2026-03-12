@@ -132,11 +132,11 @@ public class ForEachStatement extends XPathStatement {
 			 */
 			int position = 0; 		
 			if (groups == null) {
-				coco.setVariableValue(FUNCTIONS_NS_URI, "last", new Double(setsize));
+				coco.setVariableValue(FUNCTIONS_NS_URI, "last", Double.valueOf(setsize));
 				for (Object node : nodeset) {
 					++position;	coco.setXPathContext(node);
 					coco.setVariableValue(FUNCTIONS_NS_URI, "current", node);
-					coco.setVariableValue(FUNCTIONS_NS_URI, "position", new Double(position));
+					coco.setVariableValue(FUNCTIONS_NS_URI, "position", Double.valueOf(position));
 
 					for (Node statement : statements)
 						((Statement) statement).execute(traco, coco);
@@ -148,13 +148,13 @@ public class ForEachStatement extends XPathStatement {
 			 * execution of the compound statement.
 			 */
 			else {
-				coco.setVariableValue(FUNCTIONS_NS_URI, "last", new Double(groups.size()));
+				coco.setVariableValue(FUNCTIONS_NS_URI, "last", Double.valueOf(groups.size()));
 				for (String key : groups.keySet()) {
 					List group = groups.get(key);
 					++position;	coco.setXPathContext(group);
 					coco.setVariableValue(FUNCTIONS_NS_URI, "current-group", group);
 					coco.setVariableValue(FUNCTIONS_NS_URI, "current-grouping-key", key);
-					coco.setVariableValue(FUNCTIONS_NS_URI, "position", new Double(position));
+					coco.setVariableValue(FUNCTIONS_NS_URI, "position", Double.valueOf(position));
 
 					for (Node statement : statements)
 						((Statement) statement).execute(traco, coco);
