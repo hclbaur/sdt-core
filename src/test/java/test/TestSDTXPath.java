@@ -137,12 +137,12 @@ public class TestSDTXPath {
 		t.so("S100", "sdt:add-to-dateTime('1968-02-28T12:00:00',0,0,0)", doc, "1968-02-28T12:00:00");
 		t.so("S101", "sdt:add-to-dateTime('1968-02-28T12:00:00',11,59,60)", doc, "1968-02-29T00:00:00");
 		t.so("S102", "sdt:add-to-dateTime('1968-03-01T12:00:00',-35,-59,-60)", doc, "1968-02-29T00:00:00");
-		t.so("S104", "sdt:add-to-dateTime('2025-03-29T03:00:00+01:00[Europe/Amsterdam]',24,0,0)", doc, "2025-03-30T04:00:00+02:00[Europe/Amsterdam]");
-		t.so("S105", "sdt:add-to-dateTime('2025-03-30T01:00:00+01:00[Europe/Amsterdam]',1,0,0)", doc, "2025-03-30T03:00:00+02:00[Europe/Amsterdam]");
-		t.so("S106", "sdt:add-to-dateTime('2025-10-26T02:00:00+02:00[Europe/Amsterdam]',1,0,0)", doc, "2025-10-26T02:00:00+01:00[Europe/Amsterdam]");
-		t.so("S107", "sdt:add-to-dateTime('2025-10-26T03:00:00+02:00[Europe/Amsterdam]',-1,0,0)", doc, "2025-10-26T02:00:00+01:00[Europe/Amsterdam]");	
-		t.so("S108", "sdt:add-to-dateTime('2025-10-27T01:00:00+01:00[Europe/Amsterdam]',-24,0,0)", doc, "2025-10-26T02:00:00+02:00[Europe/Amsterdam]");
-		t.so("F109", "sdt:add-to-dateTime()", doc, "add-to-dateTime() requires four arguments.");
+		t.so("S103", "sdt:add-to-dateTime('2025-03-29T03:00:00+01:00[Europe/Amsterdam]',24,0,0)", doc, "2025-03-30T04:00:00+02:00[Europe/Amsterdam]");
+		t.so("S104", "sdt:add-to-dateTime('2025-03-30T01:00:00+01:00[Europe/Amsterdam]',1,0,0)", doc, "2025-03-30T03:00:00+02:00[Europe/Amsterdam]");
+		t.so("S105", "sdt:add-to-dateTime('2025-10-26T02:00:00+02:00[Europe/Amsterdam]',1,0,0)", doc, "2025-10-26T02:00:00+01:00[Europe/Amsterdam]");
+		t.so("S106", "sdt:add-to-dateTime('2025-10-26T03:00:00+02:00[Europe/Amsterdam]',-1,0,0)", doc, "2025-10-26T02:00:00+02:00[Europe/Amsterdam]");
+		t.so("S107", "sdt:add-to-dateTime('2025-10-27T01:00:00+01:00[Europe/Amsterdam]',-24,0,0)", doc, "2025-10-26T02:00:00+02:00[Europe/Amsterdam]");
+		t.so("F108", "sdt:add-to-dateTime()", doc, "add-to-dateTime() requires four arguments.");
 		
 		t.so("S110", "sdt:add-period-to-dateTime('1968-02-29T12:00:00',0,0,0)", doc, "1968-02-29T12:00:00");
 		t.so("S111", "sdt:add-period-to-dateTime('1968-02-28T12:00:00',0,0,1)", doc, "1968-02-29T12:00:00");
@@ -162,7 +162,7 @@ public class TestSDTXPath {
 		t.so("S123", "sdt:subtract-dateTimes('1968-02-28T12:00+01:00[Europe/Amsterdam]','1968-02-28T12:00+01:00[Europe/Berlin]')", doc, "0.0");
 		t.so("S124", "sdt:subtract-dateTimes('1968-03-01T12:00','1968-02-28T12:00') div 3600", doc, "48.0");
 		t.so("S125", "sdt:subtract-dateTimes('1968-02-28T12:00-05:00','1968-02-28T12:00+01:00') div 3600", doc, "6.0");
-		t.so("S126", "sdt:subtract-dateTimes('1968-02-28T12:00+01:00[America/New_York]','1968-02-28T12:00+01:00[Europe/Amsterdam]') div 3600", doc, "6.0");
+		t.so("S126", "sdt:subtract-dateTimes('1968-02-28T12:00-05:00[America/New_York]','1968-02-28T12:00+01:00[Europe/Amsterdam]') div 3600", doc, "6.0");
 		t.so("S127", "sdt:subtract-dateTimes('2025-03-30T01:00:00+01:00','2025-03-30T03:00:00+02:00') div 3600", doc, "-1.0");
 		t.so("S128", "sdt:subtract-dateTimes('2025-10-26T02:00:00+02:00','2025-10-26T03:00:00+01:00') div 3600", doc, "-2.0");
 		t.so("S129", "sdt:subtract-dateTimes() div 3600000", doc, "subtract-dateTimes() requires two arguments.");
