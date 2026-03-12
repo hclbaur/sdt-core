@@ -1,4 +1,5 @@
 import java.io.File;
+import java.io.Writer;
 
 import be.baur.sda.DataNode;
 import be.baur.sda.SDA;
@@ -14,7 +15,7 @@ public class demo {
 
 		TransformContext c = new TransformContext.Builder()
 			.setStringParameter("filename", args[1])
-			.setWriter(SDT.nullWriter())
+			.setWriter(Writer.nullWriter())
 			.build();
 		
 		DataNode output = transform.execute(c); 

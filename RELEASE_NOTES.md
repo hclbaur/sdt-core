@@ -11,10 +11,11 @@ As of this release it is possible to query XML documents using SDT.
 - Added TransformContext.Builder.setNavigator() and .addNamespace().
 - Added SDTNamespaceContext.addNamespace().
 - Added SDT.parse(File) convenience method.
+- As of this release, Java 11 is required.
 
 ## Compatibility
 
-- Requires Java 8, sda-core 2.3.0 and Jaxen 2.0.0.
+- Requires Java 11, sda-core 2.3.0 and Jaxen 2.0.0.
 
 ## Previous releases
 

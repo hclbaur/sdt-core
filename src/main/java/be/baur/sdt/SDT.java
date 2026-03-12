@@ -3,7 +3,6 @@ package be.baur.sdt;
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
-import java.io.Writer;
 import java.util.regex.Pattern;
 
 import org.jaxen.Function;
@@ -21,33 +20,12 @@ public final class SDT {
 	
 	private SDT() {} // cannot construct this
 
-	private static final Writer NULL_WRITER = new NullWriter();
-	private static class NullWriter extends Writer {
-		@Override
-		public void write(char[] cbuf, int off, int len) throws IOException {}
-		@Override
-		public void flush() throws IOException {}
-		@Override
-		public void close() throws IOException {}
-	}
 
-	/**
-	 * Returns a {@code Writer} that discards everything. The methods {@code write},
-	 * {@code flush} and {@code close} do nothing at all. Note that as of Java 11 a
-	 * {@code Writer.nullWriter()} can be used instead.
-	 * 
-	 * @return a NullWriter()
-	 */
-	public static Writer nullWriter() {
-		return NULL_WRITER;
-	}
-
-
-	/** Singleton instance of SubstringFunction for use in other functions. */
+	/** Static instance of SubstringFunction for use in other functions. */
 	public static final Function SUBSTRING = new SubstringFunction();
 	
 	
-	private static SDTParser PARSER = new SDTParser(); // singleton parser
+	private static SDTParser PARSER = new SDTParser(); // static default parser
 
 	/**
 	 * Creates a transform from a character input stream in SDT format, using the
