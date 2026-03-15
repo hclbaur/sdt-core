@@ -15,7 +15,7 @@ As of this release it is possible to query XML documents using SDT.
 
 ## Compatibility
 
-- Requires Java 11, sda-core 2.3.0 and Jaxen 2.0.0.
+- Requires Java 11, sda-core 2.4.0 and Jaxen 2.0.0.
 
 ## Previous releases
 
@@ -29,7 +29,7 @@ This release adds date and time related SDT extension functions.
 - Added TransformContext.getXPath().
 - Added SDAXPath.withSDTSupport().
 
-### [1.4.0] - 2025-02-12
+### [1.4.0] - 2025-02-12 (requires SDA v2.3.0)
 
 This release impacts the way XPath expressions are written (without referencing the root node) and how variables are (re)assigned with regards to scope. As a result, existing transformations will need to be rewritten. Also, a transform no longer adds a default 'output' node.
 
