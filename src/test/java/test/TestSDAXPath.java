@@ -140,6 +140,8 @@ public class TestSDAXPath {
 		t.so("S78", "upper-case(firstname)", bob, "BOB");
 		
 		t.so("S79", "document('"+ file + "')", addressbook, "["+doc.toString()+"]");
+		
+		t.checkFailures();
 	}
 
 }

@@ -1,11 +1,9 @@
 package test;
 
-import java.io.File;
 import java.util.function.Function;
 
 import org.jaxen.XPath;
 
-import be.baur.sda.DataNode;
 import be.baur.sda.SDA;
 import be.baur.sdt.parser.SDTParseException;
 import be.baur.sdt.parser.SDTParser;
@@ -155,19 +153,7 @@ public final class TestSDTParser {
 		f.s("F83", "transform { copy \"/item\" { value \"\" } }", "/transform/copy: statement 'copy' expects no compound statement");
 		
 		f.s("F84", "transform { transform { } }", "/transform/transform: statement 'transform' is not allowed here");
-	
-		
-		// test performance
-		DataNode sdt = SDA.parse(new File(TestSDTParser.class.getResource("/addressbook.sdt").getFile()));
-		
-		PerfTest p = new PerfTest(sdtnode -> {
-			try {
-				SDTParser.parse(sdtnode);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		});
 
-		p.test("\nPerformance: P01", sdt, 12500, 1);
+		f.checkFailures();
 	}
 }

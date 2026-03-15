@@ -139,6 +139,8 @@ public class TestDOMXPath {
 		t.so("S78", "upper-case(firstname)", bob, "BOB");
 		
 		t.so("S79", "document('"+ file + "')", addressbook, "[[#document: null]]");
+		
+		t.checkFailures();
 	}
 
 }
