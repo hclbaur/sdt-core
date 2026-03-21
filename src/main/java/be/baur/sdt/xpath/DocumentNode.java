@@ -4,7 +4,6 @@ import java.util.Objects;
 
 import be.baur.sda.AbstractNode;
 import be.baur.sda.DataNode;
-import be.baur.sda.Node;
 
 /**
  * A document node is a node that encapsulates the entire document. In SDA there
@@ -30,7 +29,7 @@ final class DocumentNode extends AbstractNode {
 	 * must not be tampered with after creation.
 	 */
 	@Override
-	public boolean add(Node node) {
+	public boolean add(AbstractNode node) {
 		throw new UnsupportedOperationException("cannot add to a document node");
 	}
 
@@ -40,7 +39,7 @@ final class DocumentNode extends AbstractNode {
 	 * must not be tampered with after creation.
 	 */
 	@Override
-	public boolean remove(Node node) {
+	public boolean remove(AbstractNode node) {
 		throw new UnsupportedOperationException("cannot remove from a document node");
 	}
 

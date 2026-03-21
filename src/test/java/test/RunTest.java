@@ -17,6 +17,5 @@ public final class RunTest extends TestCase {
 		test.TestSDTXPath.main(args);
 		System.out.print("\nSDTParser : ");
 		test.TestSDTParser.main(args);
-		test.TestPerf.main(args);
 	}
 }

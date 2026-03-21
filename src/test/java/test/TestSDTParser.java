@@ -1,9 +1,11 @@
 package test;
 
+import java.io.File;
 import java.util.function.Function;
 
 import org.jaxen.XPath;
 
+import be.baur.sda.DataNode;
 import be.baur.sda.SDA;
 import be.baur.sdt.parser.SDTParseException;
 import be.baur.sdt.parser.SDTParser;
@@ -155,5 +157,18 @@ public final class TestSDTParser {
 		f.s("F84", "transform { transform { } }", "/transform/transform: statement 'transform' is not allowed here");
 
 		f.checkFailures();
+		
+		// test performance
+		DataNode sdt = SDA.parse(new File(TestSDTParser.class.getResource("/addressbook.sdt").getFile()));
+		
+		TestPerf p = new TestPerf(sdtnode -> {
+			try {
+				SDTParser.parse(sdtnode);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		});
+
+		p.test("\nPerfTest  : P01", sdt, 10000, 20);
 	}
 }
