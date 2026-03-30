@@ -1,11 +1,9 @@
 package test;
-import java.util.List;
-
 import org.jaxen.Navigator;
 
 import be.baur.sda.DataNode;
-import be.baur.sda.Node;
 import be.baur.sdt.xpath.DocumentNavigator;
+import be.baur.sdt.xpath.DocumentNode;
 
 public class TestSDAXPath {
 
@@ -22,12 +20,12 @@ public class TestSDAXPath {
 		});
 		
 		String file = TestSDAXPath.class.getResource("/addressbook.sda").getFile();
-		Node doc = DocumentNavigator.newDocumentNode((DataNode) nav.getDocument(file));
+		DocumentNode doc = DocumentNavigator.newDocumentNode((DataNode) nav.getDocument(file));
 		
-		Node addressbook = doc.nodes().get(0);
-		List<Node> contacts = addressbook.nodes();
-		Node alice = contacts.get(0); 
-		Node bob = contacts.get(1);
+		var addressbook = doc.nodes().get(0);
+		var contacts = addressbook.nodes();
+		var alice = contacts.get(0); 
+		var bob = contacts.get(1);
 		
 		t.so("S01", "/", doc, "["+doc.toString()+"]");
 		t.so("S02", ".", doc, "["+doc.toString()+"]");

@@ -6,7 +6,6 @@ import java.util.Objects;
 import org.jaxen.XPath;
 
 import be.baur.sda.DataNode;
-import be.baur.sda.Node;
 import be.baur.sda.SDA;
 import be.baur.sdt.StatementContext;
 import be.baur.sdt.TransformContext;
@@ -128,13 +127,13 @@ public class NodeStatement extends Statement {
 	 */
 	@Override
 	public DataNode toSDA() {
-		DataNode node = new DataNode(Keyword.NODE.tag, nodeName);
+		var node = new DataNode(Keyword.NODE.tag, nodeName);
 		if (valueExpression != null)
 			node.add(new DataNode(Keyword.VALUE.tag, valueExpression));
 		else
 			node.add(null);
-		for (Node statement : nodes()) // add child statements, if any
-			node.add(((Statement) statement).toSDA());
+		for (var statement : nodes()) // add child statements, if any
+			node.add( statement.toSDA() );
 		return node;
 	}
 

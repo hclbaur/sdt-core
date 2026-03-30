@@ -10,7 +10,7 @@ import be.baur.sda.DataNode;
  * is no such thing, but this class mimics one, so that XPath expressions may
  * select "/" and the root node by name.
  */
-final class DocumentNode extends AbstractNode {
+public final class DocumentNode extends AbstractNode<DataNode> {
 
 	/**
 	 * Creates a document node containing the specified root node. This is not a
@@ -29,7 +29,7 @@ final class DocumentNode extends AbstractNode {
 	 * must not be tampered with after creation.
 	 */
 	@Override
-	public boolean add(AbstractNode node) {
+	public boolean add(DataNode node) {
 		throw new UnsupportedOperationException("cannot add to a document node");
 	}
 
@@ -39,7 +39,7 @@ final class DocumentNode extends AbstractNode {
 	 * must not be tampered with after creation.
 	 */
 	@Override
-	public boolean remove(AbstractNode node) {
+	public boolean remove(DataNode node) {
 		throw new UnsupportedOperationException("cannot remove from a document node");
 	}
 

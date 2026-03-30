@@ -1,11 +1,8 @@
 package be.baur.sdt.transform;
 
-import java.util.List;
-
 import org.jaxen.XPath;
 
 import be.baur.sda.DataNode;
-import be.baur.sda.Node;
 import be.baur.sdt.StatementContext;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.TransformException;
@@ -33,8 +30,9 @@ public class IfStatement extends XPathStatement {
 		 * context and perform a Boolean evaluation. If the result is true, execute the
 		 * compound statement, otherwise do nothing.
 		 */
-		List<Node> statements = nodes();
-		if (statements.isEmpty()) return; // nothing to do
+		var statements = nodes();
+		if (statements.isEmpty())
+			return; // nothing to do
 
 		try {
 			XPath xpath = traco.getXPath( getExpression() );
@@ -44,8 +42,8 @@ public class IfStatement extends XPathStatement {
 			if (! test) return; // do nothing
 			
 			StatementContext coco = staco.newChild();
-			for (Node statement : statements) {
-				((Statement) statement).execute(traco, coco);
+			for (var statement : statements) {
+				statement.execute(traco, coco);
 			}
 		
 		} catch (Exception e) {
@@ -60,10 +58,10 @@ public class IfStatement extends XPathStatement {
 	 */
 	@Override
 	public DataNode toSDA() {
-		DataNode node = new DataNode(Keyword.IF.tag, getExpression()); 
+		var node = new DataNode(Keyword.IF.tag, getExpression()); 
 		node.add(null); // render compound statement, even if empty
-		for (Node statement : nodes()) // add any child statements
-			node.add(((Statement) statement).toSDA());
+		for (var statement : nodes()) // add any child statements
+			node.add( statement.toSDA() );
 		return node;
 	}
 

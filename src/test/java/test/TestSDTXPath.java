@@ -4,8 +4,8 @@ import java.time.ZoneId;
 import org.jaxen.XPath;
 
 import be.baur.sda.DataNode;
-import be.baur.sda.Node;
 import be.baur.sdt.xpath.DocumentNavigator;
+import be.baur.sdt.xpath.DocumentNode;
 import be.baur.sdt.xpath.SDAXPath;
 
 public class TestSDTXPath {
@@ -24,12 +24,12 @@ public class TestSDTXPath {
 		});
 		
 		String f = TestSDTXPath.class.getResource("/addressbook.sda").getFile();
-		Node d = DocumentNavigator.newDocumentNode((DataNode) nav.getDocument(f));
+		DocumentNode d = DocumentNavigator.newDocumentNode((DataNode) nav.getDocument(f));
 		
-		Node addressbook = d.nodes().get(0);
-		//List<Node> contacts = addressbook.nodes();
-		//Node alice = contacts.get(0); 
-		//Node bob = contacts.get(1);
+		var addressbook = d.nodes().get(0);
+		//var contacts = addressbook.nodes();
+		//var alice = contacts.get(0); 
+		//var bob = contacts.get(1);
 		
 		t.so("S1", "fn:string-join(/addressbook/contact/phonenumber)", d, "06-1111111106-2222222206-3333333306-44444444");
 		t.so("S2", "fn:string-join(contact | contact/firstname,':')", addressbook, "1:Alice:2:Bob");

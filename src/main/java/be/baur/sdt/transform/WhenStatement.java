@@ -3,7 +3,6 @@ package be.baur.sdt.transform;
 import org.jaxen.XPath;
 
 import be.baur.sda.DataNode;
-import be.baur.sda.Node;
 import be.baur.sdt.StatementContext;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.TransformException;
@@ -39,10 +38,10 @@ public class WhenStatement extends XPathStatement {
 	 */
 	@Override
 	public DataNode toSDA() {
-		DataNode node = new DataNode(Keyword.WHEN.tag, getExpression()); 
+		var node = new DataNode(Keyword.WHEN.tag, getExpression()); 
 		node.add(null); // render compound statement, even if empty
-		for (Node statement : nodes()) // add any child statements
-			node.add(((Statement) statement).toSDA());
+		for (var statement : nodes()) // add any child statements
+			node.add( statement.toSDA() );
 		return node;
 	}
 

@@ -10,7 +10,7 @@ import be.baur.sdt.TransformException;
 /**
  * The abstract superclass of all transform statements.
  */
-public abstract class Statement extends AbstractNode {
+public abstract class Statement extends AbstractNode<Statement> {
 
 
 	/**

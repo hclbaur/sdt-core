@@ -5,7 +5,6 @@ import java.util.Objects;
 import org.jaxen.XPath;
 
 import be.baur.sda.DataNode;
-import be.baur.sda.Node;
 import be.baur.sdt.StatementContext;
 import be.baur.sdt.TransformContext;
 import be.baur.sdt.TransformException;
@@ -44,7 +43,7 @@ public class ChooseStatement extends Statement {
 		 */
 
 		try {
-			for (Node statement : nodes()) { // will have at least a when statement
+			for (var statement : nodes()) { // will have at least a when statement
 				
 				Boolean test = false;
 				if (statement instanceof WhenStatement) {
@@ -59,8 +58,8 @@ public class ChooseStatement extends Statement {
 					
 					// execute compound of when or otherwise in new compound context (coco)
 					StatementContext coco = staco.newChild();
-					for (Node compound : statement.nodes()) {
-						((Statement) compound).execute(traco, coco);
+					for (var compound : statement.nodes()) {
+						compound.execute(traco, coco);
 					}
 					return;
 				}
@@ -86,8 +85,8 @@ public class ChooseStatement extends Statement {
 	@Override
 	public DataNode toSDA() {
 		DataNode node = new DataNode(Keyword.CHOOSE.tag);
-		for (Node statement : nodes()) // add when/otherwise statements
-			node.add(((Statement) statement).toSDA());
+		for (var statement : nodes()) // add when/otherwise statements
+			node.add(statement.toSDA());
 		return node;
 	}
 

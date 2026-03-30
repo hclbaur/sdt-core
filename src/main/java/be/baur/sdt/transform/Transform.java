@@ -7,7 +7,6 @@ import java.util.Objects;
 
 import be.baur.sda.AbstractNode;
 import be.baur.sda.DataNode;
-import be.baur.sda.Node;
 import be.baur.sda.io.SDAFormatter;
 import be.baur.sda.io.SDAParseException;
 import be.baur.sdt.SDT;
@@ -26,7 +25,7 @@ import be.baur.sdt.parser.SDTParser;
  * @see Statement
  * @see SDTParser
  */
-public final class Transform extends AbstractNode {
+public final class Transform extends AbstractNode<Statement> {
 	
 	/**
 	 * Executes this transform with the supplied {@code TransformContext}. This
@@ -46,8 +45,8 @@ public final class Transform extends AbstractNode {
 	    DataNode output = new DataNode("output"); // collects nodes created during transform
 	    staco.setOutputNode(output);
 	    
-	    List<Statement> statements = nodes();
-		for (Statement statement : statements) {
+	    var statements = nodes();
+		for (var statement : statements) {
 			statement.execute(context, staco);
 		}
 
@@ -86,8 +85,8 @@ public final class Transform extends AbstractNode {
 	public DataNode toSDA() {
 		DataNode node = new DataNode(Keyword.TRANSFORM.tag); 
 		node.add(null); // in case there are no statements
-		for (Node statement : nodes()) // add child statements
-			node.add(((Statement) statement).toSDA());
+		for (var statement : nodes()) // add child statements
+			node.add( statement.toSDA() );
 		return node;
 	}
 	

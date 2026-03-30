@@ -73,8 +73,9 @@ public class ForEachStatement extends XPathStatement {
 		 * expression has been set, nodes with the same keys are grouped together in
 		 * node-sets, and the compound statement is executed for each node-set.
 		 */
-		List<Node> statements = nodes();
-		if (statements.isEmpty()) return; // nothing to do
+		var statements = nodes();
+		if (statements.isEmpty())
+			return; // nothing to do
 
 		try {
 
@@ -173,12 +174,12 @@ public class ForEachStatement extends XPathStatement {
 	 */
 	@Override
 	public DataNode toSDA() {
-		DataNode node = new DataNode(Keyword.FOREACH.tag, getExpression());
+		var node = new DataNode(Keyword.FOREACH.tag, getExpression());
 		node.add(null); // render compound statement, even if empty
 		if (groupExpression != null) // add group attribute
 			node.add(new DataNode(Keyword.GROUP.tag, groupExpression));
-		for (Node statement : nodes()) // add any child statements
-			node.add(((Statement) statement).toSDA());
+		for (var statement : nodes()) // add any child statements
+			node.add( statement.toSDA() );
 		return node;
 	}
 

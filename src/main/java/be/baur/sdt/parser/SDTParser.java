@@ -8,7 +8,6 @@ import java.util.List;
 import org.jaxen.XPath;
 
 import be.baur.sda.DataNode;
-import be.baur.sda.Node;
 import be.baur.sda.SDA;
 import be.baur.sda.io.Parser;
 import be.baur.sdt.SDT;
@@ -116,8 +115,8 @@ public final class SDTParser implements Parser<Transform> {
 		validateStatement(sdt, null, null);
 		
 		Transform transform = new Transform();
-		for (Node node : sdt.nodes())  // parse and add child statements
-			transform.add(parseStatement((DataNode) node));
+		for (var node : sdt.nodes())  // parse and add child statements
+			transform.add(parseStatement(node));
 
 		return transform;
 	}
@@ -174,10 +173,10 @@ public final class SDTParser implements Parser<Transform> {
 	
 		ChooseStatement choose = null;
 		int iterations = 0, last = sdt.nodes().size();
-		for (Node node : sdt.nodes()) {
+		for (var node : sdt.nodes()) {
 	
 			++iterations; 
-			final Statement stat = parseStatement((DataNode) node);
+			final Statement stat = parseStatement(node);
 	
 			if (iterations == 1) {
 				if (! (stat instanceof WhenStatement))
@@ -216,15 +215,15 @@ public final class SDTParser implements Parser<Transform> {
 		validateStatement(sdt, Arrays.asList(Keyword.GROUP), null);
 		
 		ForEachStatement foreach = new ForEachStatement(xpathFromNode(sdt));
-		DataNode group = getAttribute(sdt, Keyword.GROUP, false);
+		var group = getAttribute(sdt, Keyword.GROUP, false);
 		if (group != null) // set the optional value expression
 			foreach.setGroupExpression(xpathFromNode(group));
 		
 		int iterations = 0, sortstatements = 0;
-		for (Node node : sdt.nodes()) {
+		for (var node : sdt.nodes()) {
 
 			if (node.getName().equals(Keyword.GROUP.tag)) continue; // skip group attribute
-			++iterations; Statement stat = parseStatement((DataNode) node);
+			++iterations; Statement stat = parseStatement(node);
 			
 			if (stat instanceof SortStatement && ++sortstatements != iterations)
 				throw exception(node, STATEMENT_MISPLACED, Keyword.SORT.tag);
@@ -244,8 +243,8 @@ public final class SDTParser implements Parser<Transform> {
 		validateStatement(sdt, null, null);
 		
 		final IfStatement stat = new IfStatement(xpathFromNode(sdt));
-		for (Node node : sdt.nodes()) // parse and add child statements
-			stat.add(parseStatement((DataNode) node));
+		for (var node : sdt.nodes()) // parse and add child statements
+			stat.add(parseStatement(node));
 
 		return stat;
 	}
@@ -268,12 +267,12 @@ public final class SDTParser implements Parser<Transform> {
 			throw exception(sdt, NODE_NAME_INVALID, nodename);
 		
 		final NodeStatement stat = new NodeStatement(nodename);
-		final DataNode value = getAttribute(sdt, Keyword.VALUE, false);
+		final var value = getAttribute(sdt, Keyword.VALUE, false);
 		if (value != null) // set the optional value expression
 			stat.setValueExpression(xpathFromNode(value));
 
-		for (Node node : sdt.getAll(n -> !n.getName().equals(Keyword.VALUE.tag))) // skip value attribute
-			stat.add(parseStatement((DataNode) node)); // parse and add child statements
+		for (var node : sdt.getAll(n -> !n.getName().equals(Keyword.VALUE.tag))) // skip value attribute
+			stat.add(parseStatement(node)); // parse and add child statements
 
 		return stat;
 	}
@@ -291,8 +290,8 @@ public final class SDTParser implements Parser<Transform> {
 			throw exception(sdt, STATEMENT_REQUIRES_NO_EXPRESSION, sdt.getName());
 
 		final OtherwiseStatement stat = new OtherwiseStatement();
-		for (Node node : sdt.nodes()) // parse and add child statements
-			stat.add(parseStatement((DataNode) node));
+		for (var node : sdt.nodes()) // parse and add child statements
+			stat.add(parseStatement(node));
 
 		return stat;
 	}
@@ -322,11 +321,11 @@ public final class SDTParser implements Parser<Transform> {
 		final SortStatement sort = new SortStatement(xpathFromNode(sdt));
 		if (sdt.isLeaf()) return sort;
 
-		DataNode reverse = getAttribute(sdt, Keyword.REVERSE, false);
+		var reverse = getAttribute(sdt, Keyword.REVERSE, false);
 		if (reverse != null)
 			sort.setReverseExpression(xpathFromNode(reverse));
 
-		DataNode comparator = getAttribute(sdt, Keyword.COMPARATOR, false);
+		var comparator = getAttribute(sdt, Keyword.COMPARATOR, false);
 		if (comparator != null)
 			sort.setComparatorExpression(comparator.getValue());
 
@@ -353,11 +352,11 @@ public final class SDTParser implements Parser<Transform> {
 		if (! SDT.isVariableName(varname))
 			throw exception(sdt, VARIABLE_NAME_INVALID, varname);
 		
-		final Node parent = sdt.getParent();
+		final var parent = sdt.getParent();
 		
 		// find all declarations of a param with the specified name
-		List<Node> params = parent.getAll(n -> n.getName().equals(Keyword.PARAM.tag) 
-				&& ((DataNode) n).getValue().equals(varname));
+		var params = parent.getAll(n -> n.getName().equals(Keyword.PARAM.tag) 
+				&& n.getValue().equals(varname));
 		
 		final boolean isParam = sdt.getName().equals(Keyword.PARAM.tag);
 		
@@ -366,8 +365,8 @@ public final class SDTParser implements Parser<Transform> {
 			if (params.size() > 1) // got more than one param
 				throw exception(params.get(1), PARAMETER_REASSIGNED, varname);
 			
-			List<Node> vars = parent.find(n -> n.getName().equals(Keyword.VARIABLE.tag) 
-					&& ((DataNode) n).getValue().equals(varname)); // find variables with this name
+			var vars = parent.find(n -> n.getName().equals(Keyword.VARIABLE.tag) 
+					&& n.getValue().equals(varname)); // find variables with this name
 			
 			if (vars.size() > 0) // got a variable with the same name
 				throw exception(vars.get(0), VARIABLE_OVERWRITES_PARAM, varname);
@@ -378,7 +377,7 @@ public final class SDTParser implements Parser<Transform> {
 				throw exception(params.get(0), PARAM_OVERWRITES_VARIABLE, varname);
 		}
 		
-		DataNode select = getAttribute(sdt, Keyword.SELECT, true);
+		var select = getAttribute(sdt, Keyword.SELECT, true);
 		return isParam 
 			? new ParamStatement(varname, xpathFromNode(select))
 			: new VariableStatement(varname, xpathFromNode(select));
@@ -394,8 +393,8 @@ public final class SDTParser implements Parser<Transform> {
 		validateStatement(sdt, null, null); // no attributes allowed
 
 		WhenStatement stat = new WhenStatement(xpathFromNode(sdt));
-		for (Node node : sdt.nodes()) // parse and add child statements
-			stat.add(parseStatement((DataNode) node));
+		for (var node : sdt.nodes()) // parse and add child statements
+			stat.add( parseStatement(node) );
 
 		return stat;
 	}
@@ -437,7 +436,7 @@ public final class SDTParser implements Parser<Transform> {
 
 		final Keyword parent = Keyword.get(sdt.getName());
 		
-		for (Node node : sdt.nodes()) {
+		for (var node : sdt.nodes()) {
 
 			final String name = node.getName();
 			Keyword kw = Keyword.get(name);
@@ -488,7 +487,7 @@ public final class SDTParser implements Parser<Transform> {
 	 */
 	private static DataNode getAttribute(final DataNode sdt, Keyword att, Boolean required) throws SDTParseException {
 
-		List<DataNode> alist = sdt.getAll(n -> n.isLeaf() && n.getName().equals(att.tag));
+		var alist = sdt.getAll(n -> n.isLeaf() && n.getName().equals(att.tag));
 		int size = alist.size();
 
 		if (size == 0) {
@@ -499,7 +498,7 @@ public final class SDTParser implements Parser<Transform> {
 		if (required == null)
 			throw exception(sdt, ATTRIBUTE_NOT_ALLOWED, att.tag);
 
-		DataNode node = alist.get(0);
+		var node = alist.get(0);
 		if (node.getValue().isEmpty())
 			throw exception(node, ATTRIBUTE_REQUIRES_EXPRESSION, att.tag);
 		if (size > 1)
@@ -517,7 +516,7 @@ public final class SDTParser implements Parser<Transform> {
 	 * @param args arguments, as in {@link String#format}
 	 * @return 
 	 */
-	private static SDTParseException exception(Node node, String format, Object... args) {
+	private static SDTParseException exception(DataNode node, String format, Object... args) {
 		return new SDTParseException(node, String.format(format, args));
 	}
 }

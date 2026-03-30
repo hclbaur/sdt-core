@@ -1,6 +1,5 @@
 package be.baur.sdt.transform;
 
-import be.baur.sda.Node;
 import be.baur.sda.DataNode;
 import be.baur.sdt.StatementContext;
 import be.baur.sdt.TransformContext;
@@ -30,10 +29,10 @@ public class OtherwiseStatement extends Statement {
 	 */
 	@Override
 	public DataNode toSDA() {
-		DataNode node = new DataNode(Keyword.OTHERWISE.tag); 
+		var node = new DataNode(Keyword.OTHERWISE.tag); 
 		node.add(null); // render compound statement, even if empty
-		for (Node statement : nodes()) // add any child statements
-			node.add(((Statement) statement).toSDA());
+		for (var statement : nodes()) // add any child statements
+			node.add( statement.toSDA() );
 		return node;
 	}
 
