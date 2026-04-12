@@ -263,7 +263,7 @@ public final class SDTParser implements Parser<Transform> {
 		if (nodename.isEmpty())
 			throw exception(sdt, STATEMENT_REQUIRES_NODENAME, sdt.getName());
 
-		if (! SDA.isName(nodename))
+		if (! SDA.isNodeName(nodename))
 			throw exception(sdt, NODE_NAME_INVALID, nodename);
 		
 		final NodeStatement stat = new NodeStatement(nodename);

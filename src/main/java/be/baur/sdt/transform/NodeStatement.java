@@ -51,7 +51,7 @@ public class NodeStatement extends Statement {
 	 */
 	void setNodeName(String name) {
 		Objects.requireNonNull(name, "name must not be null");
-		if (!SDA.isName(name))
+		if (!SDA.isNodeName(name))
 			throw new IllegalArgumentException("name '" + name + "' is invalid");
 		nodeName = name;
 	}

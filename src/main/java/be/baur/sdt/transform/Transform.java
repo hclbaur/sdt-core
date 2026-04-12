@@ -7,8 +7,8 @@ import java.util.Objects;
 
 import be.baur.sda.AbstractNode;
 import be.baur.sda.DataNode;
+import be.baur.sda.io.ParseException;
 import be.baur.sda.io.SDAFormatter;
-import be.baur.sda.io.SDAParseException;
 import be.baur.sdt.SDT;
 import be.baur.sdt.StatementContext;
 import be.baur.sdt.TransformContext;
@@ -114,10 +114,10 @@ public final class Transform extends AbstractNode<Statement> {
 	 * was not created by the {@code SDTParser}.
 	 * 
 	 * @throws IOException       if an I/O operation failed
-	 * @throws SDAParseException if an SDA parse exception occurs
+	 * @throws ParseException if an SDA parse exception occurs
 	 * @throws SDTParseException if an SDT parse exception occurs
 	 */
-	public void verify() throws IOException, SDAParseException, SDTParseException {
+	public void verify() throws IOException, ParseException, SDTParseException {
 		// Serialize the Transform to SDT, then parsed it back to reveal any issues
 		SDT.parse(new StringReader(this.toString()));
 	}
