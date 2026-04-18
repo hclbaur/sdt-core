@@ -30,7 +30,7 @@ public class OtherwiseStatement extends Statement {
 	@Override
 	public DataNode toSDA() {
 		var node = new DataNode(Keyword.OTHERWISE.tag); 
-		node.add(null); // render compound statement, even if empty
+		node.expand(); // render compound statement, even if empty
 		for (var statement : nodes()) // add any child statements
 			node.add( statement.toSDA() );
 		return node;

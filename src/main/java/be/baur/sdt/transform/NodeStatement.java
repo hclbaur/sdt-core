@@ -105,7 +105,7 @@ public class NodeStatement extends Statement {
 			
 			// if any child nodes may be created downstream, this will be a (vacant) parent 
 			if ( ! find(n -> n instanceof NodeStatement || n instanceof CopyStatement).isEmpty() ) {
-				newNode.add(null);
+				newNode.expand();
 			}
 			
 			StatementContext coco = staco.newChild();
@@ -131,7 +131,7 @@ public class NodeStatement extends Statement {
 		if (valueExpression != null)
 			node.add(new DataNode(Keyword.VALUE.tag, valueExpression));
 		else
-			node.add(null);
+			node.expand();
 		for (var statement : nodes()) // add child statements, if any
 			node.add( statement.toSDA() );
 		return node;

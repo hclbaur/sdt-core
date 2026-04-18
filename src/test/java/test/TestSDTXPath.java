@@ -4,8 +4,8 @@ import java.time.ZoneId;
 import org.jaxen.XPath;
 
 import be.baur.sda.DataNode;
+import be.baur.sda.Node;
 import be.baur.sdt.xpath.DocumentNavigator;
-import be.baur.sdt.xpath.DocumentNode;
 import be.baur.sdt.xpath.SDAXPath;
 
 public class TestSDTXPath {
@@ -24,7 +24,7 @@ public class TestSDTXPath {
 		});
 		
 		String f = TestSDTXPath.class.getResource("/addressbook.sda").getFile();
-		DocumentNode d = DocumentNavigator.newDocumentNode((DataNode) nav.getDocument(f));
+		Node<?> d = DocumentNavigator.newDocumentNode((DataNode) nav.getDocument(f));
 		
 		var addressbook = d.nodes().get(0);
 		//var contacts = addressbook.nodes();

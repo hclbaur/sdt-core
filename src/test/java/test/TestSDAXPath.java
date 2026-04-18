@@ -2,8 +2,8 @@ package test;
 import org.jaxen.Navigator;
 
 import be.baur.sda.DataNode;
+import be.baur.sda.Node;
 import be.baur.sdt.xpath.DocumentNavigator;
-import be.baur.sdt.xpath.DocumentNode;
 
 public class TestSDAXPath {
 
@@ -20,7 +20,7 @@ public class TestSDAXPath {
 		});
 		
 		String file = TestSDAXPath.class.getResource("/addressbook.sda").getFile();
-		DocumentNode doc = DocumentNavigator.newDocumentNode((DataNode) nav.getDocument(file));
+		Node<?> doc = DocumentNavigator.newDocumentNode((DataNode) nav.getDocument(file));
 		
 		var addressbook = doc.nodes().get(0);
 		var contacts = addressbook.nodes();

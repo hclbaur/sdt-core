@@ -175,7 +175,7 @@ public class ForEachStatement extends XPathStatement {
 	@Override
 	public DataNode toSDA() {
 		var node = new DataNode(Keyword.FOREACH.tag, getExpression());
-		node.add(null); // render compound statement, even if empty
+		node.expand(); // render compound statement, even if empty
 		if (groupExpression != null) // add group attribute
 			node.add(new DataNode(Keyword.GROUP.tag, groupExpression));
 		for (var statement : nodes()) // add any child statements

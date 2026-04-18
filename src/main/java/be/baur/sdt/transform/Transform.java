@@ -84,7 +84,7 @@ public final class Transform extends AbstractNode<Statement> {
 	 */
 	public DataNode toSDA() {
 		DataNode node = new DataNode(Keyword.TRANSFORM.tag); 
-		node.add(null); // in case there are no statements
+		node.expand(); // in case there are no statements
 		for (var statement : nodes()) // add child statements
 			node.add( statement.toSDA() );
 		return node;

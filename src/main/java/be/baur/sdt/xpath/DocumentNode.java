@@ -10,23 +10,27 @@ import be.baur.sda.DataNode;
  * is no such thing, but this class mimics one, so that XPath expressions may
  * select "/" and the root node by name.
  */
-public final class DocumentNode extends AbstractNode<DataNode> {
+final class DocumentNode extends AbstractNode<DataNode> {
 
 	/**
-	 * Creates a document node containing the specified root node. This is not a
-	 * public class; only the navigator should create document nodes.
+	 * Creates a document node containing the specified root node. This is a
+	 * package-private class; and only the navigator should create document nodes.
 	 *
-	 * @param root a root node (e.g. not a parent), and not null
+	 * @param root a root node (e.g. not a parent), not null
+	 * @throws IllegalArgumentException if the argument is not a root node
 	 */
 	DocumentNode(DataNode root) {
 		Objects.requireNonNull(root, "root node must not be null");
+		if (root.getParent() != null)
+			throw new IllegalArgumentException("argument must be a root node");
 		super.add(root); // one and only child; we override the add/remove methods.
 	}
 
 
 	/**
-	 * This method throws an {@code UnsupportedOperationException}. DocumentNodes
-	 * must not be tampered with after creation.
+	 * Unsupported method. DocumentNodes must not be tampered with after creation.
+	 * 
+	 * @throws UnsupportedOperationException
 	 */
 	@Override
 	public boolean add(DataNode node) {
@@ -35,8 +39,9 @@ public final class DocumentNode extends AbstractNode<DataNode> {
 
 
 	/**
-	 * This method throws an {@code UnsupportedOperationException}. DocumentNodes
-	 * must not be tampered with after creation.
+	 * Unsupported method. DocumentNodes must not be tampered with after creation.
+	 * 
+	 * @throws UnsupportedOperationException
 	 */
 	@Override
 	public boolean remove(DataNode node) {
