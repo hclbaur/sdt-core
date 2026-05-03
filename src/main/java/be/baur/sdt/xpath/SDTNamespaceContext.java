@@ -45,7 +45,7 @@ public final class SDTNamespaceContext implements NamespaceContext {
 	 * 
 	 * @param prefix a namespace prefix, not null
 	 * @param URI    a namespace URI, not null
-	 * @returns true if the context changed as a result of this call
+	 * @return true if the context changed as a result of this call
 	 */
 	public boolean addNamespace(String prefix, String URI) {
 
